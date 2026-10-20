@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Builder agents' git worktrees live here during the build.
+    ".claude/**",
   ]),
 ]);
 

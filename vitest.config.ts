@@ -5,7 +5,7 @@ export default defineConfig({
   resolve: { alias: { "@": fileURLToPath(new URL("./", import.meta.url)) } },
   test: {
     include: ["**/*.test.ts", "**/*.test.tsx"],
-    exclude: ["node_modules/**", ".next/**", "tests/e2e/**"],
+    exclude: ["node_modules/**", ".next/**", "tests/e2e/**", ".claude/**"],
     testTimeout: 15000,
   },
 });

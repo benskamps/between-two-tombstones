@@ -5,6 +5,7 @@ import { BottomNav } from "@/components/shell/BottomNav";
 import { EtiquetteCard } from "@/components/shell/EtiquetteCard";
 import { SiteFooter } from "@/components/shell/SiteFooter";
 import { SiteHeader } from "@/components/shell/SiteHeader";
+import { SiteJsonLd } from "@/lib/seo/jsonld";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${body.variable} ${carved.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
+        <SiteJsonLd />
         <SiteHeader />
         <main id="main" className="mx-auto w-full max-w-2xl flex-1 px-4 pb-28 pt-4">
           {children}

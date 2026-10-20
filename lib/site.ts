@@ -5,7 +5,11 @@ export const SITE = {
   subtitle: "Macy's Graveyard Companion",
   description:
     "Find the graves worth visiting at any cemetery, take a walking tour, and read how those people lived.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "http://localhost:3000"),
   repo: "https://github.com/benskamps/between-two-tombstones",
 } as const;
 
