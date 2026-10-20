@@ -253,7 +253,7 @@ describe("the whole feed", () => {
       expect(get(ev, "TRANSP")).toBe("TRANSPARENT");
       expect(get(ev, "LOCATION")).toBe("Oakland Cemetery\\, Atlanta");
       expect(get(ev, "GEO")).toBe("33.748722;-84.371333");
-      expect(get(ev, "URL")).toMatch(new RegExp(`^${SITE_URL}/cemetery/Q2008469#Q\\d+$`));
+      expect(get(ev, "URL")).toMatch(new RegExp(`^${SITE_URL}/cemetery/Q2008469#stop-Q\\d+$`));
     }
   });
 
@@ -262,13 +262,13 @@ describe("the whole feed", () => {
     expect(get(ev, "DTSTART")).toBe("19490816");
     expect(get(ev, "RRULE")).toBe("FREQ=YEARLY");
     expect(unescape(get(ev, "SUMMARY")!)).toBe("Margaret Mitchell died on this day in 1949");
-    expect(get(ev, "URL")).toBe(`${SITE_URL}/cemetery/Q2008469#Q173540`);
+    expect(get(ev, "URL")).toBe(`${SITE_URL}/cemetery/Q2008469#stop-Q173540`);
     const description = unescape(get(ev, "DESCRIPTION")!);
     expect(description).toBe(
       [
         "Margaret Munnerlyn Mitchell (November 8, 1900 – August 16, 1949) was an American novelist and journalist.",
         "Buried at Oakland Cemetery, Atlanta.",
-        `Story: ${SITE_URL}/cemetery/Q2008469#Q173540`,
+        `Story: ${SITE_URL}/cemetery/Q2008469#stop-Q173540`,
         "From Wikipedia, CC BY-SA 4.0: https://en.wikipedia.org/wiki/Margaret_Mitchell",
       ].join("\n"),
     );

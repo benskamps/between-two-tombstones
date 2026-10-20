@@ -61,7 +61,7 @@ describe("the page preview", () => {
     const mitchell = feed.events.find((e) => e.uid === "Q173540-death@between-two-tombstones")!;
     expect(nextOccurrence(mitchell, { y: 2026, m: 10, d: 20 })).toEqual({ y: 2027, m: 8, d: 16 });
     expect(mitchell.summary).toBe("Margaret Mitchell died on this day in 1949");
-    expect(mitchell.url).toBe("https://x.test/cemetery/Q2008469#Q173540");
+    expect(mitchell.url).toBe("https://x.test/cemetery/Q2008469#stop-Q173540");
   });
 
   it("reads the Feb 29 rule from a generated feed", () => {

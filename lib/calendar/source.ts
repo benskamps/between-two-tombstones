@@ -1,15 +1,12 @@
 // Where the calendar feed gets a cemetery's burials.
 //
-// For now: the two snapshots bundled with the app (Oakland, Atlanta and Sleepy
-// Hollow). Any other cemetery is a CalendarNotAvailableError → 404.
-//
-// LANE 2 SWAP: when the live burials loader lands (lib/data/**, the same
-// CemeterySnapshot that GET /api/cemeteries/[qid]/burials returns), point
-// `burialsSource` at it. That is the one line to change; see the bottom of
-// this file.
+// The tour's live loader (lib/data/load.ts), the same CemeterySnapshot that
+// GET /api/cemeteries/[qid]/burials returns. `snapshotSource` (the two bundled
+// cemeteries) stays for tests and as a fallback reference.
 
 import oakland from "../../data/snapshots/oakland-atlanta.json";
 import sleepyHollow from "../../data/snapshots/sleepy-hollow.json";
+import { loadCemetery } from "../data/load";
 import type { CemeterySnapshot } from "../types";
 
 export type BurialsSource = (qid: string) => Promise<CemeterySnapshot>;
@@ -35,6 +32,17 @@ export const snapshotSource: BurialsSource = async (qid) => {
   return snapshot;
 };
 
-// LANE 2 SWAP: replace `snapshotSource` with Lane 2's live loader, e.g.
-//   export const burialsSource: BurialsSource = loadBurials;
-export const burialsSource: BurialsSource = snapshotSource;
+/**
+ * Live burials from the tour's data layer (lib/data). For the two samples it
+ * already falls back to the saved copy when Wikidata is down. Failures become a
+ * plain `{ source, message, status }` the calendar route passes through.
+ */
+export const liveSource: BurialsSource = async (qid) => {
+  const result = await loadCemetery(qid);
+  // Not a cemetery Wikidata knows, or a place with no recorded burials: nothing to haunt with.
+  if (result.status === "ok" && result.data.people.length > 0) return result.data;
+  if (result.status !== "error") throw new CalendarNotAvailableError();
+  throw { source: result.error.source, message: result.error.userMessage, status: result.error.httpStatus };
+};
+
+export const burialsSource: BurialsSource = liveSource;

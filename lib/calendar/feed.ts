@@ -135,7 +135,7 @@ export function cemeterySlug(cemetery: Pick<Cemetery, "qid" | "name" | "locatedI
 }
 
 export function storyUrl(cemeteryQid: string, personQid: string, siteUrl: string = SITE.url): string {
-  return new URL(`/cemetery/${cemeteryQid}#${personQid}`, siteUrl).toString();
+  return new URL(`/cemetery/${cemeteryQid}#stop-${personQid}`, siteUrl).toString();
 }
 
 // Words that end in a period without ending a sentence ("Jr.", "U.S.", "c. 1847").

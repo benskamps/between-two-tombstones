@@ -210,7 +210,7 @@ test.describe("Haunted Calendar feed", () => {
       expect(val(ev, "LOCATION")).toBe("Oakland Cemetery\\, Atlanta");
       expect(val(ev, "GEO")).toBe("33.748722;-84.371333");
       const qid = val(ev, "UID").split("-")[0];
-      expect(val(ev, "URL")).toMatch(new RegExp(`/cemetery/Q2008469#${qid}$`));
+      expect(val(ev, "URL")).toMatch(new RegExp(`/cemetery/Q2008469#stop-${qid}$`));
       expect(unescape(val(ev, "DESCRIPTION"))).toContain("Buried at Oakland Cemetery, Atlanta.");
       expect(unescape(val(ev, "DESCRIPTION"))).toContain(`Story: ${val(ev, "URL")}`);
     }
@@ -237,9 +237,15 @@ test.describe("Haunted Calendar feed", () => {
       for (const name of recentNames) expect(summaries.filter((s) => s.startsWith(name)), name).toEqual([]);
       const recent = snap.people.filter((p) => !longDead(p));
       expect(recent.length).toBeGreaterThan(0); // the snapshots do have recent and unknown deaths
+      // The feed uses the live loader, so check each person against the same
+      // live data (the burials route), falling back to the saved snapshot.
+      const live = await request.get(`/api/cemeteries/${qid}/burials`);
+      const people = live.ok() ? ((await live.json()) as typeof snap).people : snap.people;
       for (const ev of events(text)) {
-        const person = snap.people.find((p) => p.qid === val(ev, "UID").split("-")[0])!;
-        expect(longDead(person), person.name).toBe(true);
+        const uidQid = val(ev, "UID").split("-")[0];
+        const person = people.find((p) => p.qid === uidQid) ?? snap.people.find((p) => p.qid === uidQid);
+        expect(person, uidQid).toBeDefined();
+        expect(longDead(person!), person!.name).toBe(true);
       }
     }
   });
@@ -284,8 +290,9 @@ test.describe("Haunted Calendar feed", () => {
     expect(notQid.status()).toBe(400);
   });
 
-  test("answers 404 JSON for a cemetery it doesn't have", async ({ request }) => {
-    for (const path of ["/api/calendar/Q872253", "/api/calendar/Q872253.ics"]) {
+  test("answers 404 JSON for a place with no burials to put in a calendar", async ({ request }) => {
+    // Q42 is a person, not a cemetery: the live loader finds no burials there.
+    for (const path of ["/api/calendar/Q42", "/api/calendar/Q42.ics"]) {
       const res = await request.get(path);
       expect(res.status(), path).toBe(404);
       expect(res.headers()["content-type"]).toContain("application/json");
@@ -319,7 +326,7 @@ test.describe("Haunted Calendar page", () => {
       await expect(item).toContainText(unescape(val(ev, "SUMMARY")));
       await expect(item.getByRole("link", { name: "Read their story" })).toHaveAttribute(
         "href",
-        `/cemetery/Q2008469#${expected[n].uid.split("-")[0]}`,
+        `/cemetery/Q2008469#stop-${expected[n].uid.split("-")[0]}`,
       );
     }
 

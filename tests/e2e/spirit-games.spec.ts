@@ -167,10 +167,14 @@ test.describe("spirit box", () => {
   }) => {
     await page.addInitScript(stubSpeech);
     await page.addInitScript(probeAudio);
+    // Force the burials route to fail so the test doesn't depend on live
+    // Wikidata: the saved copy is used, and the page says so.
+    await page.route("**/api/cemeteries/*/burials", (route) =>
+      route.fulfill({ status: 404, contentType: "application/json", body: JSON.stringify({ error: { source: "Wikidata", message: "test outage" } }) }),
+    );
     await page.goto("/spirit?test-caps=short");
 
     await expect(page.getByText(/people buried at Oakland Cemetery died 75 or more years ago/)).toBeVisible();
-    // No burials route on this branch yet (or it failed): the saved copy is used, and we say so.
     await expect(page.getByText(/uses the copy saved with the app/)).toBeVisible();
     await expect(page.getByText(DISCLAIMER).first()).toBeVisible();
     await expect(page.getByText("Turn it off near mourners.").first()).toBeVisible();
