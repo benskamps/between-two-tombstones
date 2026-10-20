@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { calendarName, cemeteryLabel, cemeterySlug } from "@/lib/calendar/feed";
 import type { EventKind } from "@/lib/calendar/kinds";
 import { feedPath, subscribeLinks } from "@/lib/calendar/params";
 import type { CalendarSample } from "@/lib/calendar/samples";
@@ -10,6 +11,20 @@ import { localToday, readFeed, upcoming, ymdKey, type PreviewFeed } from "@/lib/
 import type { YMD } from "@/lib/stonemath";
 
 const PREVIEW_COUNT = 5;
+const QID_RE = /^Q[1-9]\d{0,9}$/;
+
+/** A cemetery passed in from its tour page (`?cemetery=&name=&place=`), not one of the samples. */
+function fromTourPage(qid: string, name: string | null, place: string | null): CalendarSample {
+  const cemetery = { qid, name: name?.trim().slice(0, 120) || qid, locatedIn: place?.trim().slice(0, 80) || null };
+  return {
+    qid,
+    name: cemetery.name,
+    place: cemetery.locatedIn ?? "",
+    label: cemeteryLabel(cemetery),
+    calendarName: calendarName(cemetery),
+    slug: cemeterySlug(cemetery),
+  };
+}
 const FETCH_TIMEOUT_MS = 10_000;
 
 const NOT_PUBLIC =
@@ -77,8 +92,18 @@ export function CalendarSubscribeFallback() {
 export function CalendarSubscribe({ samples, productionHost }: { samples: CalendarSample[]; productionHost: string }) {
   const params = useSearchParams();
   const preselect = params.get("cemetery");
+  const extraName = params.get("name");
+  const extraPlace = params.get("place");
+  const extra = useMemo(
+    () =>
+      preselect && QID_RE.test(preselect) && !samples.some((s) => s.qid === preselect)
+        ? fromTourPage(preselect, extraName, extraPlace)
+        : null,
+    [preselect, extraName, extraPlace, samples],
+  );
+  const options = useMemo(() => (extra ? [extra, ...samples] : samples), [extra, samples]);
   const [qid, setQid] = useState(() =>
-    preselect && samples.some((s) => s.qid === preselect) ? preselect : samples[0].qid,
+    preselect && options.some((s) => s.qid === preselect) ? preselect : samples[0].qid,
   );
   const [birthdays, setBirthdays] = useState(false);
   const [feeds, setFeeds] = useState<Record<string, FeedState>>({});
@@ -89,7 +114,7 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
   const host = useSyncExternalStore(subscribeNothing, getHost, () => "");
   const todayKey = useSyncExternalStore(subscribeNothing, getToday, () => "");
 
-  const sample = samples.find((s) => s.qid === qid) ?? samples[0];
+  const sample = options.find((s) => s.qid === qid) ?? samples[0];
   const kinds: EventKind[] = birthdays ? ["death", "birth"] : ["death"];
   const path = feedPath(sample.qid, { kinds });
   const links = origin ? subscribeLinks(origin, path, sample.calendarName) : null;
@@ -130,7 +155,12 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
     setQid(next);
     setCopyNote(null);
     try {
-      window.history.replaceState(null, "", `?cemetery=${next}`);
+      const q = new URLSearchParams({ cemetery: next });
+      if (extra && next === extra.qid) {
+        q.set("name", extra.name);
+        if (extra.place) q.set("place", extra.place);
+      }
+      window.history.replaceState(null, "", `?${q}`);
     } catch {
       // Only the address bar misses out.
     }
@@ -156,7 +186,7 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
     <div className="space-y-6">
       <fieldset className="space-y-2">
         <legend className="mb-2 font-bold">Cemetery</legend>
-        {samples.map((s) => (
+        {options.map((s) => (
           <label
             key={s.qid}
             className="tap flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-surface p-3 has-[:checked]:border-accent"

@@ -414,9 +414,18 @@ test.describe("Haunted Calendar page", () => {
     }
   });
 
-  test("an unknown ?cemetery= falls back to the first sample", async ({ page }) => {
-    await open(page, "/calendar?cemetery=Q872253");
+  test("a malformed ?cemetery= falls back to the first sample", async ({ page }) => {
+    await open(page, "/calendar?cemetery=oakland");
     await expect(page.getByRole("radio", { name: /Oakland Cemetery/ })).toBeChecked();
+  });
+
+  test("a cemetery passed from its tour page is offered and selected", async ({ page }) => {
+    await page.route("**/api/calendar/Q872253*", (route) =>
+      route.fulfill({ status: 200, contentType: "text/calendar; charset=utf-8", body: "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nEND:VCALENDAR\r\n" }),
+    );
+    await open(page, "/calendar?cemetery=Q872253&name=Lake%20View%20Cemetery&place=Seattle");
+    await expect(page.getByRole("radio", { name: /Lake View Cemetery/ })).toBeChecked();
+    await expect(page.getByRole("radio", { name: /Oakland Cemetery/ })).not.toBeChecked();
   });
 
   test("a Feb 29 death previews on Feb 28 in a common year and Feb 29 in a leap year", async ({ page }) => {
