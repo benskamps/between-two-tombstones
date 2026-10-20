@@ -151,6 +151,12 @@ async function captions(page: Page): Promise<string[]> {
 
 const DISCLAIMER = /The spirits use your phone.s text-to-speech\./;
 
+// Chromium's fake microphone for the EVP tests: a real MediaStream that beeps,
+// with no permission prompt. Has no effect on pages that don't ask for the mic.
+test.use({
+  launchOptions: { args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"] },
+});
+
 test.describe("spirit box", () => {
   test.beforeEach(async ({ context }) => {
     await context.addInitScript(seenEtiquette);
@@ -464,4 +470,117 @@ test("games hub lists bingo and party", async ({ page }) => {
   await page.goto("/games");
   await expect(page.getByRole("link", { name: /Tombstone Bingo/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /Graveyard Party/ })).toBeVisible();
+});
+
+type EvpWindow = Window & {
+  __decoded?: AudioBuffer[];
+  __played?: { buffer: AudioBuffer; rate: number }[];
+  __streams?: MediaStream[];
+};
+
+function probeEvp() {
+  const w = window as unknown as EvpWindow;
+  w.__decoded = [];
+  w.__played = [];
+  w.__streams = [];
+  const decode = BaseAudioContext.prototype.decodeAudioData as (...a: unknown[]) => Promise<AudioBuffer>;
+  (BaseAudioContext.prototype as unknown as { decodeAudioData: unknown }).decodeAudioData = function (
+    this: BaseAudioContext,
+    ...args: unknown[]
+  ) {
+    const p = decode.apply(this, args);
+    p.then((b) => w.__decoded!.push(b)).catch(() => {});
+    return p;
+  };
+  const start = AudioBufferSourceNode.prototype.start as (...a: unknown[]) => void;
+  (AudioBufferSourceNode.prototype as unknown as { start: unknown }).start = function (
+    this: AudioBufferSourceNode,
+    ...args: unknown[]
+  ) {
+    if (this.buffer) w.__played!.push({ buffer: this.buffer, rate: this.playbackRate.value });
+    return start.apply(this, args);
+  };
+  const gum = MediaDevices.prototype.getUserMedia;
+  MediaDevices.prototype.getUserMedia = async function (this: MediaDevices, c?: MediaStreamConstraints) {
+    const s = await gum.call(this, c);
+    w.__streams!.push(s);
+    return s;
+  };
+}
+
+test.describe("EVP recorder", () => {
+  test.use({ permissions: ["microphone"] });
+
+  test("records from the mic, releases it, plays it exactly reversed at 0.7x, and uploads nothing", async ({
+    page,
+  }) => {
+    await page.addInitScript(seenEtiquette);
+    await page.addInitScript(probeEvp);
+    const bodies: string[] = [];
+    page.on("request", (req) => {
+      const size = req.postDataBuffer()?.length ?? 0;
+      if (req.method() !== "GET") bodies.push(`${req.method()} ${req.url()} ${size}B`);
+    });
+
+    await page.goto("/games");
+    await expect(page.getByRole("link", { name: /EVP Recorder/ })).toBeVisible();
+    await page.goto("/games/evp?test-caps=short");
+    await expect(page.getByText(/never uploaded or saved/)).toBeVisible();
+    await page.getByRole("button", { name: "Record 2 seconds" }).click();
+    await expect(page.getByRole("button", { name: /Recording/ })).toBeVisible();
+    await expect(page.getByText(/Recorded \d+\.\d seconds/)).toBeVisible({ timeout: 10000 });
+
+    await page.getByRole("button", { name: "Play it backwards" }).click();
+    await expect(page.getByRole("button", { name: "Stop playback" })).toBeVisible();
+    const check = await page.evaluate(() => {
+      const w = window as unknown as EvpWindow;
+      const orig = w.__decoded!.at(-1)!;
+      const played = w.__played!.at(-1)!;
+      const a = orig.getChannelData(0);
+      const b = played.buffer.getChannelData(0);
+      let mismatches = 0;
+      let energy = 0;
+      for (let i = 0; i < a.length; i++) {
+        if (a[i] !== b[a.length - 1 - i]) mismatches++;
+        energy += a[i] * a[i];
+      }
+      return {
+        seconds: orig.duration,
+        length: a.length,
+        playedLength: b.length,
+        channels: [orig.numberOfChannels, played.buffer.numberOfChannels],
+        mismatches,
+        rms: Math.sqrt(energy / Math.max(1, a.length)),
+        rate: played.rate,
+        tracks: w.__streams!.flatMap((s) => s.getTracks().map((t) => t.readyState)),
+      };
+    });
+    console.log(`EVP: ${JSON.stringify({ ...check, nonGetRequests: bodies })}`);
+    expect(check.seconds).toBeGreaterThan(1);
+    expect(check.rms).toBeGreaterThan(0.001); // the fake mic's beeps made it into the recording
+    expect(check.playedLength).toBe(check.length);
+    expect(check.channels[1]).toBe(check.channels[0]);
+    expect(check.mismatches).toBe(0);
+    expect(check.rate).toBeCloseTo(0.7, 5);
+    expect(check.tracks.length).toBeGreaterThan(0);
+    expect(check.tracks.every((t) => t === "ended")).toBe(true); // microphone released
+    // No request carried anything the size of a recording.
+    for (const b of bodies) expect(Number(b.split(" ").pop()!.replace("B", ""))).toBeLessThan(1024);
+
+    await page.getByRole("button", { name: "Stop playback" }).click();
+    await expect(page.getByRole("button", { name: "Play it backwards" })).toBeVisible();
+  });
+});
+
+test("EVP is hidden entirely when the browser has no getUserMedia", async ({ page }) => {
+  await page.addInitScript(seenEtiquette);
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "mediaDevices", { value: undefined, configurable: true });
+  });
+  await page.goto("/games");
+  await expect(page.getByRole("link", { name: /Tombstone Bingo/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /EVP Recorder/ })).toHaveCount(0);
+  await page.goto("/games/evp");
+  await expect(page.getByText(/can.t record from a microphone, so the EVP recorder is hidden/)).toBeVisible();
+  await expect(page.getByRole("button", { name: /Record/ })).toHaveCount(0);
 });

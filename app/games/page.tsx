@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EvpHubLink } from "@/components/games/EvpRecorder";
 
 export const metadata: Metadata = {
   title: "Graveyard Games",
-  description: "Tombstone Bingo and graveyard parties to play while you walk.",
+  description: "Tombstone Bingo, graveyard parties and an EVP recorder to play with while you walk.",
 };
 
 const GAMES = [
@@ -35,6 +36,8 @@ export default function GamesPage() {
             </Link>
           </li>
         ))}
+        {/* Only shown when this browser can record from a microphone. */}
+        <EvpHubLink />
       </ul>
     </div>
   );
