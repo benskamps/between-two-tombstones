@@ -14,10 +14,8 @@ import { QID_RE, loadCemetery, type LoadResult, type SampleCemetery } from "@/li
 import { capsFromParam, createSession, formatDuration, stopMessage, type SpiritSession, type Utterance } from "@/lib/spirit/session";
 import { pickVoice, silenceVoices, speakFragment, speechAvailable } from "@/lib/spirit/voice";
 import { bankHasNames, buildWordBank } from "@/lib/spirit/wordbank";
-
-const DISCLAIMER = "The spirits use your phone’s text-to-speech.";
-const NO_SPEECH = "Your browser can’t speak, so the voices appear as captions.";
-const MOURNERS = "Turn it off near mourners.";
+import { SEANCE_PITCH, SeanceJoin, SeanceStart } from "./SeanceStart";
+import { DISCLAIMER, MOURNERS, NO_SPEECH, audioContextClass, clock, subscribeNothing } from "./shared";
 
 /** Live objects a session needs; kept out of React state because they're not rendered. */
 type Runtime = {
@@ -26,19 +24,6 @@ type Runtime = {
   session: SpiritSession | null;
   volume: number;
 };
-
-function subscribeNothing() {
-  return () => {};
-}
-
-function audioContextClass(): typeof AudioContext | null {
-  const w = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
-  return w.AudioContext ?? w.webkitAudioContext ?? null;
-}
-
-function clock(ms: number) {
-  return new Date(ms).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" });
-}
 
 export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
   const params = useSearchParams();
@@ -71,6 +56,11 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
     });
     return () => ctrl.abort();
   }, [choice, samples]);
+
+  // "/spirit?cemetery=Q…#seance" (e.g. from a tour) lands on the séance section, which renders after hydration.
+  useEffect(() => {
+    if (window.location.hash === "#seance") document.getElementById("seance")?.scrollIntoView();
+  }, []);
 
   // Stop on page hide and on unmount; close the audio context when leaving.
   useEffect(() => {
@@ -315,6 +305,18 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
         {log.length === 0 && !stopNote && (
           <p className="text-muted">Captions of every voice show up here, with the time.</p>
         )}
+      </section>
+
+      <section id="seance" aria-labelledby="seance-heading" className="scroll-mt-4 space-y-4 rounded-xl border border-border bg-surface p-4">
+        <h2 id="seance-heading" className="font-display text-2xl">
+          Séance: every phone at once
+        </h2>
+        <p className="text-muted">{SEANCE_PITCH}</p>
+        <SeanceStart
+          cemetery={result?.ok ? { qid: choice, name: result.cemetery.name } : null}
+          bank={ready ? bank : null}
+        />
+        <SeanceJoin cemeteryQid={choice} />
       </section>
     </div>
   );

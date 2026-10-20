@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { SpiritBox, SpiritBoxFallback } from "@/components/spirit/SpiritBox";
+import { SpiritBoxFallback } from "@/components/spirit/SpiritBox";
+import { SpiritModes } from "@/components/spirit/SpiritModes";
 import { SAMPLE_CEMETERIES } from "@/lib/spirit/samples";
 
 export const metadata: Metadata = {
   title: "Spirit Box",
   description:
-    "Static and low voices speaking the names of people buried at a cemetery who died at least 75 years ago.",
+    "Static and low voices speaking the names of people buried at a cemetery who died at least 75 years ago. Séance mode makes every phone speak the same names at the same second.",
 };
 
 export default function SpiritPage() {
@@ -19,9 +20,9 @@ export default function SpiritPage() {
           least 75 years ago are used.
         </p>
       </header>
-      {/* The picker reads ?cemetery= from the address bar, which is only known in the browser. */}
+      {/* ?cemetery= and ?seance= come from the address bar, which is only known in the browser. */}
       <Suspense fallback={<SpiritBoxFallback />}>
-        <SpiritBox samples={SAMPLE_CEMETERIES} />
+        <SpiritModes samples={SAMPLE_CEMETERIES} />
       </Suspense>
     </div>
   );
