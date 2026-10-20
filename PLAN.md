@@ -92,6 +92,7 @@ What it means:
 | 11 | 10/20 | **Overpass is optional enrichment** behind mirror fallback (`overpass-api.de` → `overpass.kumi.systems` → `overpass.private.coffee`), merged by QID or name. If all fail, say so by name and still show the Wikidata results. |
 | 12 | 10/20 | **Claude spend:** hard cap = a dedicated Anthropic API key with a workspace spend limit (Ben's click). `CLAUDE_DAILY_USD_CAP` is a best-effort soft cap per server instance (no database to count globally). Results are cached by image hash. |
 | 13 | 10/20 | **Wikimedia User-Agent** = `BetweenTwoTombstones/0.1 (https://github.com/benskamps/between-two-tombstones)` (`lib/site.ts`). The repo URL is the contact. |
+| 15 | 10/20 | **Gravitator (Ben's ask):** a dating-app swipe deck where the profiles are public cemeteries near you. Public only: excludes Wikidata family (Q73218016), private (Q107684101), animal (Q163778) and abandoned (Q107334193) cemeteries and anything with P576. Own palette scoped to the route: Victorian half-mourning mauve on crepe black, candle for Go now, a will-o'-the-wisp glow for matches. P1: runs in parallel, never ahead of the P0 gate. |
 | 14 | 10/20 | **Production deploys are Ben's click.** The Vercel project is not connected to Git auto-deploys for production. Claude deploys previews with the CLI; Ben promotes or runs `vercel --prod`. |
 
 ---
@@ -113,7 +114,7 @@ Owns: `next.config.ts`, `.github/workflows/**`, `app/robots.ts`, `app/sitemap.ts
 | L1.3 | P0 | Security headers in `next.config.ts` `headers()` only: HSTS with preload, nosniff, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(self), microphone=(self), geolocation=(self)` (**not** the template's `=()`), CSP with `connect-src 'self'`, `img-src 'self' https://upload.wikimedia.org https://commons.wikimedia.org blob: data:`, `font-src 'self'` (next/font self-hosts Google Fonts), `worker-src 'self' blob:`. Pick `script-src` after reading `node_modules/next/dist/docs/01-app/02-guides/content-security-policy.md`, without forcing every page dynamic | `tests/e2e/platform.spec.ts` asserts each header on `/`; Gate 9 | ✅ local prod, re-verified by orchestrator 10/20: `tests/e2e/platform.spec.ts` 22/22 (exact header values, CSP directives, Wikimedia images allowed, featurePolicy allows camera/mic/geo, zero CSP violations on hydrate). script-src `self` + `unsafe-inline`: nonces would force every page dynamic (reason in `next.config.ts`). On prod: pending |
 | L1.4 | P0 | PWA manifest + icons (192, 512, maskable), name/short name/theme colors | CDP `Page.getInstallabilityErrors` returns `[]` once Lane 2's service worker lands | ✅ local prod: CDP `Page.getInstallabilityErrors` = [] (asserted in platform spec); icons 192/512/maskable |
 | L1.5 | P0 | SEO triple, following `personal-infra/vault/skill-mirror-win/vercel-seo-triple/SKILL.md`: `app/robots.ts` with the house AI-crawler allow-list and the Bytespider block; `app/sitemap.ts` (home, tools, sample cemeteries; Lane 5 adds `/c/*`); `public/llms.txt` served with `Cache-Control: public, max-age=3600`; JSON-LD `WebSite` + `SoftwareApplication` in a helper in `lib/seo/` | Gate 10 | ✅ local prod: robots (house allow-list, Bytespider blocked, /api/ disallowed), sitemap, llms.txt with 1h cache, WebSite + SoftwareApplication JSON-LD mounted in layout; ClaudeBot/GPTBot 200. On prod: pending |
-| L1.6 | P0 | Env vars set before the merge that needs them: `NEXT_PUBLIC_SITE_URL`, `CLAUDE_DAILY_USD_CAP`, `DEVICE_COOKIE_SECRET`, `SHARE_SIGNING_SECRET`, `ANTHROPIC_API_KEY` (Ben pastes). Never in git, logs or the client bundle | `vercel env ls` shows them; `grep -r` of `.next/static` finds no secret values | 🟨 set for Production + Preview 10/20: `NEXT_PUBLIC_SITE_URL`, `CLAUDE_DAILY_USD_CAP` (=5, Ben can change), `DEVICE_COOKIE_SECRET`, `SHARE_SIGNING_SECRET` (generated, never printed). `ANTHROPIC_API_KEY` added by Ben 10/20 for Production; Preview not yet ticked |
+| L1.6 | P0 | Env vars set before the merge that needs them: `NEXT_PUBLIC_SITE_URL`, `CLAUDE_DAILY_USD_CAP`, `DEVICE_COOKIE_SECRET`, `SHARE_SIGNING_SECRET`, `ANTHROPIC_API_KEY` (Ben pastes). Never in git, logs or the client bundle | `vercel env ls` shows them; `grep -r` of `.next/static` finds no secret values | 🟨 set for Production + Preview 10/20: `NEXT_PUBLIC_SITE_URL`, `CLAUDE_DAILY_USD_CAP` (=5, Ben can change), `DEVICE_COOKIE_SECRET`, `SHARE_SIGNING_SECRET` (generated, never printed). `ANTHROPIC_API_KEY` added by Ben 10/20 for Production + Preview |
 | L1.7 | P1 | Vercel Web Analytics enabled for the project (`<Analytics/>` is already in the layout) | dashboard shows pageviews | ⬜ |
 | L1.8 | P2 | Daily cron warming the sample cemetery caches, gated by `CRON_SECRET` | cron returns 401 without the secret, 200 with it | ⬜ |
 | L1.9 | — | Domain: on hold (decision 6) | — | ⏸ |
@@ -161,6 +162,17 @@ Owns: `lib/spirit/**`, `lib/games/**`, `app/spirit/**`, `app/games/**`, `compone
 | L4.4 | P1 | EVP recorder: 15 s from the mic, played back reversed and slowed; hidden without a mic | — | ✅ local prod: fake-mic e2e, playback is the exact reverse at 0.7×; hidden without getUserMedia |
 | L4.5 | P1 | Epitaph Hunt checklist; Who Am I? (three clues from a tour); Stone Math tool (uses `lib/stonemath` once Lane 3 merges) | — | ⬜ |
 
+### Lane 7 — Gravitator (Ben's ask, P1) 🟨 builder dispatched 10/20 02:55 UTC
+Owns: `app/gravitator/**`, `app/api/gravitator/**`, `components/gravitator/**`, `lib/gravitator/**`, `tests/e2e/gravitator.spec.ts`.
+
+| ID | Tier | Item | Acceptance | Status |
+|---|---|---|---|---|
+| L7.1 | P1 | Deck API: one profile SPARQL + one burials SPARQL + batched extracts, public filter, cached per rounded point | unit tests on fixtures; live timing reported | ⬜ |
+| L7.2 | P1 | Swipe deck UI: drag, buttons, keyboard, reduced motion, match screen, saved list | `tests/e2e/gravitator.spec.ts` | ⬜ |
+| L7.3 | P1 | Palette contrast ≥ 4.5:1 for every text pair, both themes | unit test | ⬜ |
+
+Coverage note (verified 10/20): within 8 km of downtown Atlanta, 20 cemeteries; 3 have a founding date, 1 an area, 2 a photo, 1 a heritage listing. Sparse cards must look intentional.
+
 ### Lane 5 — The viral lifecycle (starts only after the Lane 2+3 stranger pass)
 | ID | Tier | Item | Status |
 |---|---|---|---|
@@ -189,7 +201,7 @@ Owns: `lib/spirit/**`, `lib/games/**`, `app/spirit/**`, `app/games/**`, `compone
 | 2 | Repo | ✅ exists; `main` created 10/20 with Ben's OK |
 | 3 | Supabase project | ✅ declined 10/20 → stateless (decision 1a) |
 | 4 | Vercel CLI login | ✅ 10/20 |
-| 5 | Dedicated Anthropic API key with a workspace spend limit → paste into Vercel env as `ANTHROPIC_API_KEY` | ⬜ |
+| 5 | Dedicated Anthropic API key with a workspace spend limit → paste into Vercel env as `ANTHROPIC_API_KEY` | ✅ 10/20: Production + Preview |
 | 6 | Every production deploy (`vercel --prod` or Promote in the dashboard) | ⬜ |
 | 7 | Domain purchase | ⏸ on hold |
 | 8 | A stranger for the stranger pass; filming at Oakland | ⬜ |
