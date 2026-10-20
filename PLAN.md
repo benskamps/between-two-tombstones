@@ -24,17 +24,17 @@ Checked on **prod**, by script or by eye. The verdict comes from the stranger pa
 
 | # | Assertion | How it's checked | Status |
 |---|---|---|---|
-| 1 | Anonymous GET of the prod `*.vercel.app` URL returns 200, not 401 (custom domain on hold) | `curl -so /dev/null -w '%{http_code}'` | ⬜ |
+| 1 | Anonymous GET of the prod `*.vercel.app` URL returns 200, not 401 (custom domain on hold) | `curl -so /dev/null -w '%{http_code}'` | ✅ prod 10/20 ~22:35 UTC: anonymous curl → 200 for /, /cemetery/Q2008469, /stamp, /spirit, /gravitator, /calendar, /games, robots, sitemap, llms.txt, manifest (custom domain on hold) |
 | 2 | A stranger at an unfamiliar cemetery sees 5+ named graves with stories within 20 s on mobile data | Ben's stranger, stopwatch | ⬜ |
 | 3 | With the network off, a downloaded tour opens and every card reads | Playwright `context.setOffline(true)` + by eye on a phone | ⬜ |
 | 4 | A real headstone photo becomes all three stamps in under 5 s on a mid-range phone | Ben's phone, stopwatch; Playwright with CPU throttling as a proxy | 🟨 proxy passes locally: 4× CPU throttle, main-thread engine ≤ 1.62 s, wall ≤ 2.1 s incl. debounce. Real phone: pending |
-| 5 | "Read with Claude" on a real stone returns a transcript with no invented dates (spot-check 3 stones) | 3 photos, compared by eye against the stone | ⬜ |
+| 5 | "Read with Claude" on a real stone returns a transcript with no invented dates (spot-check 3 stones) | 3 photos, compared by eye against the stone | ✅ prod 10/20: Irving, Iverson Jr. and S. B. Spencer stones read through the live route; every date in the transcriptions matches the photo by eye; the server withheld Iverson's worn death date (Claude unsure) and flagged Spencer's name for checking. No invented dates |
 | 6 | A shared stamp link pasted into iMessage and Slack shows the OG card and lands on a working page | Ben, two apps | ⬜ |
 | 7 | A second phone joins a graveyard party from a link and sees the same bingo card within 10 s | Playwright, two browser contexts; then two real phones | 🟨 local prod: two contexts, identical card in ~200 ms. Real phones on prod: pending |
 | 8 | With Wikidata switched off (`DISABLE_WIKIDATA=1`), the app names the failure; never an empty "nothing here" | Playwright against a preview with the flag | ⬜ |
-| 9 | Camera, mic and geolocation aren't blocked by Permissions-Policy on prod | Playwright reads the header + `document.featurePolicy` / permission query | ⬜ |
-| 10 | `/robots.txt`, `/sitemap.xml`, `/llms.txt` live; `curl -A ClaudeBot` and `-A GPTBot` get 200; JSON-LD parses | curl + JSON.parse of every `application/ld+json` block | ⬜ |
-| 11 | Lighthouse mobile: Accessibility ≥ 95, Performance ≥ 85; installable as a PWA | Lighthouse CLI; installability via CDP `Page.getInstallabilityErrors` (Lighthouse 12+ dropped the PWA category) | 🟨 local prod proxy (Lighthouse 12.6.1 mobile, 10/20 04:25 UTC): / perf 96 a11y 100; /cemetery/Q2008469 96/100; /stamp 97/100; /spirit 87/100; /gravitator 92/100; installability errors [] (platform spec). Best Practices 75 on the tour page = Wikimedia image cookies (WMF-Uniq) + the local-only 404 of /_vercel/insights; not a gate item. On prod: pending |
+| 9 | Camera, mic and geolocation aren't blocked by Permissions-Policy on prod | Playwright reads the header + `document.featurePolicy` / permission query | ✅ prod: `tests/e2e/platform.spec.ts` 22/22 against https://between-two-tombstones.vercel.app (featurePolicy allows camera, microphone, geolocation; exact header values) |
+| 10 | `/robots.txt`, `/sitemap.xml`, `/llms.txt` live; `curl -A ClaudeBot` and `-A GPTBot` get 200; JSON-LD parses | curl + JSON.parse of every `application/ld+json` block | ✅ prod: robots/sitemap/llms.txt 200; ClaudeBot and GPTBot get 200; JSON-LD parses; sitemap and robots on the canonical origin (platform spec with CANONICAL_URL) |
+| 11 | Lighthouse mobile: Accessibility ≥ 95, Performance ≥ 85; installable as a PWA | Lighthouse CLI; installability via CDP `Page.getInstallabilityErrors` (Lighthouse 12+ dropped the PWA category) | ✅ prod Lighthouse 12.6.1 mobile: / perf 97 a11y 100; /cemetery/Q2008469 89/100; /stamp 99/100; /spirit 87/100; /gravitator 99/100; installability errors [] (platform spec on prod) |
 
 ---
 
@@ -70,7 +70,8 @@ What it means:
 - **Use best-rank statements.** Margaret Mitchell (Q173540) has a preferred Nov 8 and a normal-rank Nov 9 birth date; SAMPLE over all ranks showed the wrong one. `scripts/burials.mjs` now filters `wikibase:BestRank`; snapshots regenerated 10/20 02:42 UTC.
 - **Wikidata grave photos can be wrong.** Mitchell's P1442 is another Margaret Ann Mitchell's stone in Hiland Cemetery; Lane 2 drops grave photos whose file title names a different cemetery.
 - **Rate limits are real from shared IPs.** `www.wikidata.org` answered 429 on the 3rd request. Wikipedia's per-page REST summary answered 429 with `Retry-After` ≈ 50 s. Batched intro extracts (`action=query&prop=extracts&exintro&exlimit=20`) fetched 80 summaries in 4 requests. The SPARQL endpoint was fine.
-- **Overpass: ❓ couldn't check.** `overpass-api.de`, `overpass.kumi.systems` and `overpass.private.coffee` all reset or time out from the build container (container network, not our code). Re-check from the first Vercel deploy. Until then, Overpass is optional enrichment and "nearby" must work on Wikidata alone.
+- **Overpass from Vercel (10/20 prod): times out at the 4 s budget too**; /near names it ("OpenStreetMap didn't answer within 4 s. Showing Wikidata results only.") and still lists 40 cemeteries around downtown Atlanta. Wikidata alone carries "nearby".
+- **Overpass from the container: ❓ couldn't check.** `overpass-api.de`, `overpass.kumi.systems` and `overpass.private.coffee` all reset or time out from the build container (container network, not our code). Re-check from the first Vercel deploy. Until then, Overpass is optional enrichment and "nearby" must work on Wikidata alone.
 - Snapshots committed: `data/snapshots/sleepy-hollow.json` and `data/snapshots/oakland-atlanta.json` (80 people each, all with Wikipedia text; pulled by `scripts/snapshot.mjs`; no hand-typed facts). Sleepy Hollow has Irving, Carnegie, Chrysler, Gompers, Helmsley and William Rockefeller.
 - Prior-work disclosure is in `README.md`.
 
@@ -96,7 +97,7 @@ What it means:
 | 13 | 10/20 | **Wikimedia User-Agent** = `BetweenTwoTombstones/0.1 (https://github.com/benskamps/between-two-tombstones)` (`lib/site.ts`). The repo URL is the contact. |
 | 15 | 10/20 | **Gravitator (Ben's ask):** a dating-app swipe deck where the profiles are public cemeteries near you. Public only: excludes Wikidata family (Q73218016), private (Q107684101), animal (Q163778) and abandoned (Q107334193) cemeteries and anything with P576. Own palette scoped to the route: Victorian half-mourning mauve on crepe black, candle for Go now, a will-o'-the-wisp glow for matches. P1: runs in parallel, never ahead of the P0 gate. |
 | 16 | 10/20 | **Haunted Calendar + Séance mode locked in (Ben).** Calendar: subscribe to a cemetery and your real calendar gets yearly death-days (optionally birthdays) of people who died 25+ years ago, each linking to their story card; unsubscribing removes it all. Séance: every phone on a party link speaks the same spirit words at the same second from a shared seed + synced clock (`/api/time`), no server state. Both P1, database-free, built in parallel. |
-| 14 | 10/20 | **Production deploys are Ben's click.** The Vercel project is not connected to Git auto-deploys for production. Claude deploys previews with the CLI; Ben promotes or runs `vercel --prod`. **Incident 10/20 ~03:56 and ~04:05 UTC:** `vercel deploy --yes` and then `vercel deploy --environment preview --yes` both created *production* deployments aliased to between-two-tombstones.vercel.app (live ~2 min and ~1 min). Orchestrator removed both (`vercel remove`); project back to zero deployments, prod URL 404 (checked via Vercel MCP). Working hypothesis (unverified): Vercel makes a project's first deployment production regardless of the requested environment. So the **first deploy is Ben's click**; Claude does no more deploys until a production deployment exists, then uses `--environment preview` and checks `vercel inspect` target before testing. Both builds succeeded on Vercel (Ready). |
+| 14 | 10/20 | **Production deploys are Ben's click.** The Vercel project is not connected to Git auto-deploys for production. Claude deploys previews with the CLI; Ben promotes or runs `vercel --prod`. **Incident 10/20 ~03:56 and ~04:05 UTC:** `vercel deploy --yes` and then `vercel deploy --environment preview --yes` both created *production* deployments aliased to between-two-tombstones.vercel.app (live ~2 min and ~1 min). Orchestrator removed both (`vercel remove`); project back to zero deployments, prod URL 404 (checked via Vercel MCP). Working hypothesis (unverified): Vercel makes a project's first deployment production regardless of the requested environment. So the **first deploy is Ben's click**; Claude does no more deploys until a production deployment exists, then uses `--environment preview` and checks `vercel inspect` target before testing. Both builds succeeded on Vercel (Ready). **10/20 ~22:30 UTC: Ben said "ship it"; `main` (61ef04f, PR #1 merged) deployed to production with `vercel deploy --prod`.** |
 
 ---
 
@@ -213,7 +214,7 @@ Owns (taking over from finished Lane 4): `lib/spirit/**`, `app/spirit/**`, `comp
 | 3 | Supabase project | ✅ declined 10/20 → stateless (decision 1a) |
 | 4 | Vercel CLI login | ✅ 10/20 |
 | 5 | Dedicated Anthropic API key with a workspace spend limit → paste into Vercel env as `ANTHROPIC_API_KEY` | ✅ 10/20: Production + Preview |
-| 6 | Every production deploy (`vercel --prod` or Promote in the dashboard) | ⬜ |
+| 6 | Every production deploy (`vercel --prod` or Promote in the dashboard) | ✅ first one 10/20 ("ship it") |
 | 7 | Domain purchase | ⏸ on hold |
 | 8 | A stranger for the stranger pass; filming at Oakland | ⬜ |
 | 9 | Any outreach or launch post (drafted, not sent) | ⬜ |
