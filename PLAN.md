@@ -34,7 +34,7 @@ Checked on **prod**, by script or by eye. The verdict comes from the stranger pa
 | 8 | With Wikidata switched off (`DISABLE_WIKIDATA=1`), the app names the failure; never an empty "nothing here" | Playwright against a preview with the flag | ⬜ |
 | 9 | Camera, mic and geolocation aren't blocked by Permissions-Policy on prod | Playwright reads the header + `document.featurePolicy` / permission query | ⬜ |
 | 10 | `/robots.txt`, `/sitemap.xml`, `/llms.txt` live; `curl -A ClaudeBot` and `-A GPTBot` get 200; JSON-LD parses | curl + JSON.parse of every `application/ld+json` block | ⬜ |
-| 11 | Lighthouse mobile: Accessibility ≥ 95, Performance ≥ 85; installable as a PWA | Lighthouse CLI; installability via CDP `Page.getInstallabilityErrors` (Lighthouse 12+ dropped the PWA category) | ⬜ |
+| 11 | Lighthouse mobile: Accessibility ≥ 95, Performance ≥ 85; installable as a PWA | Lighthouse CLI; installability via CDP `Page.getInstallabilityErrors` (Lighthouse 12+ dropped the PWA category) | 🟨 local prod proxy (Lighthouse 12.6.1 mobile, 10/20 04:25 UTC): / perf 96 a11y 100; /cemetery/Q2008469 96/100; /stamp 97/100; /spirit 87/100; /gravitator 92/100; installability errors [] (platform spec). Best Practices 75 on the tour page = Wikimedia image cookies (WMF-Uniq) + the local-only 404 of /_vercel/insights; not a gate item. On prod: pending |
 
 ---
 
