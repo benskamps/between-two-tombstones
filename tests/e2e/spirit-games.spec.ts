@@ -176,11 +176,11 @@ test.describe("spirit box", () => {
     await expect(page.getByText("Turn it off near mourners.").first()).toBeVisible();
     await expect(page.getByText(/Test caps are on/)).toBeVisible();
 
-    await page.getByRole("button", { name: "Start" }).click();
+    await page.getByRole("button", { name: "Start", exact: true }).click();
     await expect(page.getByRole("button", { name: "Stop" })).toBeVisible();
 
     await expect(page.getByText(/Session over: 3 voices is the limit/)).toBeVisible({ timeout: 10000 });
-    await expect(page.getByRole("button", { name: "Start" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Start", exact: true })).toBeVisible();
 
     const spoken = await page.evaluate(() => (window as unknown as ProbeWindow).__spoken!);
     const audio = await page.evaluate(() => {
@@ -217,7 +217,7 @@ test.describe("spirit box", () => {
     await expect(page.getByText(/people buried at Oakland Cemetery/)).toBeVisible();
 
     await page.getByLabel(/Sweep: every/).fill("350");
-    await page.getByRole("button", { name: "Start" }).click();
+    await page.getByRole("button", { name: "Start", exact: true }).click();
     await expect(page.getByRole("button", { name: "Stop" })).toBeVisible();
 
     const rms = await peakRms(page);
@@ -247,7 +247,7 @@ test.describe("spirit box", () => {
     await page.addInitScript(stubSpeech);
     await page.goto("/spirit?test-caps=time");
     await expect(page.getByText(/people buried at Oakland Cemetery/)).toBeVisible();
-    await page.getByRole("button", { name: "Start" }).click();
+    await page.getByRole("button", { name: "Start", exact: true }).click();
     await expect(page.getByText(/Session over: time.s up after 4 seconds/)).toBeVisible({ timeout: 10000 });
     const n = (await captions(page)).length;
     expect(n).toBeGreaterThanOrEqual(1);
@@ -258,7 +258,7 @@ test.describe("spirit box", () => {
     await page.addInitScript(stubSpeech);
     await page.goto("/spirit");
     await expect(page.getByText(/people buried at Oakland Cemetery/)).toBeVisible();
-    await page.getByRole("button", { name: "Start" }).click();
+    await page.getByRole("button", { name: "Start", exact: true }).click();
     await expect(page.getByRole("button", { name: "Stop" })).toBeVisible();
     await page.evaluate(() => {
       Object.defineProperty(document, "visibilityState", { value: "hidden", configurable: true });
@@ -274,7 +274,7 @@ test.describe("spirit box", () => {
     // Headless Chromium: speechSynthesis exists, has no voices, and every speak() errors.
     await page.goto("/spirit?test-caps=short");
     await expect(page.getByText(/people buried at Oakland Cemetery/)).toBeVisible();
-    await page.getByRole("button", { name: "Start" }).click();
+    await page.getByRole("button", { name: "Start", exact: true }).click();
     await expect(page.getByText(/Session over: 3 voices/)).toBeVisible({ timeout: 10000 });
     expect(await captions(page)).toHaveLength(3);
   });
@@ -283,7 +283,7 @@ test.describe("spirit box", () => {
     await page.addInitScript(removeSpeech);
     await page.goto("/spirit?test-caps=short");
     await expect(page.getByText(/Your browser can.t speak, so the voices appear as captions\./)).toBeVisible();
-    await page.getByRole("button", { name: "Start" }).click();
+    await page.getByRole("button", { name: "Start", exact: true }).click();
     await expect(page.getByText(/Session over: 3 voices/)).toBeVisible({ timeout: 10000 });
     expect(await captions(page)).toHaveLength(3);
   });
@@ -311,7 +311,7 @@ test.describe("spirit box", () => {
     await expect(page.getByText("Test Hill Cemetery", { exact: true })).toBeVisible();
     await expect(page.getByText(/1 person buried at Test Hill Cemetery died 75 or more years ago/)).toBeVisible();
     await expect(page.getByText(/2 more recent or undated burials are left out/)).toBeVisible();
-    await page.getByRole("button", { name: "Start" }).click();
+    await page.getByRole("button", { name: "Start", exact: true }).click();
     await expect(page.getByText(/Session over: 3 voices/)).toBeVisible({ timeout: 10000 });
     const said = [...(await captions(page)), ...(await page.evaluate(() => (window as unknown as ProbeWindow).__spoken!.map((s) => s.text)))];
     for (const t of said) expect(t).not.toMatch(/zebulon|recentperson|astronaut|ophelia|borderline|typesetter|nineteen/i);
@@ -327,11 +327,11 @@ test.describe("spirit box", () => {
     );
     await page.goto("/spirit?cemetery=Q999999");
     await expect(page.getByText(/Couldn.t load the burials for this cemetery: Wikidata: Couldn.t reach Wikidata\./)).toBeVisible();
-    await expect(page.getByRole("button", { name: "Start" })).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Start", exact: true })).toBeDisabled();
     // The samples still work.
     await page.getByLabel(/Sleepy Hollow Cemetery/).check();
     await expect(page.getByText(/people buried at Sleepy Hollow Cemetery died 75 or more years ago/)).toBeVisible();
-    await expect(page.getByRole("button", { name: "Start" })).toBeEnabled();
+    await expect(page.getByRole("button", { name: "Start", exact: true })).toBeEnabled();
   });
 });
 

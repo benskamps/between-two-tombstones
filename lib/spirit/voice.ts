@@ -24,14 +24,20 @@ export function pickVoice(voices: readonly SpeechSynthesisVoice[]): SpeechSynthe
   return english.find((v) => v.default) ?? english.find((v) => v.localService) ?? english[0] ?? null;
 }
 
-/** Speak one fragment. Returns the rate used so the static can duck for about that long. */
+/**
+ * Speak one fragment. Returns the rate used so the static can duck for about
+ * that long. Séance mode passes the slot's `rate` so every phone finishes the
+ * fragment together; pitch stays random per phone, so the voices differ.
+ */
 export function speakFragment(
   text: string,
-  opts: { volume: number; voice: SpeechSynthesisVoice | null; rng: () => number },
+  opts: { volume: number; voice: SpeechSynthesisVoice | null; rng: () => number; pitch?: number; rate?: number },
 ): number {
   const synth = window.speechSynthesis;
   const u = new SpeechSynthesisUtterance(text);
-  const { pitch, rate } = voiceParams(opts.rng);
+  const params = voiceParams(opts.rng);
+  const pitch = opts.pitch ?? params.pitch;
+  const rate = opts.rate ?? params.rate;
   u.pitch = pitch;
   u.rate = rate;
   u.volume = Math.max(0, Math.min(1, opts.volume));
@@ -45,6 +51,17 @@ export function speakFragment(
   if (synth.speaking || synth.pending) synth.cancel();
   synth.speak(u);
   return rate;
+}
+
+/**
+ * iOS only lets speech start from a tap. A séance's first voice comes seconds
+ * after the tap (at the shared start), so the tap speaks a silent space to
+ * unlock speech for the timed voices that follow.
+ */
+export function unlockSpeech() {
+  const u = new SpeechSynthesisUtterance(" ");
+  u.volume = 0;
+  window.speechSynthesis.speak(u);
 }
 
 export function silenceVoices() {

@@ -34,6 +34,12 @@ export function speechSeconds(text: string, rate: number): number {
 
 export type NoiseEngine = {
   setSweepMs(ms: number): void;
+  /**
+   * Step the band to this centre frequency and Q right now. Séance mode drives
+   * the band from the shared schedule this way (with `autoSweep: false`), so
+   * every phone's static moves together.
+   */
+  setBand(frequency: number, q: number): void;
   setVolume(v: number): void;
   /** Lower the static for `seconds`, then bring it back (scheduled on the audio clock). */
   duck(seconds: number): void;
@@ -52,9 +58,10 @@ function noiseBuffer(ctx: Ctx, seconds: number, rng: () => number): AudioBuffer 
 
 export function startNoise(
   ctx: Ctx,
-  opts: { sweepMs: number; volume: number; rng?: () => number },
+  opts: { sweepMs: number; volume: number; rng?: () => number; autoSweep?: boolean },
 ): NoiseEngine {
   const rng = opts.rng ?? Math.random;
+  const autoSweep = opts.autoSweep ?? true;
   let sweepMs = clampSweepMs(opts.sweepMs);
   let stopped = false;
   const timers = new Set<ReturnType<typeof setTimeout>>();
@@ -134,13 +141,19 @@ export function startNoise(
   }
 
   src.start();
-  sweep();
+  if (autoSweep) sweep();
   later(click, 300 + rng() * 600);
   later(blip, 800 + rng() * 1500);
 
   return {
     setSweepMs(ms) {
       sweepMs = clampSweepMs(ms);
+    },
+    setBand(frequency, q) {
+      if (stopped || !Number.isFinite(frequency) || !Number.isFinite(q)) return;
+      const t = ctx.currentTime;
+      band.frequency.setValueAtTime(Math.min(BAND_HI, Math.max(BAND_LO, frequency)), t);
+      band.Q.setValueAtTime(Math.min(10, Math.max(0.5, q)), t);
     },
     setVolume(v) {
       if (stopped) return;

@@ -3,11 +3,16 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { PartySeance } from "@/components/spirit/PartySeance";
 import { cryptoRandom, makeRoomCode, normalizeRoomCode, partyPath } from "@/lib/games/bingo";
+import type { SampleCemetery } from "@/lib/spirit/load";
 import { PartyShare } from "./PartyShare";
 
-/** Start a party (a random room code in a link) or join one by typing its code. No server involved. */
-export function PartyLobby() {
+/**
+ * Start a party (a random room code in a link) or join one by typing its code,
+ * and hold a séance with the same room code. No server involved.
+ */
+export function PartyLobby({ samples }: { samples: SampleCemetery[] }) {
   const router = useRouter();
   const [code, setCode] = useState<string | null>(null);
   const [typed, setTyped] = useState("");
@@ -87,6 +92,8 @@ export function PartyLobby() {
           </p>
         )}
       </section>
+
+      <PartySeance samples={samples} partyCode={code} />
     </div>
   );
 }
