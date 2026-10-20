@@ -1,0 +1,13 @@
+{
+ "note": "SYNTHETIC test fixture in Overpass API JSON shape (out tags center). All Overpass mirrors were unreachable from the build container (PLAN.md decision 11), so this was written by hand to exercise parsing and merging. Not shown to users.",
+ "version": 0.6,
+ "generator": "Overpass API (synthetic)",
+ "elements": [
+  { "type": "way", "id": 1001, "center": { "lat": 47.6337, "lon": -122.3158 }, "tags": { "landuse": "cemetery", "name": "Lake View Cemetery", "wikidata": "Q872253" } },
+  { "type": "way", "id": 1002, "center": { "lat": 47.6326, "lon": -122.3141 }, "tags": { "landuse": "cemetery", "name": "Grand Army of the Republic Cemetery" } },
+  { "type": "node", "id": 1003, "lat": 47.6201, "lon": -122.3302, "tags": { "amenity": "grave_yard", "name": "Example Pioneer Burial Ground" } },
+  { "type": "way", "id": 1004, "center": { "lat": 47.6401, "lon": -122.3001 }, "tags": { "landuse": "cemetery" } },
+  { "type": "relation", "id": 1005, "center": { "lat": 47.7001, "lon": -122.3401 }, "tags": { "landuse": "cemetery", "name": "Lakeview Cemetery" } },
+  { "type": "node", "id": 1006, "tags": { "amenity": "grave_yard", "name": "No coordinates" } }
+ ]
+}
