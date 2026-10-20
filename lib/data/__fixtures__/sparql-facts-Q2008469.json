@@ -1,0 +1,57 @@
+{
+ "head": {
+  "vars": [
+   "c",
+   "cLabel",
+   "cDescription",
+   "coord",
+   "fagc",
+   "locLabel",
+   "enwiki",
+   "version"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2008469"
+    },
+    "version": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2479230138"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.371333 33.748722)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "35955"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Atlanta)"
+    },
+    "cLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "cDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Atlanta, Georgia, USA"
+    },
+    "locLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Atlanta"
+    }
+   }
+  ]
+ }
+}

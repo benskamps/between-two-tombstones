@@ -1,0 +1,1025 @@
+{
+ "head": {
+  "vars": [
+   "item",
+   "label",
+   "description",
+   "ordinal",
+   "places",
+   "state",
+   "country",
+   "coord",
+   "fagc",
+   "enwiki",
+   "burials"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q872253"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Seattle, Washington, USA"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "0"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Seattle"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Washington"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.315277777 47.633888888)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "76890"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Lake_View_Cemetery_(Seattle)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "103"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q85775680"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Ithaca, New York"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "1"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Ithaca"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New York"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-76.495 42.456944444)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "65039"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Lake_View_Cemetery_(Ithaca,_New_York)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "33"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3372820"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Cleveland, Ohio"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "2"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Cleveland"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Ohio"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-81.5914 41.5109)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "41762"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Lake_View_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "339"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q110350362"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Jamestown, Chautauqua County, New York"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "3"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Jamestown"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New York"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.238888888 42.114722222)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "65038"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Lake_View_Cemetery_(Jamestown,_New_York)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "18"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6478288"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Brockport, New York"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "4"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Brockport"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New York"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-77.943771 43.192615)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "65040"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Lake_View_Cemetery_(Brockport,_New_York)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "5"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6478289"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Penn Yan, New York"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "5"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Penn Yan"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New York"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-77.064167 42.661389)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "214944"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Lake_View_Cemetery_(Penn_Yan,_New_York)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117538635"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Skaneateles, Onondaga County, New York, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "6"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Onondaga County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New York"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-76.4406 42.9431)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "65050"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "4"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117612637"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fremont County, Wyoming, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "7"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fremont County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Wyoming"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-108.1339 43.2406)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "84060"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117625520"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Wayne County, New York, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "8"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Wayne County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New York"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-77.1939 43.2817)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "65047"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117582523"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Livingston County, Michigan, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "9"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Livingston County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Michigan"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-83.9186 42.6131)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "894"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117566584"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lakeview Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Saline County, Illinois, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "10"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Saline County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Illinois"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-88.60753 37.66613)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "193885"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117571079"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Susquehanna County, Pennsylvania, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "11"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Susquehanna County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Pennsylvania"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.62223 41.85949)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1991921"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117611289"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Wells County, North Dakota, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "12"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Wells County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "North Dakota"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-99.4139 47.5589)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "102098"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117589512"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Otter Tail County, Minnesota, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "13"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Otter Tail County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Minnesota"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-96.08325 46.58537)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "82664"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117601391"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lakeview Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Niagara County, New York, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "14"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Niagara County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New York"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-78.71418 43.33337)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "65049"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117624866"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lakeview Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in LaMoure County, North Dakota, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "15"
+    },
+    "places": {
+     "type": "literal",
+     "value": "LaMoure County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "North Dakota"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-98.3425 46.6117)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "102100"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117643380"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Saxon, Iron County, Wisconsin, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "16"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Iron County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Wisconsin"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-90.4228 46.5011)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "88291"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117637217"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Roberts County, South Dakota, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "17"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Roberts County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "South Dakota"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-96.6172 45.9214)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "97191"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117637426"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Humboldt County, Iowa, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "18"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Humboldt County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Iowa"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-94.001 42.7748)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "95251"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117562829"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "St. Joseph's Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Buffalo County, South Dakota, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "19"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Buffalo County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "South Dakota"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-99.4642 44.0633)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "97570"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   }
+  ]
+ }
+}

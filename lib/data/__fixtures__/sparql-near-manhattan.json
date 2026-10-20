@@ -1,0 +1,1627 @@
+{
+ "head": {
+  "vars": [
+   "c",
+   "label",
+   "description",
+   "dist",
+   "coord",
+   "places",
+   "fagc",
+   "enwiki",
+   "burials"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117617035"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "B'nai Jeshurun Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.09"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.98823 40.74842)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2501430"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q111660256"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "St. Paul the Apostle Church Vault"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York City, New York"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.258"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.98494 40.76931)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York City"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2253527"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117506111"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Third Cemetery of Congregation Shearith Israel in use 1829-1851"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.95"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.9943 40.74178)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2260432"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117571300"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Bass Hardenbrook Family Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "2.545"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.95597 40.76285)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2667007"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117545399"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Second Cemetery of Congregation Shearith Israel"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York City, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "2.741"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.99774 40.73516)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Manhattan"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2265519"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q130607960"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "St. Mark's Church in-the-Bowery Churchyard"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Manhattan, New York City"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.085"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.98713 40.73028)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Manhattan"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "641176"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "41"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/St._Mark%27s_Church_in-the-Bowery_Churchyard"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q108049621"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Washington Square Park potter's field"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "defunct cemetery in Manhattan"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.193"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.997777777 40.730833333)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Manhattan"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117641289"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Catholic Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.209"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.98309 40.7292)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2460829"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q116810166"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "11th Street Catholic Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "former cemetery in Manhattan, New York City"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.211"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.98263 40.7292)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117660206"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Bedford Street Methodist Episcopal Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.404"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.00452 40.73099)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2416953"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117693409"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New York City 88th Street Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Former cemetery in New York County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.557"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.95783 40.78217)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2446656"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q30323846"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Congregation Shaare Zedek Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "former Jewish cemetery in Manhattan, New York City"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.564"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.957039 40.781721)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York City"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Congregation_Shaare_Zedek_Cemetery"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117594599"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "German Lutheran Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.587"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.00542 40.72949)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2573732"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q30323865"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "St. John's Burying Ground"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "defunct cemetery in Manhattan"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.594"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.006395 40.72982)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York City"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2389220"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/St._John%27s_Burying_Ground"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2879976"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New York Marble Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "historic cemetery in New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.629"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.990972 40.725625)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Manhattan"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "641160"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "18"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/New_York_Marble_Cemetery"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q111747200"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Episcopal Church of the Heavenly Rest Columbarium"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "burial place at the Episcopal Church of the Heavenly Rest in New York City"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.666"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.95844 40.78383)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York City"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "641175"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "4"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7013238"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New York City Marble Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York City"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.713"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.989167 40.724722)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Manhattan"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "641159"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "31"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/New_York_City_Marble_Cemetery"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117545208"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Brick Presbyterian Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.835"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.955 40.78361)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1643416"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q118443897"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "St. Patrick's Old Cathedral Churchyard"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Manhattan, New York"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.865"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.99491 40.72398)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York City"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "979576"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "8"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117558307"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Houston Street Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.883"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.99192 40.72342)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2473782"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117537330"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Presbyterian Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.937"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.99107 40.72284)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2560888"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117548306"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Provost Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Kings County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.955"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.95238 40.73279)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Kings County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2661247"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q123557684"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Dutch Reformed Church Cemetery of Manhattan"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Manhattan, New York City"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.968"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.99088 40.72255)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Manhattan"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2560899"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q56589154"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Ryerson Family Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Long Island City, New York"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.169"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.936834 40.751144)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Long Island City"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2485437"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5522316"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Garden State Crematory"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "crematorium in North Bergen, New Jersey, USA"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.243"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.028 40.7785)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "North Bergen"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "641084"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "5"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Garden_State_Crematory"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4891512"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Bergen Crest Mausoleum"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in North Bergen, New Jersey"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.285"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.029 40.778)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Hudson County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1965604"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Bergen_Crest_Mausoleum"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117601753"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Becker Family Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Hudson County, New Jersey, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.329"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.0288 40.77898)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Hudson County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2672642"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4928956"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Blue Chapel"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "monastery in Union City, Hudson County, New Jersey"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.428"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.0379 40.7613)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Union City"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2206378"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Blue_Chapel"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5611374"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Grove Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Hudson County, New Jersey, US"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.44"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.0264 40.7832)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "North Bergen"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "100012"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "4"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Grove_Church_Cemetery"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7979375"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Weehawken Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New Jersey"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.459"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.0302 40.7795)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New Jersey"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "100292"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Weehawken_Cemetery"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7127594"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Palisades Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in North Bergen, New Jersey"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.65"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.0331 40.7792)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Hudson County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "100162"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Palisades_Cemetery"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117554589"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Methodist Society Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.684"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.99453 40.71643)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2388877"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5462169"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Flower Hill Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in North Bergen, New Jersey"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.732"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.0251 40.7882)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "North Bergen"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "99981"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Flower_Hill_Cemetery_(North_Bergen,_New_Jersey)"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117656787"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Jewish Section of Flower Hill Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Hudson County, New Jersey, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.754"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.0256 40.7881)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Hudson County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2761628"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117566297"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "German Reformed Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in New York County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.813"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.9947 40.71528)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "New York County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2735326"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q8509417"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Hoboken Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in North Bergen, New Jersey"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.929"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.026388888 40.789722222)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "North Bergen"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "100030"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "16"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Hoboken_Cemetery"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117572596"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Saint George Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Queens County, New York, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.06"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.92861 40.77265)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Queens County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2165620"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q383996"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "African Burial Ground National Monument"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "national monument in New York City"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.084"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.004467 40.714597)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Manhattan"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2407027"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/African_Burial_Ground_National_Monument"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117580332"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Congregation Adas Emuno Hoboken Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Hudson County, New Jersey, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.101"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.02854 40.79029)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Hudson County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2452195"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6723845"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Machpelah Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in North Bergen, New Jersey"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.154"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-74.026388888 40.7925)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "North Bergen"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "100075"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Machpelah_Cemetery_(North_Bergen,_New_Jersey)"
+    }
+   }
+  ]
+ }
+}
