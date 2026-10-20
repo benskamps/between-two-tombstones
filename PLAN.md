@@ -174,8 +174,8 @@ Owns: `app/gravitator/**`, `app/api/gravitator/**`, `components/gravitator/**`, 
 
 Coverage note (verified 10/20): within 8 km of downtown Atlanta, 20 cemeteries; 3 have a founding date, 1 an area, 2 a photo, 1 a heritage listing. Sparse cards must look intentional.
 
-### Lane 8 — Haunted Calendar (P1) 🟨 builder dispatched 10/20 03:00 UTC
-Owns: `app/calendar/**`, `app/api/calendar/**`, `components/calendar/**`, `lib/calendar/**`, `tests/e2e/calendar.spec.ts`. Feed `GET /api/calendar/[qid]` (RFC 5545, yearly all-day events, stable UIDs, 25-year respect rule, day-precision dates only); page `/calendar` with Apple/Google/Outlook subscribe links. Bundled snapshots now; orchestrator swaps in Lane 2's live loader on merge. Real subscriptions need the public prod URL (preview is SSO-protected).
+### Lane 8 — Haunted Calendar (P1) ✅ merged 10/20 03:25 UTC (local prod; real calendar subscriptions wait for the public prod URL)
+Owns: `app/calendar/**`, `app/api/calendar/**`, `components/calendar/**`, `lib/calendar/**`, `tests/e2e/calendar.spec.ts`. Feed `GET /api/calendar/[qid]` (RFC 5545, yearly all-day events, stable UIDs, 25-year respect rule, day-precision dates only); page `/calendar` with Apple/Google/Outlook subscribe links. Bundled snapshots now; swap point is `lib/calendar/source.ts` line 40 when Lane 2 merges. Orchestrator re-check: Oakland feed 30 VEVENTs, max 75 octets/line, CRLF only, Maynard Jackson (d. 2003) excluded; calendar + platform e2e 38/38; robots allows `/api/calendar/`; on the home page and sitemap. Real subscriptions need the public prod URL (preview is SSO-protected).
 
 ### Lane 9 — Séance mode (P1) 🟨 builder dispatched 10/20 03:00 UTC
 Owns (taking over from finished Lane 4): `lib/spirit/**`, `app/spirit/**`, `components/spirit/**`, `app/games/party/**`, `app/api/time/**`, `tests/e2e/seance.spec.ts`, `tests/e2e/spirit-games.spec.ts`. Deterministic slot schedule from hash(room, cemetery, slot); bank hash in the link; 10 s aligned start with countdown; existing caps and respect rules unchanged.

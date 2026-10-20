@@ -47,7 +47,7 @@ const AI_CRAWLERS = [
   "CCBot",
 ];
 
-const SITEMAP_PATHS = ["/", "/stamp", "/spirit", "/games", "/cemetery/Q2008469", "/cemetery/Q360779"];
+const SITEMAP_PATHS = ["/", "/stamp", "/spirit", "/games", "/calendar", "/cemetery/Q2008469", "/cemetery/Q360779"];
 
 function parseCsp(value: string): Record<string, string[]> {
   return Object.fromEntries(

@@ -9,7 +9,8 @@ const SAMPLES = [
 const TOOLS = [
   { href: "/stamp", title: "Stamp Kit", body: "Turn a photo of a headstone into a rubbing, an ink stamp and a postage stamp." },
   { href: "/spirit", title: "Spirit Box", body: "Static and voices made from the names of people buried here long ago." },
-  { href: "/games", title: "Graveyard Games", body: "Tombstone Bingo, the Epitaph Hunt and more, to play while you walk." },
+  { href: "/games", title: "Graveyard Games", body: "Tombstone Bingo, a party mode for friends, and an EVP recorder." },
+  { href: "/calendar", title: "Haunted Calendar", body: "Your calendar gets the death-days of people buried here, every year, each linking to their story." },
 ];
 
 export default function Home() {
