@@ -93,6 +93,7 @@ What it means:
 | 12 | 10/20 | **Claude spend:** hard cap = a dedicated Anthropic API key with a workspace spend limit (Ben's click). `CLAUDE_DAILY_USD_CAP` is a best-effort soft cap per server instance (no database to count globally). Results are cached by image hash. |
 | 13 | 10/20 | **Wikimedia User-Agent** = `BetweenTwoTombstones/0.1 (https://github.com/benskamps/between-two-tombstones)` (`lib/site.ts`). The repo URL is the contact. |
 | 15 | 10/20 | **Gravitator (Ben's ask):** a dating-app swipe deck where the profiles are public cemeteries near you. Public only: excludes Wikidata family (Q73218016), private (Q107684101), animal (Q163778) and abandoned (Q107334193) cemeteries and anything with P576. Own palette scoped to the route: Victorian half-mourning mauve on crepe black, candle for Go now, a will-o'-the-wisp glow for matches. P1: runs in parallel, never ahead of the P0 gate. |
+| 16 | 10/20 | **Haunted Calendar + Séance mode locked in (Ben).** Calendar: subscribe to a cemetery and your real calendar gets yearly death-days (optionally birthdays) of people who died 25+ years ago, each linking to their story card; unsubscribing removes it all. Séance: every phone on a party link speaks the same spirit words at the same second from a shared seed + synced clock (`/api/time`), no server state. Both P1, database-free, built in parallel. |
 | 14 | 10/20 | **Production deploys are Ben's click.** The Vercel project is not connected to Git auto-deploys for production. Claude deploys previews with the CLI; Ben promotes or runs `vercel --prod`. |
 
 ---
@@ -172,6 +173,12 @@ Owns: `app/gravitator/**`, `app/api/gravitator/**`, `components/gravitator/**`, 
 | L7.3 | P1 | Palette contrast ≥ 4.5:1 for every text pair, both themes | unit test | ⬜ |
 
 Coverage note (verified 10/20): within 8 km of downtown Atlanta, 20 cemeteries; 3 have a founding date, 1 an area, 2 a photo, 1 a heritage listing. Sparse cards must look intentional.
+
+### Lane 8 — Haunted Calendar (P1) 🟨 builder dispatched 10/20 03:00 UTC
+Owns: `app/calendar/**`, `app/api/calendar/**`, `components/calendar/**`, `lib/calendar/**`, `tests/e2e/calendar.spec.ts`. Feed `GET /api/calendar/[qid]` (RFC 5545, yearly all-day events, stable UIDs, 25-year respect rule, day-precision dates only); page `/calendar` with Apple/Google/Outlook subscribe links. Bundled snapshots now; orchestrator swaps in Lane 2's live loader on merge. Real subscriptions need the public prod URL (preview is SSO-protected).
+
+### Lane 9 — Séance mode (P1) 🟨 builder dispatched 10/20 03:00 UTC
+Owns (taking over from finished Lane 4): `lib/spirit/**`, `app/spirit/**`, `components/spirit/**`, `app/games/party/**`, `app/api/time/**`, `tests/e2e/seance.spec.ts`, `tests/e2e/spirit-games.spec.ts`. Deterministic slot schedule from hash(room, cemetery, slot); bank hash in the link; 10 s aligned start with countdown; existing caps and respect rules unchanged.
 
 ### Lane 5 — The viral lifecycle (starts only after the Lane 2+3 stranger pass)
 | ID | Tier | Item | Status |
