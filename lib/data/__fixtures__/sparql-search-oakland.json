@@ -1,0 +1,127 @@
+{
+ "head": {
+  "vars": [
+   "item",
+   "label",
+   "description",
+   "ordinal",
+   "places",
+   "state",
+   "country",
+   "coord",
+   "fagc",
+   "enwiki",
+   "burials"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7074077"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oaklands Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in West Chester, Pennsylvania, U.S.A"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "16"
+    },
+    "places": {
+     "type": "literal",
+     "value": "West Chester"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Pennsylvania"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.6213 39.9799)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "45667"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oaklands_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "40"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2008469"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Atlanta, Georgia, USA"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "41"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Atlanta|Fulton County"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Georgia"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.371333 33.748722)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "35955"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Atlanta)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "115"
+    }
+   }
+  ]
+ }
+}

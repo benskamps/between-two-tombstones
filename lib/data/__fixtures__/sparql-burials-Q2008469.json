@@ -1,0 +1,5059 @@
+{
+ "head": {
+  "vars": [
+   "person",
+   "personLabel",
+   "personDescription",
+   "birth",
+   "birthPrecision",
+   "death",
+   "deathPrecision",
+   "causes",
+   "manners",
+   "occupations",
+   "image",
+   "graveImage",
+   "graveCoord",
+   "personCoord",
+   "findAGraveId",
+   "sitelinks",
+   "enwiki"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q173540"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Margaret Mitchell"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American author and journalist (1900–1949)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1900-11-08T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1949-08-16T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": "struck by vehicle"
+    },
+    "manners": {
+     "type": "literal",
+     "value": "accidental death"
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "prose writer|novelist|journalist|writer|screenwriter"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Margaret%20Mitchell%20NYWTS%20%28cropped%29.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "718"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "101"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Margaret_Mitchell"
+    },
+    "graveImage": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Margaret%20Ann%20Mitchell%20Tombstone%2C%20Hiland%20Cemetery%2C%202015-08-17%2C%2001.jpg"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q437526"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Bobby Jones"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American amateur golfer and lawyer (1902–1971)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1902-03-17T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1971-12-18T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": "neurological disorder"
+    },
+    "manners": {
+     "type": "literal",
+     "value": "natural causes"
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "golfer|athlete|jurist|lawyer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/BobbyJonesAge14.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "553"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "32"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Bobby_Jones_(golfer)"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q118774"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "John B. Gordon"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1832-1904)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1832-02-06T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1904-01-09T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Jbgordon.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "4140"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "20"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/John_B._Gordon"
+    },
+    "graveImage": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/John%20Brown%20Gordon%20grave%203.jpg"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q356810"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Hoke Smith"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1855–1931)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1855-09-02T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1931-11-27T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "jurist|politician|lawyer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/M.%20Hoke%20Smith%2C%201912.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "9663"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "15"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Hoke_Smith"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q357506"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Joseph E. Brown"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1821–1894)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1821-04-15T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1894-11-30T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "jurist|governor|politician|lawyer|judge"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Joseph%20Emerson%20Brown.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7826410"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "13"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Joseph_E._Brown"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q547342"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Benjamin Harvey Hill"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1823-1882)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1823-09-14T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1882-08-16T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Benjamin%20Harvey%20Hill%20-%20Brady-Handy.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7826448"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Benjamin_Harvey_Hill"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1146386"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Joseph Mackey Brown"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician, Georgia (1851-1932)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1851-12-28T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1932-03-03T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "governor|politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/JosephMacBrown%20%283x4a%29.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "9658"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "10"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Joseph_Mackey_Brown"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1100228"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Clement A. Evans"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Confederate States Army general, politician, minister, historian (1833-1911)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1833-02-25T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1911-07-02T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "historian|politician|lawyer|writer|judge"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Clement%20A%20Evans%2C%20Confederate%20General.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "4142"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "8"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Clement_A._Evans"
+    },
+    "graveCoord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.372694444 33.749)"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2579465"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "William J. Northen"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1835–1913)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1835-07-09T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1913-03-25T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "governor|politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20J.%20Northen%20%2810506816775%29%20%281%29.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7937492"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "8"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/William_J._Northen"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q886071"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "John M. Slaton"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1866-1955)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1866-12-25T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1955-01-11T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "jurist|governor|politician|lawyer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Ex-Gov.%20John%20Slaton%20and%20wife%20LCCN2014699353%20%283x4a%29.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7937575"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "8"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/John_M._Slaton"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1310669"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lucius Jeremiah Gartrell"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Confederate Army general (1821-1891)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1821-01-07T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1891-04-07T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician|lawyer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Portrait%20of%20Lucius%20Jeremiah%20Gartrell.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "9661"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "7"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Lucius_J._Gartrell"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3302990"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Maynard Jackson"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician and attorney (1938–2003)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1938-03-23T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "2003-06-24T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": "myocardial infarction"
+    },
+    "manners": {
+     "type": "literal",
+     "value": "natural causes"
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Maynard%20Jackson.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7609089"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "7"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Maynard_Jackson"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4197151"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Alfred Iverson, Jr."
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Confederate Army general (1829-1911)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1829-02-14T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1911-03-31T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "military personnel|lawyer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/AlfredIverson.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "4141"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "7"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Alfred_Iverson_Jr."
+    },
+    "graveImage": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Alfrediversonjr.jpg"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1966756"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Nathaniel Job Hammond"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1833-1899)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1833-12-26T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1899-04-20T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician|lawyer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Nathaniel%20Job%20Hammond%20%281833%E2%80%931899%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7937005"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "6"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Nathaniel_J._Hammond"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4888678"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Benjamin Franklin White"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American hymn writer"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1800-09-20T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1879-12-05T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "hymnwriter|politician|writer|composer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/White%20bf.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "36814801"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "6"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Benjamin_Franklin_White"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q8018782"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "William Stephen Walker"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Confederate States Army brigadier general (1822-1899)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1822-04-13T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1899-06-07T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "military officer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/William-Stephen-Walker.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "11103"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "6"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/William_Stephen_Walker"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q23010789"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Elizabeth O. King"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American bacteriologist (1912–1966)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1912-10-12T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1966-04-08T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "bacteriologist|microbiologist"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Elizabeth%20King.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "64007994"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "6"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Elizabeth_O._King"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q889369"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "John N. Irwin"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "9th Governor of Arizona Territory, 9th Governor of Idaho Territory, U.S. Minister to Portugal (1844-1905)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1847-12-25T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1905-12-11T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "diplomat|jurist|governor|politician|lawyer|mayor"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/John%20Nichol%20Irwin%20-%20oval.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "6662051"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "5"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/John_N._Irwin"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1680096"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "James C. Freeman"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1819-1885)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1819-04-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1885-09-03T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "9664"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "5"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/James_C._Freeman"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1713616"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Junius Hillyer"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1807-1886)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1807-04-23T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1886-06-21T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician|lawyer|judge"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Junius%20Hillyer.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7937340"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "5"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Junius_Hillyer"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5729655"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Henry W. Grady"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American journalist (1850–1889)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1850-05-24T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1889-12-23T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": "pneumonia"
+    },
+    "manners": {
+     "type": "literal",
+     "value": "natural causes"
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "journalist|editor"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Henry-grady-1890.JPG"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "6819457"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "5"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Henry_W._Grady"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q8004355"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "William Allen Fuller"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American railroad conductor (1836–1905)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1836-04-15T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1905-12-28T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": ""
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Allen%20Fuller.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "9660"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "5"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/William_Allen_Fuller"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q14926800"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Ivan Allen, Jr."
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Businessman and mayor (1911-2003)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1911-03-15T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "2003-07-02T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Ivan%20Allen%20Jr.%2C%201952.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7646643"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "5"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Ivan_Allen_Jr."
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q28008660"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Myrta Lockett Avary"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American writer and journalist (1857-1946)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1857-12-07T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1946-02-14T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "journalist|author"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Myrta%20Lockett%20Avary.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "112785948"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "5"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Myrta_Lockett_Avary"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q47536194"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Thomas E. Askew"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American photographer"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1847-08-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "10"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1914-07-12T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "photographer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Thomas%20E.%20Askew%2C%20self-portrait%20LCCN99472217.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "29799791"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "5"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Thomas_E._Askew"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1247941"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "John William Jones"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Confederate Army officer (1806-1871)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1806-04-14T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1871-04-27T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7937432"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "4"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/John_William_Jones"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4277827"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "James G. Woodward"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1845–1923)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1845-01-14T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1923-08-29T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "37873627"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "4"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/James_G._Woodward"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5076386"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Charles Collier"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American banker and politician"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1848-07-19T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1900-09-28T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Charles%20collier%20cyclop.gif"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "49745478"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "4"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Charles_A._Collier"
+    },
+    "graveCoord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.371388888 33.748611111)"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5540616"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "George Hillyer"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician and Confederate Army officer"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1835-03-17T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1927-10-02T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/George%20Hillyer%20%28Atlanta%20Mayor%29.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7937278"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "4"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/George_Hillyer"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6231902"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "John Erskine"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "US federal judge (1813-1895)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1813-09-13T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1895-01-27T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician|lawyer|judge"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/John%20Erskine%20%281813%E2%80%931895%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "19088446"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "4"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/John_Erskine_(judge)"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6309918"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Julius L. Brown"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American attorney"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1848-05-31T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1910-09-04T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "lawyer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Julius%20L.%20Brown%20%281848%E2%80%931910%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "16364880"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "4"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Julius_L._Brown"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1247034"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Marshall Johnson Wellborn"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1808-1874)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1808-05-29T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1874-10-16T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician|lawyer|judge"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7937596"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Marshall_Johnson_Wellborn"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5341483"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Edward A. Vincent"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American cartographer and architect"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1825-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1856-01-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "civil engineer|cartographer|architect|engineer"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Edward_A._Vincent"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5602299"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Green B. Adair"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "businessperson"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1840-10-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "10"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1914-04-20T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/19140422%20AC%20Green%20B.%20Adair.jpg"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Green_B._Adair"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5724285"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Henry Kent McCay"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States federal judge (1820–1886)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1820-01-08T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1886-07-30T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "lawyer|judge"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Henry_Kent_McCay"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6647375"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lita McClinton"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American murder victim"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1953-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1987-01-16T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": "homicide"
+    },
+    "occupations": {
+     "type": "literal",
+     "value": ""
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "134613167"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Lita_McClinton"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7347269"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Robert Foster Maddox"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1870–1965)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1870-04-04T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1965-04-10T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Robert%20Foster%20Maddox%20in%201918.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "45045825"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Robert_Maddox"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7447840"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Selena Sloan Butler"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American activist"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1872-01-04T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1964-10-09T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "social activist|educator"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Selena%20Sloan%20Butler.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "10332703"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Selena_Sloan_Butler"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q8011842"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "William Hemphill"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Confederate Army officer (1842-1902)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1842-05-05T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1902-08-17T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Arnold%20Hemphill%20%281842%E2%80%931902%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "9562367"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/William_Hemphill"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q15505741"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Franklin Garrett"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American historian (1906-2000)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1906-09-25T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "2000-03-05T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "historian"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7870234"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Franklin_Garrett"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q16043644"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Nellie Peters Black"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American women's activist"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1851-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1919-01-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "women's rights activist|community organizer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/NelliePetersBlack1895.tif"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "31736146"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Nellie_Peters_Black"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q131260124"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Margaret O'Connor Wilson"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American civic leader (1856-1942)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1856-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1942-01-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "executive"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Margaret%20O%27Conner%20Wilson%20%28ca.%201880%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "259187246"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Margaret_O%27Connor_Wilson"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q23806432"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lollie Belle Wylie"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American journalist and poet (1858-1923)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1858-10-21T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1923-02-16T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "composer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Lollie%20Belle%20Wylie%20from%20American%20Women%2C%201897%20-%20cropped.jpg"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Lollie_Belle_Wylie"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q64162479"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Martha Loftin Wilson"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American missionary worker and journal editor (1834-1919)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1834-01-18T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1919-06-11T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "missionary|writer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/MARTHA%20ELEANOR%20LOFTIN%20WILSON%20A%20woman%20of%20the%20century%20%28page%20798%20crop%29.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "32030396"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Martha_Loftin_Wilson"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q947712"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Max Corput"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Belgian-American architect and Confederate Army captain"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1825-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1911-01-16T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "architect"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Max%20Van%20Den%20Corput.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "75878290"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Max_Corput"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4888432"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Benjamin Crane"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American businessman (1835-1885)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1835-12-19T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1885-01-15T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": ""
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Benjamin%20Elliott%20Crane.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "35271012"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Benjamin_Crane"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5488849"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Frank P. Rice"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1838-10-28T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1923-03-10T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Frank%20P%20Rice.jpg"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Frank_P._Rice"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5725176"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Henry Lumpkin Wilson"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1839-1917)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1839-07-02T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1917-09-21T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Henry%20Lumpkin%20Wilson.JPG"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Henry_Lumpkin_Wilson"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6130876"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "James Calhoun"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American mayor (1811–1875)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1811-02-12T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1875-10-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "10333015"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/James_Calhoun_(Atlanta_politician)"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6213600"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Joel Hurt"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American businessman"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1850-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1926-01-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "businessperson"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Joel%20Hurt.jpg"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Joel_Hurt"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6248918"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "John Mims"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1815-11-10T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1856-04-30T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/John_Mims"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6667002"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Logan Edwin Bleckley"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American judge (1827-1907)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1827-07-03T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1907-03-06T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "lawyer|judge"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Logan_Edwin_Bleckley"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6986296"
+    },
+    "personLabel": {
+     "type": "literal",
+     "value": "Q6986296"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American mayor"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1814-11-10T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1882-02-03T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Nedom%20L.%20Angier%20%281814%E2%80%931882%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "45045211"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Nedom_L._Angier"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7181965"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Phil Haralson"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American lawyer (1851–1912)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1851-11-03T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1934-03-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "10"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "lawyer"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "57175569"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Phil_Haralson"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7328385"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Richard Peters"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American businessman, founder of Atlanta, Georgia (1810–1889)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1810-11-10T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1889-02-06T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "businessperson"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Richard%20Peters%20in%201848.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "39025241"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Richard_Peters_(Atlanta)"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7387383"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "S. B. Spencer"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1827-12-26T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1901-10-16T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/S._B._Spencer"
+    },
+    "graveImage": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Samuel-Spencer-grave.JPG"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7791946"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Thomas Lowe"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1812-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1875-11-18T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Thomas_Lowe_(politician)"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q8008738"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "William Ezzard"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American mayor"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1799-06-12T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1887-03-24T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/William_Ezzard"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q8015135"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "William Markham"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American mayor (1811–1890)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1811-10-09T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1890-11-09T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Markham%20%281811%E2%80%931890%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "109985010"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/William_Markham_(mayor)"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q16030228"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "William Ambrose Wright"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician, Georgia"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1844-01-19T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1929-09-13T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Ambrose%20Wright%20%281844%E2%80%931929%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "9553636"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/William_Ambrose_Wright"
+    },
+    "graveImage": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Ambrose%20Wright%20resting%20place.jpg"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q16043563"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Rufus M. Rose"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "physician, distiller (1836-1910)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1836-05-17T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1910-07-21T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "businessperson"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Rufus_M._Rose"
+    },
+    "graveImage": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/RufusRoseCrypt.jpg"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q16059030"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Samuel M. Inman"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American cotton merchant, businessman, philanthropist (1843–1915)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1843-02-19T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1915-01-12T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "businessperson"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Samuel%20M%20Inman%201889.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "10198227"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Samuel_M._Inman"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q98732878"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Isma Dooly"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "US newspaper editor and clubwoman"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "newspaper editor"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/IsmaDooly.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "57858679"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Isma_Dooly"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q100792941"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Christopher C. Wimbish"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American lawyer and politician"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1895-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1962-01-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "military personnel|businessperson|politician"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "178313365"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Christopher_C._Wimbish"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q107392201"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Myra Miller"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Atlanta-based food entrepreneur and baker (1811-1891)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1811-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1891-01-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "traiteur|baker|entrepreneur"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Myra_Miller"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q107990165"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Foster Blodgett"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Foster%20Blodgett%20Jr.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "42048546"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Foster_Blodgett"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q109855709"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Eugenia Jones Bacon"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "author (1840–1920)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1840-02-02T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1920-03-13T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "art educator|writer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Eugenia%20Jones%20Bacon%201895.jpg"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Eugenia_Jones_Bacon"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q131301911"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Emily Hendree Stewart Park"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American school president (1848-1910)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1848-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1910-01-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "academic administrator"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Emily%20Hendree%20Park%20%28Confederate%20Veteran%2C%201911%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "131567487"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Emily_Hendree_Stewart_Park"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q28921823"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Luetta Elmina Braumuller"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American artist, publisher"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1856-12-04T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1898-12-13T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "painter|writer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Luetta%20Elmina%20Braumuller%20ca%201893.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "52505414"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Luetta_Elmina_Braumuller"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q47541503"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Henry A. Rucker"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American entrepreneur and politician"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1852-11-14T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1924-05-11T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician|businessperson"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Henry%20A.%20Rucker.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "41334423"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Henry_A._Rucker"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q48488804"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Wesley John Gaines"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American church and community leader (1840–1912)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1840-10-04T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1912-01-12T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "writer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Bishop%20wesley%20gaines.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "9665"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Wesley_John_Gaines"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q56599684"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Osborne Augustus Lochrane"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American judge"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1829-08-22T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1887-06-17T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "judge"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Photograph%20of%20Osborne%20Augustus%20Lochrane%20%281829%E2%80%931887%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "5343708"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Osborne_Augustus_Lochrane"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q67905614"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Alexander Campbell Bruce"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "architect"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1835-03-16T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1927-12-10T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "architect"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Alexander%20Campbell%20Bruce.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "96804508"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Alexander_Campbell_Bruce"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q97961538"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Julia Collier Harris"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American writer and journalist"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1885-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1967-01-21T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "publisher|journalist"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Julia%20Collier%20Harris%20LCCN2014705884.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "49047974"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Julia_Collier_Harris"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4747236"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Ammi Williams"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American pioneer"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1780-11-19T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1864-03-30T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "businessperson"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "40594138"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Ammi_Williams"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4775482"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Antoine Graves"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American realtor and school administrator"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1862-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1941-01-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": ""
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Antoine_Graves"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4888303"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Benjamin Bomar"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician, 1816/1818-1868"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1818-08-09T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1868-02-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "10332817"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Benjamin_Bomar"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5346724"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Edwin P. Ansley"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American real estate developer in Atlanta"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1865-03-30T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1923-07-02T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "real estate developer"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "27054763"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Edwin_P._Ansley"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6066179"
+    },
+    "personLabel": {
+     "type": "literal",
+     "value": "Q6066179"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American businessman"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1807-01-19T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1887-08-28T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "businessperson"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Ira_O._McDaniel"
+    },
+    "graveImage": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/IOMcD.jpg"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6133751"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "James Fairlie Cooper"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "superintendent of the Dahlonega Mint (1814-1869)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1814-09-02T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1869-10-14T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "military officer"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "110618933"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/James_Fairlie_Cooper"
+    }
+   }
+  ]
+ }
+}

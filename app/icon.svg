@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#0e110f"/><g>
+  <mask id="crescent">
+    <rect width="512" height="512" fill="white"/>
+    <circle cx="394" cy="118" r="40" fill="black"/>
+  </mask>
+  <clipPath id="stone"><path d="M150 404V236a106 106 0 0 1 212 0v168z"/></clipPath>
+  <circle cx="372" cy="136" r="46" fill="#e2ad4b" mask="url(#crescent)"/>
+  <path d="M150 404V236a106 106 0 0 1 212 0v168z" fill="#d9d2c1"/>
+  <rect x="328" y="120" width="40" height="290" fill="#b3ae9c" clip-path="url(#stone)"/>
+  <rect x="196" y="244" width="120" height="14" rx="7" fill="#8f8878"/>
+  <rect x="210" y="280" width="92" height="14" rx="7" fill="#8f8878"/>
+  <rect x="196" y="316" width="120" height="14" rx="7" fill="#8f8878"/>
+  <rect x="88" y="396" width="336" height="28" rx="14" fill="#9db58f"/>
+</g></svg>

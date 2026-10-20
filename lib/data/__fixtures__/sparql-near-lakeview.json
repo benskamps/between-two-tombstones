@@ -1,0 +1,589 @@
+{
+ "head": {
+  "vars": [
+   "c",
+   "label",
+   "description",
+   "dist",
+   "coord",
+   "places",
+   "fagc",
+   "enwiki",
+   "burials"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q872253"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lake View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Seattle, Washington, USA"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "0.039"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.315277777 47.633888888)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Seattle"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "76890"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "103"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Lake_View_Cemetery_(Seattle)"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5594250"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Grand Army of the Republic Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American Civil War cemetery in Seattle"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "0.28"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.316388888 47.636388888)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Seattle"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "76815"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Grand_Army_of_the_Republic_Cemetery_(Seattle)"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q107541984"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Hills of Eternity Reform Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery at Seattle WA, USA"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.78"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.364333333 47.643194444)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Seattle"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "417984"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "4"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q105764046"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Mount Pleasant Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Seattle, Washington, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.948"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.365731737 47.645260489)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Seattle"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "76945"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "26"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Mount_Pleasant_Cemetery_(Seattle)"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5024158"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Calvary Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "catholic cemetery in Seattle, Washington, USA"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.057"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.293 47.667)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Seattle"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "76728"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "19"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Calvary_Cemetery_(Seattle)"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117566935"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Fort Lawton Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Seattle, King County, Washington, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "7.327"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.40553 47.66012)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Seattle"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "269043"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117549324"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Crown Hill Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in King County, Washington, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "7.726"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.3686 47.6936)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "King County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "76751"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5417254"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Evergreen Washelli Memorial Park"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Washington state"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.705"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.346 47.7095)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Seattle"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "417974"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "72"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Evergreen_Washelli_Memorial_Park"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117446823"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Pacific Lutheran Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in King County, Washington, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.821"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.33604 47.71205)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "King County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2160980"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117682849"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Seattle Historic Sephardic Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Seattle, Washington, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.859"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.33999 47.71189)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Seattle"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2143665"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117613690"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Orthodox Brotherly Cemetery of Saint Nicholas"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in King County, Washington, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.861"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.3378 47.7122)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "King County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2143667"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117692744"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New Bikur Cholim Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in King County, Washington, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.971"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.34027 47.71288)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "King County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1978487"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5151615"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Comet Lodge Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Seattle, Washington, U.S."
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.707"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.305 47.5469)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Seattle"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "244310"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Comet_Lodge_Cemetery"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117611745"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Bellevue Pioneer Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in King County, Washington, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.809"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-122.1856 47.6248)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "King County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "242669"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   }
+  ]
+ }
+}

@@ -1,0 +1,519 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import { ageFromDates, datesLine } from "@/lib/stamp/age";
+import { defaultQuad, isUsableQuad } from "@/lib/stamp/homography";
+import {
+  DEFAULT_SETTINGS,
+  GRIT_MAX,
+  STROKE_MAX,
+  STROKE_MIN,
+  type CarveMode,
+  type Quad,
+  type StampSettings,
+  type StampText,
+} from "@/lib/stamp/types";
+import { CornerFramer } from "./CornerFramer";
+import { ReadWithClaude } from "./ReadWithClaude";
+import { RENDER_LABELS, StampPreviews, type PreviewUrls } from "./StampPreviews";
+import { StampClient, stampKitSupported, type RenderResult } from "./stampClient";
+
+/** Photos are downsized to this long side on the phone before anything else happens. */
+const MAX_WORK_SIDE = 2000;
+const DEBOUNCE_MS = 250;
+
+const MODES: { value: CarveMode; label: string; hint: string }[] = [
+  { value: "dark", label: "Dark letters", hint: "Carving in shadow, darker than the stone" },
+  { value: "light", label: "Light letters", hint: "Carving lit up or painted, lighter than the stone" },
+  { value: "edges", label: "Both edges", hint: "Worn stones: pick up both sides of each cut" },
+];
+
+type Photo = { bitmap: ImageBitmap; width: number; height: number };
+type Blobs = { rubbing: Blob; ink: Blob; postage: Blob };
+
+function slug(s: string): string {
+  const out = s
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 40);
+  return out || "headstone";
+}
+
+function download(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+
+export function StampKit() {
+  const clientRef = useRef<StampClient | null>(null);
+  const urlsRef = useRef<PreviewUrls | null>(null);
+  const blobsRef = useRef<Blobs | null>(null);
+  const [photo, setPhoto] = useState<Photo | null>(null);
+  const [opening, setOpening] = useState(false);
+  const [corners, setCorners] = useState<Quad | null>(null);
+  const [settings, setSettings] = useState<StampSettings>(DEFAULT_SETTINGS);
+  const [name, setName] = useState("");
+  const [born, setBorn] = useState("");
+  const [died, setDied] = useState("");
+  const [ageInput, setAgeInput] = useState("");
+  const [ageTouched, setAgeTouched] = useState(false);
+  const [urls, setUrls] = useState<PreviewUrls | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [status, setStatus] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [last, setLast] = useState<{ ms: number; maskPixels: number; job: number; timings: string } | null>(null);
+  const [mainThread, setMainThread] = useState(false);
+
+  // Tear down the worker and blob URLs when leaving the page.
+  useEffect(() => {
+    const client = clientRef;
+    const u = urlsRef;
+    return () => {
+      client.current?.terminate();
+      client.current = null;
+      if (u.current) Object.values(u.current).forEach((x) => URL.revokeObjectURL(x));
+    };
+  }, []);
+
+  const autoAge = ageFromDates(born, died);
+  const ageValue = ageTouched ? ageInput : autoAge !== null ? String(autoAge) : "";
+  const age = useMemo(() => {
+    const n = Number.parseInt(ageValue, 10);
+    return Number.isFinite(n) && n >= 0 && n <= 150 ? n : null;
+  }, [ageValue]);
+  const text: StampText = useMemo(() => ({ name, born, died, age }), [name, born, died, age]);
+  const fileStem = slug(name);
+  const cornersOk = corners !== null && isUsableQuad(corners);
+
+  const applyRender = useCallback((r: RenderResult) => {
+    const next: PreviewUrls = {
+      rubbing: URL.createObjectURL(r.rubbing),
+      ink: URL.createObjectURL(r.ink),
+      postage: URL.createObjectURL(r.postage),
+    };
+    const prev = urlsRef.current;
+    urlsRef.current = next;
+    blobsRef.current = { rubbing: r.rubbing, ink: r.ink, postage: r.postage };
+    setUrls(next);
+    const timings = Object.fromEntries(Object.entries(r.timings).map(([k, v]) => [k, Math.round(v)]));
+    setLast({ ms: Math.round(r.timings.total), maskPixels: r.stats.maskPixels, job: r.job, timings: JSON.stringify(timings) });
+    if (prev) setTimeout(() => Object.values(prev).forEach((x) => URL.revokeObjectURL(x)), 1000);
+  }, []);
+
+  // Live previews: debounced; a newer job cancels the one in flight (in the worker) and its result is ignored here.
+  useEffect(() => {
+    const client = clientRef.current;
+    if (!photo || !corners || !cornersOk || !client) return;
+    let stale = false;
+    const timer = setTimeout(async () => {
+      setBusy(true);
+      setError(null);
+      setStatus("Making your stamps…");
+      try {
+        const r = await client.render(corners, settings, text);
+        if (stale || !r) return;
+        applyRender(r);
+        setBusy(false);
+        const secs = (r.timings.total / 1000).toFixed(1);
+        setStatus(
+          r.stats.maskPixels > 0
+            ? `Stamps ready in ${secs} s.`
+            : `Stamps ready in ${secs} s, but no carving was found. Try “Light letters” or “Both edges”, lower the grit, or tighten the corners.`,
+        );
+      } catch (err) {
+        if (stale) return;
+        setBusy(false);
+        setError(err instanceof Error ? err.message : "Couldn't make the stamps.");
+      }
+      // The first render for a photo goes straight away; later ones wait for a pause in dragging or typing.
+    }, urlsRef.current ? DEBOUNCE_MS : 0);
+    return () => {
+      stale = true;
+      clearTimeout(timer);
+    };
+  }, [photo, corners, cornersOk, settings, text, applyRender]);
+
+  async function onFile(e: ChangeEvent<HTMLInputElement>) {
+    const input = e.currentTarget;
+    const file = input.files?.[0];
+    if (!file) return;
+    if (!stampKitSupported()) {
+      setError("This browser can't make stamps: it lacks off-screen drawing. Try a current Chrome, Firefox or Safari.");
+      return;
+    }
+    setOpening(true);
+    setError(null);
+    setStatus("Opening your photo…");
+    try {
+      const full = await createImageBitmap(file, { imageOrientation: "from-image" });
+      let work = full;
+      const s = MAX_WORK_SIDE / Math.max(full.width, full.height);
+      if (s < 1) {
+        work = await createImageBitmap(full, {
+          resizeWidth: Math.round(full.width * s),
+          resizeHeight: Math.round(full.height * s),
+          resizeQuality: "high",
+        });
+        full.close();
+      }
+      const forWorker = await createImageBitmap(work);
+      clientRef.current ??= new StampClient();
+      setMainThread(clientRef.current.mode === "main");
+      await clientRef.current.load(forWorker);
+      setPhoto((old) => {
+        old?.bitmap.close();
+        return { bitmap: work, width: work.width, height: work.height };
+      });
+      setCorners(defaultQuad(work.width, work.height));
+      setUrls(null);
+      setLast(null);
+      blobsRef.current = null;
+      setStatus("Photo ready. Drag the corners onto the stone's face; the stamps update as you go.");
+    } catch (err) {
+      setStatus("");
+      setError(
+        err instanceof Error && err.message.startsWith("The Stamp Kit")
+          ? err.message
+          : "Couldn't open that photo. Try another one, or a JPEG or PNG.",
+      );
+    } finally {
+      setOpening(false);
+    }
+  }
+
+  async function saveKit(kind: "sheet" | "story") {
+    const client = clientRef.current;
+    if (!client) return;
+    setSaving(true);
+    try {
+      const { sheet, story } = await client.kit(text);
+      download(kind === "sheet" ? sheet : story, `${fileStem}-${kind === "sheet" ? "kit-sheet" : "story"}.png`);
+      setStatus(kind === "sheet" ? "Kit sheet saved." : "Story-size image saved.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't make the kit sheet.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function share() {
+    const client = clientRef.current;
+    const blobs = blobsRef.current;
+    if (!client || !blobs) return;
+    setSaving(true);
+    const who = name.trim();
+    const shareText = who
+      ? `A rubbing and stamps of ${who}'s headstone${datesLine(born, died) ? ` (${datesLine(born, died)})` : ""}, made from a photo with Between Two Tombstones. No stone was touched.`
+      : "A rubbing and stamps made from a headstone photo with Between Two Tombstones. No stone was touched.";
+    try {
+      const { sheet } = await client.kit(text);
+      const files = [
+        new File([sheet], `${fileStem}-kit-sheet.png`, { type: "image/png" }),
+        new File([blobs.rubbing], `${fileStem}-${RENDER_LABELS.rubbing.file}.png`, { type: "image/png" }),
+        new File([blobs.ink], `${fileStem}-${RENDER_LABELS.ink.file}.png`, { type: "image/png" }),
+        new File([blobs.postage], `${fileStem}-${RENDER_LABELS.postage.file}.png`, { type: "image/png" }),
+      ];
+      if (typeof navigator.canShare === "function" && navigator.canShare({ files })) {
+        try {
+          await navigator.share({ files, title: "Stamp Kit", text: shareText });
+          setStatus("Shared.");
+          return;
+        } catch (err) {
+          if (err instanceof DOMException && err.name === "AbortError") {
+            setStatus("Sharing cancelled.");
+            return;
+          }
+          // Fall through to download + copy.
+        }
+      }
+      download(sheet, `${fileStem}-kit-sheet.png`);
+      try {
+        await navigator.clipboard.writeText(shareText);
+        setStatus("This browser can't share files, so the kit sheet was saved and the caption copied.");
+      } catch {
+        setStatus(`This browser can't share files, so the kit sheet was saved. Caption: ${shareText}`);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't share the stamps.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const getReadImages = useCallback(async () => {
+    const client = clientRef.current;
+    if (!client || !corners) throw new Error("Choose a photo first.");
+    return client.readImages(corners);
+  }, [corners]);
+
+  const sectionClass = "space-y-3 rounded-xl border border-border bg-surface p-4";
+
+  return (
+    <div className="space-y-6">
+      <section aria-labelledby="step-photo" className={sectionClass}>
+        <h2 id="step-photo" className="font-display text-2xl">
+          1. Take or choose a photo
+        </h2>
+        <p className="text-muted">
+          Stand square to the stone, fill the frame with its face, and avoid your own shadow. The photo stays on your
+          phone.
+        </p>
+        <label
+          htmlFor="stamp-photo"
+          className="tap flex w-full cursor-pointer items-center justify-center rounded-xl bg-accent px-5 py-3 text-lg font-bold text-accent-ink focus-within:outline focus-within:outline-3 focus-within:outline-[var(--focus)]"
+        >
+          {opening ? "Opening…" : photo ? "Use a different photo" : "Take or choose a photo"}
+          <input
+            id="stamp-photo"
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={onFile}
+            disabled={opening}
+            className="sr-only"
+          />
+        </label>
+      </section>
+
+      <p className="sr-only" role="status" aria-live="polite" data-testid="stamp-status">
+        {status}
+      </p>
+      {status && (
+        <p aria-hidden="true" className="rounded-lg bg-surface-2 px-3 py-2 text-sm">
+          {status}
+        </p>
+      )}
+      {mainThread && (
+        <p className="text-sm text-muted" data-testid="main-thread-note">
+          This browser can&rsquo;t make stamps in the background, so the page may pause for a moment while they&rsquo;re
+          made.
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="rounded-lg border border-danger px-3 py-2 text-danger">
+          {error}
+        </p>
+      )}
+
+      {photo && corners && (
+        <>
+          <section aria-labelledby="step-frame" className={sectionClass}>
+            <div className="flex items-center justify-between gap-2">
+              <h2 id="step-frame" className="font-display text-2xl">
+                2. Frame the stone
+              </h2>
+              <button
+                type="button"
+                onClick={() => setCorners(defaultQuad(photo.width, photo.height))}
+                className="tap rounded-lg border border-border px-3 text-sm font-bold"
+              >
+                Reset corners
+              </button>
+            </div>
+            <CornerFramer bitmap={photo.bitmap} corners={corners} onChange={setCorners} />
+            {!cornersOk && (
+              <p role="alert" className="text-danger">
+                The corners cross over. Drag them back onto the stone&rsquo;s four corners, clockwise from top-left.
+              </p>
+            )}
+          </section>
+
+          <section aria-labelledby="step-lift" className={sectionClass}>
+            <h2 id="step-lift" className="font-display text-2xl">
+              3. Lift the carving
+            </h2>
+            <fieldset className="space-y-2">
+              <legend className="font-bold">What to lift</legend>
+              <div className="grid gap-2 sm:grid-cols-3">
+                {MODES.map((m) => (
+                  <label
+                    key={m.value}
+                    className={`tap flex cursor-pointer items-start gap-3 rounded-lg border p-3 ${
+                      settings.mode === m.value ? "border-accent bg-surface-2" : "border-border"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="carve-mode"
+                      value={m.value}
+                      checked={settings.mode === m.value}
+                      onChange={() => setSettings((s) => ({ ...s, mode: m.value }))}
+                      className="mt-1 h-5 w-5 accent-[var(--accent)]"
+                    />
+                    <span>
+                      <span className="block font-bold">{m.label}</span>
+                      <span className="block text-sm text-muted">{m.hint}</span>
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="grit" className="block font-bold">
+                  Grit: ignore specks under {settings.grit} px
+                </label>
+                <input
+                  id="grit"
+                  type="range"
+                  min={0}
+                  max={GRIT_MAX}
+                  step={5}
+                  value={settings.grit}
+                  onChange={(e) => setSettings((s) => ({ ...s, grit: Number(e.target.value) }))}
+                  className="tap w-full accent-[var(--accent)]"
+                />
+              </div>
+              <div>
+                <label htmlFor="stroke" className="block font-bold">
+                  Stroke weight: {settings.stroke > 0 ? `+${settings.stroke}` : settings.stroke}
+                </label>
+                <input
+                  id="stroke"
+                  type="range"
+                  min={STROKE_MIN}
+                  max={STROKE_MAX}
+                  step={1}
+                  value={settings.stroke}
+                  aria-valuetext={
+                    settings.stroke === 0
+                      ? "as found"
+                      : `${Math.abs(settings.stroke)} px ${settings.stroke > 0 ? "thicker" : "thinner"}`
+                  }
+                  onChange={(e) => setSettings((s) => ({ ...s, stroke: Number(e.target.value) }))}
+                  className="tap w-full accent-[var(--accent)]"
+                />
+              </div>
+            </div>
+            <StampPreviews
+              urls={urls}
+              busy={busy}
+              fileStem={fileStem}
+              renderMs={last?.ms ?? null}
+              maskPixels={last?.maskPixels ?? null}
+              timings={last?.timings ?? ""}
+              job={last?.job ?? 0}
+            />
+          </section>
+
+          <section aria-labelledby="step-share" className={sectionClass}>
+            <h2 id="step-share" className="font-display text-2xl">
+              4. Add words, then save or share
+            </h2>
+            <p className="text-sm text-muted">
+              Optional. The name heads the ink stamp and the kit sheet; the age at death is the postage stamp&rsquo;s
+              value.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <label htmlFor="stamp-name" className="block font-bold">
+                  Name on the stone
+                </label>
+                <input
+                  id="stamp-name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  autoComplete="off"
+                  maxLength={60}
+                  className="tap w-full rounded-lg border border-border bg-bg px-3"
+                />
+              </div>
+              <div>
+                <label htmlFor="stamp-born" className="block font-bold">
+                  Born
+                </label>
+                <input
+                  id="stamp-born"
+                  value={born}
+                  onChange={(e) => setBorn(e.target.value)}
+                  placeholder="e.g. April 3, 1783"
+                  autoComplete="off"
+                  maxLength={40}
+                  className="tap w-full rounded-lg border border-border bg-bg px-3"
+                />
+              </div>
+              <div>
+                <label htmlFor="stamp-died" className="block font-bold">
+                  Died
+                </label>
+                <input
+                  id="stamp-died"
+                  value={died}
+                  onChange={(e) => setDied(e.target.value)}
+                  placeholder="e.g. November 28, 1859"
+                  autoComplete="off"
+                  maxLength={40}
+                  className="tap w-full rounded-lg border border-border bg-bg px-3"
+                />
+              </div>
+              <div>
+                <label htmlFor="stamp-age" className="block font-bold">
+                  Age at death
+                </label>
+                <input
+                  id="stamp-age"
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  max={150}
+                  value={ageValue}
+                  onChange={(e) => {
+                    setAgeTouched(true);
+                    setAgeInput(e.target.value);
+                  }}
+                  aria-describedby="stamp-age-hint"
+                  className="tap w-full rounded-lg border border-border bg-bg px-3"
+                />
+                <p id="stamp-age-hint" className="text-sm text-muted">
+                  {ageTouched ? "Your number." : "Filled in from the two years; change it if you know better."}
+                </p>
+              </div>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-3">
+              <button
+                type="button"
+                onClick={share}
+                disabled={!urls || saving}
+                className="tap rounded-xl bg-accent px-4 font-bold text-accent-ink disabled:opacity-60"
+              >
+                Share
+              </button>
+              <button
+                type="button"
+                onClick={() => saveKit("sheet")}
+                disabled={!urls || saving}
+                className="tap rounded-xl border border-border px-4 font-bold disabled:opacity-60"
+              >
+                Save kit sheet
+              </button>
+              <button
+                type="button"
+                onClick={() => saveKit("story")}
+                disabled={!urls || saving}
+                className="tap rounded-xl border border-border px-4 font-bold disabled:opacity-60"
+              >
+                Save story size
+              </button>
+            </div>
+          </section>
+
+          <section aria-labelledby="step-read" className={sectionClass}>
+            <h2 id="step-read" className="font-display text-2xl">
+              Can&rsquo;t make out the words?
+            </h2>
+            <ReadWithClaude disabled={!cornersOk} getImages={getReadImages} />
+          </section>
+        </>
+      )}
+    </div>
+  );
+}
