@@ -1,0 +1,2094 @@
+{
+  "cemetery": {
+    "qid": "Q2008469",
+    "name": "Oakland Cemetery",
+    "description": "cemetery in Atlanta, Georgia, USA",
+    "locatedIn": "Atlanta",
+    "coord": "Point(-84.371333 33.748722)",
+    "findAGraveCemeteryId": "35955",
+    "enwiki": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Atlanta)"
+  },
+  "fetchedAt": "2026-10-20T01:56:08.694Z",
+  "sources": {
+    "wikidata": {
+      "license": "CC0 1.0",
+      "query": "SELECT ?person ?personLabel ?personDescription\n  (SAMPLE(?birth_) AS ?birth) (SAMPLE(?birthPrec_) AS ?birthPrecision)\n  (SAMPLE(?death_) AS ?death) (SAMPLE(?deathPrec_) AS ?deathPrecision)\n  (GROUP_CONCAT(DISTINCT ?causeLabel_; separator=\"|\") AS ?causes)\n  (GROUP_CONCAT(DISTINCT ?mannerLabel_; separator=\"|\") AS ?manners)\n  (GROUP_CONCAT(DISTINCT ?occLabel_; separator=\"|\") AS ?occupations)\n  (SAMPLE(?image_) AS ?image) (SAMPLE(?graveImage_) AS ?graveImage)\n  (SAMPLE(?graveCoord_) AS ?graveCoord) (SAMPLE(?personCoord_) AS ?personCoord)\n  (SAMPLE(?fag_) AS ?findAGraveId) (SAMPLE(?sitelinks_) AS ?sitelinks)\n  (SAMPLE(?enwiki_) AS ?enwiki)\nWHERE {\n  ?person p:P119 ?burial . ?burial ps:P119 wd:Q2008469 .\n  OPTIONAL { ?burial pq:P625 ?graveCoord_ }\n  OPTIONAL { ?person p:P569/psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }\n  OPTIONAL { ?person p:P570/psv:P570 [ wikibase:timeValue ?death_ ; wikibase:timePrecision ?deathPrec_ ] }\n  OPTIONAL { ?person wdt:P509 ?cause . ?cause rdfs:label ?causeLabel_ FILTER(LANG(?causeLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P1196 ?manner . ?manner rdfs:label ?mannerLabel_ FILTER(LANG(?mannerLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P106 ?occ . ?occ rdfs:label ?occLabel_ FILTER(LANG(?occLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P18 ?image_ }\n  OPTIONAL { ?person wdt:P1442 ?graveImage_ }\n  OPTIONAL { ?person wdt:P625 ?personCoord_ }\n  OPTIONAL { ?person wdt:P535 ?fag_ }\n  OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }\n  OPTIONAL { ?enwiki_ schema:about ?person ; schema:isPartOf <https://en.wikipedia.org/> }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". }\n}\nGROUP BY ?person ?personLabel ?personDescription\nORDER BY DESC(?sitelinks)\nLIMIT 80"
+    },
+    "wikipedia": {
+      "license": "CC BY-SA 4.0",
+      "note": "Intro extracts from the MediaWiki Action API; attribute on every card."
+    }
+  },
+  "people": [
+    {
+      "qid": "Q173540",
+      "name": "Margaret Mitchell",
+      "description": "American author and journalist (1900–1949)",
+      "birth": "1900-11-09T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1949-08-16T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [
+        "struck by vehicle"
+      ],
+      "mannersOfDeath": [
+        "accidental death"
+      ],
+      "occupations": [
+        "prose writer",
+        "journalist",
+        "novelist",
+        "writer",
+        "screenwriter"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Margaret%20Mitchell%20NYWTS%20%28cropped%29.jpg",
+      "graveImage": "http://commons.wikimedia.org/wiki/Special:FilePath/Margaret%20Ann%20Mitchell%20Tombstone%2C%20Hiland%20Cemetery%2C%202015-08-17%2C%2001.jpg",
+      "graveCoord": null,
+      "findAGraveId": "718",
+      "sitelinks": 101,
+      "wikipedia": {
+        "title": "Margaret Mitchell",
+        "extract": "Margaret Munnerlyn Mitchell (November 8, 1900 – August 16, 1949) was an American novelist and journalist. Mitchell wrote only one novel that was published during her lifetime, the American Civil War-era novel Gone with the Wind, for which she won the National Book Award for Fiction for Most Distinguished Novel of 1936 and the Pulitzer Prize for Fiction in 1937. Long after her death, a collection of Mitchell's girlhood writings and a novella she wrote as a teenager, titled Lost Laysen, were published. A collection of newspaper articles written by Mitchell for The Atlanta Journal was republished in book form.",
+        "url": "https://en.wikipedia.org/wiki/Margaret_Mitchell",
+        "revision": 1376091014
+      }
+    },
+    {
+      "qid": "Q437526",
+      "name": "Bobby Jones",
+      "description": "American amateur golfer and lawyer (1902–1971)",
+      "birth": "1902-03-17T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1971-12-18T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [
+        "neurological disorder"
+      ],
+      "mannersOfDeath": [
+        "natural causes"
+      ],
+      "occupations": [
+        "golfer",
+        "athlete",
+        "jurist",
+        "lawyer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/BobbyJonesAge14.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "553",
+      "sitelinks": 32,
+      "wikipedia": {
+        "title": "Bobby Jones (golfer)",
+        "extract": "Robert Tyre Jones Jr. (March 17, 1902 – December 18, 1971) was an American amateur golfer who was one of the most influential figures in the history of the sport; he was also a lawyer by profession. Jones founded and helped design Augusta National Golf Club, and co-founded the Masters Tournament. The innovations that he introduced at the Masters have been copied by virtually every professional golf tournament in the world.\nJones was the most successful amateur golfer ever to compete at a national and international level. During his peak from 1923 to 1930, he dominated top-level amateur competition, and competed very successfully against the world's best professional golfers. Jones often beat stars such as Walter Hagen and Gene Sarazen, the era's top pros. Jones earned his living mainly as a lawyer, and competed in golf only as an amateur, primarily on a part-time basis, and chose to retire from competition at age 28, though he earned significant money from golf after that, as an instructor and equipment designer.\nExplaining his decision to retire, Jones said, \"It [championship golf] is something like a cage. First you are expected to get into it and then you are expected to stay there. But of course, nobody can stay there.\" Jones is most famous for his unique \"Grand Slam,\" consisting of his victory in all four major golf tournaments of his era (the open and amateur championships in both the U.S. and the U.K.) in a single calendar year (1930). In all Jones played in 31 majors, winning 13 and placing among the top ten finishers 27 times.\nAfter retiring from competitive golf in 1930, Jones founded and helped design the Augusta National Golf Club soon afterwards in 1933. He also co-founded the Masters Tournament, which has been annually staged by the club since 1934 (except for 1943–45, when it was canceled due to World War II). The Masters evolved into one of golf's four major championships. Jones came out of retirement in 1934 to play in the Masters on an exhibition basis through 1948. Jones played his last round of golf at East Lake Golf Club, his home course in Atlanta, on August 18, 1948. A picture commemorating the event now sits in the clubhouse at East Lake. Citing health reasons, he quit golf permanently thereafter. Jones suffered from a rare neurological condition called syringomyelia, which eventually robbed him of the ability to walk. He died of cardiovascular disease in 1971.\nBobby Jones was often confused with the prolific golf course designer Robert Trent Jones, with whom he worked from time to time. \"People always used to get them confused, so when they met, they decided each be called something different,\" Robert Trent Jones Jr. said. To help avoid confusion, the golfer was called \"Bobby,\" and the golf course designer was called \"Trent.\"\n\n",
+        "url": "https://en.wikipedia.org/wiki/Bobby_Jones_(golfer)",
+        "revision": 1368989102
+      }
+    },
+    {
+      "qid": "Q118774",
+      "name": "John B. Gordon",
+      "description": "American politician (1832-1904)",
+      "birth": "1832-02-06T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1904-01-09T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Jbgordon.jpg",
+      "graveImage": "http://commons.wikimedia.org/wiki/Special:FilePath/John%20Brown%20Gordon%20grave%203.jpg",
+      "graveCoord": null,
+      "findAGraveId": "4140",
+      "sitelinks": 20,
+      "wikipedia": {
+        "title": "John B. Gordon",
+        "extract": "John Brown Gordon ((1832-02-06)February 6, 1832 – (1904-01-09)January 9, 1904) was an American politician, Confederate States Army general, attorney, slaveowner and planter. \"One of Robert E. Lee's most trusted generals\" by the end of the Civil War, according to historian Ed Bearss, he strongly opposed Reconstruction. A member of the Democratic Party, he was twice elected by the Georgia state legislature as a United States Senator (as was the practice at the time), serving from 1873 to 1880, and again from 1891 to 1897. He served two terms as the 53rd governor of Georgia from 1886 to 1890.\n\n",
+        "url": "https://en.wikipedia.org/wiki/John_B._Gordon",
+        "revision": 1381081728
+      }
+    },
+    {
+      "qid": "Q356810",
+      "name": "Hoke Smith",
+      "description": "American politician (1855–1931)",
+      "birth": "1855-09-02T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1931-11-27T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "jurist",
+        "politician",
+        "lawyer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/M.%20Hoke%20Smith%2C%201912.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "9663",
+      "sitelinks": 15,
+      "wikipedia": {
+        "title": "Hoke Smith",
+        "extract": "Michael Hoke Smith (September 2, 1855 – November 27, 1931) was an American attorney, politician, and newspaper owner who served as United States secretary of the interior (1893–1896), 58th governor of Georgia (1907–1909, 1911), and a United States senator (1911–1920) from Georgia. He was a leader of the progressive movement in the South and a white supremacist and segregationist who successfully campaigned to further disenfranchise African American voters in 1907.\n\n",
+        "url": "https://en.wikipedia.org/wiki/Hoke_Smith",
+        "revision": 1366412636
+      }
+    },
+    {
+      "qid": "Q357506",
+      "name": "Joseph E. Brown",
+      "description": "American politician (1821–1894)",
+      "birth": "1821-04-15T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1894-11-30T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "governor",
+        "jurist",
+        "politician",
+        "lawyer",
+        "judge"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Joseph%20Emerson%20Brown.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7826410",
+      "sitelinks": 13,
+      "wikipedia": {
+        "title": "Joseph E. Brown",
+        "extract": "Joseph Emerson Brown (April 15, 1821 – November 30, 1894), often referred to as Joe Brown, was an American attorney and politician, serving as the 42nd governor of Georgia from 1857 to 1865, the only governor to serve four terms. He also served as a United States Senator from that state from 1880 to 1891.\nA staunch Democrat, and a firm believer in slavery and Southern states' rights, Brown was a leading secessionist in 1861, and led his state into the Confederacy. Yet he also defied the Confederate government's wartime policies: he resisted the military draft, believing that local troops should be used only for the defense of Georgia; and denounced Confederate President Jefferson Davis as an incipient tyrant, challenging Confederate impressment of animals and goods to supply the troops, and slaves to work in military encampments and on the lines. Several other governors followed his lead.\nAfter the American Civil War, Brown joined the Republican Party for a time, and was appointed as chief justice of the Supreme Court of Georgia from 1865 to 1870. Later he rejoined the Democrats, became president of the Western and Atlantic Railroad and began to amass great wealth; he was estimated to be a millionaire by 1880. He benefited from using convicts leased from state, county and local governments in his coal mining operations in Dade County. His Dade Coal Company bought other coal and iron companies, and by 1889 was known as the Georgia Mining, Manufacturing and Investment Company. Finally, he was twice elected by the state legislature as a U.S. Senator, serving from 1880 to 1891. During this time he was part of the Bourbon Triumvirate, alongside fellow prominent Georgia politicians John Brown Gordon and Alfred H. Colquitt.\nBrown saved the Southern Baptist Theological Seminary financially in the 1870s. An endowed chair in his honor, the Joseph Emerson Brown Chair of Christian Theology, was established at the institution. In 2020, the endowed chair was vacated because of Brown's position on slavery and use of the convict leasing system.",
+        "url": "https://en.wikipedia.org/wiki/Joseph_E._Brown",
+        "revision": 1375964342
+      }
+    },
+    {
+      "qid": "Q547342",
+      "name": "Benjamin Harvey Hill",
+      "description": "American politician (1823-1882)",
+      "birth": "1823-09-14T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1882-08-16T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Benjamin%20Harvey%20Hill%20-%20Brady-Handy.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7826448",
+      "sitelinks": 11,
+      "wikipedia": {
+        "title": "Benjamin Harvey Hill",
+        "extract": "Benjamin Harvey Hill (September 14, 1823 – August 16, 1882) was an American and Confederate politician from Georgia. His \"flamboyant opposition\" to Congressional Reconstruction is credited with helping inaugurate Georgia's Ku Klux Klan. His famous \"brush arbor speech\" in Atlanta on July 23, 1868, called for the use of violence against the governor, the legislature, and freed people.  His career spanned state and national politics, and the Civil War. He served in the Georgia legislature in both houses. Although he initially opposed secession and was elected as a Unionist in 1860, he nonetheless voted to secede in that year, and represented Georgia as a Confederate senator during the conflict.\nAfter the war and near the end of the Reconstruction era, Hill was elected in 1874 to the United States House of Representatives, and in 1877 as a U.S. senator from Georgia. He served in the Senate until his death in 1882.",
+        "url": "https://en.wikipedia.org/wiki/Benjamin_Harvey_Hill",
+        "revision": 1378083451
+      }
+    },
+    {
+      "qid": "Q1146386",
+      "name": "Joseph Mackey Brown",
+      "description": "American politician, Georgia (1851-1932)",
+      "birth": "1851-12-28T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1932-03-03T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "governor",
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/JosephMacBrown%20%283x4a%29.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "9658",
+      "sitelinks": 10,
+      "wikipedia": {
+        "title": "Joseph Mackey Brown",
+        "extract": "Joseph Mackey Brown (December 28, 1851 – March 3, 1932) was an American politician. He served two non-consecutive terms as  the 59th governor of Georgia, the first from 1909 to 1911 and the second from 1912 to 1913. He has also been posthumously implicated as one of the ringleaders in the lynching of Leo Frank.",
+        "url": "https://en.wikipedia.org/wiki/Joseph_Mackey_Brown",
+        "revision": 1366404708
+      }
+    },
+    {
+      "qid": "Q1100228",
+      "name": "Clement A. Evans",
+      "description": "Confederate States Army general, politician, minister, historian (1833-1911)",
+      "birth": "1833-02-25T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1911-07-02T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "historian",
+        "writer",
+        "politician",
+        "lawyer",
+        "judge"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Clement%20A%20Evans%2C%20Confederate%20General.jpg",
+      "graveImage": null,
+      "graveCoord": "Point(-84.372694444 33.749)",
+      "findAGraveId": "4142",
+      "sitelinks": 8,
+      "wikipedia": {
+        "title": "Clement A. Evans",
+        "extract": "Brigadier-General Clement Anselm Evans (February 25, 1833 – July 2, 1911) was a senior officer of the Confederate States Army who commanded infantry in the Eastern Theater of the American Civil War. Afterwards, he edited a 12-volume work on Confederate military history, so named, in 1899.",
+        "url": "https://en.wikipedia.org/wiki/Clement_A._Evans",
+        "revision": 1373519996
+      }
+    },
+    {
+      "qid": "Q2579465",
+      "name": "William J. Northen",
+      "description": "American politician (1835–1913)",
+      "birth": "1835-07-09T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1913-03-25T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "governor",
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20J.%20Northen%20%2810506816775%29%20%281%29.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7937492",
+      "sitelinks": 8,
+      "wikipedia": {
+        "title": "William J. Northen",
+        "extract": "William Jonathan Northen (July 9, 1835 – March 25, 1913), was the 54th governor of Georgia from 1890 to 1894, as well as a leading Baptist minister. Northen was president of the Georgia Baptist Convention from 1892 to 1910, and president of the Southern Baptist Convention from 1899 to 1901. His political rhetoric was based on his religious outlook, and often focused on racial issues at a time when lynching was increasing. Northen believed that advances in medicine and health would ultimately help African Americans achieve salvation.  He promoted the ideology of the modernizing New South, but did not abandon the policy of white supremacy.",
+        "url": "https://en.wikipedia.org/wiki/William_J._Northen",
+        "revision": 1380110108
+      }
+    },
+    {
+      "qid": "Q886071",
+      "name": "John M. Slaton",
+      "description": "American politician (1866-1955)",
+      "birth": "1866-12-25T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1955-01-11T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "governor",
+        "jurist",
+        "politician",
+        "lawyer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Ex-Gov.%20John%20Slaton%20and%20wife%20LCCN2014699353%20%283x4a%29.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7937575",
+      "sitelinks": 8,
+      "wikipedia": {
+        "title": "John M. Slaton",
+        "extract": "John Marshall Slaton (December 25, 1866 – January 11, 1955) served two non-consecutive terms as the 60th governor of Georgia. His political career ended in 1915 after he commuted the death sentence of Atlanta factory boss Leo Frank, who had been convicted of the murder of a 13-year-old employee, Mary Phagan. Because of Slaton's law firm partnership with Frank's defense counsel, claims were made that Slaton's involvement represented a conflict of interest. Soon after Slaton's action, Frank was lynched. After Slaton's term as governor ended, he and his wife left the state for a decade. Slaton later served as president of the Georgia State Bar Association.",
+        "url": "https://en.wikipedia.org/wiki/John_M._Slaton",
+        "revision": 1372484751
+      }
+    },
+    {
+      "qid": "Q1310669",
+      "name": "Lucius Jeremiah Gartrell",
+      "description": "Confederate Army general (1821-1891)",
+      "birth": "1821-01-07T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1891-04-07T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician",
+        "lawyer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Portrait%20of%20Lucius%20Jeremiah%20Gartrell.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "9661",
+      "sitelinks": 7,
+      "wikipedia": {
+        "title": "Lucius J. Gartrell",
+        "extract": "Lucius Jeremiah Gartrell (January 7, 1821 – April 7, 1891) was an American politician, lawyer, and Confederate general during the American Civil War.",
+        "url": "https://en.wikipedia.org/wiki/Lucius_J._Gartrell",
+        "revision": 1373522325
+      }
+    },
+    {
+      "qid": "Q3302990",
+      "name": "Maynard Jackson",
+      "description": "American politician and attorney (1938–2003)",
+      "birth": "1938-03-23T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "2003-06-23T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [
+        "myocardial infarction"
+      ],
+      "mannersOfDeath": [
+        "natural causes"
+      ],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Maynard%20Jackson.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7609089",
+      "sitelinks": 7,
+      "wikipedia": {
+        "title": "Maynard Jackson",
+        "extract": "Maynard Holbrook Jackson Jr. (March 23, 1938 – June 23, 2003) was an American attorney and politician who served as the 54th mayor of Atlanta, Georgia, from 1974 to 1982, and again as the city's 56th mayor from 1990 to 1994. A member of the Democratic Party, he was the first Black American mayor of Atlanta and of any major city in the South; Jackson's three terms made him the second longest-serving mayor in the city's history, after six-term mayor William B. Hartsfield.\nJackson is notable also for public works projects, primarily the new Maynard H. Jackson International terminal at the Atlanta airport, and for greatly increasing minority business participation in the city. After his death, the William B. Hartsfield Atlanta International Airport was renamed Hartsfield–Jackson Atlanta International Airport to honor his service to the expansion of the airport, the city, and its people.",
+        "url": "https://en.wikipedia.org/wiki/Maynard_Jackson",
+        "revision": 1376555259
+      }
+    },
+    {
+      "qid": "Q4197151",
+      "name": "Alfred Iverson, Jr.",
+      "description": "Confederate Army general (1829-1911)",
+      "birth": "1829-02-14T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1911-03-31T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "military personnel",
+        "lawyer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/AlfredIverson.jpg",
+      "graveImage": "http://commons.wikimedia.org/wiki/Special:FilePath/Alfrediversonjr.jpg",
+      "graveCoord": null,
+      "findAGraveId": "4141",
+      "sitelinks": 7,
+      "wikipedia": {
+        "title": "Alfred Iverson Jr.",
+        "extract": "Alfred Iverson Jr. (February 14, 1829 – March 31, 1911) was a lawyer, an officer in the Mexican–American War, a U.S. Army cavalry officer, and a Confederate general in the American Civil War. He served in the 1862–63 campaigns of the Army of Northern Virginia as a regimental and later brigade commander. His career was fatally damaged by a disastrous infantry assault at the first day of the Battle of Gettysburg. General Robert E. Lee removed Iverson from his army and sent him to cavalry duty in Georgia. During the Atlanta campaign, he achieved a notable success in a cavalry action near Macon, Georgia, capturing Union Army Maj. Gen. George Stoneman and hundreds of his men.",
+        "url": "https://en.wikipedia.org/wiki/Alfred_Iverson_Jr.",
+        "revision": 1379835421
+      }
+    },
+    {
+      "qid": "Q8018782",
+      "name": "William Stephen Walker",
+      "description": "Confederate States Army brigadier general (1822-1899)",
+      "birth": "1822-04-13T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1899-06-07T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "military officer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William-Stephen-Walker.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "11103",
+      "sitelinks": 6,
+      "wikipedia": {
+        "title": "William Stephen Walker",
+        "extract": "William Stephen Walker (April 13, 1822 – June 7, 1899) was a Confederate States Army brigadier general during the American Civil War (Civil War). He was born in Pittsburgh, Pennsylvania, but was raised by Robert J. Walker, his uncle, who was a Secretary of the Treasury and U.S. Senator. Walker served as a first lieutenant in the United States Army during the Mexican–American War from 1847 to 1848. He was discharged in 1848. Walker rejoined the army as captain in the 1st U.S. Cavalry Regiment on March 3, 1855, and served until he resigned on May 1, 1861. Walker was wounded in the left arm and lost his left foot during the Battle of Ware Bottom Church during the Overland Campaign. After the war, he lived at Atlanta, Georgia.",
+        "url": "https://en.wikipedia.org/wiki/William_Stephen_Walker",
+        "revision": 1379931291
+      }
+    },
+    {
+      "qid": "Q1966756",
+      "name": "Nathaniel Job Hammond",
+      "description": "American politician (1833-1899)",
+      "birth": "1833-12-26T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1899-04-20T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician",
+        "lawyer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Nathaniel%20Job%20Hammond%20%281833%E2%80%931899%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7937005",
+      "sitelinks": 6,
+      "wikipedia": {
+        "title": "Nathaniel J. Hammond",
+        "extract": "Nathaniel Job Hammond (December 26, 1833 – April 20, 1899) was a jurist and politician from the American state of Georgia. A Democrat, Hammond was the Attorney General of Georgia from 1872 to 1877, before serving in the United States House of Representatives from 1879 to 1887.",
+        "url": "https://en.wikipedia.org/wiki/Nathaniel_J._Hammond",
+        "revision": 1364798131
+      }
+    },
+    {
+      "qid": "Q4888678",
+      "name": "Benjamin Franklin White",
+      "description": "American hymn writer",
+      "birth": "1800-09-20T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1879-12-05T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "hymnwriter",
+        "writer",
+        "politician",
+        "composer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/White%20bf.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "36814801",
+      "sitelinks": 6,
+      "wikipedia": {
+        "title": "Benjamin Franklin White",
+        "extract": "Benjamin Franklin White (September 20, 1800 – December 5, 1879) was a shape note \"singing master\", and compiler of the shape note tunebook known as The Sacred Harp. He was born near Cross Keys in Union County, South Carolina, the twelfth child of Robert and Mildred White.",
+        "url": "https://en.wikipedia.org/wiki/Benjamin_Franklin_White",
+        "revision": 1378708541
+      }
+    },
+    {
+      "qid": "Q23010789",
+      "name": "Elizabeth O. King",
+      "description": "American bacteriologist (1912–1966)",
+      "birth": "1912-10-12T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1966-04-08T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "bacteriologist",
+        "microbiologist"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Elizabeth%20King.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "64007994",
+      "sitelinks": 6,
+      "wikipedia": {
+        "title": "Elizabeth O. King",
+        "extract": "Elizabeth Osborne King (October 12, 1912 – April 8, 1966) was an American microbiologist who discovered and described bacteria of medical importance at the United States Centers for Disease Control and Prevention from the late 1940s through the early 1960s. A 1984 CDC manual dedication referred to King as \"internationally known as an authority on a variety of unusual bacteria.\" The genera Kingella and Elizabethkingia and several species of bacteria are named to honor her for her pioneering work. King died of cancer on April 8, 1966, in Atlanta, where she is interred in Oakland Cemetery.",
+        "url": "https://en.wikipedia.org/wiki/Elizabeth_O._King",
+        "revision": 1352719161
+      }
+    },
+    {
+      "qid": "Q5729655",
+      "name": "Henry W. Grady",
+      "description": "American journalist (1850–1889)",
+      "birth": "1850-05-24T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1889-12-23T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [
+        "pneumonia"
+      ],
+      "mannersOfDeath": [
+        "natural causes"
+      ],
+      "occupations": [
+        "journalist",
+        "editor"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Henry-grady-1890.JPG",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "6819457",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "Henry W. Grady",
+        "extract": "Henry Woodfin Grady (May 24, 1850 – December 23, 1889) was an American journalist and orator who helped reintegrate the states of the Confederacy into the Union after the American Civil War.\nGrady encouraged the industrialization of the postbellum South, which Grady referred to as \"The New South.\" By creating his metaphor of the \"New South,\" he voluntarily contributed to \"dismantling the advances in rights that Black people had enjoyed during Reconstruction\" (Gates 2019, 3-4). He was praised by his contemporaries and by authors Shavin and Galphin as a civic promoter, political strategist, and captivating speaker, and by Atlanta journalist Frederick Allen as a visionary.\nHowever, in modern times, Grady's arguments for the need for white supremacy in the post–Civil War South have resulted in his legacy being seen as mixed and overtly racist. Grady's name has been removed from several schools including Atlanta's former Grady High School. Grady was the father-in-law of Federal Reserve Chairman Eugene Robert Black and grandfather of banker and World Bank President Eugene R. Black Sr.\n\n",
+        "url": "https://en.wikipedia.org/wiki/Henry_W._Grady",
+        "revision": 1372517187
+      }
+    },
+    {
+      "qid": "Q8004355",
+      "name": "William Allen Fuller",
+      "description": "American railroad conductor (1836–1905)",
+      "birth": "1836-04-15T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1905-12-28T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Allen%20Fuller.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "9660",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "William Allen Fuller",
+        "extract": "William Allen Fuller (April 15, 1836 – December 28, 1905) was a conductor on the Western & Atlantic Railroad during the American Civil War era. He was most noted for his role in the 1862 Great Locomotive Chase, a daring sabotage mission and raid conducted by soldiers of the Union Army in northern Georgia. Fuller's determined pursuit prevented the Union agents from driving a captured train north to Tennessee and the Union lines.",
+        "url": "https://en.wikipedia.org/wiki/William_Allen_Fuller",
+        "revision": 1346108358
+      }
+    },
+    {
+      "qid": "Q14926800",
+      "name": "Ivan Allen, Jr.",
+      "description": "Businessman and mayor (1911-2003)",
+      "birth": "1911-03-15T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "2003-07-02T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Ivan%20Allen%20Jr.%2C%201952.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7646643",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "Ivan Allen Jr.",
+        "extract": "Ivan Earnest Allen Jr. (March 15, 1911 – July 2, 2003) was an American businessman who served two terms as the 51st mayor of Atlanta, during the Civil Rights Movement of the 1960s.\nAllen took the helm of the Ivan Allen Company, his father's office supply business, in 1946 and within three years had the company bringing in annual revenues of several millions of dollars. In 1961, he authored a white paper for revitalizing Atlanta. It was adopted by the Atlanta Chamber of Commerce and became the Six Point Forward Atlanta program. This plan would become his roadmap as mayor for creating an economic surge that established the infrastructure, business, education, arts, sports, and international presence that are the foundations for modern Atlanta. Allen was a founding member of Atlanta's influential Commerce Club, which he chaired until his death in 2003. He became president of the city Chamber of Commerce in 1961 and during this same year ran for mayor, defeating the staunch segregationist, Lester Maddox.\nConvinced that the South could never thrive economically under segregation, Allen supported the demands of African Americans for their accommodation at public facilities. On his first day in office, he ordered the removal of all \"white\" and \"colored\" signs from facilities in city hall. Racial alliances forged by Allen with Martin Luther King Jr. and others in the African American community, along with his advocacy for the public accommodation of African Americans in the white community, allowed Allen to guide Atlanta through the turbulence of racial integration without the violence that occurred in many southern cities. In a key address to the public, he asked Atlantans to eliminate racial segregation and in doing so, to set an example to inspire \"all the world\". At the behest of President John F. Kennedy, Allen testified before Congress on behalf of what became the Civil Rights Act of 1964. He was the only white southern politician of significance to do so. After his testimony, Allen and his family were under death threats and required police protection for a year.",
+        "url": "https://en.wikipedia.org/wiki/Ivan_Allen_Jr.",
+        "revision": 1374250626
+      }
+    },
+    {
+      "qid": "Q889369",
+      "name": "John N. Irwin",
+      "description": "9th Governor of Arizona Territory, 9th Governor of Idaho Territory, U.S. Minister to Portugal (1844-1905)",
+      "birth": "1844-12-25T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1905-12-22T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "diplomat",
+        "governor",
+        "jurist",
+        "politician",
+        "lawyer",
+        "mayor"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/John%20Nichol%20Irwin%20-%20oval.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "6662051",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "John N. Irwin",
+        "extract": "John Nichol Irwin (December 25, 1844 – December 22, 1905) was an American businessman, politician and diplomat. Among the positions he held were Mayor of Keokuk, Iowa, Governor of Idaho Territory, Governor of Arizona Territory, and U.S. Minister to Portugal.",
+        "url": "https://en.wikipedia.org/wiki/John_N._Irwin",
+        "revision": 1366903159
+      }
+    },
+    {
+      "qid": "Q1680096",
+      "name": "James C. Freeman",
+      "description": "American politician (1819-1885)",
+      "birth": "1819-04-01T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1885-09-03T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "9664",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "James C. Freeman",
+        "extract": "James Crawford Freeman (April 1, 1820 – September 3, 1885) was a Georgia planter and slaveowner who after serving in the Confederate States Army during the American Civil War received a pardon and became a banker, jeweler and politician who served one term in the U.S. Representative as a Republican.",
+        "url": "https://en.wikipedia.org/wiki/James_C._Freeman",
+        "revision": 1379291375
+      }
+    },
+    {
+      "qid": "Q1713616",
+      "name": "Junius Hillyer",
+      "description": "American politician (1807-1886)",
+      "birth": "1807-04-23T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1886-06-21T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician",
+        "lawyer",
+        "judge"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Junius%20Hillyer.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7937340",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "Junius Hillyer",
+        "extract": "Junius Hillyer (April 23, 1807 – June 21, 1886) was an American lawyer, judge, and politician who served two terms in the United States Congress.",
+        "url": "https://en.wikipedia.org/wiki/Junius_Hillyer",
+        "revision": 1378311598
+      }
+    },
+    {
+      "qid": "Q28008660",
+      "name": "Myrta Lockett Avary",
+      "description": "American writer and journalist (1857-1946)",
+      "birth": "1857-12-07T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1946-02-14T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "journalist",
+        "author"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Myrta%20Lockett%20Avary.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "112785948",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "Myrta Lockett Avary",
+        "extract": "Myrta Lockett Avary (December 7, 1857 – February 14, 1946) was an American writer and journalist. Her books include Dixie After the War (1906),  The Recollections of Alexander H. Stephens (1910) and Uncle Remus and the Wren's Nest (1913). She died on February 14, 1946, in Atlanta.",
+        "url": "https://en.wikipedia.org/wiki/Myrta_Lockett_Avary",
+        "revision": 1371375393
+      }
+    },
+    {
+      "qid": "Q47536194",
+      "name": "Thomas E. Askew",
+      "description": "American photographer",
+      "birth": "1847-08-01T00:00:00Z",
+      "birthPrecision": 10,
+      "death": "1914-07-12T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "photographer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Thomas%20E.%20Askew%2C%20self-portrait%20LCCN99472217.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "29799791",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "Thomas E. Askew",
+        "extract": "Thomas E. Askew (c. 1847 – July 12, 1914) was an African American photographer based in Atlanta, Georgia. He was among the earliest Black professional photographers in Atlanta, and is best known as a principal contributor to W. E. B. Du Bois's Exhibit of American Negroes at the 1900 Paris Exposition.",
+        "url": "https://en.wikipedia.org/wiki/Thomas_E._Askew",
+        "revision": 1364440394
+      }
+    },
+    {
+      "qid": "Q5540616",
+      "name": "George Hillyer",
+      "description": "American politician and Confederate Army officer",
+      "birth": "1835-03-17T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1927-10-02T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/George%20Hillyer%20%28Atlanta%20Mayor%29.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7937278",
+      "sitelinks": 4,
+      "wikipedia": {
+        "title": "George Hillyer",
+        "extract": "George Hillyer (March 17, 1835 – October 2, 1927) was an American politician, serving as the 29th Mayor of Atlanta, Georgia, as well as a state representative and senator. He was also an officer in the Confederate States Army during the American Civil War.",
+        "url": "https://en.wikipedia.org/wiki/George_Hillyer",
+        "revision": 1378252775
+      }
+    },
+    {
+      "qid": "Q6231902",
+      "name": "John Erskine",
+      "description": "US federal judge (1813-1895)",
+      "birth": "1813-09-13T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1895-01-27T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician",
+        "lawyer",
+        "judge"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/John%20Erskine%20%281813%E2%80%931895%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "19088446",
+      "sitelinks": 4,
+      "wikipedia": {
+        "title": "John Erskine (judge)",
+        "extract": "John Erskine (September 13, 1813 – January 27, 1895) was a United States district judge of the United States District Court for the Northern District of Georgia and the United States District Court for the Southern District of Georgia.",
+        "url": "https://en.wikipedia.org/wiki/John_Erskine_(judge)",
+        "revision": 1359049756
+      }
+    },
+    {
+      "qid": "Q6309918",
+      "name": "Julius L. Brown",
+      "description": "American attorney",
+      "birth": "1848-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1910-09-04T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "lawyer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Julius%20L.%20Brown%20%281848%E2%80%931910%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "16364880",
+      "sitelinks": 4,
+      "wikipedia": {
+        "title": "Julius L. Brown",
+        "extract": "Julius L. Brown (1848–1910) was a prominent Atlanta, Georgia attorney, co-incorporator of the Metropolitan Street Railroad, and brother of Georgia governor and senator Joseph E. Brown.",
+        "url": "https://en.wikipedia.org/wiki/Julius_L._Brown",
+        "revision": 1293608181
+      }
+    },
+    {
+      "qid": "Q1247941",
+      "name": "John William Jones",
+      "description": "Confederate Army officer (1806-1871)",
+      "birth": "1806-04-14T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1871-04-27T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7937432",
+      "sitelinks": 4,
+      "wikipedia": {
+        "title": "John William Jones",
+        "extract": "John William Jones (April 14, 1806 – April 27, 1871) was an American politician, planter, educator and medical doctor. Born in Maryland and raised in Kentucky, Jones served one term in the United States Congress representing Georgia's 3rd congressional district, before resuming his careers as a planter and physician in Alabama as well as helped found two female seminaries before returning to Georgia. During the American Civil War, Jones accepted a commission as a surgeon in the Confederate States Army, and postwar taught medicine in Atlanta.",
+        "url": "https://en.wikipedia.org/wiki/John_William_Jones",
+        "revision": 1378326018
+      }
+    },
+    {
+      "qid": "Q4277827",
+      "name": "James G. Woodward",
+      "description": "American politician (1845–1923)",
+      "birth": "1845-01-14T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1923-08-29T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "37873627",
+      "sitelinks": 4,
+      "wikipedia": {
+        "title": "James G. Woodward",
+        "extract": "James G. Woodward (January 14, 1845 – August 29, 1923) was an American newspaperman and politician, having served as the 36th, 39th and 43rd Mayor of Atlanta, Georgia.\nWoodward made his living as printer through the newsrooms of the Atlanta Journal and Constitution over the years.\nHe was elected mayor in 1899 and 1904.\nFollowing the Atlanta race riot of 1906, he won the 1908 Democratic primary (in a virtually one party state) but was arrested for public intoxication less than a month before the December general election and was defeated by Robert Maddox.\nHe served his third and fourth terms following Courtland Winn.\nTrying for a fifth term as Atlanta mayor, he ran (and lost) in September 1922, a year before his death.\nThe Atlanta race riot of 1906 was a defining moment of Woodward's political career.\nThe New York Times reported that when Woodward was asked as to the measures taken to prevent a race riot, he replied:\n\nThe best way to prevent a race riot depends entirely upon the cause. If your inquiry has anything to do with the present situation in Atlanta then I would say the only remedy is to remove the cause. As long as the black brutes assault our white women, just so long will they be unceremoniously dealt with.He had gone around the city on Saturday night trying to calm the mobs, but was generally ignored.",
+        "url": "https://en.wikipedia.org/wiki/James_G._Woodward",
+        "revision": 1360389377
+      }
+    },
+    {
+      "qid": "Q5076386",
+      "name": "Charles Collier",
+      "description": "American banker and politician",
+      "birth": "1848-07-19T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1900-09-28T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Charles%20collier%20cyclop.gif",
+      "graveImage": null,
+      "graveCoord": "Point(-84.371388888 33.748611111)",
+      "findAGraveId": "49745478",
+      "sitelinks": 4,
+      "wikipedia": {
+        "title": "Charles A. Collier",
+        "extract": "Charles Augustus Collier (; July 19, 1848 – September 28, 1900) was an American banker, lawyer, and politician who served as Mayor of Atlanta, Georgia, from 1897 to 1899.",
+        "url": "https://en.wikipedia.org/wiki/Charles_A._Collier",
+        "revision": 1364279145
+      }
+    },
+    {
+      "qid": "Q5602299",
+      "name": "Green B. Adair",
+      "description": "businessperson",
+      "birth": "1840-10-01T00:00:00Z",
+      "birthPrecision": 10,
+      "death": "1914-04-20T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/19140422%20AC%20Green%20B.%20Adair.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Green B. Adair",
+        "extract": "Green Buren Adair (1840 - April 20, 1914) was a prominent cotton merchant in Atlanta, conducting business there from the Civil War era until the turn of the 20th century. He was a cousin of George Washington Adair, another prominent real estate mogul in Atlanta.\nAdair was born in Talladega County, Alabama. He served in the Confederate Army including the Battle of Appomattox Courthouse. Adair settled in Atlanta in 1866 and entered the wholesale commission and fertilizer business together with his brother Augustus D. Adair (1835–1922), and in a few years became one of Atlanta's most successful merchants. 1890 property tax records indicate that he owned $26,500 worth of property. He retired from active business in 1891, when his eldest son, Green B. Adair Jr. (b. 1887 d. 1968), was still a toddler, but remained active in Atlanta charities and business affairs.\nIn the 1880s and 1890s he served on the Atlanta City Council. He was instrumental in building the Second Baptist Church, which was located at Washington and Mitchell streets, and later joined the Highland Park Baptist Church, which opened in 1908 on Highland Avenue at the northwest corner of Highland and Greenwood avenues.\nThe Adairs lived on fashionable Washington Street as of 1891, but in 1892 Adair acquired 16 acres (6.5 ha) of land for $17,000 at the southwest corner of Highland and Virginia avenues in what is today Virginia-Highland neighborhood of Atlanta. The land was in the country at the time, but easily accessed by the new Nine-Mile Circle streetcar line. Adair had a summer house built on the site, which was completed in 1895. In 1911 the family moved in permanently.  The Adair Mansion remains a landmark and is divided into apartments. (It is now located on Rupley Avenue as bungalows were built on the land between the mansion and the Virginia-Highland intersection.)\nHe died in Atlanta on April 20, 1914, of a paralytic stroke. His obituary described him as \"one of Atlanta’s most beloved citizens,\" known for his acts of charity and in the business world as a man of sterling character, energetic and progressive.\" He was buried in Oakland Cemetery.",
+        "url": "https://en.wikipedia.org/wiki/Green_B._Adair",
+        "revision": 1336345815
+      }
+    },
+    {
+      "qid": "Q5724285",
+      "name": "Henry Kent McCay",
+      "description": "United States federal judge (1820–1886)",
+      "birth": "1820-01-08T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1886-07-30T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "lawyer",
+        "judge"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Henry Kent McCay",
+        "extract": "Henry Kent McCay (January 8, 1820 – July 30, 1886) was a lawyer, a Confederate States Army and Georgia militia officer, an associate justice of the Georgia Supreme Court, and a United States district judge of the United States District Court for the Northern District of Georgia.",
+        "url": "https://en.wikipedia.org/wiki/Henry_Kent_McCay",
+        "revision": 1347581626
+      }
+    },
+    {
+      "qid": "Q6647375",
+      "name": "Lita McClinton",
+      "description": "American murder victim",
+      "birth": "1953-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1987-01-16T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [
+        "homicide"
+      ],
+      "occupations": [],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "134613167",
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Lita McClinton",
+        "extract": "Lita McClinton (née LaVaughn; January 7, 1952 – January 16, 1987) was an African-American socialite who was murdered the day her divorce was to be settled. She was the daughter of JoAnn McClinton, a member of the Georgia House of Representatives from 1993 to 2006, and Emory McClinton, an official in the United States Department of Transportation.\nMcClinton was shot dead while receiving a box of pink roses at her doorstep. In 1997, Phillip Anthony Harwood was identified as the hit man. He said he had committed the murder for $25,000 at the behest of her former husband, James Sullivan. Sullivan had been in Palm Beach, Florida during the shooting in Atlanta. Sullivan escaped arrest by fleeing abroad but, on July 2, 2002, he was arrested in Thailand. In 2004, he was extradited to Atlanta. In March 2006, Sullivan was convicted of murder for arranging the 1987 shooting of his wife. After the jury spared him from a death sentence, he was sentenced to life in prison without the possibility of parole. The case was profiled on Unsolved Mysteries in 2001, the year before Sullivan was arrested.",
+        "url": "https://en.wikipedia.org/wiki/Lita_McClinton",
+        "revision": 1351262903
+      }
+    },
+    {
+      "qid": "Q7347269",
+      "name": "Robert Foster Maddox",
+      "description": "American politician (1870–1965)",
+      "birth": "1870-04-04T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1965-04-10T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Robert%20Foster%20Maddox%20in%201918.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "45045825",
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Robert Maddox",
+        "extract": "Robert Foster Maddox (April 4, 1870 – 1965) was the 41st Mayor of Atlanta, Georgia.\n\n",
+        "url": "https://en.wikipedia.org/wiki/Robert_Maddox",
+        "revision": 1378252789
+      }
+    },
+    {
+      "qid": "Q7447840",
+      "name": "Selena Sloan Butler",
+      "description": "American activist",
+      "birth": "1872-01-04T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1964-10-07T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "social activist",
+        "educator"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Selena%20Sloan%20Butler.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "10332703",
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Selena Sloan Butler",
+        "extract": "Selena Sloan Butler (1872–1964) was the founder and first president of the National Congress of Colored Parents and Teachers Association (NCCPT). President Herbert Hoover appointed her to the White House Conference on Child Health and Protection in 1929. During World War II, she organized the Red Cross' first black women's chapter of \"Gray Ladies.\" When Congress merged the NCCPT with the National PTA in 1970, Butler was posthumously recognized as one of the organization's founders. Today, Butler is considered a co-founder of the National Parent-Teacher Association.",
+        "url": "https://en.wikipedia.org/wiki/Selena_Sloan_Butler",
+        "revision": 1364833389
+      }
+    },
+    {
+      "qid": "Q8011842",
+      "name": "William Hemphill",
+      "description": "Confederate Army officer (1842-1902)",
+      "birth": "1842-05-05T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1902-08-17T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Arnold%20Hemphill%20%281842%E2%80%931902%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "9562367",
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "William Hemphill",
+        "extract": "William Arnold Hemphill (May 5, 1842 – August 17, 1902) was an American businessman and politician who served as Mayor of Atlanta from 1891 to 1893.",
+        "url": "https://en.wikipedia.org/wiki/William_Hemphill",
+        "revision": 1324530303
+      }
+    },
+    {
+      "qid": "Q15505741",
+      "name": "Franklin Garrett",
+      "description": "American historian (1906-2000)",
+      "birth": "1906-09-25T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "2000-03-05T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "historian"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7870234",
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Franklin Garrett",
+        "extract": "Franklin Miller Garrett (September 25, 1906 – March 5, 2000) was an American historian, particularly of Atlanta, Georgia. His massive Atlanta and Environs: A Chronicle of its People and Events is a book about the city's history.",
+        "url": "https://en.wikipedia.org/wiki/Franklin_Garrett",
+        "revision": 1372106504
+      }
+    },
+    {
+      "qid": "Q16043644",
+      "name": "Nellie Peters Black",
+      "description": "American women's activist",
+      "birth": "1851-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1919-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "women's rights activist",
+        "community organizer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/NelliePetersBlack1895.tif",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "31736146",
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Nellie Peters Black",
+        "extract": "Mary Ellen Peters Black (1851–1919) was a prominent organizer and activist related to women's issues in Georgia. Black also promoted agricultural reform and increasing educational opportunities, especially for women. She was an active member of the Atlanta Woman's Club as well as the Woman's Auxiliary of the Episcopal Diocese of Georgia.\nIn 1918, Mary Turner, a pregnant Black woman from Valdosta, Georgia, protested the lynching of her husband. Her punishment was brutal torture before being burned alive, her fetus cut from her abdomen. Nellie Peters Black sent a letter condoning the lynching of Mary Turner. In a letter to the Negro Women's Clubs, Black told the group that \"until you teach your people not to molest the whites, there could be no adjustment.\"",
+        "url": "https://en.wikipedia.org/wiki/Nellie_Peters_Black",
+        "revision": 1312338133
+      }
+    },
+    {
+      "qid": "Q1247034",
+      "name": "Marshall Johnson Wellborn",
+      "description": "American politician (1808-1874)",
+      "birth": "1808-05-29T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1874-10-16T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician",
+        "lawyer",
+        "judge"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7937596",
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Marshall Johnson Wellborn",
+        "extract": "Marshall Johnson Wellborn (May 29, 1808 – October 16, 1874) was an American politician, lawyer and jurist. From 1849 to 1851, he served one term as a Democratic member of the U.S. House of Representatives from Georgia.",
+        "url": "https://en.wikipedia.org/wiki/Marshall_Johnson_Wellborn",
+        "revision": 1378324047
+      }
+    },
+    {
+      "qid": "Q5341483",
+      "name": "Edward A. Vincent",
+      "description": "American cartographer and architect",
+      "birth": "1825-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1856-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "civil engineer",
+        "cartographer",
+        "engineer",
+        "architect"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Edward A. Vincent",
+        "extract": "Edward Arista Vincent (c. 1825 – November 27, 1856) was an architect, cartographer, and civil engineer, known for his design for Atlanta's antebellum railroad depot Union Station – destroyed by the Union Army during the Battle of Atlanta in the American Civil War.",
+        "url": "https://en.wikipedia.org/wiki/Edward_A._Vincent",
+        "revision": 1363334482
+      }
+    },
+    {
+      "qid": "Q131260124",
+      "name": "Margaret O'Connor Wilson",
+      "description": "American civic leader (1856-1942)",
+      "birth": "1856-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1942-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "executive"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Margaret%20O%27Conner%20Wilson%20%28ca.%201880%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "259187246",
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Margaret O'Connor Wilson",
+        "extract": "Margaret O'Connor Wilson (née O'Connor; also known as Mrs. A. McD. Wilson; 1856–1942) was an American civic leader and philanthropist. Prominent in civic and patriotic organizations in Atlanta for many years, she was also known for her religious and philanthropic work. Among the many positions that she held, Wilson served as President General of the Confederated Southern Memorial Association (CSMA).",
+        "url": "https://en.wikipedia.org/wiki/Margaret_O%27Connor_Wilson",
+        "revision": 1374520436
+      }
+    },
+    {
+      "qid": "Q23806432",
+      "name": "Lollie Belle Wylie",
+      "description": "American journalist and poet (1858-1923)",
+      "birth": "1858-10-21T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1923-02-16T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "composer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Lollie%20Belle%20Wylie%20from%20American%20Women%2C%201897%20-%20cropped.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Lollie Belle Wylie",
+        "extract": "Lollie Belle Wylie (October 21, 1858 – February 16, 1923) was an American poet and composer from Atlanta, Georgia. She was the first paid woman journalist in Georgia and composed the music for the song, which was the official state anthem from 1922 to 1979. She was one of the founders of the Georgia Women's Press Club and the Atlanta Writers Club. In addition to supporting forest preservation, Wylie was the historian for the \"Uncle Remus\" Memorial Association. In 2013, she was inducted into the Georgia Women of Achievement.",
+        "url": "https://en.wikipedia.org/wiki/Lollie_Belle_Wylie",
+        "revision": 1363286486
+      }
+    },
+    {
+      "qid": "Q64162479",
+      "name": "Martha Loftin Wilson",
+      "description": "American missionary worker and journal editor (1834-1919)",
+      "birth": "1834-01-18T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1919-06-11T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "missionary",
+        "writer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/MARTHA%20ELEANOR%20LOFTIN%20WILSON%20A%20woman%20of%20the%20century%20%28page%20798%20crop%29.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "32030396",
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Martha Loftin Wilson",
+        "extract": "Martha Loftin Wilson (née, Loftin; January 19, 1834 – June 11, 1919) was an American missionary worker and journal editor, as well as a pioneer Atlanta resident and a nurse in the American Civil War. She was regarded as \"the most influential leader in the Woman's Missionary Union in Georgia\". Wilson was the author of Hospital Scenes and Incidents of the War.",
+        "url": "https://en.wikipedia.org/wiki/Martha_Loftin_Wilson",
+        "revision": 1377851194
+      }
+    },
+    {
+      "qid": "Q5488849",
+      "name": "Frank P. Rice",
+      "description": "American politician",
+      "birth": "1838-10-28T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1923-03-10T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Frank%20P%20Rice.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Frank P. Rice",
+        "extract": "Franklin P. Rice (October 28, 1838, Sullivan County, New Hampshire - March 10, 1923, Atlanta) was an investor, businessman and local politician in Atlanta, Georgia.",
+        "url": "https://en.wikipedia.org/wiki/Frank_P._Rice",
+        "revision": 1336344858
+      }
+    },
+    {
+      "qid": "Q5725176",
+      "name": "Henry Lumpkin Wilson",
+      "description": "American politician (1839-1917)",
+      "birth": "1839-07-02T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1917-09-21T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Henry%20Lumpkin%20Wilson.JPG",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Henry Lumpkin Wilson",
+        "extract": "Dr. Henry Lumpkin Wilson (July 2, 1839 in Danville, Virginia – September 21, 1917 in Atlanta) was an American physician, city councilman, and was active in the city of Atlanta's  expansion and development.\nDr. Wilson was born in Danville, Virginia in 1839 and came to Atlanta in 1853. He graduated from Emory College at the original Oxford campus in 1858. He then became a doctor at Atlanta Medical College and was appointed as city physician. He served in the Confederate army and was made chief surgeon of the conscript department of Georgia. In 1872 he was elected to Atlanta City Council. He was chairman of the street committee and helped improved Whitehall, Marietta and Peachtree Streets. He was elected to the Fulton County commissioner in 1886 and was chairman of the committee of public works.\nSoon after 1885 he opened a drug store at the corner of Broad and Marietta Streets.\nAfter selling his drug business he entered the real estate business to become \"one of the largest and boldest real estate men of the South\", long in partnership with Frank P. Rice. in 1883 he was an incorporator of the Fulton County Street Railroad which brought horsecar service to Ponce de Leon Springs. Wilson is credited with giving the Springs their name. The line would later become the Nine-Mile Circle electric streetcar which would make accessible and thus enable the development of what is today Virginia-Highland and adjacent neighborhoods. Indeed, in 1914, Wilson sold 65 acres which would be subdivided into Boulevard Park, one of the original subdivisions of today's Virginia Highland.\nHe was also a director of the Cotton States and International Exposition Company.\nWilson was described as a \"stubby blond man of medium height with a brusque manner and a quick keen glance\".  At one point Wilson resided in a grand house on Peachtree Street in today's Midtown Atlanta near the intersection of 5th Street.\nHe died in 1917 and was buried in Oakland Cemetery (Atlanta, Georgia).",
+        "url": "https://en.wikipedia.org/wiki/Henry_Lumpkin_Wilson",
+        "revision": 1369047269
+      }
+    },
+    {
+      "qid": "Q6130876",
+      "name": "James Calhoun",
+      "description": "American mayor (1811–1875)",
+      "birth": "1811-02-12T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1875-10-01T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "10333015",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "James Calhoun (Atlanta politician)",
+        "extract": "James Montgomery Calhoun (February 12, 1811 – October 1, 1875) was an American politician who served as the sixteenth mayor of Atlanta, Georgia during the American Civil War, best known as the recipient of Union General William T. Sherman's famous \"war is cruelty\" (often misquoted as \"war is hell\") letter.",
+        "url": "https://en.wikipedia.org/wiki/James_Calhoun_(Atlanta_politician)",
+        "revision": 1342823562
+      }
+    },
+    {
+      "qid": "Q6213600",
+      "name": "Joel Hurt",
+      "description": "American businessman",
+      "birth": "1850-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1926-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "businessperson"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Joel%20Hurt.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Joel Hurt",
+        "extract": "Joel Hurt (1850–1926) was an American businessman. He was the president of Trust Company of Georgia, and a developer in Atlanta. He was one of the many founders of SunTrust Bank.",
+        "url": "https://en.wikipedia.org/wiki/Joel_Hurt",
+        "revision": 1372397310
+      }
+    },
+    {
+      "qid": "Q6248918",
+      "name": "John Mims",
+      "description": "American politician",
+      "birth": "1815-11-10T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1856-04-30T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "John Mims",
+        "extract": "John F. Mims (November 10, 1815 – April 30, 1856) was the sixth mayor of Atlanta and agent of the Georgia Railroad & Banking Company.",
+        "url": "https://en.wikipedia.org/wiki/John_Mims",
+        "revision": 1321973317
+      }
+    },
+    {
+      "qid": "Q6667002",
+      "name": "Logan Edwin Bleckley",
+      "description": "American judge (1827-1907)",
+      "birth": "1827-07-03T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1907-03-06T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "lawyer",
+        "judge"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Logan Edwin Bleckley",
+        "extract": "Logan Edwin Bleckley (July 3, 1827 – March 6, 1907) was an American lawyer and jurist.\nBorn in 1827 on Screamer Mountain in Rabun County, Georgia, Bleckley became a self-taught lawyer.  At age eleven, he started working in his father's office (Clerk of the Court in Clayton).  He was admitted to the bar in 1846 at age nineteen.  During this period of his life, he authored a state bill that outlawed the imprisonment of women for debt and worked with state legislators to have it passed into law.\nTwo years later, he became a bookkeeper for the State Railroad Office in Atlanta, Georgia. In 1851, he was appointed as a secretary to the governor of Georgia, George W. Towns in Milledgeville (the capital of Georgia at that time), but he left later that year when the new governor, Howell Cobb took office.  Bleckley opened his own practice in Atlanta in 1852 at the age of twenty-four.\nBleckley partnered with Basil H. Overby in 1854 to form the firm of Bleckley and Overby.  The following year, they added John Brown Gordon, but he left in 1856 to pursue other interests. An interesting note is that all three gentlemen married daughters of General Hugh A. Haralson, a former major general in the state militia, a state congressional representative and a U.S. representative for the state of Georgia.  Bleckley married Clara Caroline Haralson, the General's third daughter.  Their son, Haralson Bleckley,  became an architect and designed the University of Georgia Library Building built in 1904.\nIn 1857, Bleckley was elected to the office of Solicitor General in his judicial circuit covering eight counties and served in that capacity for the next four years while still maintaining his practice.\nIn 1861, Bleckley briefly joined the Confederate Army but was discharged for health reasons and returned to his law practice in Atlanta.  He was appointed to office of Supreme Court of Georgia Reporter in 1864.  He resigned that position in 1867 and returned to his private practice.\nIn 1875, he was appointed an Associate Justice of the Supreme Court of Georgia by his former law partner, John Brown Gordon, the governor of Georgia at the time. He resigned in 1880.  When presiding Chief Justice James Jackson died, Bleckley was appointed as the chief justice of the court in 1887 and presided until his resignation in 1894.\nBleckley died in Clarkesville, Georgia, on March 6, 1907, and is buried at Oakland Cemetery in Atlanta. Bleckley County is named in his honor.\nHis son, Logan Bleckley Jr., was later appointed the first Clerk of Court to the Georgia Court of Appeals.\n\n",
+        "url": "https://en.wikipedia.org/wiki/Logan_Edwin_Bleckley",
+        "revision": 1362390451
+      }
+    },
+    {
+      "qid": "Q6986296",
+      "name": "Q6986296",
+      "description": "American mayor",
+      "birth": "1814-11-10T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1882-02-03T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Nedom%20L.%20Angier%20%281814%E2%80%931882%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "45045211",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Nedom L. Angier",
+        "extract": "Nedom L. Angier (November 10, 1814 – February 3, 1882) was the Mayor of Atlanta from 1877 to 1879. To date, he is the last Republican to hold that office.\n\n",
+        "url": "https://en.wikipedia.org/wiki/Nedom_L._Angier",
+        "revision": 1373175232
+      }
+    },
+    {
+      "qid": "Q7181965",
+      "name": "Phil Haralson",
+      "description": "American lawyer (1851–1912)",
+      "birth": "1851-11-03T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1912-10-27T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "lawyer"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "57175569",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Phil Haralson",
+        "extract": "Philip H. Haralson (November 3, 1851, Macon, Georgia - March 1934, Atlanta) was an American lawyer. At one time he headed up the Committee on Manufactures and Statistics. and at another  went into real estate investment in Cuba. He married Mary E. Morris in 1881. Haralson had his mansion in the Inman Park neighborhood of Atlanta. He was buried in Oakland Cemetery.",
+        "url": "https://en.wikipedia.org/wiki/Phil_Haralson",
+        "revision": 1368212455
+      }
+    },
+    {
+      "qid": "Q7328385",
+      "name": "Richard Peters",
+      "description": "American businessman, founder of Atlanta, Georgia (1810–1889)",
+      "birth": "1810-11-10T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1889-02-06T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "businessperson"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Richard%20Peters%20in%201848.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "39025241",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Richard Peters (Atlanta)",
+        "extract": "Richard Peters (November 10, 1810 – February 6, 1889) was an American railroad man and a founder of Atlanta, Georgia, in the 1840s.",
+        "url": "https://en.wikipedia.org/wiki/Richard_Peters_(Atlanta)",
+        "revision": 1376486802
+      }
+    },
+    {
+      "qid": "Q7387383",
+      "name": "S. B. Spencer",
+      "description": "American politician",
+      "birth": "1827-12-26T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1901-10-16T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": null,
+      "graveImage": "http://commons.wikimedia.org/wiki/Special:FilePath/Samuel-Spencer-grave.JPG",
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "S. B. Spencer",
+        "extract": "Samuel Bacon Spencer (December 26, 1827 – October 16, 1901) was the last mayor of Atlanta, Georgia to serve a one-year term.\nSpencer was born on December 26, 1827. In 1848, he graduated from Oglethorpe University in Milledgeville, Georgia. On December 12, 1849, Spencer married the former Mary E. Baker. Between 1848 and 1854, he was a teacher in Greene County and Lumpkin Counties then turned to practicing law in Thomasville. A major in the Confederate Army during the American Civil War, Spencer moved to Atlanta in 1870 and continued practicing law. On December 3, 1873, as the unopposed Democratic candidate, he was elected mayor of Atlanta with 798 votes. After his one-term as mayor, Spencer moved to Savannah and taught school again at the Chatham Academy. In 1896, he returned to Atlanta. Spencer died on October 16, 1901, and is interred at Oakland Cemetery.",
+        "url": "https://en.wikipedia.org/wiki/S._B._Spencer",
+        "revision": 1378252763
+      }
+    },
+    {
+      "qid": "Q7791946",
+      "name": "Thomas Lowe",
+      "description": "American politician",
+      "birth": "1812-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1875-11-18T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Thomas Lowe (politician)",
+        "extract": "Thomas F. Lowe (died November 18, 1875) was an American musician, businessman, and politician who served as the acting mayor of Atlanta, during the early part of the American Civil War.\nIn 1858, T. F. Lowe was elected as an alderman representing Atlanta's Second Ward. Lowe and fellow future Atlanta mayor William Ezzard were among a group of investors that chartered the Atlanta Mutual Insurance and Stock Company in 1859.\nIn November 1861, he took over as Atlanta's mayor after incumbent Jared Whitaker was appointed to head the commissary and logistics activities for Georgia's state troops. He was not a candidate for election to a full term, and was succeeded by James M. Calhoun. He was commissioned as a colonel in the Georgia state militia. As a violin soloist, he was a local favorite and played many recitals in Atlanta and Decatur, even during the war.\nLowe died in Mount Airy, Georgia, and is buried in Atlanta's Oakland Cemetery.",
+        "url": "https://en.wikipedia.org/wiki/Thomas_Lowe_(politician)",
+        "revision": 1376709240
+      }
+    },
+    {
+      "qid": "Q8008738",
+      "name": "William Ezzard",
+      "description": "American mayor",
+      "birth": "1799-06-12T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1887-03-24T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "William Ezzard",
+        "extract": "William E. Ezzard (June 12, 1799 – March 24, 1887) was a Southern United States politician who served as the 11th, 13th and 19th Mayor of Atlanta, Georgia, in the 19th century.",
+        "url": "https://en.wikipedia.org/wiki/William_Ezzard",
+        "revision": 1362972905
+      }
+    },
+    {
+      "qid": "Q8015135",
+      "name": "William Markham",
+      "description": "American mayor (1811–1890)",
+      "birth": "1811-10-09T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1890-11-09T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Markham%20%281811%E2%80%931890%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "109985010",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "William Markham (mayor)",
+        "extract": "William Markham (October 9, 1811 – November 9, 1890) was a hotel owner in Atlanta, who served as mayor of that city from 1853 to 1854.",
+        "url": "https://en.wikipedia.org/wiki/William_Markham_(mayor)",
+        "revision": 1324529596
+      }
+    },
+    {
+      "qid": "Q16030228",
+      "name": "William Ambrose Wright",
+      "description": "American politician, Georgia",
+      "birth": "1844-01-19T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1929-09-13T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Ambrose%20Wright%20%281844%E2%80%931929%29.png",
+      "graveImage": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Ambrose%20Wright%20resting%20place.jpg",
+      "graveCoord": null,
+      "findAGraveId": "9553636",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "William Ambrose Wright",
+        "extract": "William Ambrose Wright (January 19, 1844 – September 13, 1929) was a lieutenant in the Confederate States Army, and Georgia state comptroller for fifty years, as well as insurance commissioner.\n\n",
+        "url": "https://en.wikipedia.org/wiki/William_Ambrose_Wright",
+        "revision": 1322953625
+      }
+    },
+    {
+      "qid": "Q16043563",
+      "name": "Rufus M. Rose",
+      "description": "physician, distiller (1836-1910)",
+      "birth": "1836-05-17T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1910-07-21T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "businessperson"
+      ],
+      "image": null,
+      "graveImage": "http://commons.wikimedia.org/wiki/Special:FilePath/RufusRoseCrypt.jpg",
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Rufus M. Rose",
+        "extract": "Rufus Mathewson Rose (born May 17, 1836, in New London, Connecticut; died July 21, 1910, in Atlanta, Georgia), was an American businessman. After growing up and receiving a primary and secondary education in that state, he moved to New York City, where he practiced as a druggist, and then on to Long Island, where he worked in a sailors' hospital.\nBefore the start of the American Civil War, Rose had studied medicine, received a diploma and moved to Hawkinsville, Georgia. When the war broke out in 1861, Rose joined the Confederate Army's Tenth Georgia Regiment as a foot soldier, but was quickly reassigned to Williamsburg, Virginia, where he worked in the army's medical department. Due to a personal injury, Rose was honorably discharged in December 1861, but his services in creating medicines for the Confederate army continued until just before the end of the war.\nAfter the war, Rose moved to Atlanta. In 1867, he founded the R. M. Rose Co. Distillery, also known as the Mountain Spring Distillery, in Vinings, Georgia, a then-small community twelve miles north of Atlanta. He sold his corn and rye whiskies to the public from retail outlets he owned and operated in Atlanta.\nAccording to some accounts, his company established the whiskey brand Four Roses in 1888, likely named in honor of him, his brother Origen, and their two sons. The brand is still produced, and was the top selling brand of Bourbon in the United States in the 1930s, 1940s and 1950s. The brand is currently owned by the Kirin Brewery Company of Japan and produced at the Four Roses distillery in Lawrenceburg, Kentucky. However, the actual origin of the Four Roses brand is not well established, and current brand owners do not mention Rufus M. Rose in their version of its history.\nIn addition to selling liquor, Rose was the owner of a large real estate business known as the Rose Investment Company.\nRose died of heart failure on July 21, 1910, in his Victorian mansion – the Rufus M. Rose House – which still stands on Peachtree Street in the SoNo district of Atlanta. His remains are interred in the Rose mausoleum at Oakland Cemetery.",
+        "url": "https://en.wikipedia.org/wiki/Rufus_M._Rose",
+        "revision": 1345410468
+      }
+    },
+    {
+      "qid": "Q16059030",
+      "name": "Samuel M. Inman",
+      "description": "American cotton merchant, businessman, philanthropist (1843–1915)",
+      "birth": "1843-02-19T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1915-01-12T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "businessperson"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Samuel%20M%20Inman%201889.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "10198227",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Samuel M. Inman",
+        "extract": "Samuel Martin Inman (February 19, 1843 – January 12, 1915) was a prominent cotton merchant and businessman in Atlanta, Georgia, who is best known for the neighborhood in Atlanta that bears his name. Inman was also commemorated in the name of the Samuel M. Inman Elementary School, and subsequently Middle School in the Virginia-Highland neighborhood from 1929-2020.",
+        "url": "https://en.wikipedia.org/wiki/Samuel_M._Inman",
+        "revision": 1368212506
+      }
+    },
+    {
+      "qid": "Q947712",
+      "name": "Max Corput",
+      "description": "Belgian-American architect and Confederate Army captain",
+      "birth": "1825-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1911-01-16T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "architect"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Max%20Van%20Den%20Corput.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "75878290",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Max Corput",
+        "extract": "Max Corput, fully documented as Maximilien van den Corput (died 1911), was a Belgian-American architect. He designed the second Union Station in Atlanta, Georgia. Van den Corput also served as an officer in the Confederate States Army during the American Civil War.",
+        "url": "https://en.wikipedia.org/wiki/Max_Corput",
+        "revision": 1380072954
+      }
+    },
+    {
+      "qid": "Q4888432",
+      "name": "Benjamin Crane",
+      "description": "American businessman (1835-1885)",
+      "birth": "1835-12-19T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1885-01-15T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Benjamin%20Elliott%20Crane.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "35271012",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Benjamin Crane",
+        "extract": "Benjamin Elliott Crane (December 19, 1835 – January 15, 1885) was a businessman in post-bellum Atlanta, Georgia, United States.",
+        "url": "https://en.wikipedia.org/wiki/Benjamin_Crane",
+        "revision": 1321985770
+      }
+    },
+    {
+      "qid": "Q98732878",
+      "name": "Isma Dooly",
+      "description": "US newspaper editor and clubwoman",
+      "birth": null,
+      "birthPrecision": null,
+      "death": null,
+      "deathPrecision": null,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "newspaper editor"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/IsmaDooly.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "57858679",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Isma Dooly",
+        "extract": "Isma Dooly (1870 – May 11, 1921), also seen as Isma Dooley, was an American newspaper editor and clubwoman, based in Atlanta, Georgia.",
+        "url": "https://en.wikipedia.org/wiki/Isma_Dooly",
+        "revision": 1354929318
+      }
+    },
+    {
+      "qid": "Q100792941",
+      "name": "Christopher C. Wimbish",
+      "description": "American lawyer and politician",
+      "birth": "1895-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1962-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "military personnel",
+        "politician",
+        "businessperson"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "178313365",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Christopher C. Wimbish",
+        "extract": "Christopher Columbus Wimbish, Jr. (February 6, 1895 – December 27, 1962) was an American lawyer and politician. He served in the Illinois State Senate from 1942 through 1955. He was a Democrat.",
+        "url": "https://en.wikipedia.org/wiki/Christopher_C._Wimbish",
+        "revision": 1378367324
+      }
+    },
+    {
+      "qid": "Q107392201",
+      "name": "Myra Miller",
+      "description": "Atlanta-based food entrepreneur and baker (1811-1891)",
+      "birth": "1811-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1891-05-04T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "baker",
+        "entrepreneur",
+        "traiteur"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Myra Miller",
+        "extract": "Myra Miller (c. 1811–1891) was an African-American food entrepreneur and baker in Atlanta during Reconstruction.\nMiller was born in Virginia in about 1811. She was enslaved and sold as a cook to someone in Rome, Georgia. In 1871, after slavery was abolished in the United States, she moved with her husband to Atlanta and started a bakery. Miller's bakery was well known in Atlanta and her wedding fruitcakes were sent across the country. Miller died in 1891 and was buried in the African American section of  Oakland Cemetery.",
+        "url": "https://en.wikipedia.org/wiki/Myra_Miller",
+        "revision": 1336110162
+      }
+    },
+    {
+      "qid": "Q107990165",
+      "name": "Foster Blodgett",
+      "description": "American politician",
+      "birth": null,
+      "birthPrecision": null,
+      "death": null,
+      "deathPrecision": null,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Foster%20Blodgett%20Jr.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "42048546",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Foster Blodgett",
+        "extract": "Foster Blodgett Jr. (15 January 1826 – 3 December 1877) was an American politician elected mayor of Augusta, Georgia, from 1859 to 1860, and returned to the mayoralty via military appointment between 1867 and 1868. Blodgett was elected to the United States Senate by the Georgia General Assembly in 1871, but not seated.",
+        "url": "https://en.wikipedia.org/wiki/Foster_Blodgett",
+        "revision": 1356552599
+      }
+    },
+    {
+      "qid": "Q109855709",
+      "name": "Eugenia Jones Bacon",
+      "description": "author (1840–1920)",
+      "birth": "1840-02-02T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1920-03-13T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "art educator",
+        "writer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Eugenia%20Jones%20Bacon%201895.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Eugenia Jones Bacon",
+        "extract": "Eugenia Jones Bacon (1840-1920) was an American writer, known for her novel Lyddy: A Tale of the Old South (1898), a pro-slavery response to Uncle Tom's Cabin (1852) by Harriet Beecher Stowe. Bacon based the novel on memories of her childhood on her father's plantation in Liberty County, Georgia. She also wrote about a rock she collected in Bavaria with an edge reminiscent of the visage of Jesus. She also wrote The Red Moon published in 1910 by the Neale Publishing Company (Eugenie Jones-Bacon).",
+        "url": "https://en.wikipedia.org/wiki/Eugenia_Jones_Bacon",
+        "revision": 1374632015
+      }
+    },
+    {
+      "qid": "Q131301911",
+      "name": "Emily Hendree Stewart Park",
+      "description": "American school president (1848-1910)",
+      "birth": "1848-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1910-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "academic administrator"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Emily%20Hendree%20Park%20%28Confederate%20Veteran%2C%201911%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "131567487",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Emily Hendree Stewart Park",
+        "extract": "Emily Hendree Stewart Park (née Hendree; after first marriage, Stewart; after second marriage, Park; 1848-1910) was a school administrator. She served as President of the Washington Seminary in Atlanta, Georgia.\n Also active in civic affairs, Park served as State Regent and Vice President General of the National Society of the Daughters of the American Revolution (DAR), as Vice President of the Georgia Division of the United Daughters of the Confederacy (UDC), and as State Regent of the Confederate Memorial Museum at Richmond, Virginia.",
+        "url": "https://en.wikipedia.org/wiki/Emily_Hendree_Stewart_Park",
+        "revision": 1297020608
+      }
+    },
+    {
+      "qid": "Q28921823",
+      "name": "Luetta Elmina Braumuller",
+      "description": "American artist, publisher",
+      "birth": "1856-12-04T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1898-12-13T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "painter",
+        "writer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Luetta%20Elmina%20Braumuller%20ca%201893.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "52505414",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Luetta Elmina Braumuller",
+        "extract": "Luetta Elmina Braumuller (née Bumstead; December 4, 1856 – December 13, 1898) was an artist and publisher who founded the periodical The China Decorator.",
+        "url": "https://en.wikipedia.org/wiki/Luetta_Elmina_Braumuller",
+        "revision": 1329549485
+      }
+    },
+    {
+      "qid": "Q47541503",
+      "name": "Henry A. Rucker",
+      "description": "American entrepreneur and politician",
+      "birth": "1852-11-14T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1924-05-11T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician",
+        "businessperson"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Henry%20A.%20Rucker.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "41334423",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Henry A. Rucker",
+        "extract": "Henry Allen Rucker (November 14, 1852—May 11, 1924) was an African American entrepreneur and politician. Born into slavery, he was able to achieve significant wealth and political power within the Republican Party. From 1897 to 1911 — the administrations of McKinley, Roosevelt, and Taft, all Republicans — he was the appointed head of federal tax collections for the state of Georgia. Despite serving at the nadir of race relations in Atlanta, Rucker was one of the three most powerful Black politicians in Georgia, alongside Judson Whitlocke Lyons and John H. Deveaux, characterized as the \"big three\" by rival Benjamin Jefferson Davis Sr.",
+        "url": "https://en.wikipedia.org/wiki/Henry_A._Rucker",
+        "revision": 1380245884
+      }
+    },
+    {
+      "qid": "Q48488804",
+      "name": "Wesley John Gaines",
+      "description": "American church and community leader (1840–1912)",
+      "birth": "1840-10-04T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1912-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "writer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Bishop%20wesley%20gaines.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "9665",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Wesley John Gaines",
+        "extract": "Bishop Wesley John Gaines (October 4, 1840 – January 12, 1912) was a church and community leader in Georgia. He was vice president of Payne Theological Seminary and co-founder of Morris Brown College. He was African-American.",
+        "url": "https://en.wikipedia.org/wiki/Wesley_John_Gaines",
+        "revision": 1380243286
+      }
+    },
+    {
+      "qid": "Q56599684",
+      "name": "Osborne Augustus Lochrane",
+      "description": "American judge",
+      "birth": "1829-08-22T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1887-06-17T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "judge"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Photograph%20of%20Osborne%20Augustus%20Lochrane%20%281829%E2%80%931887%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "5343708",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Osborne Augustus Lochrane",
+        "extract": "Osborne Augustus Lochrane (August 22, 1829 – June 17, 1887) was chief justice of the Supreme Court of Georgia from 1871 to 1872.",
+        "url": "https://en.wikipedia.org/wiki/Osborne_Augustus_Lochrane",
+        "revision": 1362389298
+      }
+    },
+    {
+      "qid": "Q67905614",
+      "name": "Alexander Campbell Bruce",
+      "description": "architect",
+      "birth": "1835-03-16T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1927-12-10T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "architect"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Alexander%20Campbell%20Bruce.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "96804508",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Alexander Campbell Bruce",
+        "extract": "Alexander Campbell Bruce (March 16, 1835 – December 10, 1927), also known as A. C. Bruce, was an American architect based in Atlanta, Georgia.",
+        "url": "https://en.wikipedia.org/wiki/Alexander_Campbell_Bruce",
+        "revision": 1345331029
+      }
+    },
+    {
+      "qid": "Q97961538",
+      "name": "Julia Collier Harris",
+      "description": "American writer and journalist",
+      "birth": "1885-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1967-01-21T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "journalist",
+        "publisher"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Julia%20Collier%20Harris%20LCCN2014705884.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "49047974",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Julia Collier Harris",
+        "extract": "Julia Collier Harris (November 11, 1875 – January 21, 1967) was an American writer and journalist. She wrote the earliest biography of Joel Chandler Harris, her husband's father. As owners and publishers of the Columbus Enquirer Sun she and her husband won the 1926 Pulitzer Prize for Public Service. She has been inducted into three Georgia halls of fame: Georgia Newspaper Hall of Fame, Georgia Writers Hall of Fame, and Georgia Women of Achievement.",
+        "url": "https://en.wikipedia.org/wiki/Julia_Collier_Harris",
+        "revision": 1356024615
+      }
+    },
+    {
+      "qid": "Q5346724",
+      "name": "Edwin P. Ansley",
+      "description": "American real estate developer in Atlanta",
+      "birth": "1865-03-30T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1923-07-02T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "real estate developer"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "27054763",
+      "sitelinks": 1,
+      "wikipedia": {
+        "title": "Edwin P. Ansley",
+        "extract": "Edwin Percival Ansley (March 30, 1865, in Augusta, Georgia – July 2, 1923, in Atlanta) was a real estate developer in Atlanta.",
+        "url": "https://en.wikipedia.org/wiki/Edwin_P._Ansley",
+        "revision": 1315276840
+      }
+    },
+    {
+      "qid": "Q6066179",
+      "name": "Q6066179",
+      "description": "American businessman",
+      "birth": "1807-01-19T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1887-08-28T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "businessperson"
+      ],
+      "image": null,
+      "graveImage": "http://commons.wikimedia.org/wiki/Special:FilePath/IOMcD.jpg",
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 1,
+      "wikipedia": {
+        "title": "Ira O. McDaniel",
+        "extract": "Ira Oliver McDaniel (January 19, 1807 – August 28, 1887) was a cotton merchant, farmer and newspaper man in early Atlanta, Georgia.",
+        "url": "https://en.wikipedia.org/wiki/Ira_O._McDaniel",
+        "revision": 1336518147
+      }
+    },
+    {
+      "qid": "Q6133751",
+      "name": "James Fairlie Cooper",
+      "description": "superintendent of the Dahlonega Mint (1814-1869)",
+      "birth": "1814-09-02T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1869-10-14T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "military officer"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "110618933",
+      "sitelinks": 1,
+      "wikipedia": {
+        "title": "James Fairlie Cooper",
+        "extract": "James Fairlie Cooper (September 2, 1814 – October 14, 1869) was an American minter and soldier.",
+        "url": "https://en.wikipedia.org/wiki/James_Fairlie_Cooper",
+        "revision": 1380315917
+      }
+    },
+    {
+      "qid": "Q6160116",
+      "name": "Jared Whitaker",
+      "description": "American newspaperman and politician (1818–1884)",
+      "birth": "1818-05-04T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1884-05-03T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 1,
+      "wikipedia": {
+        "title": "Jared Whitaker",
+        "extract": "Jared Irwin Whitaker (May 4, 1818 – May 3, 1884) was a Georgia newspaperman, publisher of the Daily Intelligencer from 1864 to 1871, and earlier served as a politician. Defeating a three-term incumbent to become the 14th Mayor of Atlanta, Georgia, during the early days of the American Civil War, he left office early when appointed as Commissary General of Georgia.",
+        "url": "https://en.wikipedia.org/wiki/Jared_Whitaker",
+        "revision": 1378193326
+      }
+    },
+    {
+      "qid": "Q6692559",
+      "name": "Lovick Pierce Thomas I",
+      "description": "American quartermaster",
+      "birth": "1812-05-12T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1878-05-24T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "military officer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/LP%20Thomas.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "86381897",
+      "sitelinks": 1,
+      "wikipedia": {
+        "title": "Lovick Pierce Thomas I",
+        "extract": "Lovick Pierce Thomas I (May 12, 1812 – May 24, 1878) was an American hotel owner, tavern keeper, and Confederate States Army officer who served as a quartermaster in the Civil War from 1861 to 1863. After the war, he served as city marshal of Atlanta, Georgia. He was the father of famed American Old West Deputy U.S. Marshal Heck Thomas and the brother of Confederate Brigadier General Edward Lloyd Thomas.",
+        "url": "https://en.wikipedia.org/wiki/Lovick_Pierce_Thomas_I",
+        "revision": 1367408447
+      }
+    },
+    {
+      "qid": "Q6915771",
+      "name": "Moses Formwalt",
+      "description": "American mayor",
+      "birth": "1820-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1852-05-26T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7870193",
+      "sitelinks": 1,
+      "wikipedia": {
+        "title": "Moses Formwalt",
+        "extract": "Moses W. Formwalt (1820 – May 26, 1852) was the first mayor of the city of Atlanta, which was then in DeKalb County, Georgia. Atlanta was chartered in December 1847 (the name had been changed from Marthasville in December 1845), and the first election of officers took place on January 29, 1848. Formwalt drew a larger share of the 215 votes than Jonathan Norcross and was elected mayor, representing the Free and Rowdy Party. First meeting of the city council followed on February 2 at the Jonas Smith grocery (site of the Howard Johnson hotel near Five Points). Things proceeded pretty normally throughout his one-year term: roads were cut, wells dug, law and order somewhat maintained (a jail was built); and on January 17, 1849, Dr. Benjamin F. Bomar succeeded him as mayor.\nBorn in Tennessee, Formwalt came to Decatur in 1836 and established a tin shop on Decatur St. in Atlanta in 1846 where one of his most popular products were stills. He became mayor at age 28. Two years after leaving office, he began serving as deputy sheriff of DeKalb County; a short time later he was stabbed to death by a prisoner while escorting him from the council chamber.\n\nHe was buried at Oakland Cemetery and is honored by Formwalt Street just southwest of downtown.",
+        "url": "https://en.wikipedia.org/wiki/Moses_Formwalt",
+        "revision": 1376737622
+      }
+    }
+  ]
+}

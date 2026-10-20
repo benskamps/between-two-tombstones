@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+/*
+  Two themes. "night" is the default dark look; "day" is high contrast for
+  reading in sunlight. The OS preference picks one; the toggle can override it
+  by setting data-theme on <html>.
+*/
+:root {
+  --bg: #0e110f;
+  --surface: #171c18;
+  --surface-2: #212922;
+  --border: #364036;
+  --text: #ece6d7;
+  --text-muted: #b3ae9c;
+  --accent: #e2ad4b;
+  --accent-ink: #14110a;
+  --moss: #9db58f;
+  --danger: #f08a6c;
+  --focus: #f5d27a;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="night"]) {
+    --bg: #fbf8f1;
+    --surface: #ffffff;
+    --surface-2: #efe9dc;
+    --border: #8f8878;
+    --text: #111111;
+    --text-muted: #3b3933;
+    --accent: #6e4300;
+    --accent-ink: #ffffff;
+    --moss: #2c4727;
+    --danger: #a3271b;
+    --focus: #1b4fd6;
+    color-scheme: light;
+  }
+}
+
+:root[data-theme="day"] {
+  --bg: #fbf8f1;
+  --surface: #ffffff;
+  --surface-2: #efe9dc;
+  --border: #8f8878;
+  --text: #111111;
+  --text-muted: #3b3933;
+  --accent: #6e4300;
+  --accent-ink: #ffffff;
+  --moss: #2c4727;
+  --danger: #a3271b;
+  --focus: #1b4fd6;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-moss: var(--moss);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-body), system-ui, sans-serif;
+  --font-display: var(--font-carved), Georgia, serif;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Tap targets: 48px minimum everywhere (gloves, cold hands). */
+.tap {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
