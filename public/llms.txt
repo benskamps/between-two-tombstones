@@ -1,0 +1,50 @@
+# Between Two Tombstones
+
+> Between Two Tombstones (Macy's Graveyard Companion) is a free web app for visiting cemeteries. At any cemetery it finds the graves with the most interesting stories, walks you through them as a tour, and tells you how those people lived.
+
+It is an installable progressive web app for phones. There is no account or signup. Photos you take stay on your phone unless you choose "Read with Claude" on a headstone.
+
+## Core capabilities
+
+- **Cemetery tours**: find a cemetery near you or by name, then get a tour of its notable graves ("Greatest hits", "Walk through time", or a walking route once graves are pinned). Each stop is a story card with dates, age, occupations and a Wikipedia summary.
+- **Offline tours**: download a tour before you go; it reads without a signal.
+- **Stamp Kit**: turn a photo of a headstone into a rubbing, an ink stamp and a postage stamp, on the phone. Real rubbings wear stones down; this needs no contact with the stone.
+- **Read with Claude**: an optional transcription of a weathered headstone (names, dates, epitaph, symbols). Unreadable characters are marked [?], never guessed.
+- **Spirit box and graveyard games**: a static-and-voices toy that speaks the names of people buried at the cemetery who died at least 75 years ago, plus Tombstone Bingo with the traditional meanings of carved symbols.
+
+## Key pages
+
+- Home: /
+- Cemetery tour: /cemetery/{Wikidata ID}, for example /cemetery/Q2008469 (Oakland Cemetery, Atlanta) and /cemetery/Q360779 (Sleepy Hollow Cemetery, New York)
+- Stamp Kit: /stamp
+- Spirit box: /spirit
+- Graveyard games: /games
+- Sitemap: /sitemap.xml
+
+## Data sources and licenses
+
+- Wikidata (CC0): cemeteries, burials, dates, occupations, grave photos.
+- Wikipedia (CC BY-SA 4.0): life summaries, credited on every card.
+- OpenStreetMap (ODbL, © OpenStreetMap contributors): cemetery outlines, when available.
+- Find a Grave: outbound links only, built from the Find a Grave IDs that Wikidata stores. Nothing is scraped.
+- Wikimedia Commons: portraits and grave photos, under each file's own license.
+
+## Respect rules
+
+- The spirit box only uses people who died 75 or more years ago.
+- Deaths within the last 25 years, or with an unknown date, get a plain card with no spooky effects.
+- A first-run card asks visitors to stay on paths, give mourners space, and never take real rubbings.
+
+## Stack
+
+- Next.js 16 (App Router) on Vercel
+- Anthropic Claude, called only from server routes, for headstone transcription
+- No database: tours and pins are kept on the phone
+
+## Origin
+
+Built solo for Hackyard Yard #5 ("Haunted"), October 19–23, 2026.
+
+## Contact
+
+- Source code: https://github.com/benskamps/between-two-tombstones

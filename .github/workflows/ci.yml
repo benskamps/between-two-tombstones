@@ -1,0 +1,56 @@
+# House CI budget (personal-infra/AUTONOMY.md, "CI minutes are money"):
+# PRs into main only, superseded runs cancel, every job has a timeout,
+# docs-only PRs skip the heavy steps but the job still reports.
+# Playwright e2e is not run here; run it locally against a preview or prod.
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # The PR merge commit and its first parent (main), for the docs-only check.
+          fetch-depth: 2
+
+      - name: Docs-only change?
+        id: changes
+        run: |
+          if git diff --name-only HEAD^1 HEAD | grep -qvE '\.md$'; then
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "code=false" >> "$GITHUB_OUTPUT"
+            echo "Only Markdown changed: skipping install, check and build."
+          fi
+
+      - uses: pnpm/action-setup@v4
+        if: steps.changes.outputs.code == 'true'
+
+      - uses: actions/setup-node@v5
+        if: steps.changes.outputs.code == 'true'
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+        if: steps.changes.outputs.code == 'true'
+
+      - run: pnpm check
+        if: steps.changes.outputs.code == 'true'
+
+      - run: pnpm build
+        if: steps.changes.outputs.code == 'true'
