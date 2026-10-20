@@ -45,3 +45,4 @@ next-env.d.ts
 .vercel
 /test-results
 /playwright-report
+.claude/worktrees/

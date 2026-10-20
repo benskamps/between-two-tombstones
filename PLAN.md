@@ -101,22 +101,22 @@ Every item: tier, acceptance line (machine-checkable where possible), status. Bu
 ### Lane 0 — Ledger ✅
 - P0 This file + `CLAUDE.md` pointer. ✅ (this commit)
 
-### Lane 1 — Platform
+### Lane 1 — Platform 🟨 builder dispatched 10/20 02:05 UTC (L1.1, L1.3–L1.5); orchestrator owns L1.2, L1.6
 Owns: `next.config.ts`, `.github/workflows/**`, `app/robots.ts`, `app/sitemap.ts`, `app/manifest.ts`, `app/icon*`, `app/apple-icon*`, `app/opengraph-image*`, `public/llms.txt`, `public/icons/**`, `lib/seo/**`, `vercel.json`, `tests/e2e/platform.spec.ts`.
 
 | ID | Tier | Item | Acceptance | Status |
 |---|---|---|---|---|
 | L1.1 | P0 | One CI workflow per the house CI budget (`personal-infra/AUTONOMY.md:244`): PRs into `main` only, superseded runs cancel, every job has `timeout-minutes`, runs `pnpm check` + `pnpm build` | `.github/workflows/ci.yml` has `on.pull_request.branches: [main]`, a `concurrency` group with `cancel-in-progress: true`, `timeout-minutes` on every job | ⬜ |
-| L1.2 | P0 | Vercel project created with the CLI; Deployment Protection set to `preview` **before** the first deploy | anonymous `curl` of the production URL → 200 | ⬜ |
+| L1.2 | P0 | Vercel project created with the CLI; Deployment Protection set to `preview` **before** the first deploy | anonymous `curl` of the production URL → 200 | 🟨 project `between-two-tombstones` created 10/20 02:08 UTC; API read-back: `ssoProtection.deploymentType = preview` (was the inherited `all_except_custom_domains`), framework `nextjs`. Prod URL `https://between-two-tombstones.vercel.app`. Gate 1 waits for the first prod deploy |
 | L1.3 | P0 | Security headers in `next.config.ts` `headers()` only: HSTS with preload, nosniff, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(self), microphone=(self), geolocation=(self)` (**not** the template's `=()`), CSP with `connect-src 'self'`, `img-src 'self' https://upload.wikimedia.org https://commons.wikimedia.org blob: data:`, `font-src 'self'` (next/font self-hosts Google Fonts), `worker-src 'self' blob:`. Pick `script-src` after reading `node_modules/next/dist/docs/01-app/02-guides/content-security-policy.md`, without forcing every page dynamic | `tests/e2e/platform.spec.ts` asserts each header on `/`; Gate 9 | ⬜ |
 | L1.4 | P0 | PWA manifest + icons (192, 512, maskable), name/short name/theme colors | CDP `Page.getInstallabilityErrors` returns `[]` once Lane 2's service worker lands | ⬜ |
 | L1.5 | P0 | SEO triple, following `personal-infra/vault/skill-mirror-win/vercel-seo-triple/SKILL.md`: `app/robots.ts` with the house AI-crawler allow-list and the Bytespider block; `app/sitemap.ts` (home, tools, sample cemeteries; Lane 5 adds `/c/*`); `public/llms.txt` served with `Cache-Control: public, max-age=3600`; JSON-LD `WebSite` + `SoftwareApplication` in a helper in `lib/seo/` | Gate 10 | ⬜ |
-| L1.6 | P0 | Env vars set before the merge that needs them: `NEXT_PUBLIC_SITE_URL`, `CLAUDE_DAILY_USD_CAP`, `DEVICE_COOKIE_SECRET`, `SHARE_SIGNING_SECRET`, `ANTHROPIC_API_KEY` (Ben pastes). Never in git, logs or the client bundle | `vercel env ls` shows them; `grep -r` of `.next/static` finds no secret values | ⬜ |
+| L1.6 | P0 | Env vars set before the merge that needs them: `NEXT_PUBLIC_SITE_URL`, `CLAUDE_DAILY_USD_CAP`, `DEVICE_COOKIE_SECRET`, `SHARE_SIGNING_SECRET`, `ANTHROPIC_API_KEY` (Ben pastes). Never in git, logs or the client bundle | `vercel env ls` shows them; `grep -r` of `.next/static` finds no secret values | 🟨 set for Production + Preview 10/20: `NEXT_PUBLIC_SITE_URL`, `CLAUDE_DAILY_USD_CAP` (=5, Ben can change), `DEVICE_COOKIE_SECRET`, `SHARE_SIGNING_SECRET` (generated, never printed). Waiting: `ANTHROPIC_API_KEY` |
 | L1.7 | P1 | Vercel Web Analytics enabled for the project (`<Analytics/>` is already in the layout) | dashboard shows pageviews | ⬜ |
 | L1.8 | P2 | Daily cron warming the sample cemetery caches, gated by `CRON_SECRET` | cron returns 401 without the secret, 200 with it | ⬜ |
 | L1.9 | — | Domain: on hold (decision 6) | — | ⏸ |
 
-### Lane 2 — Data + the tour (core experience)
+### Lane 2 — Data + the tour (core experience) 🟨 builder dispatched 10/20 02:05 UTC (L2.1–L2.7)
 Owns: `lib/data/**`, `lib/tour/**`, `app/api/cemeteries/**`, `app/near/**`, `app/search/**`, `app/cemetery/**`, `components/tour/**`, `components/offline/**`, `public/sw.js`, `tests/e2e/tour.spec.ts`. Reads `data/snapshots/*` and `lib/types.ts`.
 
 | ID | Tier | Item | Acceptance | Status |
@@ -132,7 +132,7 @@ Owns: `lib/data/**`, `lib/tour/**`, `app/api/cemeteries/**`, `app/near/**`, `app
 | L2.9 | P1 | "Their world": notable events their lifetime spanned | — | ⬜ |
 | L2.10 | P2 | Shared crowd map of pins (needs a database) | — | ⬜ |
 
-### Lane 3 — Stamp Kit (written fresh from this spec)
+### Lane 3 — Stamp Kit (written fresh from this spec) 🟨 two builders dispatched 10/20 02:05 UTC: 3a = L3.1 + L3.5, 3b = L3.2–L3.4 + L3.6
 Owns: `lib/stamp/**`, `lib/stonemath/**`, `workers/**`, `app/stamp/**`, `app/api/read-stone/**`, `components/stamp/**`, `tests/fixtures/stones/**`, `tests/e2e/stamp.spec.ts`.
 
 | ID | Tier | Item | Acceptance | Status |
@@ -146,7 +146,7 @@ Owns: `lib/stamp/**`, `lib/stonemath/**`, `workers/**`, `app/stamp/**`, `app/api
 | L3.7 | P1 | Live camera viewfinder with a stone-shaped guide (getUserMedia) | — | ⬜ |
 | L3.8 | P2 | Automatic corner detection | — | ⬜ |
 
-### Lane 4 — Spirit box + games
+### Lane 4 — Spirit box + games 🟨 builder dispatched 10/20 02:05 UTC (L4.1–L4.3, then L4.4)
 Owns: `lib/spirit/**`, `lib/games/**`, `app/spirit/**`, `app/games/**`, `components/spirit/**`, `components/games/**`, `tests/e2e/spirit-games.spec.ts`.
 
 | ID | Tier | Item | Acceptance | Status |
