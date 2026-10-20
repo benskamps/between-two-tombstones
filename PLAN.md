@@ -12,6 +12,8 @@ Between Two Tombstones · Hackyard Yard #5 ("Haunted") · solo · open model
 
 **Order (outranks every lane):** real experience first, built for real, then the viral layer. Lane 5 starts only after a stranger passes Lanes 2+3 unaided.
 
+Test log: full e2e on the merged build (Lanes 1, 2, 3a, 4, 7, 8, 9) at 04:15 UTC: 84/85 on the first run after a restart (one unidentified failure, likely a cold live-data request), then 85/85 twice. Unit 420/420.
+
 Status keys: ⬜ not started · 🟨 in progress · ✅ verified (how is written next to it) · ❌ failed · ❓ couldn't check
 
 ---
@@ -120,7 +122,9 @@ Owns: `next.config.ts`, `.github/workflows/**`, `app/robots.ts`, `app/sitemap.ts
 | L1.8 | P2 | Daily cron warming the sample cemetery caches, gated by `CRON_SECRET` | cron returns 401 without the secret, 200 with it | ⬜ |
 | L1.9 | — | Domain: on hold (decision 6) | — | ⏸ |
 
-### Lane 2 — Data + the tour (core experience) 🟨 builder dispatched 10/20 02:05 UTC (L2.1–L2.7)
+### Lane 2 — Data + the tour (core experience) ✅ merged 10/20 04:05 UTC (local prod)
+
+The builder was stopped mid-run (the session interrupt at ~02:50 UTC) before committing. Orchestrator salvaged its worktree, verified it (unit 317/317, full e2e 71/71 at the time) and merged. It includes the best-rank date fix, the mismatched-grave-photo guard (`lib/tour/photo.ts`, tested on Mitchell's Hiland filename), standard thumbnail widths, https image URLs, and a service worker that never caches `/api/*`. The calendar feed now uses its live loader for any cemetery (Lake View Seattle: 30 events, 10.5 s cold). Not yet re-checked: wake lock and `watchPosition` behavior on a real phone; Overpass from Vercel.
 Owns: `lib/data/**`, `lib/tour/**`, `app/api/cemeteries/**`, `app/near/**`, `app/search/**`, `app/cemetery/**`, `components/tour/**`, `components/offline/**`, `public/sw.js`, `tests/e2e/tour.spec.ts`. Reads `data/snapshots/*` and `lib/types.ts`.
 
 | ID | Tier | Item | Acceptance | Status |
@@ -163,7 +167,7 @@ Owns: `lib/spirit/**`, `lib/games/**`, `app/spirit/**`, `app/games/**`, `compone
 | L4.4 | P1 | EVP recorder: 15 s from the mic, played back reversed and slowed; hidden without a mic | — | ✅ local prod: fake-mic e2e, playback is the exact reverse at 0.7×; hidden without getUserMedia |
 | L4.5 | P1 | Epitaph Hunt checklist; Who Am I? (three clues from a tour); Stone Math tool (uses `lib/stonemath` once Lane 3 merges) | — | ⬜ |
 
-### Lane 7 — Gravitator (Ben's ask, P1) 🟨 builder dispatched 10/20 02:55 UTC
+### Lane 7 — Gravitator (Ben's ask, P1) ✅ merged 10/20 04:15 UTC (local prod). Live deck around downtown Atlanta: 216 public cards, 4.7 s cold; Oakland first (est. 1850, 48 acres, NRHP, 114 notable people). Name-based filter also drops 29 "X Family Cemetery" items typed as plain cemeteries. Palette contrast 26/26 ≥ 4.5:1. On home, bottom nav (Tours) and sitemap
 Owns: `app/gravitator/**`, `app/api/gravitator/**`, `components/gravitator/**`, `lib/gravitator/**`, `tests/e2e/gravitator.spec.ts`.
 
 | ID | Tier | Item | Acceptance | Status |

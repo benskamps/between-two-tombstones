@@ -7,6 +7,7 @@ const SAMPLES = [
 ];
 
 const TOOLS = [
+  { href: "/gravitator", title: "Gravitator", body: "Swipe through the public cemeteries near you. Save the ones you like, pass on the rest, or start a tour." },
   { href: "/stamp", title: "Stamp Kit", body: "Turn a photo of a headstone into a rubbing, an ink stamp and a postage stamp." },
   { href: "/spirit", title: "Spirit Box", body: "Static and voices made from the names of people buried here long ago." },
   { href: "/spirit#seance", title: "Séance", body: "Every phone in your group speaks the same spirit words at the same second, from one link." },
