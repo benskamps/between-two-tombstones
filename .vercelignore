@@ -1,0 +1,8 @@
+# Keep local-only folders out of CLI deploy uploads.
+.claude
+.preview-shots
+.next
+node_modules
+test-results
+playwright-report
+.env*.local
