@@ -18,6 +18,11 @@ const GAMES = [
     title: "Graveyard Party",
     body: "Send one link; everyone who opens it plays on the same bingo card.",
   },
+  {
+    href: "/spirit#seance",
+    title: "Séance",
+    body: "Every phone on one link speaks the same spirit words at the same second.",
+  },
 ];
 
 export default function GamesPage() {

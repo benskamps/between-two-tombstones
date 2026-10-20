@@ -9,6 +9,7 @@ const SAMPLES = [
 const TOOLS = [
   { href: "/stamp", title: "Stamp Kit", body: "Turn a photo of a headstone into a rubbing, an ink stamp and a postage stamp." },
   { href: "/spirit", title: "Spirit Box", body: "Static and voices made from the names of people buried here long ago." },
+  { href: "/spirit#seance", title: "Séance", body: "Every phone in your group speaks the same spirit words at the same second, from one link." },
   { href: "/games", title: "Graveyard Games", body: "Tombstone Bingo, a party mode for friends, and an EVP recorder." },
   { href: "/calendar", title: "Haunted Calendar", body: "Your calendar gets the death-days of people buried here, every year, each linking to their story." },
 ];
