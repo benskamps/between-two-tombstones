@@ -1,0 +1,457 @@
+/*
+  Gravitator palette: Victorian half-mourning (mauve, lavender, grey) on crepe
+  black, with a dating app's "match" glow. Scoped to the route: the variables
+  live on the route's root wrapper (.gravitator) and, only while that wrapper is
+  on the page, on <html> so the page behind the header matches. Nothing here
+  touches the app's own tokens in app/globals.css.
+
+  Values must match lib/gravitator/palette.ts; palette.test.ts checks both the
+  values and the WCAG contrast of every text pair we use.
+
+  Night is the default; daylight follows the OS preference and the app's
+  data-theme toggle, the same way app/globals.css does.
+*/
+.gravitator,
+:root:has(.gravitator) {
+  --g-bg: #130F15;
+  --g-surface: #1D1720;
+  --g-surface-2: #2A2130;
+  --g-border: #43364B;
+  --g-text: #F1EADF;
+  --g-muted: #B9AEBF;
+  --g-mauve: #C7A2DC;
+  --g-mauve-ink: #1A1220;
+  --g-candle: #E2AD4B;
+  --g-lichen: #A3C293;
+  --g-ash: #8E8794;
+  --g-wisp: #86E3D3;
+  /* Silhouette ink for the drawn placeholders (an alias, not a new color). */
+  --g-art-ink: var(--g-bg);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="night"]) .gravitator,
+  :root:not([data-theme="night"]):has(.gravitator) {
+    --g-bg: #FAF6F1;
+    --g-surface: #FFFFFF;
+    --g-surface-2: #F0E9F2;
+    --g-border: #8E8297;
+    --g-text: #151018;
+    --g-muted: #463E4C;
+    --g-mauve: #5E3474;
+    --g-mauve-ink: #FFFFFF;
+    --g-candle: #7A4A00;
+    --g-lichen: #2F5626;
+    --g-ash: #57505C;
+    --g-wisp: #0F6E62;
+    --g-art-ink: var(--g-muted);
+  }
+}
+
+:root[data-theme="day"] .gravitator,
+:root[data-theme="day"]:has(.gravitator) {
+  --g-bg: #FAF6F1;
+  --g-surface: #FFFFFF;
+  --g-surface-2: #F0E9F2;
+  --g-border: #8E8297;
+  --g-text: #151018;
+  --g-muted: #463E4C;
+  --g-mauve: #5E3474;
+  --g-mauve-ink: #FFFFFF;
+  --g-candle: #7A4A00;
+  --g-lichen: #2F5626;
+  --g-ash: #57505C;
+  --g-wisp: #0F6E62;
+  --g-art-ink: var(--g-muted);
+}
+
+html:has(.gravitator),
+body:has(.gravitator) {
+  background: var(--g-bg);
+}
+
+.gravitator {
+  color: var(--g-text);
+}
+
+.gravitator a:not(.g-btn) {
+  color: var(--g-mauve);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Buttons ---------- */
+
+.g-btn {
+  display: inline-flex;
+  min-height: 48px;
+  min-width: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  user-select: none;
+}
+.g-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.g-btn-mauve {
+  background: var(--g-mauve);
+  color: var(--g-mauve-ink);
+}
+.g-btn-candle {
+  background: var(--g-candle);
+  color: var(--g-mauve-ink);
+}
+.g-btn-ghost {
+  background: var(--g-surface);
+  color: var(--g-text);
+  border-color: var(--g-border);
+}
+.g-btn-ash {
+  background: var(--g-surface);
+  color: var(--g-text);
+  border-color: var(--g-ash);
+}
+
+/* The three deck actions: round Pass and Save around a wide Go now. */
+.g-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr 1fr;
+  gap: 0.75rem;
+  align-items: center;
+}
+.g-actions .g-btn {
+  min-height: 56px;
+  padding: 0 0.75rem;
+}
+
+/* ---------- The card stack ---------- */
+
+.g-stack {
+  position: relative;
+  height: clamp(440px, calc(100svh - 330px), 640px);
+}
+
+.g-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  border: 1px solid var(--g-border);
+  background: var(--g-surface);
+  box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.65);
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform;
+}
+.g-card:focus-visible {
+  outline-offset: 4px;
+}
+.g-card[data-dragging="true"] {
+  cursor: grabbing;
+}
+
+/* The card waiting underneath. */
+.g-card-under {
+  transform: translateY(12px) scale(0.955);
+  filter: brightness(0.82);
+  pointer-events: none;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+/* Settling back after a short drag. */
+.g-card-settle {
+  transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+/* Leaving the deck (full motion): fling off the side. */
+.g-card-fling {
+  transition: transform 0.32s ease-in, opacity 0.32s ease-in;
+  opacity: 0;
+}
+
+/*
+  Reduced motion: no fling, no rotation, no settling springs. A decision is a
+  quick fade. The app's global reduced-motion rule shortens every transition
+  to 0.01 ms with !important; this one fade is kept at 150 ms on purpose.
+*/
+.gravitator .g-card.g-card-fade {
+  transition-property: opacity !important;
+  transition-duration: 150ms !important;
+  transition-timing-function: linear !important;
+  opacity: 0;
+  transform: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .g-card-under {
+    transform: none;
+    transition: none;
+  }
+  .g-card-settle {
+    transition: none;
+  }
+}
+
+/* ---------- Photo ---------- */
+
+.g-photo {
+  position: relative;
+  flex: 0 0 auto;
+  height: 50%;
+  background: var(--g-surface-2);
+  transition: height 0.2s ease;
+}
+.g-card[data-expanded="true"] .g-photo {
+  height: 28%;
+}
+.g-photo img,
+.g-photo svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* "Full profile", in the photo's corner so the name gets the full width. */
+.g-info {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 1;
+  padding: 0 0.9rem;
+  font-size: 0.9rem;
+}
+
+/* The name sits on solid surface color at the foot of the photo, so its contrast never depends on the picture. */
+.g-nameplate {
+  position: absolute;
+  /* -1px: no sliver of photo peeks out under it at fractional heights. */
+  inset: auto 0 -1px 0;
+  padding: 2.75rem 1.1rem 0.6rem;
+  background: linear-gradient(to bottom, transparent 0, var(--g-surface) 2.6rem);
+}
+
+.g-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0.25rem 1.1rem 1rem;
+  position: relative;
+}
+.g-card[data-expanded="true"] .g-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+/* Fade the clipped end of a collapsed card. */
+.g-card:not([data-expanded="true"]) .g-body::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2.5rem;
+  background: linear-gradient(to bottom, transparent, var(--g-surface));
+  pointer-events: none;
+}
+
+.g-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  background: var(--g-surface-2);
+  color: var(--g-text);
+  padding: 0.3rem 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.g-verified {
+  color: var(--g-mauve);
+  font-weight: 700;
+}
+
+/* ---------- Drag feedback ---------- */
+
+.g-tint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 2;
+}
+.g-tint-save {
+  background: var(--g-lichen);
+}
+.g-tint-pass {
+  background: var(--g-ash);
+}
+
+.g-stamp {
+  position: absolute;
+  top: 1.25rem;
+  z-index: 3;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0.5rem;
+  border: 3px solid var(--g-mauve-ink);
+  color: var(--g-mauve-ink);
+  font-family: var(--font-carved), Georgia, serif;
+  font-size: 2rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+}
+.g-stamp-save {
+  left: 1rem;
+  background: var(--g-lichen);
+  transform: rotate(-12deg);
+}
+.g-stamp-pass {
+  right: 1rem;
+  background: var(--g-ash);
+  transform: rotate(12deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .g-stamp-save,
+  .g-stamp-pass {
+    transform: none;
+  }
+}
+
+/* ---------- Placeholder art (no photo on Wikidata) ---------- */
+
+.g-art-sky {
+  fill: var(--g-surface-2);
+}
+.g-art-glow {
+  fill: var(--g-mauve);
+  opacity: 0.16;
+}
+.g-art-moon {
+  fill: var(--g-mauve);
+  opacity: 0.75;
+}
+.g-art-far {
+  fill: var(--g-border);
+  opacity: 0.55;
+}
+.g-art-near {
+  fill: var(--g-art-ink);
+}
+.g-art-line {
+  fill: none;
+  stroke: var(--g-art-ink);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+.g-art-mist {
+  fill: var(--g-muted);
+  opacity: 0.08;
+}
+
+/* ---------- The match ---------- */
+
+.g-match {
+  margin: auto;
+  width: min(26rem, calc(100vw - 2rem));
+  max-height: calc(100svh - 2rem);
+  overflow: auto;
+  border: 1px solid var(--g-border);
+  border-radius: 1.75rem;
+  background: var(--g-surface);
+  color: var(--g-text);
+  padding: 2rem 1.5rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 0 0 1px var(--g-wisp), 0 0 60px -10px var(--g-wisp);
+}
+.g-match::backdrop {
+  background: rgb(10 6 12 / 0.82);
+}
+
+.g-match-portrait {
+  position: relative;
+  width: 9.5rem;
+  height: 9.5rem;
+  margin: 0 auto 1.25rem;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--g-surface-2);
+  box-shadow:
+    0 0 0 3px var(--g-wisp),
+    0 0 28px 6px color-mix(in srgb, var(--g-wisp) 55%, transparent),
+    0 0 70px 18px color-mix(in srgb, var(--g-wisp) 22%, transparent);
+  animation: g-wisp 2.6s ease-in-out infinite alternate;
+}
+.g-match-portrait img,
+.g-match-portrait svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes g-wisp {
+  from {
+    box-shadow:
+      0 0 0 3px var(--g-wisp),
+      0 0 22px 4px color-mix(in srgb, var(--g-wisp) 45%, transparent),
+      0 0 56px 12px color-mix(in srgb, var(--g-wisp) 16%, transparent);
+  }
+  to {
+    box-shadow:
+      0 0 0 3px var(--g-wisp),
+      0 0 34px 9px color-mix(in srgb, var(--g-wisp) 60%, transparent),
+      0 0 84px 24px color-mix(in srgb, var(--g-wisp) 26%, transparent);
+  }
+}
+
+/* Will-o'-the-wisps drifting up behind the portrait. Decorative only. */
+.g-wisps {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+.g-wisps span {
+  position: absolute;
+  bottom: -10px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--g-wisp);
+  box-shadow: 0 0 12px 4px color-mix(in srgb, var(--g-wisp) 50%, transparent);
+  opacity: 0;
+  animation: g-drift 5.5s ease-in infinite;
+}
+.g-wisps span:nth-child(1) { left: 12%; animation-delay: 0s; }
+.g-wisps span:nth-child(2) { left: 30%; animation-delay: 1.4s; }
+.g-wisps span:nth-child(3) { left: 68%; animation-delay: 0.7s; }
+.g-wisps span:nth-child(4) { left: 86%; animation-delay: 2.3s; }
+.g-wisps span:nth-child(5) { left: 50%; animation-delay: 3.1s; }
+
+@keyframes g-drift {
+  0% { transform: translateY(0) scale(0.6); opacity: 0; }
+  20% { opacity: 0.85; }
+  100% { transform: translateY(-340px) translateX(14px) scale(1); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-match-portrait {
+    animation: none;
+  }
+  .g-wisps {
+    display: none;
+  }
+}
