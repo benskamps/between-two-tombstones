@@ -1,0 +1,35 @@
+{
+  "WashingtonIrvingGrave.jpg": {
+    "width": 450,
+    "height": 600,
+    "corners": [
+      { "x": 103, "y": 143 },
+      { "x": 383, "y": 143 },
+      { "x": 383, "y": 486 },
+      { "x": 103, "y": 486 }
+    ],
+    "note": "Bounding rectangle of the arched face: the slab's left and right edges, the top of the arch, and where the face meets the base. The top corners sit on background, which the edge-blob drop removes."
+  },
+  "AlfredIversonJrGrave.jpg": {
+    "width": 800,
+    "height": 1069,
+    "corners": [
+      { "x": 150, "y": 24 },
+      { "x": 588, "y": 52 },
+      { "x": 799, "y": 1068 },
+      { "x": 40, "y": 1068 }
+    ],
+    "note": "Ledger slab shot at a steep angle (keystone). The slab runs past the bottom of the photo, so the bottom corners sit on the image's bottom edge."
+  },
+  "SamuelSpencerGrave.jpg": {
+    "width": 1280,
+    "height": 960,
+    "corners": [
+      { "x": 408, "y": 603 },
+      { "x": 848, "y": 526 },
+      { "x": 960, "y": 637 },
+      { "x": 523, "y": 727 }
+    ],
+    "note": "Top face of a flush marker in grass, seen obliquely from the front left: back-left, back-right, front-right, front-left."
+  }
+}
