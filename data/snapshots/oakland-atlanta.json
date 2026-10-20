@@ -8,11 +8,11 @@
     "findAGraveCemeteryId": "35955",
     "enwiki": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Atlanta)"
   },
-  "fetchedAt": "2026-10-20T01:56:08.694Z",
+  "fetchedAt": "2026-10-20T02:41:03.479Z",
   "sources": {
     "wikidata": {
       "license": "CC0 1.0",
-      "query": "SELECT ?person ?personLabel ?personDescription\n  (SAMPLE(?birth_) AS ?birth) (SAMPLE(?birthPrec_) AS ?birthPrecision)\n  (SAMPLE(?death_) AS ?death) (SAMPLE(?deathPrec_) AS ?deathPrecision)\n  (GROUP_CONCAT(DISTINCT ?causeLabel_; separator=\"|\") AS ?causes)\n  (GROUP_CONCAT(DISTINCT ?mannerLabel_; separator=\"|\") AS ?manners)\n  (GROUP_CONCAT(DISTINCT ?occLabel_; separator=\"|\") AS ?occupations)\n  (SAMPLE(?image_) AS ?image) (SAMPLE(?graveImage_) AS ?graveImage)\n  (SAMPLE(?graveCoord_) AS ?graveCoord) (SAMPLE(?personCoord_) AS ?personCoord)\n  (SAMPLE(?fag_) AS ?findAGraveId) (SAMPLE(?sitelinks_) AS ?sitelinks)\n  (SAMPLE(?enwiki_) AS ?enwiki)\nWHERE {\n  ?person p:P119 ?burial . ?burial ps:P119 wd:Q2008469 .\n  OPTIONAL { ?burial pq:P625 ?graveCoord_ }\n  OPTIONAL { ?person p:P569/psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }\n  OPTIONAL { ?person p:P570/psv:P570 [ wikibase:timeValue ?death_ ; wikibase:timePrecision ?deathPrec_ ] }\n  OPTIONAL { ?person wdt:P509 ?cause . ?cause rdfs:label ?causeLabel_ FILTER(LANG(?causeLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P1196 ?manner . ?manner rdfs:label ?mannerLabel_ FILTER(LANG(?mannerLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P106 ?occ . ?occ rdfs:label ?occLabel_ FILTER(LANG(?occLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P18 ?image_ }\n  OPTIONAL { ?person wdt:P1442 ?graveImage_ }\n  OPTIONAL { ?person wdt:P625 ?personCoord_ }\n  OPTIONAL { ?person wdt:P535 ?fag_ }\n  OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }\n  OPTIONAL { ?enwiki_ schema:about ?person ; schema:isPartOf <https://en.wikipedia.org/> }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". }\n}\nGROUP BY ?person ?personLabel ?personDescription\nORDER BY DESC(?sitelinks)\nLIMIT 80"
+      "query": "SELECT ?person ?personLabel ?personDescription\n  (SAMPLE(?birth_) AS ?birth) (SAMPLE(?birthPrec_) AS ?birthPrecision)\n  (SAMPLE(?death_) AS ?death) (SAMPLE(?deathPrec_) AS ?deathPrecision)\n  (GROUP_CONCAT(DISTINCT ?causeLabel_; separator=\"|\") AS ?causes)\n  (GROUP_CONCAT(DISTINCT ?mannerLabel_; separator=\"|\") AS ?manners)\n  (GROUP_CONCAT(DISTINCT ?occLabel_; separator=\"|\") AS ?occupations)\n  (SAMPLE(?image_) AS ?image) (SAMPLE(?graveImage_) AS ?graveImage)\n  (SAMPLE(?graveCoord_) AS ?graveCoord) (SAMPLE(?personCoord_) AS ?personCoord)\n  (SAMPLE(?fag_) AS ?findAGraveId) (SAMPLE(?sitelinks_) AS ?sitelinks)\n  (SAMPLE(?enwiki_) AS ?enwiki)\nWHERE {\n  ?person p:P119 ?burial . ?burial ps:P119 wd:Q2008469 .\n  OPTIONAL { ?burial pq:P625 ?graveCoord_ }\n  # Best-rank statements only: Margaret Mitchell (Q173540) has a preferred\n  # Nov 8 and a normal-rank Nov 9 birth date, and SAMPLE over all ranks can\n  # pick the wrong one.\n  OPTIONAL { ?person p:P569 ?bst . ?bst a wikibase:BestRank ; psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }\n  OPTIONAL { ?person p:P570 ?dst . ?dst a wikibase:BestRank ; psv:P570 [ wikibase:timeValue ?death_ ; wikibase:timePrecision ?deathPrec_ ] }\n  OPTIONAL { ?person wdt:P509 ?cause . ?cause rdfs:label ?causeLabel_ FILTER(LANG(?causeLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P1196 ?manner . ?manner rdfs:label ?mannerLabel_ FILTER(LANG(?mannerLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P106 ?occ . ?occ rdfs:label ?occLabel_ FILTER(LANG(?occLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P18 ?image_ }\n  OPTIONAL { ?person wdt:P1442 ?graveImage_ }\n  OPTIONAL { ?person wdt:P625 ?personCoord_ }\n  OPTIONAL { ?person wdt:P535 ?fag_ }\n  OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }\n  OPTIONAL { ?enwiki_ schema:about ?person ; schema:isPartOf <https://en.wikipedia.org/> }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". }\n}\nGROUP BY ?person ?personLabel ?personDescription\nORDER BY DESC(?sitelinks)\nLIMIT 80"
     },
     "wikipedia": {
       "license": "CC BY-SA 4.0",
@@ -24,7 +24,7 @@
       "qid": "Q173540",
       "name": "Margaret Mitchell",
       "description": "American author and journalist (1900–1949)",
-      "birth": "1900-11-09T00:00:00Z",
+      "birth": "1900-11-08T00:00:00Z",
       "birthPrecision": 11,
       "death": "1949-08-16T00:00:00Z",
       "deathPrecision": 11,
@@ -148,8 +148,8 @@
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
-        "governor",
         "jurist",
+        "governor",
         "politician",
         "lawyer",
         "judge"
@@ -229,9 +229,9 @@
       "mannersOfDeath": [],
       "occupations": [
         "historian",
-        "writer",
         "politician",
         "lawyer",
+        "writer",
         "judge"
       ],
       "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Clement%20A%20Evans%2C%20Confederate%20General.jpg",
@@ -283,8 +283,8 @@
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
-        "governor",
         "jurist",
+        "governor",
         "politician",
         "lawyer"
       ],
@@ -332,7 +332,7 @@
       "description": "American politician and attorney (1938–2003)",
       "birth": "1938-03-23T00:00:00Z",
       "birthPrecision": 11,
-      "death": "2003-06-23T00:00:00Z",
+      "death": "2003-06-24T00:00:00Z",
       "deathPrecision": 11,
       "causesOfDeath": [
         "myocardial infarction"
@@ -382,31 +382,6 @@
       }
     },
     {
-      "qid": "Q8018782",
-      "name": "William Stephen Walker",
-      "description": "Confederate States Army brigadier general (1822-1899)",
-      "birth": "1822-04-13T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1899-06-07T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "military officer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William-Stephen-Walker.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "11103",
-      "sitelinks": 6,
-      "wikipedia": {
-        "title": "William Stephen Walker",
-        "extract": "William Stephen Walker (April 13, 1822 – June 7, 1899) was a Confederate States Army brigadier general during the American Civil War (Civil War). He was born in Pittsburgh, Pennsylvania, but was raised by Robert J. Walker, his uncle, who was a Secretary of the Treasury and U.S. Senator. Walker served as a first lieutenant in the United States Army during the Mexican–American War from 1847 to 1848. He was discharged in 1848. Walker rejoined the army as captain in the 1st U.S. Cavalry Regiment on March 3, 1855, and served until he resigned on May 1, 1861. Walker was wounded in the left arm and lost his left foot during the Battle of Ware Bottom Church during the Overland Campaign. After the war, he lived at Atlanta, Georgia.",
-        "url": "https://en.wikipedia.org/wiki/William_Stephen_Walker",
-        "revision": 1379931291
-      }
-    },
-    {
       "qid": "Q1966756",
       "name": "Nathaniel Job Hammond",
       "description": "American politician (1833-1899)",
@@ -444,9 +419,9 @@
       "mannersOfDeath": [],
       "occupations": [
         "hymnwriter",
-        "writer",
         "politician",
-        "composer"
+        "composer",
+        "writer"
       ],
       "image": "http://commons.wikimedia.org/wiki/Special:FilePath/White%20bf.jpg",
       "graveImage": null,
@@ -458,6 +433,31 @@
         "extract": "Benjamin Franklin White (September 20, 1800 – December 5, 1879) was a shape note \"singing master\", and compiler of the shape note tunebook known as The Sacred Harp. He was born near Cross Keys in Union County, South Carolina, the twelfth child of Robert and Mildred White.",
         "url": "https://en.wikipedia.org/wiki/Benjamin_Franklin_White",
         "revision": 1378708541
+      }
+    },
+    {
+      "qid": "Q8018782",
+      "name": "William Stephen Walker",
+      "description": "Confederate States Army brigadier general (1822-1899)",
+      "birth": "1822-04-13T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1899-06-07T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "military officer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William-Stephen-Walker.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "11103",
+      "sitelinks": 6,
+      "wikipedia": {
+        "title": "William Stephen Walker",
+        "extract": "William Stephen Walker (April 13, 1822 – June 7, 1899) was a Confederate States Army brigadier general during the American Civil War (Civil War). He was born in Pittsburgh, Pennsylvania, but was raised by Robert J. Walker, his uncle, who was a Secretary of the Treasury and U.S. Senator. Walker served as a first lieutenant in the United States Army during the Mexican–American War from 1847 to 1848. He was discharged in 1848. Walker rejoined the army as captain in the 1st U.S. Cavalry Regiment on March 3, 1855, and served until he resigned on May 1, 1861. Walker was wounded in the left arm and lost his left foot during the Battle of Ware Bottom Church during the Overland Campaign. After the war, he lived at Atlanta, Georgia.",
+        "url": "https://en.wikipedia.org/wiki/William_Stephen_Walker",
+        "revision": 1379931291
       }
     },
     {
@@ -484,6 +484,88 @@
         "extract": "Elizabeth Osborne King (October 12, 1912 – April 8, 1966) was an American microbiologist who discovered and described bacteria of medical importance at the United States Centers for Disease Control and Prevention from the late 1940s through the early 1960s. A 1984 CDC manual dedication referred to King as \"internationally known as an authority on a variety of unusual bacteria.\" The genera Kingella and Elizabethkingia and several species of bacteria are named to honor her for her pioneering work. King died of cancer on April 8, 1966, in Atlanta, where she is interred in Oakland Cemetery.",
         "url": "https://en.wikipedia.org/wiki/Elizabeth_O._King",
         "revision": 1352719161
+      }
+    },
+    {
+      "qid": "Q889369",
+      "name": "John N. Irwin",
+      "description": "9th Governor of Arizona Territory, 9th Governor of Idaho Territory, U.S. Minister to Portugal (1844-1905)",
+      "birth": "1847-12-25T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1905-12-11T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "diplomat",
+        "jurist",
+        "governor",
+        "politician",
+        "lawyer",
+        "mayor"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/John%20Nichol%20Irwin%20-%20oval.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "6662051",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "John N. Irwin",
+        "extract": "John Nichol Irwin (December 25, 1844 – December 22, 1905) was an American businessman, politician and diplomat. Among the positions he held were Mayor of Keokuk, Iowa, Governor of Idaho Territory, Governor of Arizona Territory, and U.S. Minister to Portugal.",
+        "url": "https://en.wikipedia.org/wiki/John_N._Irwin",
+        "revision": 1366903159
+      }
+    },
+    {
+      "qid": "Q1680096",
+      "name": "James C. Freeman",
+      "description": "American politician (1819-1885)",
+      "birth": "1819-04-01T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1885-09-03T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "9664",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "James C. Freeman",
+        "extract": "James Crawford Freeman (April 1, 1820 – September 3, 1885) was a Georgia planter and slaveowner who after serving in the Confederate States Army during the American Civil War received a pardon and became a banker, jeweler and politician who served one term in the U.S. Representative as a Republican.",
+        "url": "https://en.wikipedia.org/wiki/James_C._Freeman",
+        "revision": 1379291375
+      }
+    },
+    {
+      "qid": "Q1713616",
+      "name": "Junius Hillyer",
+      "description": "American politician (1807-1886)",
+      "birth": "1807-04-23T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1886-06-21T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician",
+        "lawyer",
+        "judge"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Junius%20Hillyer.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7937340",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "Junius Hillyer",
+        "extract": "Junius Hillyer (April 23, 1807 – June 21, 1886) was an American lawyer, judge, and politician who served two terms in the United States Congress.",
+        "url": "https://en.wikipedia.org/wiki/Junius_Hillyer",
+        "revision": 1378311598
       }
     },
     {
@@ -565,88 +647,6 @@
       }
     },
     {
-      "qid": "Q889369",
-      "name": "John N. Irwin",
-      "description": "9th Governor of Arizona Territory, 9th Governor of Idaho Territory, U.S. Minister to Portugal (1844-1905)",
-      "birth": "1844-12-25T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1905-12-22T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "diplomat",
-        "governor",
-        "jurist",
-        "politician",
-        "lawyer",
-        "mayor"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/John%20Nichol%20Irwin%20-%20oval.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "6662051",
-      "sitelinks": 5,
-      "wikipedia": {
-        "title": "John N. Irwin",
-        "extract": "John Nichol Irwin (December 25, 1844 – December 22, 1905) was an American businessman, politician and diplomat. Among the positions he held were Mayor of Keokuk, Iowa, Governor of Idaho Territory, Governor of Arizona Territory, and U.S. Minister to Portugal.",
-        "url": "https://en.wikipedia.org/wiki/John_N._Irwin",
-        "revision": 1366903159
-      }
-    },
-    {
-      "qid": "Q1680096",
-      "name": "James C. Freeman",
-      "description": "American politician (1819-1885)",
-      "birth": "1819-04-01T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1885-09-03T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "politician"
-      ],
-      "image": null,
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "9664",
-      "sitelinks": 5,
-      "wikipedia": {
-        "title": "James C. Freeman",
-        "extract": "James Crawford Freeman (April 1, 1820 – September 3, 1885) was a Georgia planter and slaveowner who after serving in the Confederate States Army during the American Civil War received a pardon and became a banker, jeweler and politician who served one term in the U.S. Representative as a Republican.",
-        "url": "https://en.wikipedia.org/wiki/James_C._Freeman",
-        "revision": 1379291375
-      }
-    },
-    {
-      "qid": "Q1713616",
-      "name": "Junius Hillyer",
-      "description": "American politician (1807-1886)",
-      "birth": "1807-04-23T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1886-06-21T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "politician",
-        "lawyer",
-        "judge"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Junius%20Hillyer.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "7937340",
-      "sitelinks": 5,
-      "wikipedia": {
-        "title": "Junius Hillyer",
-        "extract": "Junius Hillyer (April 23, 1807 – June 21, 1886) was an American lawyer, judge, and politician who served two terms in the United States Congress.",
-        "url": "https://en.wikipedia.org/wiki/Junius_Hillyer",
-        "revision": 1378311598
-      }
-    },
-    {
       "qid": "Q28008660",
       "name": "Myrta Lockett Avary",
       "description": "American writer and journalist (1857-1946)",
@@ -695,83 +695,6 @@
         "extract": "Thomas E. Askew (c. 1847 – July 12, 1914) was an African American photographer based in Atlanta, Georgia. He was among the earliest Black professional photographers in Atlanta, and is best known as a principal contributor to W. E. B. Du Bois's Exhibit of American Negroes at the 1900 Paris Exposition.",
         "url": "https://en.wikipedia.org/wiki/Thomas_E._Askew",
         "revision": 1364440394
-      }
-    },
-    {
-      "qid": "Q5540616",
-      "name": "George Hillyer",
-      "description": "American politician and Confederate Army officer",
-      "birth": "1835-03-17T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1927-10-02T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "politician"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/George%20Hillyer%20%28Atlanta%20Mayor%29.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "7937278",
-      "sitelinks": 4,
-      "wikipedia": {
-        "title": "George Hillyer",
-        "extract": "George Hillyer (March 17, 1835 – October 2, 1927) was an American politician, serving as the 29th Mayor of Atlanta, Georgia, as well as a state representative and senator. He was also an officer in the Confederate States Army during the American Civil War.",
-        "url": "https://en.wikipedia.org/wiki/George_Hillyer",
-        "revision": 1378252775
-      }
-    },
-    {
-      "qid": "Q6231902",
-      "name": "John Erskine",
-      "description": "US federal judge (1813-1895)",
-      "birth": "1813-09-13T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1895-01-27T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "politician",
-        "lawyer",
-        "judge"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/John%20Erskine%20%281813%E2%80%931895%29.png",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "19088446",
-      "sitelinks": 4,
-      "wikipedia": {
-        "title": "John Erskine (judge)",
-        "extract": "John Erskine (September 13, 1813 – January 27, 1895) was a United States district judge of the United States District Court for the Northern District of Georgia and the United States District Court for the Southern District of Georgia.",
-        "url": "https://en.wikipedia.org/wiki/John_Erskine_(judge)",
-        "revision": 1359049756
-      }
-    },
-    {
-      "qid": "Q6309918",
-      "name": "Julius L. Brown",
-      "description": "American attorney",
-      "birth": "1848-01-01T00:00:00Z",
-      "birthPrecision": 9,
-      "death": "1910-09-04T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "lawyer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Julius%20L.%20Brown%20%281848%E2%80%931910%29.png",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "16364880",
-      "sitelinks": 4,
-      "wikipedia": {
-        "title": "Julius L. Brown",
-        "extract": "Julius L. Brown (1848–1910) was a prominent Atlanta, Georgia attorney, co-incorporator of the Metropolitan Street Railroad, and brother of Georgia governor and senator Joseph E. Brown.",
-        "url": "https://en.wikipedia.org/wiki/Julius_L._Brown",
-        "revision": 1293608181
       }
     },
     {
@@ -847,6 +770,138 @@
         "extract": "Charles Augustus Collier (; July 19, 1848 – September 28, 1900) was an American banker, lawyer, and politician who served as Mayor of Atlanta, Georgia, from 1897 to 1899.",
         "url": "https://en.wikipedia.org/wiki/Charles_A._Collier",
         "revision": 1364279145
+      }
+    },
+    {
+      "qid": "Q5540616",
+      "name": "George Hillyer",
+      "description": "American politician and Confederate Army officer",
+      "birth": "1835-03-17T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1927-10-02T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/George%20Hillyer%20%28Atlanta%20Mayor%29.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7937278",
+      "sitelinks": 4,
+      "wikipedia": {
+        "title": "George Hillyer",
+        "extract": "George Hillyer (March 17, 1835 – October 2, 1927) was an American politician, serving as the 29th Mayor of Atlanta, Georgia, as well as a state representative and senator. He was also an officer in the Confederate States Army during the American Civil War.",
+        "url": "https://en.wikipedia.org/wiki/George_Hillyer",
+        "revision": 1378252775
+      }
+    },
+    {
+      "qid": "Q6231902",
+      "name": "John Erskine",
+      "description": "US federal judge (1813-1895)",
+      "birth": "1813-09-13T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1895-01-27T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician",
+        "lawyer",
+        "judge"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/John%20Erskine%20%281813%E2%80%931895%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "19088446",
+      "sitelinks": 4,
+      "wikipedia": {
+        "title": "John Erskine (judge)",
+        "extract": "John Erskine (September 13, 1813 – January 27, 1895) was a United States district judge of the United States District Court for the Northern District of Georgia and the United States District Court for the Southern District of Georgia.",
+        "url": "https://en.wikipedia.org/wiki/John_Erskine_(judge)",
+        "revision": 1359049756
+      }
+    },
+    {
+      "qid": "Q6309918",
+      "name": "Julius L. Brown",
+      "description": "American attorney",
+      "birth": "1848-05-31T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1910-09-04T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "lawyer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Julius%20L.%20Brown%20%281848%E2%80%931910%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "16364880",
+      "sitelinks": 4,
+      "wikipedia": {
+        "title": "Julius L. Brown",
+        "extract": "Julius L. Brown (1848–1910) was a prominent Atlanta, Georgia attorney, co-incorporator of the Metropolitan Street Railroad, and brother of Georgia governor and senator Joseph E. Brown.",
+        "url": "https://en.wikipedia.org/wiki/Julius_L._Brown",
+        "revision": 1293608181
+      }
+    },
+    {
+      "qid": "Q1247034",
+      "name": "Marshall Johnson Wellborn",
+      "description": "American politician (1808-1874)",
+      "birth": "1808-05-29T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1874-10-16T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician",
+        "lawyer",
+        "judge"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7937596",
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Marshall Johnson Wellborn",
+        "extract": "Marshall Johnson Wellborn (May 29, 1808 – October 16, 1874) was an American politician, lawyer and jurist. From 1849 to 1851, he served one term as a Democratic member of the U.S. House of Representatives from Georgia.",
+        "url": "https://en.wikipedia.org/wiki/Marshall_Johnson_Wellborn",
+        "revision": 1378324047
+      }
+    },
+    {
+      "qid": "Q5341483",
+      "name": "Edward A. Vincent",
+      "description": "American cartographer and architect",
+      "birth": "1825-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1856-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "civil engineer",
+        "cartographer",
+        "engineer",
+        "architect"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Edward A. Vincent",
+        "extract": "Edward Arista Vincent (c. 1825 – November 27, 1856) was an architect, cartographer, and civil engineer, known for his design for Atlanta's antebellum railroad depot Union Station – destroyed by the Union Army during the Battle of Atlanta in the American Civil War.",
+        "url": "https://en.wikipedia.org/wiki/Edward_A._Vincent",
+        "revision": 1363334482
       }
     },
     {
@@ -956,7 +1011,7 @@
       "description": "American activist",
       "birth": "1872-01-04T00:00:00Z",
       "birthPrecision": 11,
-      "death": "1964-10-07T00:00:00Z",
+      "death": "1964-10-09T00:00:00Z",
       "deathPrecision": 11,
       "causesOfDeath": [],
       "mannersOfDeath": [],
@@ -1053,61 +1108,6 @@
       }
     },
     {
-      "qid": "Q1247034",
-      "name": "Marshall Johnson Wellborn",
-      "description": "American politician (1808-1874)",
-      "birth": "1808-05-29T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1874-10-16T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "politician",
-        "lawyer",
-        "judge"
-      ],
-      "image": null,
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "7937596",
-      "sitelinks": 3,
-      "wikipedia": {
-        "title": "Marshall Johnson Wellborn",
-        "extract": "Marshall Johnson Wellborn (May 29, 1808 – October 16, 1874) was an American politician, lawyer and jurist. From 1849 to 1851, he served one term as a Democratic member of the U.S. House of Representatives from Georgia.",
-        "url": "https://en.wikipedia.org/wiki/Marshall_Johnson_Wellborn",
-        "revision": 1378324047
-      }
-    },
-    {
-      "qid": "Q5341483",
-      "name": "Edward A. Vincent",
-      "description": "American cartographer and architect",
-      "birth": "1825-01-01T00:00:00Z",
-      "birthPrecision": 9,
-      "death": "1856-01-01T00:00:00Z",
-      "deathPrecision": 9,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "civil engineer",
-        "cartographer",
-        "engineer",
-        "architect"
-      ],
-      "image": null,
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": null,
-      "sitelinks": 3,
-      "wikipedia": {
-        "title": "Edward A. Vincent",
-        "extract": "Edward Arista Vincent (c. 1825 – November 27, 1856) was an architect, cartographer, and civil engineer, known for his design for Atlanta's antebellum railroad depot Union Station – destroyed by the Union Army during the Battle of Atlanta in the American Civil War.",
-        "url": "https://en.wikipedia.org/wiki/Edward_A._Vincent",
-        "revision": 1363334482
-      }
-    },
-    {
       "qid": "Q131260124",
       "name": "Margaret O'Connor Wilson",
       "description": "American civic leader (1856-1942)",
@@ -1181,6 +1181,54 @@
         "extract": "Martha Loftin Wilson (née, Loftin; January 19, 1834 – June 11, 1919) was an American missionary worker and journal editor, as well as a pioneer Atlanta resident and a nurse in the American Civil War. She was regarded as \"the most influential leader in the Woman's Missionary Union in Georgia\". Wilson was the author of Hospital Scenes and Incidents of the War.",
         "url": "https://en.wikipedia.org/wiki/Martha_Loftin_Wilson",
         "revision": 1377851194
+      }
+    },
+    {
+      "qid": "Q947712",
+      "name": "Max Corput",
+      "description": "Belgian-American architect and Confederate Army captain",
+      "birth": "1825-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1911-01-16T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "architect"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Max%20Van%20Den%20Corput.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "75878290",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Max Corput",
+        "extract": "Max Corput, fully documented as Maximilien van den Corput (died 1911), was a Belgian-American architect. He designed the second Union Station in Atlanta, Georgia. Van den Corput also served as an officer in the Confederate States Army during the American Civil War.",
+        "url": "https://en.wikipedia.org/wiki/Max_Corput",
+        "revision": 1380072954
+      }
+    },
+    {
+      "qid": "Q4888432",
+      "name": "Benjamin Crane",
+      "description": "American businessman (1835-1885)",
+      "birth": "1835-12-19T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1885-01-15T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Benjamin%20Elliott%20Crane.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "35271012",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Benjamin Crane",
+        "extract": "Benjamin Elliott Crane (December 19, 1835 – January 15, 1885) was a businessman in post-bellum Atlanta, Georgia, United States.",
+        "url": "https://en.wikipedia.org/wiki/Benjamin_Crane",
+        "revision": 1321985770
       }
     },
     {
@@ -1365,8 +1413,8 @@
       "description": "American lawyer (1851–1912)",
       "birth": "1851-11-03T00:00:00Z",
       "birthPrecision": 11,
-      "death": "1912-10-27T00:00:00Z",
-      "deathPrecision": 11,
+      "death": "1934-03-01T00:00:00Z",
+      "deathPrecision": 10,
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
@@ -1585,54 +1633,6 @@
       }
     },
     {
-      "qid": "Q947712",
-      "name": "Max Corput",
-      "description": "Belgian-American architect and Confederate Army captain",
-      "birth": "1825-01-01T00:00:00Z",
-      "birthPrecision": 9,
-      "death": "1911-01-16T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "architect"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Max%20Van%20Den%20Corput.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "75878290",
-      "sitelinks": 2,
-      "wikipedia": {
-        "title": "Max Corput",
-        "extract": "Max Corput, fully documented as Maximilien van den Corput (died 1911), was a Belgian-American architect. He designed the second Union Station in Atlanta, Georgia. Van den Corput also served as an officer in the Confederate States Army during the American Civil War.",
-        "url": "https://en.wikipedia.org/wiki/Max_Corput",
-        "revision": 1380072954
-      }
-    },
-    {
-      "qid": "Q4888432",
-      "name": "Benjamin Crane",
-      "description": "American businessman (1835-1885)",
-      "birth": "1835-12-19T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1885-01-15T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Benjamin%20Elliott%20Crane.png",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "35271012",
-      "sitelinks": 2,
-      "wikipedia": {
-        "title": "Benjamin Crane",
-        "extract": "Benjamin Elliott Crane (December 19, 1835 – January 15, 1885) was a businessman in post-bellum Atlanta, Georgia, United States.",
-        "url": "https://en.wikipedia.org/wiki/Benjamin_Crane",
-        "revision": 1321985770
-      }
-    },
-    {
       "qid": "Q98732878",
       "name": "Isma Dooly",
       "description": "US newspaper editor and clubwoman",
@@ -1690,14 +1690,14 @@
       "description": "Atlanta-based food entrepreneur and baker (1811-1891)",
       "birth": "1811-01-01T00:00:00Z",
       "birthPrecision": 9,
-      "death": "1891-05-04T00:00:00Z",
-      "deathPrecision": 11,
+      "death": "1891-01-01T00:00:00Z",
+      "deathPrecision": 9,
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
-        "baker",
+        "traiteur",
         "entrepreneur",
-        "traiteur"
+        "baker"
       ],
       "image": null,
       "graveImage": null,
@@ -1845,8 +1845,8 @@
       "description": "American church and community leader (1840–1912)",
       "birth": "1840-10-04T00:00:00Z",
       "birthPrecision": 11,
-      "death": "1912-01-01T00:00:00Z",
-      "deathPrecision": 9,
+      "death": "1912-01-12T00:00:00Z",
+      "deathPrecision": 11,
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
@@ -1925,8 +1925,8 @@
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
-        "journalist",
-        "publisher"
+        "publisher",
+        "journalist"
       ],
       "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Julia%20Collier%20Harris%20LCCN2014705884.jpg",
       "graveImage": null,
@@ -1938,6 +1938,79 @@
         "extract": "Julia Collier Harris (November 11, 1875 – January 21, 1967) was an American writer and journalist. She wrote the earliest biography of Joel Chandler Harris, her husband's father. As owners and publishers of the Columbus Enquirer Sun she and her husband won the 1926 Pulitzer Prize for Public Service. She has been inducted into three Georgia halls of fame: Georgia Newspaper Hall of Fame, Georgia Writers Hall of Fame, and Georgia Women of Achievement.",
         "url": "https://en.wikipedia.org/wiki/Julia_Collier_Harris",
         "revision": 1356024615
+      }
+    },
+    {
+      "qid": "Q4747236",
+      "name": "Ammi Williams",
+      "description": "American pioneer",
+      "birth": "1780-11-19T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1864-03-30T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "businessperson"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "40594138",
+      "sitelinks": 1,
+      "wikipedia": {
+        "title": "Ammi Williams",
+        "extract": "Ammi Williams (November 19, 1780 – March 30, 1864) was an early settler and prominent businessman of DeKalb County, Georgia. Williams married Laura Loomis in 1810. The couple had two daughters, Laura (b. 1820), wife of Lemuel Grant, and Martha Buckingham (b. 1826). Around 1825, he built and lived in the Swanton House, now listed on the National Register of Historic Places and the oldest home in DeKalb County. He purchased land lot 78, which now comprises much of downtown Atlanta. Williams Street in Atlanta is named for him.",
+        "url": "https://en.wikipedia.org/wiki/Ammi_Williams",
+        "revision": 1345911682
+      }
+    },
+    {
+      "qid": "Q4775482",
+      "name": "Antoine Graves",
+      "description": "American realtor and school administrator",
+      "birth": "1862-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1941-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 1,
+      "wikipedia": {
+        "title": "Antoine Graves",
+        "extract": "Antoine Graves (1862–1941) was a prominent Atlanta realtor, first principal of Gate City Colored Public School (1884–1886), and principal at the Storrs School, the first school in Atlanta for blacks. He had his real estate offices in the Kimball Building on Wall Street, a street otherwise totally occupied by whites. He brokered the deal for the sale of the land where the Georgia State Capitol now stands. His is the only mausoleum in the black section of Oakland Cemetery.\nWhen principal of Gate City Colored Public School, Jefferson Davis's body passed in front of the school on the way to Richmond, Virginia for burial. Schools were ordered to close that day so everyone could attend the memorial parade, but Graves refused to honor a man who fought for slavery. Graves was fired as a result of this refusal.\nHis wife Catherine Webb was the daughter of Sinai Calhoun Webb, born a slave in 1830 and the biracial daughter of prominent Southern politician and mayor of Atlanta Judge William Ezzard.\nThe Atlanta Housing Authority's Antoine Graves senior citizen highrise (built 1965, demolished 2009) was named after him.",
+        "url": "https://en.wikipedia.org/wiki/Antoine_Graves",
+        "revision": 1158377838
+      }
+    },
+    {
+      "qid": "Q4888303",
+      "name": "Benjamin Bomar",
+      "description": "American politician, 1816/1818-1868",
+      "birth": "1818-08-09T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1868-02-01T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "10332817",
+      "sitelinks": 1,
+      "wikipedia": {
+        "title": "Benjamin Bomar",
+        "extract": "Benjamin Franklin Bomar (August 9, 1816 – February 1, 1868) was an alderman, clerk of the Superior Court and the second mayor of Atlanta, Georgia. He was born in South Carolina and trained as a medical doctor. In 1847, he and his family settled in the burgeoning town of Atlanta. After the town received its first charter, Bomar won election as alderman. He served for one year, before becoming mayor the following year. Bomar also co-founded Atlanta's Daily Intelligencer newspaper. Bomar served in the Civil War as a paymaster in the Georgia infantry. He returned from the war in poor health and died 3 years later.",
+        "url": "https://en.wikipedia.org/wiki/Benjamin_Bomar",
+        "revision": 1357931721
       }
     },
     {
@@ -2013,81 +2086,6 @@
         "extract": "James Fairlie Cooper (September 2, 1814 – October 14, 1869) was an American minter and soldier.",
         "url": "https://en.wikipedia.org/wiki/James_Fairlie_Cooper",
         "revision": 1380315917
-      }
-    },
-    {
-      "qid": "Q6160116",
-      "name": "Jared Whitaker",
-      "description": "American newspaperman and politician (1818–1884)",
-      "birth": "1818-05-04T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1884-05-03T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "politician"
-      ],
-      "image": null,
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": null,
-      "sitelinks": 1,
-      "wikipedia": {
-        "title": "Jared Whitaker",
-        "extract": "Jared Irwin Whitaker (May 4, 1818 – May 3, 1884) was a Georgia newspaperman, publisher of the Daily Intelligencer from 1864 to 1871, and earlier served as a politician. Defeating a three-term incumbent to become the 14th Mayor of Atlanta, Georgia, during the early days of the American Civil War, he left office early when appointed as Commissary General of Georgia.",
-        "url": "https://en.wikipedia.org/wiki/Jared_Whitaker",
-        "revision": 1378193326
-      }
-    },
-    {
-      "qid": "Q6692559",
-      "name": "Lovick Pierce Thomas I",
-      "description": "American quartermaster",
-      "birth": "1812-05-12T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1878-05-24T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "military officer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/LP%20Thomas.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "86381897",
-      "sitelinks": 1,
-      "wikipedia": {
-        "title": "Lovick Pierce Thomas I",
-        "extract": "Lovick Pierce Thomas I (May 12, 1812 – May 24, 1878) was an American hotel owner, tavern keeper, and Confederate States Army officer who served as a quartermaster in the Civil War from 1861 to 1863. After the war, he served as city marshal of Atlanta, Georgia. He was the father of famed American Old West Deputy U.S. Marshal Heck Thomas and the brother of Confederate Brigadier General Edward Lloyd Thomas.",
-        "url": "https://en.wikipedia.org/wiki/Lovick_Pierce_Thomas_I",
-        "revision": 1367408447
-      }
-    },
-    {
-      "qid": "Q6915771",
-      "name": "Moses Formwalt",
-      "description": "American mayor",
-      "birth": "1820-01-01T00:00:00Z",
-      "birthPrecision": 9,
-      "death": "1852-05-26T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "politician"
-      ],
-      "image": null,
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "7870193",
-      "sitelinks": 1,
-      "wikipedia": {
-        "title": "Moses Formwalt",
-        "extract": "Moses W. Formwalt (1820 – May 26, 1852) was the first mayor of the city of Atlanta, which was then in DeKalb County, Georgia. Atlanta was chartered in December 1847 (the name had been changed from Marthasville in December 1845), and the first election of officers took place on January 29, 1848. Formwalt drew a larger share of the 215 votes than Jonathan Norcross and was elected mayor, representing the Free and Rowdy Party. First meeting of the city council followed on February 2 at the Jonas Smith grocery (site of the Howard Johnson hotel near Five Points). Things proceeded pretty normally throughout his one-year term: roads were cut, wells dug, law and order somewhat maintained (a jail was built); and on January 17, 1849, Dr. Benjamin F. Bomar succeeded him as mayor.\nBorn in Tennessee, Formwalt came to Decatur in 1836 and established a tin shop on Decatur St. in Atlanta in 1846 where one of his most popular products were stills. He became mayor at age 28. Two years after leaving office, he began serving as deputy sheriff of DeKalb County; a short time later he was stabbed to death by a prisoner while escorting him from the council chamber.\n\nHe was buried at Oakland Cemetery and is honored by Formwalt Street just southwest of downtown.",
-        "url": "https://en.wikipedia.org/wiki/Moses_Formwalt",
-        "revision": 1376737622
       }
     }
   ]

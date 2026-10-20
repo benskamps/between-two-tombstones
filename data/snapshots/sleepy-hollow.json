@@ -8,11 +8,11 @@
     "findAGraveCemeteryId": "66311",
     "enwiki": "https://en.wikipedia.org/wiki/Sleepy_Hollow_Cemetery"
   },
-  "fetchedAt": "2026-10-20T01:55:06.045Z",
+  "fetchedAt": "2026-10-20T02:42:04.054Z",
   "sources": {
     "wikidata": {
       "license": "CC0 1.0",
-      "query": "SELECT ?person ?personLabel ?personDescription\n  (SAMPLE(?birth_) AS ?birth) (SAMPLE(?birthPrec_) AS ?birthPrecision)\n  (SAMPLE(?death_) AS ?death) (SAMPLE(?deathPrec_) AS ?deathPrecision)\n  (GROUP_CONCAT(DISTINCT ?causeLabel_; separator=\"|\") AS ?causes)\n  (GROUP_CONCAT(DISTINCT ?mannerLabel_; separator=\"|\") AS ?manners)\n  (GROUP_CONCAT(DISTINCT ?occLabel_; separator=\"|\") AS ?occupations)\n  (SAMPLE(?image_) AS ?image) (SAMPLE(?graveImage_) AS ?graveImage)\n  (SAMPLE(?graveCoord_) AS ?graveCoord) (SAMPLE(?personCoord_) AS ?personCoord)\n  (SAMPLE(?fag_) AS ?findAGraveId) (SAMPLE(?sitelinks_) AS ?sitelinks)\n  (SAMPLE(?enwiki_) AS ?enwiki)\nWHERE {\n  ?person p:P119 ?burial . ?burial ps:P119 wd:Q360779 .\n  OPTIONAL { ?burial pq:P625 ?graveCoord_ }\n  OPTIONAL { ?person p:P569/psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }\n  OPTIONAL { ?person p:P570/psv:P570 [ wikibase:timeValue ?death_ ; wikibase:timePrecision ?deathPrec_ ] }\n  OPTIONAL { ?person wdt:P509 ?cause . ?cause rdfs:label ?causeLabel_ FILTER(LANG(?causeLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P1196 ?manner . ?manner rdfs:label ?mannerLabel_ FILTER(LANG(?mannerLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P106 ?occ . ?occ rdfs:label ?occLabel_ FILTER(LANG(?occLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P18 ?image_ }\n  OPTIONAL { ?person wdt:P1442 ?graveImage_ }\n  OPTIONAL { ?person wdt:P625 ?personCoord_ }\n  OPTIONAL { ?person wdt:P535 ?fag_ }\n  OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }\n  OPTIONAL { ?enwiki_ schema:about ?person ; schema:isPartOf <https://en.wikipedia.org/> }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". }\n}\nGROUP BY ?person ?personLabel ?personDescription\nORDER BY DESC(?sitelinks)\nLIMIT 80"
+      "query": "SELECT ?person ?personLabel ?personDescription\n  (SAMPLE(?birth_) AS ?birth) (SAMPLE(?birthPrec_) AS ?birthPrecision)\n  (SAMPLE(?death_) AS ?death) (SAMPLE(?deathPrec_) AS ?deathPrecision)\n  (GROUP_CONCAT(DISTINCT ?causeLabel_; separator=\"|\") AS ?causes)\n  (GROUP_CONCAT(DISTINCT ?mannerLabel_; separator=\"|\") AS ?manners)\n  (GROUP_CONCAT(DISTINCT ?occLabel_; separator=\"|\") AS ?occupations)\n  (SAMPLE(?image_) AS ?image) (SAMPLE(?graveImage_) AS ?graveImage)\n  (SAMPLE(?graveCoord_) AS ?graveCoord) (SAMPLE(?personCoord_) AS ?personCoord)\n  (SAMPLE(?fag_) AS ?findAGraveId) (SAMPLE(?sitelinks_) AS ?sitelinks)\n  (SAMPLE(?enwiki_) AS ?enwiki)\nWHERE {\n  ?person p:P119 ?burial . ?burial ps:P119 wd:Q360779 .\n  OPTIONAL { ?burial pq:P625 ?graveCoord_ }\n  # Best-rank statements only: Margaret Mitchell (Q173540) has a preferred\n  # Nov 8 and a normal-rank Nov 9 birth date, and SAMPLE over all ranks can\n  # pick the wrong one.\n  OPTIONAL { ?person p:P569 ?bst . ?bst a wikibase:BestRank ; psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }\n  OPTIONAL { ?person p:P570 ?dst . ?dst a wikibase:BestRank ; psv:P570 [ wikibase:timeValue ?death_ ; wikibase:timePrecision ?deathPrec_ ] }\n  OPTIONAL { ?person wdt:P509 ?cause . ?cause rdfs:label ?causeLabel_ FILTER(LANG(?causeLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P1196 ?manner . ?manner rdfs:label ?mannerLabel_ FILTER(LANG(?mannerLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P106 ?occ . ?occ rdfs:label ?occLabel_ FILTER(LANG(?occLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P18 ?image_ }\n  OPTIONAL { ?person wdt:P1442 ?graveImage_ }\n  OPTIONAL { ?person wdt:P625 ?personCoord_ }\n  OPTIONAL { ?person wdt:P535 ?fag_ }\n  OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }\n  OPTIONAL { ?enwiki_ schema:about ?person ; schema:isPartOf <https://en.wikipedia.org/> }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". }\n}\nGROUP BY ?person ?personLabel ?personDescription\nORDER BY DESC(?sitelinks)\nLIMIT 80"
     },
     "wikipedia": {
       "license": "CC BY-SA 4.0",
@@ -39,8 +39,8 @@
         "philanthropist",
         "industrialist",
         "business magnate",
-        "merchant",
         "economist",
+        "merchant",
         "entrepreneur",
         "writer"
       ],
@@ -71,11 +71,11 @@
         "novelist",
         "journalist",
         "biographer",
-        "playwright",
         "historian",
+        "playwright",
         "ambassador",
-        "lawyer",
         "politician",
+        "lawyer",
         "writer"
       ],
       "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Portrait%20of%20Washington%20Irving%20attr.%20to%20Charles%20Robert%20Leslie.jpg",
@@ -224,8 +224,8 @@
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
-        "industrialist",
         "business executive",
+        "industrialist",
         "machinist",
         "entrepreneur",
         "engineer"
@@ -253,15 +253,15 @@
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
-        "opinion journalist",
         "revolutionary",
-        "journalist",
+        "opinion journalist",
         "editor",
-        "diplomat",
+        "journalist",
         "military officer",
+        "diplomat",
         "ambassador",
-        "lawyer",
         "politician",
+        "lawyer",
         "writer"
       ],
       "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Carl%20Schurz%201879.jpg",
@@ -280,7 +280,7 @@
       "qid": "Q235509",
       "name": "Elizabeth Arden",
       "description": "Canadian American businesswoman",
-      "birth": "1884-12-31T00:00:00Z",
+      "birth": "1881-12-31T00:00:00Z",
       "birthPrecision": 11,
       "death": "1966-10-18T00:00:00Z",
       "deathPrecision": 11,
@@ -321,9 +321,9 @@
       ],
       "occupations": [
         "eugenicist",
+        "ecologist",
         "racial theorist",
         "conservationist",
-        "ecologist",
         "anthropologist",
         "zoologist",
         "historian",
@@ -340,6 +340,36 @@
         "extract": "Madison Grant (November 19, 1865 – May 30, 1937) was an American lawyer, zoologist, anthropologist, and writer known for his work as a conservationist, eugenicist, and as an advocate of scientific racism. Grant is less noted for his far-reaching achievements in conservation than for his pseudoscientific advocacy of Nordicism, a form of racism which views the \"Nordic race\" as superior.\nAs a white supremacist eugenicist, Grant was the author of The Passing of the Great Race (1916), one of the most famous racist texts, a book Adolf Hitler referred to as his personal Bible. Grant also played an active role in crafting immigration restriction and anti-miscegenation laws in the United States.\nAs a conservationist, he is credited with the saving of species including the American bison, helped create the Bronx Zoo, Glacier National Park, and Denali National Park, and co-founded the Save the Redwoods League. Grant developed much of the discipline of wildlife management.",
         "url": "https://en.wikipedia.org/wiki/Madison_Grant",
         "revision": 1379877668
+      }
+    },
+    {
+      "qid": "Q624868",
+      "name": "Charles Sheeler",
+      "description": "American artist (1883-1965)",
+      "birth": "1883-07-16T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1965-05-07T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "draftsperson",
+        "architectural drafter",
+        "film director",
+        "sculptor",
+        "painter",
+        "photographer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Charles%20Sheeler.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "55326942",
+      "sitelinks": 21,
+      "wikipedia": {
+        "title": "Charles Sheeler",
+        "extract": "Charles Sheeler (July 16, 1883 – May 7, 1965) was an American artist known for his Precisionist paintings, commercial photography, and the 1921 avant-garde film, Manhatta, which he made in collaboration with Paul Strand. Sheeler is recognized as one of the early adopters of modernism in American art.",
+        "url": "https://en.wikipedia.org/wiki/Charles_Sheeler",
+        "revision": 1375431484
       }
     },
     {
@@ -367,61 +397,6 @@
         "extract": "Samuel Gompers (né Gumpertz; January 27, 1850 – December 11, 1924) was a British-born American cigar maker and labor union leader. A key figure in American labor history, Gompers founded the American Federation of Labor (AFL) and served as the organization's president from 1886 to 1894, and from 1895 until his death in 1924. He promoted harmony among the different craft unions that comprised the AFL, trying to minimize jurisdictional battles. He promoted thorough organization and collective bargaining in order to secure shorter hours and higher wages, which he considered the essential first steps to emancipating labor.\nHe was against the AFL member unions taking political action to \"elect their friends\" and \"defeat their enemies\". In politics he mostly supported Democrats, and occasionally local Republicans. He led the opposition to immigration from China. During World War I, Gompers and the AFL energetically supported the war effort, attempting to avert strikes and boost morale while raising wage rates and expanding membership. He strongly opposed the antiwar labor groups, especially the Industrial Workers of the World (IWW).",
         "url": "https://en.wikipedia.org/wiki/Samuel_Gompers",
         "revision": 1372943143
-      }
-    },
-    {
-      "qid": "Q624868",
-      "name": "Charles Sheeler",
-      "description": "American artist (1883-1965)",
-      "birth": "1883-07-16T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1965-05-07T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "draftsperson",
-        "film director",
-        "architectural drafter",
-        "sculptor",
-        "painter",
-        "photographer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Charles%20Sheeler.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "55326942",
-      "sitelinks": 21,
-      "wikipedia": {
-        "title": "Charles Sheeler",
-        "extract": "Charles Sheeler (July 16, 1883 – May 7, 1965) was an American artist known for his Precisionist paintings, commercial photography, and the 1921 avant-garde film, Manhatta, which he made in collaboration with Paul Strand. Sheeler is recognized as one of the early adopters of modernism in American art.",
-        "url": "https://en.wikipedia.org/wiki/Charles_Sheeler",
-        "revision": 1375431484
-      }
-    },
-    {
-      "qid": "Q1451318",
-      "name": "Jasper Francis Cropsey",
-      "description": "American painter (1823–1900)",
-      "birth": "1823-02-18T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1900-06-22T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "painter"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Jasper%20Francis%20Cropsey%20by%20Napoleon%20Sarony.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "11617709",
-      "sitelinks": 20,
-      "wikipedia": {
-        "title": "Jasper Francis Cropsey",
-        "extract": "Jasper Francis Cropsey (February 18, 1823 – June 22, 1900) was an American architect and artist. He is best known for his Hudson River School landscape paintings.\n\n",
-        "url": "https://en.wikipedia.org/wiki/Jasper_Francis_Cropsey",
-        "revision": 1374147896
       }
     },
     {
@@ -456,10 +431,35 @@
       }
     },
     {
+      "qid": "Q1451318",
+      "name": "Jasper Francis Cropsey",
+      "description": "American painter (1823–1900)",
+      "birth": "1823-02-18T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1900-06-22T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "painter"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Jasper%20Francis%20Cropsey%20by%20Napoleon%20Sarony.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "11617709",
+      "sitelinks": 20,
+      "wikipedia": {
+        "title": "Jasper Francis Cropsey",
+        "extract": "Jasper Francis Cropsey (February 18, 1823 – June 22, 1900) was an American architect and artist. He is best known for his Hudson River School landscape paintings.\n\n",
+        "url": "https://en.wikipedia.org/wiki/Jasper_Francis_Cropsey",
+        "revision": 1374147896
+      }
+    },
+    {
       "qid": "Q467364",
       "name": "Leona Helmsley",
       "description": "American hotel owner (1920–2007)",
-      "birth": "1920-07-04T00:00:00Z",
+      "birth": "1919-07-04T00:00:00Z",
       "birthPrecision": 11,
       "death": "2007-08-20T00:00:00Z",
       "deathPrecision": 11,
@@ -516,7 +516,7 @@
       "qid": "Q3595756",
       "name": "Viola Allen",
       "description": "American actress (1867–1948)",
-      "birth": "1867-10-27T00:00:00Z",
+      "birth": "1869-10-27T00:00:00Z",
       "birthPrecision": 11,
       "death": "1948-05-09T00:00:00Z",
       "deathPrecision": 11,
@@ -555,8 +555,8 @@
       "occupations": [
         "film actor",
         "stage actor",
-        "actor",
-        "screenwriter"
+        "screenwriter",
+        "actor"
       ],
       "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Holbrook%20Blinn.jpg",
       "graveImage": "http://commons.wikimedia.org/wiki/Special:FilePath/Holbrook%20Blinn%20Gravesite%202010.JPG",
@@ -581,10 +581,10 @@
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
-        "activist",
         "women's rights activist",
-        "art collector",
+        "activist",
         "philanthropist",
+        "art collector",
         "art dealer"
       ],
       "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Lasker%2C%20Mary.%20nlm%20nlmuid-101441394.jpg",
@@ -614,8 +614,8 @@
         "natural causes"
       ],
       "occupations": [
-        "art collector",
         "philanthropist",
+        "art collector",
         "novelist",
         "socialite",
         "businessperson",
@@ -713,10 +713,10 @@
       "qid": "Q1347859",
       "name": "William Rockefeller",
       "description": "American financier, businessman, and Standard Oil co-founder (1841-1922)",
-      "birth": "1841-01-01T00:00:00Z",
-      "birthPrecision": 9,
-      "death": "1922-01-01T00:00:00Z",
-      "deathPrecision": 9,
+      "birth": "1841-05-31T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1922-06-24T00:00:00Z",
+      "deathPrecision": 11,
       "causesOfDeath": [
         "pneumonia"
       ],
@@ -753,11 +753,11 @@
         "natural causes"
       ],
       "occupations": [
-        "epidemiologist",
         "bacteriologist",
+        "epidemiologist",
+        "immunologist",
         "infectious disease physician",
         "military physician",
-        "immunologist",
         "biographer",
         "physician"
       ],
@@ -797,6 +797,60 @@
         "extract": "Artur Bodanzky (also written as Artur Bodzansky) (16 December 1877 – 23 November 1939) was an Austrian-American conductor particularly associated with the operas of Wagner. He conducted Enrico Caruso's last performance at the Metropolitan Opera House on Christmas Eve 1920.\n\nThe son of Jewish merchants, Bodanzky studied the violin and composition with Alexander Zemlinsky. Bodanzky then became conducting assistant to Gustav Mahler in Vienna, later going on to jobs in Berlin, the Neues Deutsches Theater in Prague (August 1907), where he was briefly a colleague of Otto Klemperer and Mannheim. In 1915 he emigrated to the United States to work for the Metropolitan Opera, being replaced at Mannheim by Wilhelm Furtwängler.\nHe was head of German repertory at the Met, being accepted by Arturo Toscanini on the recommendation of Ferruccio Busoni.  In 1921 he was engaged by the New York Philharmonic as a guest conductor.  In 1928, Bodanzky announced his resignation from the Met and was replaced by Joseph Rosenstock.  However, Rosenstock received such criticism in the press that he himself resigned almost immediately on medical advice, and Bodanzky was rehired, and remained at the Met until his death in 1939.  He was approached by Thomas Beecham to conduct at Covent Garden in 1936, but his requested fee of £250 for each performance was considered exorbitant.",
         "url": "https://en.wikipedia.org/wiki/Artur_Bodanzky",
         "revision": 1374729212
+      }
+    },
+    {
+      "qid": "Q3719069",
+      "name": "Edgar Saltus",
+      "description": "American writer (1855–1921)",
+      "birth": "1855-10-08T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1921-07-31T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "novelist",
+        "translator",
+        "writer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Edgar%20Saltus.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 11,
+      "wikipedia": {
+        "title": "Edgar Saltus",
+        "extract": "Edgar Evertson Saltus (October 8, 1855 – July 31, 1921) was an American writer known for his highly refined prose style. His works paralleled those by European decadent authors such as Joris-Karl Huysmans, Gabriele D'Annunzio and Oscar Wilde.\nUnder the pseudonym Myndart Verelst, Saltus translated works by Balzac, Théophile Gautier, and Prosper Mérimée; he also wrote using the name Archibald Wilberforce.",
+        "url": "https://en.wikipedia.org/wiki/Edgar_Saltus",
+        "revision": 1375458345
+      }
+    },
+    {
+      "qid": "Q965138",
+      "name": "Amelia Edith Huddleston Barr",
+      "description": "English novelist (1831–1919)",
+      "birth": "1831-03-29T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1919-03-10T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "novelist",
+        "autobiographer",
+        "writer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Amelia%20Barr%20cph.3a42966.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "14528950",
+      "sitelinks": 11,
+      "wikipedia": {
+        "title": "Amelia Edith Huddleston Barr",
+        "extract": "Amelia Edith Huddleston Barr (March 29, 1831 – March 10, 1919) was an English novelist and teacher. Many of the plots of her stories are laid in Scotland and England. The scenes are from her girlhood recollection of surroundings. Her works include, Jan Vedder's Wife, A Border Shepherdess, Feet of Clay, Friend Olivia, The Bow of Orange Ribbon, Remember the Alamo, She Loved a Sailor, A Daughter of Fife, The Squire of Sanddal Side, Paul and Christina, Master of His Fate, The Household of McNeil, The Last of the Macallisters, Between Two Loves, A Sister to Esau, A Rose of a Hundred Leaves, A Singer from the Sea, The Beads of Tasmer, The Hallam Succession, The Lone House, Christopher and Other Stories, The Lost Silver of Briffault.",
+        "url": "https://en.wikipedia.org/wiki/Amelia_Edith_Huddleston_Barr",
+        "revision": 1373074299
       }
     },
     {
@@ -854,60 +908,6 @@
       }
     },
     {
-      "qid": "Q3719069",
-      "name": "Edgar Saltus",
-      "description": "American writer (1855–1921)",
-      "birth": "1855-10-08T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1921-07-31T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "novelist",
-        "translator",
-        "writer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Edgar%20Saltus.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": null,
-      "sitelinks": 11,
-      "wikipedia": {
-        "title": "Edgar Saltus",
-        "extract": "Edgar Evertson Saltus (October 8, 1855 – July 31, 1921) was an American writer known for his highly refined prose style. His works paralleled those by European decadent authors such as Joris-Karl Huysmans, Gabriele D'Annunzio and Oscar Wilde.\nUnder the pseudonym Myndart Verelst, Saltus translated works by Balzac, Théophile Gautier, and Prosper Mérimée; he also wrote using the name Archibald Wilberforce.",
-        "url": "https://en.wikipedia.org/wiki/Edgar_Saltus",
-        "revision": 1375458345
-      }
-    },
-    {
-      "qid": "Q965138",
-      "name": "Amelia Edith Huddleston Barr",
-      "description": "English novelist (1831–1919)",
-      "birth": "1831-01-01T00:00:00Z",
-      "birthPrecision": 9,
-      "death": "1919-01-01T00:00:00Z",
-      "deathPrecision": 9,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "autobiographer",
-        "novelist",
-        "writer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Amelia%20Barr%20cph.3a42966.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "14528950",
-      "sitelinks": 11,
-      "wikipedia": {
-        "title": "Amelia Edith Huddleston Barr",
-        "extract": "Amelia Edith Huddleston Barr (March 29, 1831 – March 10, 1919) was an English novelist and teacher. Many of the plots of her stories are laid in Scotland and England. The scenes are from her girlhood recollection of surroundings. Her works include, Jan Vedder's Wife, A Border Shepherdess, Feet of Clay, Friend Olivia, The Bow of Orange Ribbon, Remember the Alamo, She Loved a Sailor, A Daughter of Fife, The Squire of Sanddal Side, Paul and Christina, Master of His Fate, The Household of McNeil, The Last of the Macallisters, Between Two Loves, A Sister to Esau, A Rose of a Hundred Leaves, A Singer from the Sea, The Beads of Tasmer, The Hallam Succession, The Lone House, Christopher and Other Stories, The Lost Silver of Briffault.",
-        "url": "https://en.wikipedia.org/wiki/Amelia_Edith_Huddleston_Barr",
-        "revision": 1373074299
-      }
-    },
-    {
       "qid": "Q356856",
       "name": "Francis Pharcellus Church",
       "description": "American publisher and editor (1839–1906)",
@@ -919,9 +919,9 @@
       "mannersOfDeath": [],
       "occupations": [
         "publisher",
-        "journalist",
         "editor",
         "correspondent",
+        "journalist",
         "editing staff",
         "writer"
       ],
@@ -935,6 +935,34 @@
         "extract": "Francis Pharcellus Church (February 22, 1839 – April 11, 1906) was an American publisher and editor. In 1897, Church wrote the editorial \"Yes, Virginia, there is a Santa Claus\". Produced in response to eight-year-old Virginia O'Hanlon's letter asking whether Santa Claus was real, the widely republished editorial has become one of the most famous ever written.\nBorn in Rochester, New York, Church graduated from Columbia University and embarked on a career in journalism. With his brother, William Conant Church, Francis founded and edited several periodicals including The Army and Navy Journal, The Galaxy, and the Internal Revenue Record and Customs Journal. He was a war correspondent for The New York Times during the American Civil War. He worked at The Sun in the early 1860s and again from 1874 until his death, writing thousands of editorials.\nChurch died in New York City and was buried at Sleepy Hollow Cemetery.",
         "url": "https://en.wikipedia.org/wiki/Francis_Pharcellus_Church",
         "revision": 1372274477
+      }
+    },
+    {
+      "qid": "Q3568455",
+      "name": "William Boyce Thompson",
+      "description": "American engineer (1869–1930)",
+      "birth": "1869-05-13T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1930-06-27T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "mining engineer",
+        "banker",
+        "diplomat",
+        "engineer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Boyce%20Thompson%20circa%201928.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "8234204",
+      "sitelinks": 10,
+      "wikipedia": {
+        "title": "William Boyce Thompson",
+        "extract": "William Boyce Thompson (May 13, 1869 – June 27, 1930) was an American mining engineer, financier, prominent in the Republican party, philanthropist, and founder of Newmont Mining.  Thompson was one of the early twentieth century mine operators that discovered and exploited vast copper deposits that revolutionized Western American mining, and reaped tremendous fortunes. The William Boyce Thompson School in Yonkers, New York, is  named after him.\n\n",
+        "url": "https://en.wikipedia.org/wiki/William_Boyce_Thompson",
+        "revision": 1380712158
       }
     },
     {
@@ -1027,31 +1055,30 @@
       }
     },
     {
-      "qid": "Q3568455",
-      "name": "William Boyce Thompson",
-      "description": "American engineer (1869–1930)",
-      "birth": "1869-05-13T00:00:00Z",
+      "qid": "Q85017",
+      "name": "Joseph Urban",
+      "description": "Austrian-American architect (1872-1933)",
+      "birth": "1872-05-26T00:00:00Z",
       "birthPrecision": 11,
-      "death": "1930-06-27T00:00:00Z",
+      "death": "1933-07-10T00:00:00Z",
       "deathPrecision": 11,
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
-        "mining engineer",
-        "banker",
-        "diplomat",
-        "engineer"
+        "scenographer",
+        "sculptor",
+        "architect"
       ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Boyce%20Thompson%20circa%201928.jpg",
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Joseph%20Urban%20-%20Dec%201921%20Photoplay.jpg",
       "graveImage": null,
       "graveCoord": null,
-      "findAGraveId": "8234204",
-      "sitelinks": 10,
+      "findAGraveId": "8879831",
+      "sitelinks": 9,
       "wikipedia": {
-        "title": "William Boyce Thompson",
-        "extract": "William Boyce Thompson (May 13, 1869 – June 27, 1930) was an American mining engineer, financier, prominent in the Republican party, philanthropist, and founder of Newmont Mining.  Thompson was one of the early twentieth century mine operators that discovered and exploited vast copper deposits that revolutionized Western American mining, and reaped tremendous fortunes. The William Boyce Thompson School in Yonkers, New York, is  named after him.\n\n",
-        "url": "https://en.wikipedia.org/wiki/William_Boyce_Thompson",
-        "revision": 1380712158
+        "title": "Joseph Urban",
+        "extract": "Joseph Urban (May 26, 1872 – July 10, 1933) was an Austrian-American architect, illustrator, and scenic designer.\n\n",
+        "url": "https://en.wikipedia.org/wiki/Joseph_Urban",
+        "revision": 1336650402
       }
     },
     {
@@ -1081,58 +1108,6 @@
       }
     },
     {
-      "qid": "Q85017",
-      "name": "Joseph Urban",
-      "description": "Austrian-American architect (1872-1933)",
-      "birth": "1872-05-26T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1933-07-10T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "scenographer",
-        "sculptor",
-        "architect"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Joseph%20Urban%20-%20Dec%201921%20Photoplay.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "8879831",
-      "sitelinks": 9,
-      "wikipedia": {
-        "title": "Joseph Urban",
-        "extract": "Joseph Urban (May 26, 1872 – July 10, 1933) was an Austrian-American architect, illustrator, and scenic designer.\n\n",
-        "url": "https://en.wikipedia.org/wiki/Joseph_Urban",
-        "revision": 1336650402
-      }
-    },
-    {
-      "qid": "Q954366",
-      "name": "Henry Evelyn Bliss",
-      "description": "American librarian (1870–1955)",
-      "birth": "1870-01-29T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1955-08-09T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "librarian"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Henry%20Evelyn%20Bliss%20%281870%201955%29.png",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "24255278",
-      "sitelinks": 9,
-      "wikipedia": {
-        "title": "Henry E. Bliss",
-        "extract": "Henry Evelyn Bliss  (January 29, 1870 – August 9, 1955) was the author of a classification system he called Bibliographic Classification which is often abbreviated to BC and is sometimes called Bliss Classification. He was named one of the 100 most important leaders in the field of library and Information science in the 20th century by American Libraries in December 1999, which praised his “subject approach to information” as “one of the most flexible ever conceived.” Despite these praises, Bliss was “met with apathy and even derision in his efforts” during his lifetime.  His classification system was generally disregarded in favor of other more established classification systems such as the Dewey Decimal System created by Melvil Dewey and the Library of Congress Classification system, causing “more than one author” to label him as a, “prophet without honor.”  Although Bliss was an American, his system was more popular in British libraries than in American libraries. A second edition of the system has been developed in the United Kingdom in 1977. Several volumes have been published.",
-        "url": "https://en.wikipedia.org/wiki/Henry_E._Bliss",
-        "revision": 1339018109
-      }
-    },
-    {
       "qid": "Q516182",
       "name": "James Smith Bush",
       "description": "American priest, lawyer and writer (1825-1889)",
@@ -1145,8 +1120,8 @@
       "occupations": [
         "Anglican priest",
         "jurist",
-        "lawyer",
         "politician",
+        "lawyer",
         "writer"
       ],
       "image": "http://commons.wikimedia.org/wiki/Special:FilePath/JSBush.jpg",
@@ -1190,31 +1165,28 @@
       }
     },
     {
-      "qid": "Q1606578",
-      "name": "Henry Carrington Bolton",
-      "description": "American chemist and bibliographer of science (1843–1903)",
-      "birth": "1843-01-01T00:00:00Z",
-      "birthPrecision": 9,
-      "death": "1903-01-01T00:00:00Z",
-      "deathPrecision": 9,
+      "qid": "Q954366",
+      "name": "Henry Evelyn Bliss",
+      "description": "American librarian (1870–1955)",
+      "birth": "1870-01-29T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1955-08-09T00:00:00Z",
+      "deathPrecision": 11,
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
-        "bibliographer",
-        "chemist",
-        "historian",
-        "writer"
+        "librarian"
       ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/PSM%20V43%20D594%20Henry%20Carrington%20Bolton.jpg",
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Henry%20Evelyn%20Bliss%20%281870%201955%29.png",
       "graveImage": null,
       "graveCoord": null,
-      "findAGraveId": "234113165",
-      "sitelinks": 8,
+      "findAGraveId": "24255278",
+      "sitelinks": 9,
       "wikipedia": {
-        "title": "Henry Carrington Bolton",
-        "extract": "Henry Carrington Bolton (1843–1903) was an American chemist and bibliographer of science.",
-        "url": "https://en.wikipedia.org/wiki/Henry_Carrington_Bolton",
-        "revision": 1379594077
+        "title": "Henry E. Bliss",
+        "extract": "Henry Evelyn Bliss  (January 29, 1870 – August 9, 1955) was the author of a classification system he called Bibliographic Classification which is often abbreviated to BC and is sometimes called Bliss Classification. He was named one of the 100 most important leaders in the field of library and Information science in the 20th century by American Libraries in December 1999, which praised his “subject approach to information” as “one of the most flexible ever conceived.” Despite these praises, Bliss was “met with apathy and even derision in his efforts” during his lifetime.  His classification system was generally disregarded in favor of other more established classification systems such as the Dewey Decimal System created by Melvil Dewey and the Library of Congress Classification system, causing “more than one author” to label him as a, “prophet without honor.”  Although Bliss was an American, his system was more popular in British libraries than in American libraries. A second edition of the system has been developed in the United Kingdom in 1977. Several volumes have been published.",
+        "url": "https://en.wikipedia.org/wiki/Henry_E._Bliss",
+        "revision": 1339018109
       }
     },
     {
@@ -1228,8 +1200,8 @@
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
-        "film director",
         "director",
+        "film director",
         "painter",
         "animator"
       ],
@@ -1243,6 +1215,64 @@
         "extract": "Frank Moser (1886 – October 1, 1964) was an American artist, illustrator and film director who co-founded Terrytoons, the animation studio. Between 1916 and 1937, he directed 202 films. He died in Dobbs Ferry Hospital at the age of 78.\n\n",
         "url": "https://en.wikipedia.org/wiki/Frank_Moser_(artist)",
         "revision": 1351798446
+      }
+    },
+    {
+      "qid": "Q91417",
+      "name": "Henry Villard",
+      "description": "German-American journalist and financier (1835–1900)",
+      "birth": "1835-04-10T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1900-11-12T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "financier",
+        "journalist",
+        "entrepreneur",
+        "war correspondent",
+        "writer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Henry%20Villard.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "1061",
+      "sitelinks": 8,
+      "wikipedia": {
+        "title": "Henry Villard",
+        "extract": "Henry Villard (April 10, 1835 – November 12, 1900) was a German-American journalist and financier who was an influential leader and the sixth president of the Northern Pacific Railway (1881–1884) which completed its trans-continental route during his tenure in 1883.\nBorn and raised by Ferdinand Heinrich Gustav Hilgard in the historic ancient Roman Empire border fortification, then Medieval / Middle Ages town of Speyer, along the Rhine River in the Rhenish Palatinate of the Kingdom of Bavaria. Villard clashed with his more conservative father over politics and was sent to a semi-military academy across the border in northeastern France. As a teenager, he emigrated to the United States in the 1850s without his parents' knowledge. He changed his name to Henry Villard, the name of a French classmate, to avoid being sent back to Europe, and began making his way west, briefly studying law as he developed a career in journalism. He supported famed Western explorer (\"The Pathfinder\") and military officer in the United States Army of John C. Frémont (1813–1890), of the newly established Republican Party in his first presidential candidate campaign representing the new political party in the 1856 presidential election, and four years later followed former U.S. Representative (congressman) from Springfield, Illinois of Abraham Lincoln (1809–1865), in his bid for the American Presidency in the 1860 presidential election campaign.\nVillard became a war correspondent, first covering the ensuing American Civil War (1861–1865), and later being sent back overseas by the Chicago Tribune to Europe (because of his childhood experiences and knowledge of foreign languages) to also cover the brief Austro-Prussian War in 1866, between two German-speaking totalitarian / authoritarian regimes fighting for political supremacy in Central Europe. It was also significant because with the quick decisive Prussian military victory over the neighboring Austrian Empire enabled the rising  Kingdom of Prussia under dynamic Chancellor Otto von Bismarck (1815–1898, served Prussia 1862–1871 / Imperial Germany 1871–1890), to exclude Austria and its ruling Habsburg imperial dynasty from future German affairs and to then lead and dominate the unification campaign to create a new centralized German Empire in Central Europe. This occurred four years later in Paris after a similar defeat of rival  Emperor Napoleon III of the Second French Empire and his French Army military forces of France in the subsequent Franco-Prussian War of 1870–1871.\nHe became a pacifist as a result of his experiences covering the two conflicts at home and abroad of the Civil War and European wars In the late 1860s. He married women's suffrage advocate Helen Frances Garrison (nicknamed \"Fanny\") and the daughter of famed newspaper publisher and slavery abolitionist William Lloyd Garrison (1805–1879), and returned to the U.S., only to go back to Germany several years later for his health in 1870.\nWhile in Germany, Villard became involved in investments in American railroads, and returned to the U.S. in 1874 to oversee German investments in the Oregon and California Railroad. He visited Oregon that summer, and being impressed with the region's natural resources, began acquiring various transportation interests in the region. During the ensuing decade he acquired several rail and steamship companies, and pursued a rail line from Portland to the Pacific Ocean; he was successful, but the line cost more than anticipated, causing financial turmoil. Villard returned to Europe, helping German investors acquire stakes in the transportation network, and returned to New York in 1886.\nAlso in the 1880s, Villard acquired the New York Evening Post and The Nation, and established the predecessor of General Electric. He was the first benefactor of the University of Oregon, and contributed to other universities, churches, hospitals, and orphanages. He died of a stroke at his country home in New York in 1900.\n\n",
+        "url": "https://en.wikipedia.org/wiki/Henry_Villard",
+        "revision": 1373611188
+      }
+    },
+    {
+      "qid": "Q632812",
+      "name": "Vincent Astor",
+      "description": "American businessman and art collector (1891–1959)",
+      "birth": "1891-11-15T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1959-02-03T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [
+        "myocardial infarction"
+      ],
+      "mannersOfDeath": [
+        "natural causes"
+      ],
+      "occupations": [
+        "businessperson"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/WVincentAstor.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "8652807",
+      "sitelinks": 8,
+      "wikipedia": {
+        "title": "Vincent Astor",
+        "extract": "William Vincent Astor (November 15, 1891 – February 3, 1959) was an American businessman, philanthropist, and member of the prominent Astor family.",
+        "url": "https://en.wikipedia.org/wiki/Vincent_Astor",
+        "revision": 1373628142
       }
     },
     {
@@ -1277,61 +1307,6 @@
       }
     },
     {
-      "qid": "Q5591185",
-      "name": "Grace George",
-      "description": "American stage actress (1879–1961)",
-      "birth": "1879-12-25T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1961-05-19T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "stage actor",
-        "actor"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Grace%20George.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "8036390",
-      "sitelinks": 8,
-      "wikipedia": {
-        "title": "Grace George",
-        "extract": "Grace George (December 25, 1879 – May 19, 1961) was a prominent American stage actress, who had a long career on Broadway stage and also appeared in two films.",
-        "url": "https://en.wikipedia.org/wiki/Grace_George",
-        "revision": 1356948149
-      }
-    },
-    {
-      "qid": "Q91417",
-      "name": "Henry Villard",
-      "description": "German-American journalist and financier (1835–1900)",
-      "birth": "1835-04-10T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1900-11-12T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "financier",
-        "journalist",
-        "war correspondent",
-        "entrepreneur",
-        "writer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Henry%20Villard.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "1061",
-      "sitelinks": 8,
-      "wikipedia": {
-        "title": "Henry Villard",
-        "extract": "Henry Villard (April 10, 1835 – November 12, 1900) was a German-American journalist and financier who was an influential leader and the sixth president of the Northern Pacific Railway (1881–1884) which completed its trans-continental route during his tenure in 1883.\nBorn and raised by Ferdinand Heinrich Gustav Hilgard in the historic ancient Roman Empire border fortification, then Medieval / Middle Ages town of Speyer, along the Rhine River in the Rhenish Palatinate of the Kingdom of Bavaria. Villard clashed with his more conservative father over politics and was sent to a semi-military academy across the border in northeastern France. As a teenager, he emigrated to the United States in the 1850s without his parents' knowledge. He changed his name to Henry Villard, the name of a French classmate, to avoid being sent back to Europe, and began making his way west, briefly studying law as he developed a career in journalism. He supported famed Western explorer (\"The Pathfinder\") and military officer in the United States Army of John C. Frémont (1813–1890), of the newly established Republican Party in his first presidential candidate campaign representing the new political party in the 1856 presidential election, and four years later followed former U.S. Representative (congressman) from Springfield, Illinois of Abraham Lincoln (1809–1865), in his bid for the American Presidency in the 1860 presidential election campaign.\nVillard became a war correspondent, first covering the ensuing American Civil War (1861–1865), and later being sent back overseas by the Chicago Tribune to Europe (because of his childhood experiences and knowledge of foreign languages) to also cover the brief Austro-Prussian War in 1866, between two German-speaking totalitarian / authoritarian regimes fighting for political supremacy in Central Europe. It was also significant because with the quick decisive Prussian military victory over the neighboring Austrian Empire enabled the rising  Kingdom of Prussia under dynamic Chancellor Otto von Bismarck (1815–1898, served Prussia 1862–1871 / Imperial Germany 1871–1890), to exclude Austria and its ruling Habsburg imperial dynasty from future German affairs and to then lead and dominate the unification campaign to create a new centralized German Empire in Central Europe. This occurred four years later in Paris after a similar defeat of rival  Emperor Napoleon III of the Second French Empire and his French Army military forces of France in the subsequent Franco-Prussian War of 1870–1871.\nHe became a pacifist as a result of his experiences covering the two conflicts at home and abroad of the Civil War and European wars In the late 1860s. He married women's suffrage advocate Helen Frances Garrison (nicknamed \"Fanny\") and the daughter of famed newspaper publisher and slavery abolitionist William Lloyd Garrison (1805–1879), and returned to the U.S., only to go back to Germany several years later for his health in 1870.\nWhile in Germany, Villard became involved in investments in American railroads, and returned to the U.S. in 1874 to oversee German investments in the Oregon and California Railroad. He visited Oregon that summer, and being impressed with the region's natural resources, began acquiring various transportation interests in the region. During the ensuing decade he acquired several rail and steamship companies, and pursued a rail line from Portland to the Pacific Ocean; he was successful, but the line cost more than anticipated, causing financial turmoil. Villard returned to Europe, helping German investors acquire stakes in the transportation network, and returned to New York in 1886.\nAlso in the 1880s, Villard acquired the New York Evening Post and The Nation, and established the predecessor of General Electric. He was the first benefactor of the University of Oregon, and contributed to other universities, churches, hospitals, and orphanages. He died of a stroke at his country home in New York in 1900.\n\n",
-        "url": "https://en.wikipedia.org/wiki/Henry_Villard",
-        "revision": 1373611188
-      }
-    },
-    {
       "qid": "Q20684329",
       "name": "Fred Keating",
       "description": "American magician (1897-1961)",
@@ -1358,32 +1333,57 @@
       }
     },
     {
-      "qid": "Q632812",
-      "name": "Vincent Astor",
-      "description": "American businessman and art collector (1891–1959)",
-      "birth": "1891-11-15T00:00:00Z",
+      "qid": "Q1606578",
+      "name": "Henry Carrington Bolton",
+      "description": "American chemist and bibliographer of science (1843–1903)",
+      "birth": "1843-01-29T00:00:00Z",
       "birthPrecision": 11,
-      "death": "1959-02-03T00:00:00Z",
+      "death": "1903-11-19T00:00:00Z",
       "deathPrecision": 11,
-      "causesOfDeath": [
-        "myocardial infarction"
-      ],
-      "mannersOfDeath": [
-        "natural causes"
-      ],
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
       "occupations": [
-        "businessperson"
+        "bibliographer",
+        "chemist",
+        "historian",
+        "writer"
       ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/WVincentAstor.jpg",
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/PSM%20V43%20D594%20Henry%20Carrington%20Bolton.jpg",
       "graveImage": null,
       "graveCoord": null,
-      "findAGraveId": "8652807",
+      "findAGraveId": "234113165",
       "sitelinks": 8,
       "wikipedia": {
-        "title": "Vincent Astor",
-        "extract": "William Vincent Astor (November 15, 1891 – February 3, 1959) was an American businessman, philanthropist, and member of the prominent Astor family.",
-        "url": "https://en.wikipedia.org/wiki/Vincent_Astor",
-        "revision": 1373628142
+        "title": "Henry Carrington Bolton",
+        "extract": "Henry Carrington Bolton (1843–1903) was an American chemist and bibliographer of science.",
+        "url": "https://en.wikipedia.org/wiki/Henry_Carrington_Bolton",
+        "revision": 1379594077
+      }
+    },
+    {
+      "qid": "Q5591185",
+      "name": "Grace George",
+      "description": "American stage actress (1879–1961)",
+      "birth": "1879-12-25T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1961-05-19T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "stage actor",
+        "actor"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Grace%20George.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "8036390",
+      "sitelinks": 8,
+      "wikipedia": {
+        "title": "Grace George",
+        "extract": "Grace George (December 25, 1879 – May 19, 1961) was a prominent American stage actress, who had a long career on Broadway stage and also appeared in two films.",
+        "url": "https://en.wikipedia.org/wiki/Grace_George",
+        "revision": 1356948149
       }
     },
     {
@@ -1414,6 +1414,33 @@
       }
     },
     {
+      "qid": "Q4103325",
+      "name": "Frank Arthur Vanderlip",
+      "description": "American journalist (1864–1937)",
+      "birth": "1864-11-17T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1937-06-29T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "financier",
+        "journalist",
+        "banker"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Frank%20A.%20Vanderlip.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "10583518",
+      "sitelinks": 7,
+      "wikipedia": {
+        "title": "Frank A. Vanderlip",
+        "extract": "Frank Arthur Vanderlip Sr. (November 17, 1864 – June 30, 1937) was an American banker and journalist. He was president of the National City Bank of New York (now Citibank) from 1909 to 1919, and Assistant Secretary of the Treasury from 1897 to 1901. Vanderlip is known for his part in founding the Federal Reserve System and for founding the first Montessori school in the United States, the Scarborough School and the group of communities in Palos Verdes, California.\nBorn in rural Illinois, Vanderlip worked in farms and factories until beginning a career in journalism in 1885. His efforts in financial journalism led him to become Assistant Secretary of the Treasury until the National City Bank hired him. While president of the bank, Vanderlip worked with the Jekyll Island group to develop a federal reserve; Vanderlip's later proposals also influenced the creation of the Federal Reserve System in 1913. His later life was focused towards developing Palos Verdes and creating the Scarborough School at his estate, Beechwood, in Briarcliff Manor, New York, as well as gentrifying the hamlet of Sparta, Ossining nearby. In addition, he helped found and was the first president of Sleepy Hollow Country Club. Vanderlip died in 1937 in New York Hospital, after weeks of treatment there.",
+        "url": "https://en.wikipedia.org/wiki/Frank_A._Vanderlip",
+        "revision": 1379485259
+      }
+    },
+    {
       "qid": "Q6759245",
       "name": "Margaret Carnegie Miller",
       "description": "American philanthropist",
@@ -1436,6 +1463,61 @@
         "extract": "Margaret Carnegie Miller (March 30, 1897 – April 11, 1990) was the only child of industrialist and philanthropist Andrew Carnegie and Louise Whitfield, and heiress to the Carnegie fortune.\nA resident of Manhattan, New York City, from 1934 to 1973, Miller was a trustee of the Carnegie Corporation of New York, a grant-making foundation.  The foundation was established by her father in 1911.  From 1973 until her death in 1990, she was an honorary lifetime trustee.",
         "url": "https://en.wikipedia.org/wiki/Margaret_Carnegie_Miller",
         "revision": 1363715021
+      }
+    },
+    {
+      "qid": "Q5417354",
+      "name": "Evert Augustus Duyckinck",
+      "description": "United States publisher and biographer (1816–1878)",
+      "birth": "1816-11-23T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1878-08-13T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "bibliophile",
+        "publisher",
+        "editor",
+        "journalist",
+        "biographer",
+        "writer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Evert%20Augustus%20Duyckinck%20%28November%2023%2C%201816%20%E2%80%93%20August%2013%2C%201878%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "58908066",
+      "sitelinks": 7,
+      "wikipedia": {
+        "title": "Evert Augustus Duyckinck",
+        "extract": "Evert Augustus Duyckinck (pronounced DIE-KINK) (November 23, 1816 – August 13, 1878) was an American publisher and biographer. He was associated with the literary side of the Young America movement in New York.",
+        "url": "https://en.wikipedia.org/wiki/Evert_Augustus_Duyckinck",
+        "revision": 1375458195
+      }
+    },
+    {
+      "qid": "Q5434034",
+      "name": "Fanny Garrison Villard",
+      "description": "American suffragist (1844–1928)",
+      "birth": "1844-12-16T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1928-07-05T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "suffragist"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/NPG-NPG%2077%20144.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "27167963",
+      "sitelinks": 7,
+      "wikipedia": {
+        "title": "Fanny Garrison Villard",
+        "extract": "Helen Frances “Fanny” Garrison Villard (December 16, 1844 – July 5, 1928) was an American  women's suffrage campaigner, pacifist and a co-founder of National Association for the Advancement of Colored People.  She was the daughter of prominent publisher and abolitionist William Lloyd Garrison and the wife of railroad tycoon Henry Villard.",
+        "url": "https://en.wikipedia.org/wiki/Fanny_Garrison_Villard",
+        "revision": 1360954394
       }
     },
     {
@@ -1477,8 +1559,8 @@
       "mannersOfDeath": [],
       "occupations": [
         "publisher",
-        "journalist",
         "editor",
+        "journalist",
         "writer"
       ],
       "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Conant%20Church.JPG",
@@ -1491,88 +1573,6 @@
         "extract": "William Conant Church (August 11, 1836 – May 23, 1917) was an American journalist, author and soldier. He was publisher of several newspapers and magazines in association with his father and brother. He was the co-founder and second president of the National Rifle Association of America.",
         "url": "https://en.wikipedia.org/wiki/William_Conant_Church",
         "revision": 1363856477
-      }
-    },
-    {
-      "qid": "Q4103325",
-      "name": "Frank Arthur Vanderlip",
-      "description": "American journalist (1864–1937)",
-      "birth": "1864-11-13T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1937-06-30T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "financier",
-        "journalist",
-        "banker"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Frank%20A.%20Vanderlip.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "10583518",
-      "sitelinks": 7,
-      "wikipedia": {
-        "title": "Frank A. Vanderlip",
-        "extract": "Frank Arthur Vanderlip Sr. (November 17, 1864 – June 30, 1937) was an American banker and journalist. He was president of the National City Bank of New York (now Citibank) from 1909 to 1919, and Assistant Secretary of the Treasury from 1897 to 1901. Vanderlip is known for his part in founding the Federal Reserve System and for founding the first Montessori school in the United States, the Scarborough School and the group of communities in Palos Verdes, California.\nBorn in rural Illinois, Vanderlip worked in farms and factories until beginning a career in journalism in 1885. His efforts in financial journalism led him to become Assistant Secretary of the Treasury until the National City Bank hired him. While president of the bank, Vanderlip worked with the Jekyll Island group to develop a federal reserve; Vanderlip's later proposals also influenced the creation of the Federal Reserve System in 1913. His later life was focused towards developing Palos Verdes and creating the Scarborough School at his estate, Beechwood, in Briarcliff Manor, New York, as well as gentrifying the hamlet of Sparta, Ossining nearby. In addition, he helped found and was the first president of Sleepy Hollow Country Club. Vanderlip died in 1937 in New York Hospital, after weeks of treatment there.",
-        "url": "https://en.wikipedia.org/wiki/Frank_A._Vanderlip",
-        "revision": 1379485259
-      }
-    },
-    {
-      "qid": "Q5417354",
-      "name": "Evert Augustus Duyckinck",
-      "description": "United States publisher and biographer (1816–1878)",
-      "birth": "1816-11-23T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1878-08-13T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "bibliophile",
-        "publisher",
-        "biographer",
-        "editor",
-        "journalist",
-        "writer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Evert%20Augustus%20Duyckinck%20%28November%2023%2C%201816%20%E2%80%93%20August%2013%2C%201878%29.png",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "58908066",
-      "sitelinks": 7,
-      "wikipedia": {
-        "title": "Evert Augustus Duyckinck",
-        "extract": "Evert Augustus Duyckinck (pronounced DIE-KINK) (November 23, 1816 – August 13, 1878) was an American publisher and biographer. He was associated with the literary side of the Young America movement in New York.",
-        "url": "https://en.wikipedia.org/wiki/Evert_Augustus_Duyckinck",
-        "revision": 1375458195
-      }
-    },
-    {
-      "qid": "Q5434034",
-      "name": "Fanny Garrison Villard",
-      "description": "American suffragist (1844–1928)",
-      "birth": "1844-12-16T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1928-07-05T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "suffragist"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/NPG-NPG%2077%20144.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "27167963",
-      "sitelinks": 7,
-      "wikipedia": {
-        "title": "Fanny Garrison Villard",
-        "extract": "Helen Frances “Fanny” Garrison Villard (December 16, 1844 – July 5, 1928) was an American  women's suffrage campaigner, pacifist and a co-founder of National Association for the Advancement of Colored People.  She was the daughter of prominent publisher and abolitionist William Lloyd Garrison and the wife of railroad tycoon Henry Villard.",
-        "url": "https://en.wikipedia.org/wiki/Fanny_Garrison_Villard",
-        "revision": 1360954394
       }
     },
     {
@@ -1608,7 +1608,7 @@
       "qid": "Q328119",
       "name": "Moses Hicks Grinnell",
       "description": "American politician (1803-1877)",
-      "birth": "1803-03-03T00:00:00Z",
+      "birth": "1803-03-23T00:00:00Z",
       "birthPrecision": 11,
       "death": "1877-11-24T00:00:00Z",
       "deathPrecision": 11,
@@ -1682,122 +1682,6 @@
       }
     },
     {
-      "qid": "Q7152003",
-      "name": "Paul Leicester Ford",
-      "description": "American novelist and biographer (1865–1902)",
-      "birth": "1865-01-01T00:00:00Z",
-      "birthPrecision": 9,
-      "death": "1902-01-01T00:00:00Z",
-      "deathPrecision": 9,
-      "causesOfDeath": [],
-      "mannersOfDeath": [
-        "homicide"
-      ],
-      "occupations": [
-        "novelist",
-        "biographer",
-        "historian",
-        "writer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Paul%20Leicester%20Ford%20%281902%29.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "24405176",
-      "sitelinks": 6,
-      "wikipedia": {
-        "title": "Paul Leicester Ford",
-        "extract": "Paul Leicester Ford (March 23, 1865 – May 8, 1902) was an American novelist and biographer, born in Brooklyn, the son of Gordon Lester Ford and Emily Fowler Ford (a granddaughter of Noah Webster and lifelong friend of Emily Dickinson).\n\n",
-        "url": "https://en.wikipedia.org/wiki/Paul_Leicester_Ford",
-        "revision": 1375458208
-      }
-    },
-    {
-      "qid": "Q7172439",
-      "name": "Peter A. Peyser",
-      "description": "American politician (1921–2014)",
-      "birth": "1921-09-07T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "2014-10-09T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [
-        "Parkinson's disease"
-      ],
-      "mannersOfDeath": [
-        "natural causes"
-      ],
-      "occupations": [
-        "politician"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Peter%20A.%20Peyser.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "137029739",
-      "sitelinks": 6,
-      "wikipedia": {
-        "title": "Peter A. Peyser",
-        "extract": "Peter A. Peyser (September 7, 1921 – October 9, 2014) was a United States representative from New York, serving from 1971 to 1977 as a Republican and from 1979 to 1983 as a Democrat.",
-        "url": "https://en.wikipedia.org/wiki/Peter_A._Peyser",
-        "revision": 1373856535
-      }
-    },
-    {
-      "qid": "Q8013917",
-      "name": "William Sergeant Kendall",
-      "description": "American painter (1869–1938)",
-      "birth": "1869-01-20T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1938-01-01T00:00:00Z",
-      "deathPrecision": 9,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "designer",
-        "painter"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Sargeant%20Kendall.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "57488278",
-      "sitelinks": 6,
-      "wikipedia": {
-        "title": "William Sergeant Kendall",
-        "extract": "William Sergeant Kendall (born 1869 in Spuyten Duyvil, New York, died 1938 in Hot Springs, Virginia), was an American painter, most famous for his evocative scenes of domestic life; his wife Margaret Stickney Kendall and three young daughters were frequent subjects in his early work.",
-        "url": "https://en.wikipedia.org/wiki/William_Sergeant_Kendall",
-        "revision": 1364525546
-      }
-    },
-    {
-      "qid": "Q1644763",
-      "name": "Rudolf Cronau",
-      "description": "German journalist and painter (1855-1939)",
-      "birth": "1855-01-21T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1939-10-27T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "landscape painter",
-        "draftsperson",
-        "visual artist",
-        "painter",
-        "journalist",
-        "illustrator",
-        "writer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Rudolf%20Cronau%201882%20Family%20Album.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "158317360",
-      "sitelinks": 6,
-      "wikipedia": {
-        "title": "Rudolf Cronau",
-        "extract": "Rudolf Daniel Ludwig Cronau (21 January 1855 – 27 October 1939) was a German-American painter, illustrator and journalist.\nRudolf Cronau was well known in Germany for his illustrations, articles and books about the American West.",
-        "url": "https://en.wikipedia.org/wiki/Rudolf_Cronau",
-        "revision": 1371553521
-      }
-    },
-    {
       "qid": "Q2791112",
       "name": "William Harris Douglas",
       "description": "American politician, New York (1853-1944)",
@@ -1862,12 +1746,12 @@
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
+        "theatre director",
         "boxing manager",
         "Theaterintendant",
-        "theatre director",
+        "stage actor",
         "film director",
         "film producer",
-        "stage actor",
         "impresario",
         "entrepreneur",
         "screenwriter"
@@ -1882,6 +1766,91 @@
         "extract": "William Aloysius Brady (June 19, 1863 – January 6, 1950) was an American theater actor, producer, and sports promoter.",
         "url": "https://en.wikipedia.org/wiki/William_A._Brady",
         "revision": 1358917824
+      }
+    },
+    {
+      "qid": "Q7152003",
+      "name": "Paul Leicester Ford",
+      "description": "American novelist and biographer (1865–1902)",
+      "birth": "1865-03-23T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1902-05-08T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [
+        "homicide"
+      ],
+      "occupations": [
+        "novelist",
+        "biographer",
+        "historian",
+        "writer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Paul%20Leicester%20Ford%20%281902%29.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "24405176",
+      "sitelinks": 6,
+      "wikipedia": {
+        "title": "Paul Leicester Ford",
+        "extract": "Paul Leicester Ford (March 23, 1865 – May 8, 1902) was an American novelist and biographer, born in Brooklyn, the son of Gordon Lester Ford and Emily Fowler Ford (a granddaughter of Noah Webster and lifelong friend of Emily Dickinson).\n\n",
+        "url": "https://en.wikipedia.org/wiki/Paul_Leicester_Ford",
+        "revision": 1375458208
+      }
+    },
+    {
+      "qid": "Q7172439",
+      "name": "Peter A. Peyser",
+      "description": "American politician (1921–2014)",
+      "birth": "1921-09-07T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "2014-10-09T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [
+        "Parkinson's disease"
+      ],
+      "mannersOfDeath": [
+        "natural causes"
+      ],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Peter%20A.%20Peyser.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "137029739",
+      "sitelinks": 6,
+      "wikipedia": {
+        "title": "Peter A. Peyser",
+        "extract": "Peter A. Peyser (September 7, 1921 – October 9, 2014) was a United States representative from New York, serving from 1971 to 1977 as a Republican and from 1979 to 1983 as a Democrat.",
+        "url": "https://en.wikipedia.org/wiki/Peter_A._Peyser",
+        "revision": 1373856535
+      }
+    },
+    {
+      "qid": "Q8013917",
+      "name": "William Sergeant Kendall",
+      "description": "American painter (1869–1938)",
+      "birth": "1869-01-20T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1938-02-16T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "designer",
+        "painter"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Sargeant%20Kendall.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "57488278",
+      "sitelinks": 6,
+      "wikipedia": {
+        "title": "William Sergeant Kendall",
+        "extract": "William Sergeant Kendall (born 1869 in Spuyten Duyvil, New York, died 1938 in Hot Springs, Virginia), was an American painter, most famous for his evocative scenes of domestic life; his wife Margaret Stickney Kendall and three young daughters were frequent subjects in his early work.",
+        "url": "https://en.wikipedia.org/wiki/William_Sergeant_Kendall",
+        "revision": 1364525546
       }
     },
     {
@@ -1966,8 +1935,8 @@
       "qid": "Q5201150",
       "name": "Cyrus Townsend Brady",
       "description": "American writer (1861-1920)",
-      "birth": "1861-01-01T00:00:00Z",
-      "birthPrecision": 9,
+      "birth": "1861-12-20T00:00:00Z",
+      "birthPrecision": 11,
       "death": "1920-01-24T00:00:00Z",
       "deathPrecision": 11,
       "causesOfDeath": [
@@ -1992,6 +1961,37 @@
         "extract": "Cyrus Townsend Brady (December 20, 1861 – January 24, 1920) was an American priest, journalist, historian and adventure writer. His best-known work is Indian Fights and Fighters.",
         "url": "https://en.wikipedia.org/wiki/Cyrus_Townsend_Brady",
         "revision": 1372767652
+      }
+    },
+    {
+      "qid": "Q1644763",
+      "name": "Rudolf Cronau",
+      "description": "German journalist and painter (1855-1939)",
+      "birth": "1855-01-21T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1939-10-27T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "landscape painter",
+        "draftsperson",
+        "visual artist",
+        "illustrator",
+        "painter",
+        "journalist",
+        "writer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Rudolf%20Cronau%201882%20Family%20Album.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "158317360",
+      "sitelinks": 6,
+      "wikipedia": {
+        "title": "Rudolf Cronau",
+        "extract": "Rudolf Daniel Ludwig Cronau (21 January 1855 – 27 October 1939) was a German-American painter, illustrator and journalist.\nRudolf Cronau was well known in Germany for his illustrations, articles and books about the American West.",
+        "url": "https://en.wikipedia.org/wiki/Rudolf_Cronau",
+        "revision": 1371553521
       }
     },
     {
@@ -2046,97 +2046,13 @@
       }
     },
     {
-      "qid": "Q7962338",
-      "name": "Walker Whiteside",
-      "description": "American actor (1869-1942)",
-      "birth": "1869-03-16T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1942-01-01T00:00:00Z",
-      "deathPrecision": 9,
-      "causesOfDeath": [],
-      "mannersOfDeath": [
-        "natural causes"
-      ],
-      "occupations": [
-        "stage actor",
-        "actor",
-        "writer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Walker-Whiteside-006JPG.JPG",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "7044479",
-      "sitelinks": 5,
-      "wikipedia": {
-        "title": "Walker Whiteside",
-        "extract": "Walker Whiteside (1869–1942) was an American actor who had played Hamlet, Othello, King Lear, and Shylock while still in his teens.",
-        "url": "https://en.wikipedia.org/wiki/Walker_Whiteside",
-        "revision": 1363186917
-      }
-    },
-    {
-      "qid": "Q1533272",
-      "name": "Harry Helmsley",
-      "description": "American businessman (1909-1997)",
-      "birth": "1909-03-04T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1997-01-04T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [
-        "pneumonia"
-      ],
-      "mannersOfDeath": [
-        "natural causes"
-      ],
-      "occupations": [
-        "business magnate",
-        "entrepreneur"
-      ],
-      "image": null,
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "5592",
-      "sitelinks": 5,
-      "wikipedia": {
-        "title": "Harry Helmsley",
-        "extract": "Harry Brakmann Helmsley (March 4, 1909 – January 4, 1997) was an American real estate billionaire whose company, Helmsley-Spear, became one of the country's biggest property holders, owning the Empire State Building, the Helmsley Building (230 Park Avenue), the Graybar Building (420 Lexington Avenue), the Flatiron Building, and some of New York's most noted hotels. His second marriage to Leona Roberts (\"Queen of Mean\") led to charges of false accounting and tax evasion as well as a celebrated trial, where Harry was judged too frail to plead, but Leona was fined and jailed.",
-        "url": "https://en.wikipedia.org/wiki/Harry_Helmsley",
-        "revision": 1367382725
-      }
-    },
-    {
-      "qid": "Q2070228",
-      "name": "Percy Avery Rockefeller",
-      "description": "American director (1878–1934)",
-      "birth": "1878-02-27T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1934-09-25T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "businessperson"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Percy%20A.%20Rockefeller%20cph.3b33666.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "27082471",
-      "sitelinks": 5,
-      "wikipedia": {
-        "title": "Percy Avery Rockefeller",
-        "extract": "Percy Avery Rockefeller (February 27, 1878 — September 25, 1934) was a board director who founded and was vice president of Owenoke Corporation. He was a son of American Businessman William Avery Rockefeller Jr. and a nephew of Standard Oil co-founder John D. Rockefeller.",
-        "url": "https://en.wikipedia.org/wiki/Percy_Avery_Rockefeller",
-        "revision": 1379773024
-      }
-    },
-    {
       "qid": "Q3195283",
       "name": "Kent Cooper",
       "description": "American journalist (1880-1965)",
       "birth": "1880-03-22T00:00:00Z",
       "birthPrecision": 11,
-      "death": "1965-01-01T00:00:00Z",
-      "deathPrecision": 9,
+      "death": "1965-01-31T00:00:00Z",
+      "deathPrecision": 11,
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
@@ -2182,6 +2098,35 @@
       }
     },
     {
+      "qid": "Q7962338",
+      "name": "Walker Whiteside",
+      "description": "American actor (1869-1942)",
+      "birth": "1869-03-16T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1942-08-17T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [
+        "natural causes"
+      ],
+      "occupations": [
+        "stage actor",
+        "actor",
+        "writer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Walker-Whiteside-006JPG.JPG",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7044479",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "Walker Whiteside",
+        "extract": "Walker Whiteside (1869–1942) was an American actor who had played Hamlet, Othello, King Lear, and Shylock while still in his teens.",
+        "url": "https://en.wikipedia.org/wiki/Walker_Whiteside",
+        "revision": 1363186917
+      }
+    },
+    {
       "qid": "Q5541819",
       "name": "George Long Duyckinck",
       "description": "American writer",
@@ -2204,61 +2149,6 @@
         "extract": "George Long Duyckinck (October 17, 1823 – March 30, 1863) was a New York City writer.",
         "url": "https://en.wikipedia.org/wiki/George_Long_Duyckinck",
         "revision": 1339736700
-      }
-    },
-    {
-      "qid": "Q5645258",
-      "name": "Hamilton Wright Mabie",
-      "description": "American writer (1846-1916)",
-      "birth": "1846-12-13T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1916-01-01T00:00:00Z",
-      "deathPrecision": 9,
-      "causesOfDeath": [],
-      "mannersOfDeath": [
-        "natural causes"
-      ],
-      "occupations": [
-        "children's writer",
-        "biographer",
-        "writer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/HamiltonWrightMabie.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "32471463",
-      "sitelinks": 5,
-      "wikipedia": {
-        "title": "Hamilton Wright Mabie",
-        "extract": "Hamilton Wright Mabie, A.M., L.H.D., LL.D. (December 13, 1846 – December 31, 1916) was an American essayist, editor, critic, and lecturer.\n\n",
-        "url": "https://en.wikipedia.org/wiki/Hamilton_Wright_Mabie",
-        "revision": 1378520058
-      }
-    },
-    {
-      "qid": "Q1156088",
-      "name": "William Adams Walker",
-      "description": "American politician (1805-1861)",
-      "birth": "1805-06-05T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1861-12-18T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "politician",
-        "lawyer"
-      ],
-      "image": null,
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "7249574",
-      "sitelinks": 5,
-      "wikipedia": {
-        "title": "William Adams Walker",
-        "extract": "William Adams Walker (June 5, 1805 – December 18, 1861) was an American educator and politician who served one term as a U.S. Representative from New York from 1853 to 1855.",
-        "url": "https://en.wikipedia.org/wiki/William_Adams_Walker",
-        "revision": 1364812644
       }
     },
     {
@@ -2285,6 +2175,111 @@
         "extract": "Vincent Serrano (February 17, 1866 – January 11, 1935) was an American actor in plays and silent films.",
         "url": "https://en.wikipedia.org/wiki/Vincent_Serrano",
         "revision": 1360954931
+      }
+    },
+    {
+      "qid": "Q19865977",
+      "name": "William Orton",
+      "description": "American politician",
+      "birth": "1826-06-14T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1878-04-22T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician",
+        "businessperson"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/William%20Orton%20%28Western%20Union%29.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "92600739",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "William Orton (businessman)",
+        "extract": "William Orton (June 14, 1826 – April 22, 1878) was an American businessman who served as president of the Western Union Telegraph Company.\n\n",
+        "url": "https://en.wikipedia.org/wiki/William_Orton_(businessman)",
+        "revision": 1378271546
+      }
+    },
+    {
+      "qid": "Q19873496",
+      "name": "Heber R. Bishop",
+      "description": "American businessman and art collector (1840–1902)",
+      "birth": "1840-03-02T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1902-12-10T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "philanthropist",
+        "entrepreneur"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Heber%20Reginald%20Bishop%20%281840%E2%80%931902%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "168603936",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "Heber R. Bishop",
+        "extract": "Heber Reginald Bishop (March 2, 1840 – December 10, 1902) was an American businessman and philanthropist of the late 19th and early 20th centuries. His collections of art, especially his noted collection of jade, were donated to museums. Bishop was a Trustee of the Metropolitan Museum in New York City during its early years.",
+        "url": "https://en.wikipedia.org/wiki/Heber_R._Bishop",
+        "revision": 1374146745
+      }
+    },
+    {
+      "qid": "Q39049244",
+      "name": "Oscar R. Ewing",
+      "description": "American lawyer and government official",
+      "birth": "1889-03-08T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1980-01-08T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "jurist",
+        "politician",
+        "lawyer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Oscar%20R.%20Ewing.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "50331649",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "Oscar R. Ewing",
+        "extract": "Oscar R. Ewing (March 8, 1889 – January 8, 1980) was a 20th-century American lawyer, social reformer, and politician who was one of the main authors of the Fair Deal program of U.S. President Harry S. Truman.",
+        "url": "https://en.wikipedia.org/wiki/Oscar_R._Ewing",
+        "revision": 1364927999
+      }
+    },
+    {
+      "qid": "Q1156088",
+      "name": "William Adams Walker",
+      "description": "American politician (1805-1861)",
+      "birth": "1805-06-05T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1861-12-18T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician",
+        "lawyer"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7249574",
+      "sitelinks": 5,
+      "wikipedia": {
+        "title": "William Adams Walker",
+        "extract": "William Adams Walker (June 5, 1805 – December 18, 1861) was an American educator and politician who served one term as a U.S. Representative from New York from 1853 to 1855.",
+        "url": "https://en.wikipedia.org/wiki/William_Adams_Walker",
+        "revision": 1364812644
       }
     }
   ]

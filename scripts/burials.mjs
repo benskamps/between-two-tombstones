@@ -15,8 +15,11 @@ SELECT ?person ?personLabel ?personDescription
 WHERE {
   ?person p:P119 ?burial . ?burial ps:P119 wd:${qid} .
   OPTIONAL { ?burial pq:P625 ?graveCoord_ }
-  OPTIONAL { ?person p:P569/psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }
-  OPTIONAL { ?person p:P570/psv:P570 [ wikibase:timeValue ?death_ ; wikibase:timePrecision ?deathPrec_ ] }
+  # Best-rank statements only: Margaret Mitchell (Q173540) has a preferred
+  # Nov 8 and a normal-rank Nov 9 birth date, and SAMPLE over all ranks can
+  # pick the wrong one.
+  OPTIONAL { ?person p:P569 ?bst . ?bst a wikibase:BestRank ; psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }
+  OPTIONAL { ?person p:P570 ?dst . ?dst a wikibase:BestRank ; psv:P570 [ wikibase:timeValue ?death_ ; wikibase:timePrecision ?deathPrec_ ] }
   OPTIONAL { ?person wdt:P509 ?cause . ?cause rdfs:label ?causeLabel_ FILTER(LANG(?causeLabel_) = "en") }
   OPTIONAL { ?person wdt:P1196 ?manner . ?manner rdfs:label ?mannerLabel_ FILTER(LANG(?mannerLabel_) = "en") }
   OPTIONAL { ?person wdt:P106 ?occ . ?occ rdfs:label ?occLabel_ FILTER(LANG(?occLabel_) = "en") }

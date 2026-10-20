@@ -65,6 +65,8 @@ What it means:
 - **Wikidata almost never knows where a grave is.** The walking-route mode will rarely trigger from Wikidata alone. Route stops come from the "I found it" pins (on the phone for now, decision 8). "Walk through time" and "greatest hits" are the realistic defaults.
 - Cause and manner of death are sparse (about 10%). The "unusual death" tag will be rare; that's fine.
 - Find a Grave coverage is excellent: links will exist for ~90% of cards.
+- **Use best-rank statements.** Margaret Mitchell (Q173540) has a preferred Nov 8 and a normal-rank Nov 9 birth date; SAMPLE over all ranks showed the wrong one. `scripts/burials.mjs` now filters `wikibase:BestRank`; snapshots regenerated 10/20 02:42 UTC.
+- **Wikidata grave photos can be wrong.** Mitchell's P1442 is another Margaret Ann Mitchell's stone in Hiland Cemetery; Lane 2 drops grave photos whose file title names a different cemetery.
 - **Rate limits are real from shared IPs.** `www.wikidata.org` answered 429 on the 3rd request. Wikipedia's per-page REST summary answered 429 with `Retry-After` ≈ 50 s. Batched intro extracts (`action=query&prop=extracts&exintro&exlimit=20`) fetched 80 summaries in 4 requests. The SPARQL endpoint was fine.
 - **Overpass: ❓ couldn't check.** `overpass-api.de`, `overpass.kumi.systems` and `overpass.private.coffee` all reset or time out from the build container (container network, not our code). Re-check from the first Vercel deploy. Until then, Overpass is optional enrichment and "nearby" must work on Wikidata alone.
 - Snapshots committed: `data/snapshots/sleepy-hollow.json` and `data/snapshots/oakland-atlanta.json` (80 people each, all with Wikipedia text; pulled by `scripts/snapshot.mjs`; no hand-typed facts). Sleepy Hollow has Irving, Carnegie, Chrysler, Gompers, Helmsley and William Rockefeller.
@@ -148,15 +150,15 @@ Owns: `lib/stamp/**`, `lib/stonemath/**`, `workers/**`, `app/stamp/**`, `app/api
 | L3.7 | P1 | Live camera viewfinder with a stone-shaped guide (getUserMedia) | — | ⬜ |
 | L3.8 | P2 | Automatic corner detection | — | ⬜ |
 
-### Lane 4 — Spirit box + games 🟨 builder dispatched 10/20 02:05 UTC (L4.1–L4.3, then L4.4)
+### Lane 4 — Spirit box + games ✅ merged 10/20 02:40 UTC (P0s + L4.4). `?test-caps=` only shortens sessions and shows a banner; left on in prod for e2e
 Owns: `lib/spirit/**`, `lib/games/**`, `app/spirit/**`, `app/games/**`, `components/spirit/**`, `components/games/**`, `tests/e2e/spirit-games.spec.ts`.
 
 | ID | Tier | Item | Acceptance | Status |
 |---|---|---|---|---|
-| L4.1 | P0 | Spirit box: Web Audio white noise → band-pass filter stepping every 50–350 ms (slider), click gaps, faint carrier blips. Low-pitch `speechSynthesis` fragments from a word bank of **only** `spiritEligible` burials at the chosen cemetery (first names, surnames, occupations, death years spoken as "eighteen ninety"). On-screen captions log every "voice". Caps: 10 minutes and 60 utterances per session. Disclaimer played straight: "The spirits use your phone's text-to-speech." Audio and speech start from the tap (iOS). No speech → captions only, and say so | vitest: word bank excludes people dead < 75 years; Playwright: caps stop the session | ⬜ |
-| L4.2 | P0 | Tombstone Bingo: 5×5 of carved symbols with their traditional meanings (lamb, weeping willow, draped urn, broken column, clasped hands, winged hourglass, inverted torch, anchor, square and compass, three chain links, Woodmen of the World tree stump, GAR star, white-bronze zinc marker…), center "R.I.P.", seeded per player | vitest: same seed → same card; different seeds → different cards | ⬜ |
-| L4.3 | P0 | Graveyard party, stateless: "Start a party" makes a link with a seed; everyone who opens it gets the same bingo card | Gate 7 via two Playwright contexts | ⬜ |
-| L4.4 | P1 | EVP recorder: 15 s from the mic, played back reversed and slowed; hidden without a mic | — | ⬜ |
+| L4.1 | P0 | Spirit box: Web Audio white noise → band-pass filter stepping every 50–350 ms (slider), click gaps, faint carrier blips. Low-pitch `speechSynthesis` fragments from a word bank of **only** `spiritEligible` burials at the chosen cemetery (first names, surnames, occupations, death years spoken as "eighteen ninety"). On-screen captions log every "voice". Caps: 10 minutes and 60 utterances per session. Disclaimer played straight: "The spirits use your phone's text-to-speech." Audio and speech start from the tap (iOS). No speech → captions only, and say so | vitest: word bank excludes people dead < 75 years; Playwright: caps stop the session | ✅ local prod, merged 10/20 02:40 UTC; orchestrator re-ran `tests/e2e/spirit-games.spec.ts` 16/16 on the merged build and watched captions run; word bank built through `spiritEligible`. Real phone audio/speech: pending |
+| L4.2 | P0 | Tombstone Bingo: 5×5 of carved symbols with their traditional meanings (lamb, weeping willow, draped urn, broken column, clasped hands, winged hourglass, inverted torch, anchor, square and compass, three chain links, Woodmen of the World tree stump, GAR star, white-bronze zinc marker…), center "R.I.P.", seeded per player | vitest: same seed → same card; different seeds → different cards | ✅ local prod: 44 symbols with meanings, seeded cards, unit + e2e |
+| L4.3 | P0 | Graveyard party, stateless: "Start a party" makes a link with a seed; everyone who opens it gets the same bingo card | Gate 7 via two Playwright contexts | ✅ local prod: two-context e2e, second phone has the identical card in ~200 ms (Gate 7 locally) |
+| L4.4 | P1 | EVP recorder: 15 s from the mic, played back reversed and slowed; hidden without a mic | — | ✅ local prod: fake-mic e2e, playback is the exact reverse at 0.7×; hidden without getUserMedia |
 | L4.5 | P1 | Epitaph Hunt checklist; Who Am I? (three clues from a tour); Stone Math tool (uses `lib/stonemath` once Lane 3 merges) | — | ⬜ |
 
 ### Lane 5 — The viral lifecycle (starts only after the Lane 2+3 stranger pass)

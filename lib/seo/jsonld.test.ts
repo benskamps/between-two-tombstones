@@ -60,7 +60,10 @@ describe("personJsonLd", () => {
   });
 
   it("does not turn a year-only birth into January 1", () => {
-    expect(personJsonLd(byName("William Rockefeller")).birthDate).toBe("1841");
+    // Explicit year-precision value (Wikidata precision 9) rather than relying
+    // on a snapshot person whose best-rank date happens to be year-only.
+    const yearOnly = { ...byName("William Rockefeller"), birth: "1841-01-01T00:00:00Z", birthPrecision: 9 };
+    expect(personJsonLd(yearOnly).birthDate).toBe("1841");
   });
 });
 
