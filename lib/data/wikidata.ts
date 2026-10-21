@@ -3,10 +3,12 @@
 // scripts/snapshot.mjs and scripts/hour0-probe.mjs (verified live on 10/20).
 // Everything here is uncached; lib/data/cached.ts wraps it in 'use cache: remote'.
 
+import { personName } from "@/lib/tour/text";
 import type { Cemetery, Person } from "@/lib/types";
 import { DataSourceError } from "./errors";
 import type { CemeterySearchResult, NearbyCemetery } from "./types";
 import { politeJson, REQUEST_PATH } from "./wikimedia";
+import { titleFromUrl } from "./wikipedia";
 
 export const SPARQL_ENDPOINT = "https://query.wikidata.org/sparql";
 export const BURIALS_LIMIT = 80;
@@ -104,24 +106,22 @@ LIMIT ${limit}`;
 export type PersonRow = { person: Omit<Person, "wikipedia">; enwiki: string | null };
 
 /**
- * True when a "name" is really an ID. With no English label, the label service
- * answers with the QID ("Q16162799"), which is no name to carve on a card.
+ * One person per row. A row whose label is only its QID (no English label)
+ * takes its name from the English Wikipedia title; with no article either, it
+ * is dropped (F20).
  */
-export function isQidName(name: string | null | undefined): boolean {
-  return !name || /^Q\d+$/.test(name.trim());
-}
-
-/** People with a real name; the rest leave every tour list (F20). */
-export function hasRealName(p: Pick<Person, "name">): boolean {
-  return !isQidName(p.name);
-}
-
-/** One person per row, minus anyone whose only label is their QID. */
 export function parseBurialRows(rows: SparqlRow[]): PersonRow[] {
-  return rows.filter((r) => !isQidName(r.personLabel)).map((r) => ({
+  return rows.flatMap((r) => {
+    const name = personName(r.personLabel, r.enwiki ? titleFromUrl(r.enwiki) : null);
+    return name ? [toPersonRow(r, name)] : [];
+  });
+}
+
+function toPersonRow(r: SparqlRow, name: string): PersonRow {
+  return {
     person: {
       qid: idOf(r.person),
-      name: r.personLabel!,
+      name,
       description: r.personDescription ?? null,
       birth: r.birth ?? null,
       birthPrecision: num(r.birthPrecision),
@@ -137,7 +137,7 @@ export function parseBurialRows(rows: SparqlRow[]): PersonRow[] {
       sitelinks: r.sitelinks ? Number(r.sitelinks) : 0,
     },
     enwiki: r.enwiki ?? null,
-  }));
+  };
 }
 
 export async function fetchBurials(qid: string): Promise<PersonRow[]> {

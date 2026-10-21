@@ -12,8 +12,6 @@ import {
   burialsQuery,
   fetchSearch,
   flattenBindings,
-  hasRealName,
-  isQidName,
   mentionsCemetery,
   mergeSearchResults,
   SEARCH_LIMIT,
@@ -54,8 +52,8 @@ describe("burials", () => {
     const raw = flattenBindings(burialsJson);
     expect(raw).toHaveLength(80);
     const rows = parseBurialRows(raw);
-    // Two of the 80 recorded rows have only their QID as a label (F20); they're dropped.
-    expect(rows).toHaveLength(78);
+    // Two of the 80 recorded rows have only their QID as a label (F20); both have an article, so both stay, named by it.
+    expect(rows).toHaveLength(80);
     const mitchell = rows.find((r) => r.person.name === "Margaret Mitchell")!;
     expect(mitchell.person).toMatchObject({ qid: "Q173540", findAGraveId: "718", birthPrecision: 11, deathPrecision: 11 });
     expect(mitchell.person.occupations).toContain("novelist");
@@ -69,23 +67,29 @@ describe("burials", () => {
 });
 
 describe("people with no English label (F20)", () => {
-  it("treats a QID-shaped name as no name", () => {
-    for (const id of ["Q16162799", "Q1", " Q6986296 "]) expect(isQidName(id)).toBe(true);
-    for (const none of [undefined, null, ""]) expect(isQidName(none)).toBe(true);
-    for (const name of ["Margaret Mitchell", "Q", "Quincy Adams", "Q-ship captain", "Q1 Smith", "John Q. Public"]) expect(isQidName(name)).toBe(false);
-    expect(hasRealName({ name: "Q16162799" })).toBe(false);
-    expect(hasRealName({ name: "Bobby Jones" })).toBe(true);
-  });
-
-  it("drops people whose label is their QID from the recorded Oakland rows", () => {
+  it("names the recorded Oakland rows whose label is their QID from their English Wikipedia articles", () => {
     const raw = flattenBindings(burialsJson);
     const qidNamed = raw.filter((r) => /^Q\d+$/.test(r.personLabel ?? "")).map((r) => r.person.split("/").pop());
     expect(qidNamed.sort()).toEqual(["Q6066179", "Q6986296"]);
     const rows = parseBurialRows(raw);
-    expect(rows.some((r) => qidNamed.includes(r.person.qid))).toBe(false);
+    const byQid = new Map(rows.map((r) => [r.person.qid, r]));
+    expect(byQid.get("Q6986296")?.person.name).toBe("Nedom L. Angier");
+    expect(byQid.get("Q6066179")?.person.name).toBe("Ira O. McDaniel");
     expect(rows.every((r) => !/^Q\d+$/.test(r.person.name))).toBe(true);
-    // A row with no label at all is dropped the same way.
-    expect(parseBurialRows([{ person: "http://www.wikidata.org/entity/Q42" }])).toEqual([]);
+  });
+
+  it("strips a disambiguator from the title, and drops a bare-QID row with no article", () => {
+    const row = (label: string | undefined, enwiki?: string) => ({
+      person: "http://www.wikidata.org/entity/Q42",
+      ...(label ? { personLabel: label } : {}),
+      ...(enwiki ? { enwiki } : {}),
+    });
+    expect(parseBurialRows([row("Q42", "https://en.wikipedia.org/wiki/Nedom_L._Angier_(politician)")])[0].person.name).toBe("Nedom L. Angier");
+    expect(parseBurialRows([row("Q42")])).toEqual([]);
+    expect(parseBurialRows([row(undefined)])).toEqual([]);
+    expect(parseBurialRows([row(undefined, "https://en.wikipedia.org/wiki/Douglas_Adams")])[0].person.name).toBe("Douglas Adams");
+    // A real label always wins over the title.
+    expect(parseBurialRows([row("Bobby Jones", "https://en.wikipedia.org/wiki/Bobby_Jones_(golfer)")])[0].person.name).toBe("Bobby Jones");
   });
 });
 

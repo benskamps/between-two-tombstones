@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import oakland from "@/data/snapshots/oakland-atlanta.json";
-import { cleanExtract } from "./text";
+import { cleanExtract, isQidName, nameFromWikiTitle, personName } from "./text";
 
 // The two extracts the review found on Oakland Cemetery cards (F19), verbatim from prod.
 const GORDON =
@@ -61,5 +61,25 @@ describe("cleanExtract", () => {
       const t = cleanExtract(p.wikipedia.extract);
       expect(t, p.name).not.toMatch(/\(\d{4}-\d{2}-\d{2}\)|\(\s*;|\(\(|\(\s*\)| {2}/);
     }
+  });
+});
+
+describe("names (F20)", () => {
+  it("treats a QID-shaped or missing name as no name", () => {
+    for (const id of ["Q16162799", "Q1", " Q6986296 ", "", "  ", undefined, null]) expect(isQidName(id), String(id)).toBe(true);
+    for (const name of ["Margaret Mitchell", "Q", "Quincy Adams", "Q-ship captain", "Q1 Smith", "John Q. Public"]) expect(isQidName(name), name).toBe(false);
+  });
+
+  it("uses the English Wikipedia title, without a trailing disambiguator, when the label is a bare QID", () => {
+    expect(nameFromWikiTitle("Nedom L. Angier (politician)")).toBe("Nedom L. Angier");
+    expect(nameFromWikiTitle("Ira_O._McDaniel")).toBe("Ira O. McDaniel");
+    expect(nameFromWikiTitle("Bobby Jones (golfer)")).toBe("Bobby Jones");
+    expect(nameFromWikiTitle("Q42")).toBeNull();
+    expect(nameFromWikiTitle(null)).toBeNull();
+    expect(personName("Q6986296", "Nedom L. Angier")).toBe("Nedom L. Angier");
+    expect(personName("Q6986296", null)).toBeNull();
+    expect(personName("Margaret Mitchell", "Something else")).toBe("Margaret Mitchell");
+    // Only a trailing disambiguator goes; parentheses inside a title stay.
+    expect(nameFromWikiTitle("Jane (Jenny) Doe")).toBe("Jane (Jenny) Doe");
   });
 });

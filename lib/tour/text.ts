@@ -28,3 +28,30 @@ export function cleanExtract(text: string): string {
     .map((line) => line.trim())
     .join("\n");
 }
+
+// ---------------------------------------------------------------- names
+
+/**
+ * True when a "name" is really an ID, or missing. With no English label,
+ * Wikidata's label service answers with the QID ("Q16162799"): no name to
+ * carve on a card, put in a calendar or speak in the spirit box.
+ */
+export function isQidName(name: string | null | undefined): boolean {
+  return !name || !name.trim() || /^Q\d+$/.test(name.trim());
+}
+
+/** An English Wikipedia title as a name: "Nedom L. Angier (politician)" → "Nedom L. Angier". */
+export function nameFromWikiTitle(title: string | null | undefined): string | null {
+  const t = (title ?? "").replaceAll("_", " ").replace(/\s*\([^()]*\)\s*$/, "").trim();
+  return isQidName(t) ? null : t;
+}
+
+/**
+ * The name to show for a person: the Wikidata label, unless it's a bare QID;
+ * then the English Wikipedia title without its disambiguator; null when
+ * neither exists (the person leaves the list).
+ */
+export function personName(label: string | null | undefined, wikiTitle: string | null | undefined): string | null {
+  if (!isQidName(label)) return label!;
+  return nameFromWikiTitle(wikiTitle);
+}

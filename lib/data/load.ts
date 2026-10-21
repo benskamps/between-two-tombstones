@@ -8,9 +8,9 @@ import { asDataSourceError, DataSourceError, type DataSource } from "./errors";
 import { mergeOsm, type OsmCemetery } from "./overpass";
 import { savedSnapshot } from "./samples";
 import type { BurialsResponse, CemeterySearchResult, NearbyCemetery, NearResponse, SourceStatus } from "./types";
-import { cleanExtract } from "@/lib/tour/text";
+import { cleanExtract, personName } from "@/lib/tour/text";
 import { parsePoint } from "@/lib/types";
-import { burialsQuery, hasRealName, NEAR_RADIUS_KM, searchWithFallback, type PersonRow } from "./wikidata";
+import { burialsQuery, NEAR_RADIUS_KM, searchWithFallback, type PersonRow } from "./wikidata";
 import { BATCH_SIZE, titleFromUrl } from "./wikipedia";
 
 /** A sample cemetery falls back to its saved copy if live data takes longer than this. */
@@ -50,9 +50,11 @@ export function assembleSnapshot(
   extracts: Record<string, WikipediaSummary>,
   fetchedAt: string,
 ): CemeterySnapshot {
-  const people: Person[] = rows.map(({ person, enwiki }) => {
+  // Rows cached before the F20 fix can still carry a bare QID as the name: repair it from the article title, or drop the row.
+  const people: Person[] = rows.flatMap(({ person, enwiki }) => {
     const title = enwiki ? titleFromUrl(enwiki) : null;
-    return { ...person, wikipedia: title ? extracts[title] ?? null : null };
+    const name = personName(person.name, title);
+    return name ? [{ ...person, name, wikipedia: title ? extracts[title] ?? null : null }] : [];
   });
   return {
     cemetery,
@@ -158,22 +160,24 @@ function fromSaved(saved: CemeterySnapshot, err: DataSourceError): BurialsRespon
 }
 
 /**
- * Every person a tour gets has a real name (not a bare QID) and clean story
- * text, whichever cache entry or saved copy the data came from: parsing fixes
- * new data, but cached rows live up to 7 days and the saved copies are fixed.
+ * Every person a tour gets has a real name and clean story text, whichever
+ * cache entry or saved copy the data came from: parsing fixes new data, but
+ * cached rows live up to 7 days and the saved copies are fixed. A bare-QID
+ * name takes the English Wikipedia title (F20); with no article, the person
+ * is dropped.
  */
 export function tidyPeople<T extends { people: Person[] }>(data: T): T {
   let changed = false;
   const people = data.people.flatMap((p) => {
-    if (!hasRealName(p)) {
+    const name = personName(p.name, p.wikipedia?.title);
+    if (!name) {
       changed = true;
       return [];
     }
-    if (!p.wikipedia) return [p];
-    const extract = cleanExtract(p.wikipedia.extract);
-    if (extract === p.wikipedia.extract) return [p];
+    const extract = p.wikipedia ? cleanExtract(p.wikipedia.extract) : null;
+    if (name === p.name && (!p.wikipedia || extract === p.wikipedia.extract)) return [p];
     changed = true;
-    return [{ ...p, wikipedia: { ...p.wikipedia, extract } }];
+    return [{ ...p, name, wikipedia: p.wikipedia && { ...p.wikipedia, extract: extract! } }];
   });
   return changed ? { ...data, people } : data;
 }

@@ -98,6 +98,8 @@ test.describe("story text", () => {
     expect(texts.filter((t) => /\(\d{4}-\d{2}-\d{2}\)|\(\s*;|\(\(|\(\s*\)/.test(t))).toEqual([]);
     const names = await page.getByTestId("story-name").allInnerTexts();
     expect(names.filter((n) => /^Q\d+$/.test(n.trim()))).toEqual([]);
+    // No English label on Wikidata, so they're named by their Wikipedia articles (F20).
+    expect(names).toEqual(expect.arrayContaining(["Nedom L. Angier", "Ira O. McDaniel"]));
 
     // "aged N" never breaks across lines.
     const aged = card("Charles Collier").locator("span", { hasText: /aged 52/ });

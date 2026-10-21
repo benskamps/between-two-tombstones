@@ -16,7 +16,7 @@ const cached = vi.hoisted(() => ({
 }));
 vi.mock("./cached", () => cached);
 
-const { combineNear, loadCemetery, loadNearOsm, loadSearch, normalizeQuery, resetOsmCooldown } = await import("./load");
+const { combineNear, loadCemetery, loadNearOsm, loadSearch, normalizeQuery, resetOsmCooldown, tidyPeople } = await import("./load");
 
 const rows = parseBurialRows(flattenBindings(burialsJson));
 const facts = parseCemeteryFacts("Q2008469", flattenBindings(factsJson));
@@ -43,8 +43,8 @@ describe("loadCemetery", () => {
     expect(r.data.origin).toBe("live");
     expect(r.data.warnings).toEqual([]);
     expect(r.data.cemetery.name).toBe("Oakland Cemetery");
-    // 80 recorded rows minus the 2 whose only label is their QID (F20).
-    expect(r.data.people).toHaveLength(78);
+    // All 80 recorded rows: the 2 whose label is their QID are named from their articles (F20).
+    expect(r.data.people).toHaveLength(80);
     expect(r.data.people.find((p) => p.name === "Margaret Mitchell")?.wikipedia?.extract).toMatch(/^Margaret Munnerlyn Mitchell/);
     expect(r.data.sources.wikipedia.license).toBe("CC BY-SA 4.0");
     // One cached call per batch of at most 20 titles.
@@ -90,8 +90,8 @@ describe("loadCemetery", () => {
     expect(r.status).toBe("ok");
     if (r.status !== "ok") return;
     expect(r.data.origin).toBe("live");
-    // 80 recorded rows minus the 2 whose only label is their QID (F20).
-    expect(r.data.people).toHaveLength(78);
+    // All 80 recorded rows: the 2 whose label is their QID are named from their articles (F20).
+    expect(r.data.people).toHaveLength(80);
     expect(r.data.people.every((p) => p.wikipedia === null)).toBe(true);
     expect(r.data.warnings[0]).toMatchObject({ source: "Wikipedia", code: "stories-missing", message: expect.stringMatching(/^Couldn't load \d+ of \d+ stories from Wikipedia/) });
   });
@@ -131,10 +131,12 @@ describe("loadCemetery", () => {
     expect(r.data.warnings[0].message).toMatch(/^Wikipedia didn't answer for every story, so \d+ come from the copy saved on Oct 20, 2026\.$/);
   });
 
-  it("drops QID-named people and cleans story text from a cache entry written before the parse-time fixes", async () => {
+  it("repairs or drops QID-named people and cleans story text in a cache entry written before the parse-time fixes", async () => {
     const stale = [
       ...rows,
+      // Written by the old parser: a bare QID as the name. One has an article, one doesn't.
       { person: { ...rows[1].person, qid: "Q16162799", name: "Q16162799" }, enwiki: null },
+      { person: { ...rows[2].person, qid: "Q16162800", name: "Q16162800" }, enwiki: "https://en.wikipedia.org/wiki/Jane_Doe_(diarist)" },
     ];
     cached.cachedBurials.mockResolvedValue({ rows: stale, fetchedAt: "2026-10-20T02:15:00.000Z" });
     cached.cachedCemeteryFacts.mockResolvedValue({ ...facts!, qid: "Q872253" });
@@ -149,6 +151,8 @@ describe("loadCemetery", () => {
     const r = await loadCemetery("Q872253");
     if (r.status !== "ok") throw new Error("expected ok");
     expect(r.data.people.some((p) => p.qid === "Q16162799")).toBe(false);
+    expect(r.data.people.find((p) => p.qid === "Q16162800")?.name).toBe("Jane Doe");
+    expect(r.data.people.filter((p) => /^Q\d+$/.test(p.name))).toEqual([]);
     expect(r.data.people.find((p) => p.name === "John B. Gordon")?.wikipedia?.extract).toBe(
       "John Brown Gordon (February 6, 1832 – January 9, 1904) was a general.",
     );
@@ -159,10 +163,19 @@ describe("loadCemetery", () => {
     const r = await loadCemetery("Q2008469");
     if (r.status !== "ok") throw new Error("expected ok");
     expect(r.data.origin).toBe("saved");
-    // The committed snapshot has two QID-only names (Q6986296, Q6066179); neither reaches the tour.
+    // The committed snapshot names two people by their QID; both have articles, so both come back named.
+    expect(r.data.people).toHaveLength(80);
     expect(r.data.people.filter((p) => /^Q\d+$/.test(p.name))).toEqual([]);
+    expect(r.data.people.find((p) => p.qid === "Q6986296")?.name).toBe("Nedom L. Angier");
+    expect(r.data.people.find((p) => p.qid === "Q6066179")?.name).toBe("Ira O. McDaniel");
     expect(r.data.people.find((p) => p.name === "John B. Gordon")?.wikipedia?.extract).toMatch(/^John Brown Gordon \(February 6, 1832 – /);
     expect(r.data.people.find((p) => p.name === "Charles Collier")?.wikipedia?.extract).toMatch(/^Charles Augustus Collier \(July 19, 1848 – /);
+  });
+
+  it("tidyPeople drops a bare-QID person whose story didn't load (no title to name them by)", () => {
+    const p = { ...rows[0].person, qid: "Q1", name: "Q1", wikipedia: null };
+    const named = { ...rows[1].person, wikipedia: null };
+    expect(tidyPeople({ people: [p, named] }).people).toEqual([named]);
   });
 
   it("a request that lands while the same cemetery is loading joins that load (one set of Wikimedia calls)", async () => {

@@ -62,8 +62,9 @@ function longDead(p: Person): boolean {
 
 function expectedUids(snap: CemeterySnapshot, kinds: ("death" | "birth")[], limit: number): string[] {
   const has = (p: Person, k: "death" | "birth") => (k === "death" ? p.deathPrecision : p.birthPrecision) === 11;
-  // The data layer drops people whose only label is their QID (F20): the snapshot has two at Oakland.
-  const named = (p: Person) => !/^Q\d+$/.test(p.name.trim());
+  // F20: a bare-QID name takes the Wikipedia title; only someone with neither is left out.
+  // (Oakland's snapshot has two bare-QID names, Q6986296 and Q6066179; both have articles, so both stay.)
+  const named = (p: Person) => !/^Q\d+$/.test(p.name.trim()) || Boolean(p.wikipedia?.title);
   const chosen = snap.people
     .filter((p) => named(p) && longDead(p) && kinds.some((k) => has(p, k)))
     .sort((a, b) => b.sitelinks - a.sitelinks || Number(a.qid.slice(1)) - Number(b.qid.slice(1)))
