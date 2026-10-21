@@ -2,6 +2,7 @@
 // (GET /api/cemeteries/[qid]/burials, a CemeterySnapshot) and falls back to the
 // saved copy bundled with the app for the sample cemeteries.
 
+import { personName } from "../tour/text";
 import type { SpiritPerson } from "./wordbank";
 
 export type SampleCemetery = {
@@ -32,12 +33,17 @@ function str(v: unknown): string | null {
   return typeof v === "string" ? v : null;
 }
 
-/** Pull only the fields the spirit box needs, checking each one. */
+/**
+ * Pull only the fields the spirit box needs, checking each one. The spirit box
+ * never speaks an ID: a bare-QID name (no English label on Wikidata) takes the
+ * English Wikipedia title, as the tour does, or the person is left out.
+ */
 export function toSpiritPerson(raw: unknown): SpiritPerson | null {
   if (!raw || typeof raw !== "object") return null;
   const r = raw as Record<string, unknown>;
   const qid = str(r.qid);
-  const name = str(r.name);
+  const wikipedia = r.wikipedia && typeof r.wikipedia === "object" ? (r.wikipedia as Record<string, unknown>) : null;
+  const name = personName(str(r.name), str(wikipedia?.title));
   if (!qid || !name) return null;
   return {
     qid,
