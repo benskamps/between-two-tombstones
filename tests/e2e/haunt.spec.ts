@@ -124,31 +124,37 @@ test.describe("home", () => {
     await expect(page).toHaveURL(/\/$/);
   });
 
-  test("“I’m here. Haunt me.” opens the nearby list with the fix and its accuracy (F17)", async ({ page, context }) => {
-    await context.grantPermissions(["geolocation"]);
-    await context.setGeolocation({ latitude: 33.7487, longitude: -84.3713, accuracy: 35 });
-    // Only the hand-off matters here; the list itself is the data lane's.
-    await page.route("**/near?**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<p>near</p>" }));
-    await page.goto("/", { waitUntil: "networkidle" });
-    await page.getByRole("button", { name: HAUNT_ME }).click();
-    await expect(page).toHaveURL(/\/near\?lat=33\.7487\d*&lon=-84\.3713\d*&acc=35$/);
-  });
+  // These two mock /near to test only the hand-off. A request that goes through the
+  // service worker (home registers it, F16) skips page.route, so block it here.
+  test.describe("hand-off to /near", () => {
+    test.use({ serviceWorkers: "block" });
 
-  test("a tap before React hydrates still goes to the nearby list (F5)", async ({ page, context }) => {
-    await context.grantPermissions(["geolocation"]);
-    await context.setGeolocation({ latitude: 33.7487, longitude: -84.3713, accuracy: 12 });
-    await page.route("**/near?**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<p>near</p>" }));
-    // Hold every script chunk back (not the CSS), so the button is painted long before React owns it.
-    await page.route((url) => url.pathname.startsWith("/_next/static/chunks/") && url.pathname.endsWith(".js"), async (route) => {
-      await new Promise((r) => setTimeout(r, 6000));
-      await route.continue().catch(() => {});
+    test("“I’m here. Haunt me.” opens the nearby list with the fix and its accuracy (F17)", async ({ page, context }) => {
+      await context.grantPermissions(["geolocation"]);
+      await context.setGeolocation({ latitude: 33.7487, longitude: -84.3713, accuracy: 35 });
+      // Only the hand-off matters here; the list itself is the data lane's.
+      await page.route("**/near?**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<p>near</p>" }));
+      await page.goto("/", { waitUntil: "networkidle" });
+      await page.getByRole("button", { name: HAUNT_ME }).click();
+      await expect(page).toHaveURL(/\/near\?lat=33\.7487\d*&lon=-84\.3713\d*&acc=35$/);
     });
-    await page.goto("/", { waitUntil: "commit" });
-    const button = page.getByRole("button", { name: HAUNT_ME });
-    await expect(button).toBeVisible();
-    await expect(button).not.toHaveAttribute("data-ready", "");
-    await button.click();
-    await expect(page).toHaveURL(/\/near\?lat=33\.7487\d*&lon=-84\.3713\d*&acc=12$/, { timeout: 5000 });
+
+    test("a tap before React hydrates still goes to the nearby list (F5)", async ({ page, context }) => {
+      await context.grantPermissions(["geolocation"]);
+      await context.setGeolocation({ latitude: 33.7487, longitude: -84.3713, accuracy: 12 });
+      await page.route("**/near?**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<p>near</p>" }));
+      // Hold every script chunk back (not the CSS), so the button is painted long before React owns it.
+      await page.route((url) => url.pathname.startsWith("/_next/static/chunks/") && url.pathname.endsWith(".js"), async (route) => {
+        await new Promise((r) => setTimeout(r, 6000));
+        await route.continue().catch(() => {});
+      });
+      await page.goto("/", { waitUntil: "commit" });
+      const button = page.getByRole("button", { name: HAUNT_ME });
+      await expect(button).toBeVisible();
+      await expect(button).not.toHaveAttribute("data-ready", "");
+      await button.click();
+      await expect(page).toHaveURL(/\/near\?lat=33\.7487\d*&lon=-84\.3713\d*&acc=12$/, { timeout: 5000 });
+    });
   });
 
   test("with no signal, the button says so and points at the saved tours (F16)", async ({ page, context }) => {

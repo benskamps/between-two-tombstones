@@ -12,6 +12,7 @@ import {
   slotStart,
 } from "../../lib/spirit/seance";
 import type { CemeterySnapshot } from "../../lib/types";
+import { toSpiritPerson } from "../../lib/spirit/load";
 import { buildWordBank, type SpiritPerson } from "../../lib/spirit/wordbank";
 
 // Lane 9: séance mode. Several browser contexts stand in for phones. Each one's
@@ -31,7 +32,10 @@ const MISMATCH = "Your copy of the names differs from the host’s, so some voic
 const oakland = JSON.parse(
   readFileSync(join(__dirname, "../../data/snapshots/oakland-atlanta.json"), "utf8"),
 ) as CemeterySnapshot;
-const oaklandBank = canonicalBank(buildWordBank(oakland.people as SpiritPerson[]));
+// The same normalization the app applies to its saved copy (lib/spirit/samples.ts):
+// a bare-QID label takes the Wikipedia title, so the bank matches what phones build.
+const oaklandPeople = oakland.people.map(toSpiritPerson).filter((p): p is SpiritPerson => p !== null);
+const oaklandBank = canonicalBank(buildWordBank(oaklandPeople));
 const OAKLAND_HASH = bankHash(oaklandBank);
 
 type Spoken = { text: string; event: string | null; real: number; rate: number; pitch: number };
