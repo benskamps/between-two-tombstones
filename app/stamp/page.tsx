@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { HauntGate } from "@/components/haunt/HauntGate";
+import { GateNeutral } from "@/components/haunt/PickHauntFirst";
 import { StampKit } from "@/components/stamp/StampKit";
 
 export const metadata: Metadata = {
@@ -17,7 +20,12 @@ export default function StampPage() {
           down; this one only needs a photo.
         </p>
       </header>
-      <StampKit />
+      {/* Opens once you have a haunt (or the link names a cemetery); the haunt lives on the phone. */}
+      <Suspense fallback={<GateNeutral />}>
+        <HauntGate tool="Stamp Kit">
+          <StampKit />
+        </HauntGate>
+      </Suspense>
     </div>
   );
 }

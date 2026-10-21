@@ -10,6 +10,8 @@ import {
   startNoise,
   type NoiseEngine,
 } from "@/lib/spirit/engine";
+import { getHaunt, setHaunt } from "@/lib/haunt/store";
+import { useHaunt } from "@/lib/haunt/useHaunt";
 import { QID_RE, loadCemetery, type LoadResult, type SampleCemetery } from "@/lib/spirit/load";
 import { capsFromParam, createSession, formatDuration, stopMessage, type SpiritSession, type Utterance } from "@/lib/spirit/session";
 import { pickVoice, silenceVoices, speakFragment, speechAvailable } from "@/lib/spirit/voice";
@@ -29,11 +31,14 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
   const params = useSearchParams();
   const rawTour = params.get("cemetery");
   const tourQid = rawTour && QID_RE.test(rawTour) ? rawTour : null;
-  const tourIsSample = tourQid !== null && samples.some((s) => s.qid === tourQid);
+  // The cemetery in the link wins; otherwise the haunt (decision 18e); the first sample only as a last resort.
+  const haunt = useHaunt();
+  const extraQid = tourQid ?? haunt?.qid ?? null;
+  const extraIsSample = extraQid !== null && samples.some((s) => s.qid === extraQid);
   const { caps, test } = capsFromParam(params.get("test-caps"));
   const canSpeak = useSyncExternalStore(subscribeNothing, speechAvailable, () => true);
 
-  const [choice, setChoice] = useState<string>(tourQid ?? samples[0].qid);
+  const [choice, setChoice] = useState<string>(extraQid ?? samples[0].qid);
   const [results, setResults] = useState<Record<string, LoadResult>>({});
   const [running, setRunning] = useState(false);
   const [log, setLog] = useState<Utterance[]>([]);
@@ -56,6 +61,14 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
     });
     return () => ctrl.abort();
   }, [choice, samples]);
+
+  // A cemetery from the link becomes the haunt once its burials load (then its name is known),
+  // unless it already is (the gate may have set it with its place from ?name=&place=).
+  const tourResult = tourQid ? results[tourQid] : undefined;
+  const tourName = tourResult?.ok ? tourResult.cemetery.name : null;
+  useEffect(() => {
+    if (tourQid && tourName && getHaunt()?.qid !== tourQid) setHaunt({ qid: tourQid, name: tourName });
+  }, [tourQid, tourName]);
 
   // "/spirit?cemetery=Q…#seance" (e.g. from a tour) lands on the séance section, which renders after hydration.
   useEffect(() => {
@@ -154,12 +167,16 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
 
   const options = [
     ...samples.map((s) => ({ qid: s.qid, label: s.name, detail: s.place })),
-    ...(tourQid && !tourIsSample
+    ...(extraQid && !extraIsSample
       ? [
           {
-            qid: tourQid,
-            label: "The cemetery from your last tour",
-            detail: results[tourQid]?.ok ? (results[tourQid] as Extract<LoadResult, { ok: true }>).cemetery.name : tourQid,
+            qid: extraQid,
+            label: "Your haunt",
+            detail: results[extraQid]?.ok
+              ? (results[extraQid] as Extract<LoadResult, { ok: true }>).cemetery.name
+              : extraQid === haunt?.qid
+                ? haunt.name
+                : extraQid,
           },
         ]
       : []),

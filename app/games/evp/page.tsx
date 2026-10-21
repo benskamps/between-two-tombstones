@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { EvpRecorder } from "@/components/games/EvpRecorder";
+import { HauntGate } from "@/components/haunt/HauntGate";
 
 export const metadata: Metadata = {
   title: "EVP Recorder",
@@ -18,7 +19,9 @@ export default function EvpPage() {
         </p>
       </header>
       <Suspense fallback={<p className="text-muted">Checking for a microphone&hellip;</p>}>
-        <EvpRecorder />
+        <HauntGate tool="EVP Recorder">
+          <EvpRecorder />
+        </HauntGate>
       </Suspense>
     </div>
   );

@@ -1,6 +1,8 @@
-import Link from "next/link";
 import type { Cemetery } from "@/lib/types";
 import { findAGraveCemeteryUrl, httpsUrl } from "@/lib/tour/links";
+
+// "Start a séance here" and "Haunt my calendar" moved into the haunt's toolkit
+// (components/haunt/HauntToolkit.tsx), with the other tools for this cemetery.
 
 /** Matches BURIALS_LIMIT in lib/data/wikidata.ts (kept literal so no server code ships to the browser). */
 const BURIALS_CAP = 80;
@@ -34,22 +36,6 @@ export function TourHeader({ cemetery, people }: { cemetery: Cemetery; people: n
           </a>
         )}
       </p>
-      {people > 0 && (
-        <div className="flex flex-wrap gap-2 pt-1">
-          <Link
-            href={`/spirit?cemetery=${cemetery.qid}#seance`}
-            className="tap inline-flex items-center rounded-xl border border-border bg-surface px-4 font-bold"
-          >
-            Start a séance here
-          </Link>
-          <Link
-            href={`/calendar?${new URLSearchParams({ cemetery: cemetery.qid, name: cemetery.name, ...(cemetery.locatedIn ? { place: cemetery.locatedIn } : {}) })}`}
-            className="tap inline-flex items-center rounded-xl border border-border bg-surface px-4 font-bold"
-          >
-            Haunt my calendar
-          </Link>
-        </div>
-      )}
     </header>
   );
 }

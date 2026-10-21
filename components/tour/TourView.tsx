@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { HauntToolkit } from "@/components/haunt/HauntToolkit";
 import { DownloadTourButton } from "@/components/offline/DownloadTourButton";
 import { useOnline, useWakeLock, useWatchPosition } from "@/components/offline/hooks";
 import { getPins, getSavedTour, type Pin } from "@/components/offline/store";
 import type { DataSource } from "@/lib/data/errors";
 import type { BurialsResponse } from "@/lib/data/types";
+import { useSetHaunt } from "@/lib/haunt/useHaunt";
 import { buildStops, canRoute, locatedGraves, MIN_ROUTE_STOPS, MODES, PAGE_SIZE, type Mode } from "@/lib/tour/modes";
 import { distanceM } from "@/lib/tour/route";
 import { rankPeople } from "@/lib/tour/score";
@@ -62,6 +64,9 @@ export function TourView({ qid, initial, error, fallback }: Props) {
     };
   }, [qid, initial]);
 
+  // Opening a cemetery makes it your haunt (decision 18e), live or from the saved copy.
+  useSetHaunt(data ? { qid: data.cemetery.qid, name: data.cemetery.name, place: data.cemetery.locatedIn } : null);
+
   const wakeLockHeld = useWakeLock(true);
   const { position, first, error: positionError, reset } = useWatchPosition(walking);
 
@@ -113,6 +118,8 @@ export function TourView({ qid, initial, error, fallback }: Props) {
           ))}
         </div>
       )}
+
+      <HauntToolkit cemetery={data.cemetery} people={data.people.length} />
 
       <DownloadTourButton data={data} />
 

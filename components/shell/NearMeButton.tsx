@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 const ERRORS: Record<number, string> = {
   1: "Location is turned off for this site. Allow it in your browser settings, or search by name below.",
@@ -9,9 +9,13 @@ const ERRORS: Record<number, string> = {
   3: "Finding your location took too long. Try again, or search by name below.",
 };
 
-/** Asks for location only when tapped, then opens the nearby list. */
-export function NearMeButton() {
+/**
+ * Asks for location only when tapped (never on load), then opens the nearby
+ * list. Every failure says so and points at the name search below it.
+ */
+export function NearMeButton({ label = "Find cemeteries near me", hint }: { label?: string; hint?: string }) {
   const router = useRouter();
+  const hintId = useId();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,10 +46,16 @@ export function NearMeButton() {
         type="button"
         onClick={locate}
         disabled={busy}
-        className="tap w-full rounded-xl bg-accent px-5 py-3 text-lg font-bold text-accent-ink disabled:opacity-70"
+        aria-describedby={hint ? hintId : undefined}
+        className="btn btn-primary btn-lg w-full"
       >
-        {busy ? "Finding you…" : "Find cemeteries near me"}
+        {busy ? "Finding you…" : label}
       </button>
+      {hint && (
+        <p id={hintId} className="mt-1.5 text-center text-sm text-muted">
+          {hint}
+        </p>
+      )}
       {error && (
         <p role="alert" className="mt-2 text-danger">
           {error}
