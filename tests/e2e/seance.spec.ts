@@ -289,13 +289,16 @@ test.describe("séance", () => {
         const k = Math.floor(step / STEPS_PER_SLOT);
         return planSlot({ room: code, cemetery: OAKLAND }, oaklandBank, k).bands[step - k * STEPS_PER_SLOT].frequency;
       };
+      // How far this phone's synced clock runs ahead of true time, read off its spoken slots (the check above
+      // allows up to 150 ms). Against prod on 10/21, B ran 53 ms ahead.
+      const ahead = Math.max(0, -Math.min(...(p === pa ? lateA : lateB)));
       let matched = 0;
       const misses: string[] = [];
       for (const b of bands) {
-        // Timed ticks land a few ms after a step boundary, or a hair early if the synced clock runs a
-        // little fast (hence the +50 ms candidate); the very first step happens at the tap, anywhere in a step.
+        // Timed ticks land a few ms after a step boundary, or early by as much as the synced clock runs
+        // ahead (hence the nudged candidate); the very first step happens at the tap, anywhere in a step.
         const step = Math.floor((b.real - SEANCE_EPOCH_MS) / STEP_MS);
-        const nudged = Math.floor((b.real - SEANCE_EPOCH_MS + 50) / STEP_MS);
+        const nudged = Math.floor((b.real - SEANCE_EPOCH_MS + ahead + 50) / STEP_MS);
         if ([step, nudged].some((s) => Math.abs(b.hz - bandAt(s)) < 0.01)) matched += 1;
         else misses.push(`${b.hz.toFixed(1)} Hz at +${((b.real - SEANCE_EPOCH_MS) % STEP_MS).toFixed(0)} ms into step ${step}`);
       }

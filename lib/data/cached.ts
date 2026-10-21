@@ -42,11 +42,18 @@ export async function cachedNearby(lat: number, lon: number): Promise<NearbyCeme
   return fetchNearby(lat, lon);
 }
 
-/** One search query. The "<q> cemetery" widening runs outside the cache (lib/data/load.ts), one entry per query. */
+/**
+ * One search query. The "<q> cemetery" widening runs outside the cache (lib/data/load.ts), one entry per query.
+ * No matches are kept for minutes, not weeks: the search runs through WDQS's MWAPI service, which can answer
+ * 200 with no rows when its own call to the Wikidata API fails. On 10/21, during a WDQS outage, prod kept an
+ * empty "oakland cemetery" here.
+ */
 export async function cachedSearch(q: string): Promise<CemeterySearchResult[]> {
   "use cache: remote";
-  cacheLife("weeks");
-  return fetchSearchOnce(q);
+  const results = await fetchSearchOnce(q);
+  if (results.length > 0) cacheLife("weeks");
+  else cacheLife("minutes");
+  return results;
 }
 
 export async function cachedOsm(lat: number, lon: number, radiusKm: number): Promise<{ mirror: string; cemeteries: OsmCemetery[] }> {

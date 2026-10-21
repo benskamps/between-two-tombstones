@@ -222,7 +222,11 @@ test.describe("share images", () => {
       expect(og.status()).toBe(200);
       expect(og.headers()["content-type"]).toBe("image/png");
       expect(await pngSize(og)).toEqual({ width: 1200, height: 630 });
-      expect(og.headers()["cache-control"]).toContain("s-maxage=86400");
+      // A full card, not the stand-in. Vercel's CDN keeps s-maxage for itself and strips it from what it
+      // sends on; `next start` sends the header as written.
+      const cacheControl = og.headers()["cache-control"];
+      expect(cacheControl).toMatch(/(^|[\s,])max-age=3600\b/);
+      if (!og.headers()["x-vercel-cache"]) expect(cacheControl).toContain("s-maxage=86400");
       const story = await request.get(`${base}/story-image`);
       expect(story.status()).toBe(200);
       expect(story.headers()["content-type"]).toBe("image/png");
