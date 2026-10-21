@@ -13,9 +13,11 @@ import {
   type StampSettings,
   type StampText,
 } from "@/lib/stamp/types";
+import { ReadoutStrip } from "@/components/ui/Instrument";
+import { StepHeading } from "@/components/ui/Motifs";
 import { CornerFramer } from "./CornerFramer";
 import { ReadWithClaude } from "./ReadWithClaude";
-import { RENDER_LABELS, StampPreviews, type PreviewUrls } from "./StampPreviews";
+import { EmptySpecimens, RENDER_LABELS, StampPreviews, type PreviewUrls } from "./StampPreviews";
 import { StampClient, stampKitSupported, type RenderResult } from "./stampClient";
 
 /** Photos are downsized to this long side on the phone before anything else happens. */
@@ -105,7 +107,12 @@ export function StampKit() {
     blobsRef.current = { rubbing: r.rubbing, ink: r.ink, postage: r.postage };
     setUrls(next);
     const timings = Object.fromEntries(Object.entries(r.timings).map(([k, v]) => [k, Math.round(v)]));
-    setLast({ ms: Math.round(r.timings.total), maskPixels: r.stats.maskPixels, job: r.job, timings: JSON.stringify(timings) });
+    setLast({
+      ms: Math.round(r.timings.total),
+      maskPixels: r.stats.maskPixels,
+      job: r.job,
+      timings: JSON.stringify(timings),
+    });
     if (prev) setTimeout(() => Object.values(prev).forEach((x) => URL.revokeObjectURL(x)), 1000);
   }, []);
 
@@ -114,28 +121,31 @@ export function StampKit() {
     const client = clientRef.current;
     if (!photo || !corners || !cornersOk || !client) return;
     let stale = false;
-    const timer = setTimeout(async () => {
-      setBusy(true);
-      setError(null);
-      setStatus("Making your stamps…");
-      try {
-        const r = await client.render(corners, settings, text);
-        if (stale || !r) return;
-        applyRender(r);
-        setBusy(false);
-        const secs = (r.timings.total / 1000).toFixed(1);
-        setStatus(
-          r.stats.maskPixels > 0
-            ? `Stamps ready in ${secs} s.`
-            : `Stamps ready in ${secs} s, but no carving was found. Try “Light letters” or “Both edges”, lower the grit, or tighten the corners.`,
-        );
-      } catch (err) {
-        if (stale) return;
-        setBusy(false);
-        setError(err instanceof Error ? err.message : "Couldn't make the stamps.");
-      }
-      // The first render for a photo goes straight away; later ones wait for a pause in dragging or typing.
-    }, urlsRef.current ? DEBOUNCE_MS : 0);
+    const timer = setTimeout(
+      async () => {
+        setBusy(true);
+        setError(null);
+        setStatus("Making your stamps…");
+        try {
+          const r = await client.render(corners, settings, text);
+          if (stale || !r) return;
+          applyRender(r);
+          setBusy(false);
+          const secs = (r.timings.total / 1000).toFixed(1);
+          setStatus(
+            r.stats.maskPixels > 0
+              ? `Stamps ready in ${secs} s.`
+              : `Stamps ready in ${secs} s, but no carving was found. Try “Light letters” or “Both edges”, lower the grit, or tighten the corners.`,
+          );
+        } catch (err) {
+          if (stale) return;
+          setBusy(false);
+          setError(err instanceof Error ? err.message : "Couldn't make the stamps.");
+        }
+        // The first render for a photo goes straight away; later ones wait for a pause in dragging or typing.
+      },
+      urlsRef.current ? DEBOUNCE_MS : 0,
+    );
     return () => {
       stale = true;
       clearTimeout(timer);
@@ -255,21 +265,30 @@ export function StampKit() {
     return client.readImages(corners);
   }, [corners]);
 
-  const sectionClass = "space-y-3 rounded-xl border border-border bg-surface p-4";
+  const strokeLabel = settings.stroke > 0 ? `+${settings.stroke}` : String(settings.stroke);
 
   return (
     <div className="space-y-6">
-      <section aria-labelledby="step-photo" className={sectionClass}>
-        <h2 id="step-photo" className="font-display text-2xl">
-          1. Take or choose a photo
-        </h2>
-        <p className="text-muted">
-          Stand square to the stone, fill the frame with its face, and avoid your own shadow. The photo stays on your
-          phone.
-        </p>
+      <section aria-labelledby="step-photo" className="darkroom-easel bezel space-y-4">
+        <StepHeading n={1} id="step-photo">
+          Take or choose a photo
+        </StepHeading>
+        {!photo && (
+          <div className="darkroom-mat">
+            <EmptyStage />
+          </div>
+        )}
+        {!photo && (
+          <p className="text-muted">
+            Stand square to the stone, fill the frame with its face, and avoid your own shadow. The photo stays on your
+            phone.
+          </p>
+        )}
         <label
           htmlFor="stamp-photo"
-          className="tap flex w-full cursor-pointer items-center justify-center rounded-xl bg-accent px-5 py-3 text-lg font-bold text-accent-ink focus-within:outline focus-within:outline-3 focus-within:outline-[var(--focus)]"
+          className={`btn w-full cursor-pointer focus-within:outline focus-within:outline-3 focus-within:outline-[var(--focus)] ${
+            photo ? "btn-ghost" : "btn-primary btn-lg"
+          }`}
         >
           {opening ? "Opening…" : photo ? "Use a different photo" : "Take or choose a photo"}
           <input
@@ -284,11 +303,23 @@ export function StampKit() {
         </label>
       </section>
 
+      {!photo && (
+        <section aria-labelledby="what-you-get" className="space-y-3">
+          <h2 id="what-you-get" className="font-display text-2xl">
+            What your photo becomes
+          </h2>
+          <EmptySpecimens />
+          <p className="text-muted">
+            They appear here as you frame the stone. The postage stamp&rsquo;s value is the age at death.
+          </p>
+        </section>
+      )}
+
       <p className="sr-only" role="status" aria-live="polite" data-testid="stamp-status">
         {status}
       </p>
       {status && (
-        <p aria-hidden="true" className="rounded-lg bg-surface-2 px-3 py-2 text-sm">
+        <p aria-hidden="true" className="rounded-lg bg-surface-2 px-3 py-2 text-[0.9375rem]">
           {status}
         </p>
       )}
@@ -306,39 +337,47 @@ export function StampKit() {
 
       {photo && corners && (
         <>
-          <section aria-labelledby="step-frame" className={sectionClass}>
-            <div className="flex items-center justify-between gap-2">
-              <h2 id="step-frame" className="font-display text-2xl">
-                2. Frame the stone
-              </h2>
-              <button
-                type="button"
-                onClick={() => setCorners(defaultQuad(photo.width, photo.height))}
-                className="tap rounded-lg border border-border px-3 text-sm font-bold"
-              >
-                Reset corners
-              </button>
-            </div>
-            <CornerFramer bitmap={photo.bitmap} corners={corners} onChange={setCorners} />
+          <section aria-labelledby="step-frame" className="darkroom-easel bezel space-y-3">
+            <StepHeading n={2} id="step-frame">
+              Frame the stone
+            </StepHeading>
+            <CornerFramer bitmap={photo.bitmap} corners={corners} onChange={setCorners} matClassName="darkroom-mat" />
             {!cornersOk && (
               <p role="alert" className="text-danger">
                 The corners cross over. Drag them back onto the stone&rsquo;s four corners, clockwise from top-left.
               </p>
             )}
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={() => setCorners(defaultQuad(photo.width, photo.height))}
+                className="btn btn-ghost px-4 text-sm"
+              >
+                Reset corners
+              </button>
+            </div>
           </section>
 
-          <section aria-labelledby="step-lift" className={sectionClass}>
-            <h2 id="step-lift" className="font-display text-2xl">
-              3. Lift the carving
-            </h2>
+          <section aria-labelledby="step-lift" className="darkroom-easel bezel space-y-4">
+            <StepHeading n={3} id="step-lift">
+              Lift the carving
+            </StepHeading>
+            {/* The settings as a readout; the same facts are in the labels below. */}
+            <ReadoutStrip
+              testId="stamp-readouts"
+              tone="candle"
+              live={busy}
+              status={busy ? "Developing" : last ? "Ready" : "Standby"}
+              values={[{ value: settings.mode }, { label: "Grit", value: String(settings.grit) }]}
+            />
             <fieldset className="space-y-2">
               <legend className="font-bold">What to lift</legend>
               <div className="grid gap-2 sm:grid-cols-3">
                 {MODES.map((m) => (
                   <label
                     key={m.value}
-                    className={`tap flex cursor-pointer items-start gap-3 rounded-lg border p-3 ${
-                      settings.mode === m.value ? "border-accent bg-surface-2" : "border-border"
+                    className={`tap flex cursor-pointer items-start gap-3 rounded-xl border p-3 ${
+                      settings.mode === m.value ? "border-accent bg-surface-2" : "border-border bg-surface"
                     }`}
                   >
                     <input
@@ -370,12 +409,12 @@ export function StampKit() {
                   step={5}
                   value={settings.grit}
                   onChange={(e) => setSettings((s) => ({ ...s, grit: Number(e.target.value) }))}
-                  className="tap w-full accent-[var(--accent)]"
+                  className="knob"
                 />
               </div>
               <div>
                 <label htmlFor="stroke" className="block font-bold">
-                  Stroke weight: {settings.stroke > 0 ? `+${settings.stroke}` : settings.stroke}
+                  Stroke weight: {strokeLabel}
                 </label>
                 <input
                   id="stroke"
@@ -390,7 +429,7 @@ export function StampKit() {
                       : `${Math.abs(settings.stroke)} px ${settings.stroke > 0 ? "thicker" : "thinner"}`
                   }
                   onChange={(e) => setSettings((s) => ({ ...s, stroke: Number(e.target.value) }))}
-                  className="tap w-full accent-[var(--accent)]"
+                  className="knob"
                 />
               </div>
             </div>
@@ -405,11 +444,11 @@ export function StampKit() {
             />
           </section>
 
-          <section aria-labelledby="step-share" className={sectionClass}>
-            <h2 id="step-share" className="font-display text-2xl">
-              4. Add words, then save or share
-            </h2>
-            <p className="text-sm text-muted">
+          <section aria-labelledby="step-share" className="darkroom-easel bezel space-y-3">
+            <StepHeading n={4} id="step-share">
+              Add words, then save or share
+            </StepHeading>
+            <p className="text-muted">
               Optional. The name heads the ink stamp and the kit sheet; the age at death is the postage stamp&rsquo;s
               value.
             </p>
@@ -424,7 +463,7 @@ export function StampKit() {
                   onChange={(e) => setName(e.target.value)}
                   autoComplete="off"
                   maxLength={60}
-                  className="tap w-full rounded-lg border border-border bg-bg px-3"
+                  className="field mt-1 w-full"
                 />
               </div>
               <div>
@@ -438,7 +477,7 @@ export function StampKit() {
                   placeholder="e.g. April 3, 1783"
                   autoComplete="off"
                   maxLength={40}
-                  className="tap w-full rounded-lg border border-border bg-bg px-3"
+                  className="field mt-1 w-full"
                 />
               </div>
               <div>
@@ -452,7 +491,7 @@ export function StampKit() {
                   placeholder="e.g. November 28, 1859"
                   autoComplete="off"
                   maxLength={40}
-                  className="tap w-full rounded-lg border border-border bg-bg px-3"
+                  className="field mt-1 w-full"
                 />
               </div>
               <div>
@@ -471,27 +510,22 @@ export function StampKit() {
                     setAgeInput(e.target.value);
                   }}
                   aria-describedby="stamp-age-hint"
-                  className="tap w-full rounded-lg border border-border bg-bg px-3"
+                  className="field mt-1 w-full"
                 />
-                <p id="stamp-age-hint" className="text-sm text-muted">
+                <p id="stamp-age-hint" className="mt-1 text-sm text-muted">
                   {ageTouched ? "Your number." : "Filled in from the two years; change it if you know better."}
                 </p>
               </div>
             </div>
             <div className="grid gap-2 sm:grid-cols-3">
-              <button
-                type="button"
-                onClick={share}
-                disabled={!urls || saving}
-                className="tap rounded-xl bg-accent px-4 font-bold text-accent-ink disabled:opacity-60"
-              >
+              <button type="button" onClick={share} disabled={!urls || saving} className="btn btn-primary btn-lg">
                 Share
               </button>
               <button
                 type="button"
                 onClick={() => saveKit("sheet")}
                 disabled={!urls || saving}
-                className="tap rounded-xl border border-border px-4 font-bold disabled:opacity-60"
+                className="btn btn-ghost"
               >
                 Save kit sheet
               </button>
@@ -499,14 +533,14 @@ export function StampKit() {
                 type="button"
                 onClick={() => saveKit("story")}
                 disabled={!urls || saving}
-                className="tap rounded-xl border border-border px-4 font-bold disabled:opacity-60"
+                className="btn btn-ghost"
               >
                 Save story size
               </button>
             </div>
           </section>
 
-          <section aria-labelledby="step-read" className={sectionClass}>
+          <section aria-labelledby="step-read" className="darkroom-easel bezel space-y-3">
             <h2 id="step-read" className="font-display text-2xl">
               Can&rsquo;t make out the words?
             </h2>
@@ -515,5 +549,38 @@ export function StampKit() {
         </>
       )}
     </div>
+  );
+}
+
+/** The empty easel: a stone drawn in dashes, with the four corner handles you'll drag onto it. */
+function EmptyStage() {
+  const corners = [
+    [62, 34],
+    [138, 34],
+    [146, 126],
+    [54, 126],
+  ];
+  return (
+    <svg viewBox="0 0 200 140" className="darkroom-empty-stage" aria-hidden="true" focusable="false">
+      <path
+        d="M62 126V58c0-22 17-36 38-36s38 14 38 36v68Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        strokeDasharray="5 5"
+      />
+      <path d="M78 66h44M74 80h52M80 94h40" fill="none" stroke="currentColor" strokeWidth={1.5} opacity={0.5} />
+      <polygon
+        points={corners.map((c) => c.join(",")).join(" ")}
+        fill="none"
+        className="stroke-mauve"
+        strokeWidth={1.5}
+        opacity={0.8}
+      />
+      {corners.map(([x, y]) => (
+        <circle key={`${x}-${y}`} cx={x} cy={y} r={5} className="fill-mauve stroke-bg" strokeWidth={2} />
+      ))}
+      <path d="M40 130h120" stroke="currentColor" strokeWidth={1.5} opacity={0.5} />
+    </svg>
   );
 }

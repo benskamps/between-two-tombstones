@@ -1,6 +1,6 @@
 # Between Two Tombstones
 
-**Macy's Graveyard Companion.** At any cemetery, it finds the graves with the most interesting stories, walks you through them as a tour, and tells you how those people lived.
+At any cemetery, Between Two Tombstones finds the graves with the most interesting stories, walks you through them as a tour, and tells you how those people lived.
 
 Built solo for [Hackyard](https://hackyard.tech) Yard #5, theme "Haunted", Oct 19–23, 2026.
 

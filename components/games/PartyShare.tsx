@@ -2,6 +2,7 @@
 
 import { useState, useSyncExternalStore } from "react";
 import { partyPath } from "@/lib/games/bingo";
+import { SplitFlap } from "@/components/ui/Instrument";
 
 function subscribeNothing() {
   return () => {};
@@ -15,8 +16,12 @@ function origin() {
   return window.location.origin;
 }
 
-/** The room code, the link, a copy button and (where the phone has it) a share button. */
-export function PartyShare({ code }: { code: string }) {
+/**
+ * The room code (as an instrument readout), the link, a copy button and
+ * (where the phone has it) a share button. `showCode` is off where the page
+ * already shows the code above (the party's own card).
+ */
+export function PartyShare({ code, showCode = true }: { code: string; showCode?: boolean }) {
   const base = useSyncExternalStore(subscribeNothing, origin, () => "");
   const shareable = useSyncExternalStore(subscribeNothing, canWebShare, () => false);
   const [note, setNote] = useState<string | null>(null);
@@ -46,31 +51,32 @@ export function PartyShare({ code }: { code: string }) {
 
   return (
     <div className="space-y-3">
-      <div>
-        <p className="text-sm text-muted">Room code</p>
-        <p className="font-mono text-4xl font-bold tracking-[0.3em]" data-testid="room-code">
-          {code}
-        </p>
-      </div>
+      {showCode && (
+        <div className="instrument bezel space-y-2 px-4 py-3">
+          <p className="label text-muted">Room code</p>
+          <SplitFlap value={code} testId="room-code" />
+        </div>
+      )}
       <label className="block">
         <span className="text-sm text-muted">Party link</span>
         <input
           readOnly
           value={link}
           onFocus={(e) => e.currentTarget.select()}
-          className="tap mt-1 w-full rounded-lg border border-border bg-bg px-3 font-mono text-sm"
+          className="field mt-1 w-full text-sm"
           data-testid="party-link"
         />
       </label>
       <div className="flex flex-wrap gap-2">
-        <button type="button" onClick={copy} className="tap rounded-lg border border-border px-4 font-bold">
-          Copy link
-        </button>
+        {/* Web Share where the phone has it: the quickest way to every other phone (as in the séance). */}
         {shareable && (
-          <button type="button" onClick={share} className="tap rounded-lg border border-border px-4 font-bold">
-            Share
+          <button type="button" onClick={share} className="btn btn-ghost">
+            Send the link
           </button>
         )}
+        <button type="button" onClick={copy} className="btn btn-ghost">
+          Copy link
+        </button>
       </div>
       {note && (
         <p role="status" className="text-sm">

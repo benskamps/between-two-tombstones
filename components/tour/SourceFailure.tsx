@@ -17,33 +17,36 @@ export function SourceFailure({
   message,
   retryHref,
   showSearch = true,
+  title,
 }: {
   source: DataSource;
   message: string;
   retryHref: string;
   showSearch?: boolean;
+  /** Defaults to "<source> didn't answer". A big cemetery that timed out says so instead. */
+  title?: string;
 }) {
   return (
     <section
       role="alert"
       aria-labelledby="failure-title"
-      className="space-y-4 rounded-xl border border-danger bg-surface p-4"
+      className="card card-alert space-y-4 p-4"
       data-testid="source-failure"
       // The service worker never caches a page that shows a failure.
       data-btt-nocache=""
     >
       <h2 id="failure-title" className="font-display text-2xl">
-        {source} didn&rsquo;t answer
+        {title ?? <>{source} didn&rsquo;t answer</>}
       </h2>
       <p className="font-bold" data-testid="failure-message">
         {message}
       </p>
       <div className="flex flex-wrap gap-3">
-        <a href={retryHref} className="tap inline-flex items-center rounded-lg bg-accent px-4 font-bold text-accent-ink">
+        <a href={retryHref} className="btn btn-primary">
           Try again
         </a>
         {showSearch && (
-          <Link href="/" className="tap inline-flex items-center rounded-lg border border-border px-4">
+          <Link href="/" className="btn btn-ghost">
             Search by name
           </Link>
         )}
@@ -54,7 +57,7 @@ export function SourceFailure({
         <ul className="grid gap-2">
           {SAMPLES.map((s) => (
             <li key={s.qid}>
-              <Link href={`/cemetery/${s.qid}`} className="tap block rounded-xl border border-border bg-surface-2 p-3">
+              <Link href={`/cemetery/${s.qid}`} className="card tap block p-3">
                 <span className="font-display text-lg">{s.name}</span>
                 <span className="block text-sm text-muted">{s.place}</span>
               </Link>

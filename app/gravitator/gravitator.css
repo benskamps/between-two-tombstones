@@ -1,68 +1,26 @@
 /*
   Gravitator palette: Victorian half-mourning (mauve, lavender, grey) on crepe
-  black, with a dating app's "match" glow. Scoped to the route: the variables
-  live on the route's root wrapper (.gravitator) and, only while that wrapper is
-  on the page, on <html> so the page behind the header matches. Nothing here
-  touches the app's own tokens in app/globals.css.
-
-  Values must match lib/gravitator/palette.ts; palette.test.ts checks both the
-  values and the WCAG contrast of every text pair we use.
-
-  Night is the default; daylight follows the OS preference and the app's
-  data-theme toggle, the same way app/globals.css does.
+  black, with a dating app's "match" glow. Since decision 18 this is the whole
+  app's palette: the values live in app/globals.css (and lib/palette.ts), and
+  the route's --g-* names below only alias them. lib/palette.test.ts checks
+  that nothing here repeats a color value. Dark only.
 */
 .gravitator,
 :root:has(.gravitator) {
-  --g-bg: #130F15;
-  --g-surface: #1D1720;
-  --g-surface-2: #2A2130;
-  --g-border: #43364B;
-  --g-text: #F1EADF;
-  --g-muted: #B9AEBF;
-  --g-mauve: #C7A2DC;
-  --g-mauve-ink: #1A1220;
-  --g-candle: #E2AD4B;
-  --g-lichen: #A3C293;
-  --g-ash: #8E8794;
-  --g-wisp: #86E3D3;
+  --g-bg: var(--bg);
+  --g-surface: var(--surface);
+  --g-surface-2: var(--surface-2);
+  --g-border: var(--border);
+  --g-text: var(--text);
+  --g-muted: var(--text-muted);
+  --g-mauve: var(--mauve);
+  --g-mauve-ink: var(--mauve-ink);
+  --g-candle: var(--candle);
+  --g-lichen: var(--lichen);
+  --g-ash: var(--ash);
+  --g-wisp: var(--wisp);
   /* Silhouette ink for the drawn placeholders (an alias, not a new color). */
   --g-art-ink: var(--g-bg);
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="night"]) .gravitator,
-  :root:not([data-theme="night"]):has(.gravitator) {
-    --g-bg: #FAF6F1;
-    --g-surface: #FFFFFF;
-    --g-surface-2: #F0E9F2;
-    --g-border: #8E8297;
-    --g-text: #151018;
-    --g-muted: #463E4C;
-    --g-mauve: #5E3474;
-    --g-mauve-ink: #FFFFFF;
-    --g-candle: #7A4A00;
-    --g-lichen: #2F5626;
-    --g-ash: #57505C;
-    --g-wisp: #0F6E62;
-    --g-art-ink: var(--g-muted);
-  }
-}
-
-:root[data-theme="day"] .gravitator,
-:root[data-theme="day"]:has(.gravitator) {
-  --g-bg: #FAF6F1;
-  --g-surface: #FFFFFF;
-  --g-surface-2: #F0E9F2;
-  --g-border: #8E8297;
-  --g-text: #151018;
-  --g-muted: #463E4C;
-  --g-mauve: #5E3474;
-  --g-mauve-ink: #FFFFFF;
-  --g-candle: #7A4A00;
-  --g-lichen: #2F5626;
-  --g-ash: #57505C;
-  --g-wisp: #0F6E62;
-  --g-art-ink: var(--g-muted);
 }
 
 html:has(.gravitator),
@@ -109,10 +67,12 @@ body:has(.gravitator) {
   background: var(--g-candle);
   color: var(--g-mauve-ink);
 }
+/* Ghost pills take the ash edge at 1.5 px, like every other ghost pill in the app (REVIEW-3 #13). */
 .g-btn-ghost {
   background: var(--g-surface);
   color: var(--g-text);
-  border-color: var(--g-border);
+  border-width: 1.5px;
+  border-color: var(--g-ash);
 }
 .g-btn-ash {
   background: var(--g-surface);
@@ -145,7 +105,8 @@ body:has(.gravitator) {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 1.5rem;
+  /* The app's card radius. */
+  border-radius: 1.1rem;
   border: 1px solid var(--g-border);
   background: var(--g-surface);
   box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.65);

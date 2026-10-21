@@ -1,4 +1,5 @@
 import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
+import { seedHaunt } from "./fixtures/haunt";
 import oaklandJson from "../../data/snapshots/oakland-atlanta.json";
 import sleepyJson from "../../data/snapshots/sleepy-hollow.json";
 import { buildCalendar } from "../../lib/calendar/feed";
@@ -62,8 +63,11 @@ function longDead(p: Person): boolean {
 
 function expectedUids(snap: CemeterySnapshot, kinds: ("death" | "birth")[], limit: number): string[] {
   const has = (p: Person, k: "death" | "birth") => (k === "death" ? p.deathPrecision : p.birthPrecision) === 11;
+  // F20: a bare-QID name takes the Wikipedia title; only someone with neither is left out.
+  // (Oakland's snapshot has two bare-QID names, Q6986296 and Q6066179; both have articles, so both stay.)
+  const named = (p: Person) => !/^Q\d+$/.test(p.name.trim()) || Boolean(p.wikipedia?.title);
   const chosen = snap.people
-    .filter((p) => longDead(p) && kinds.some((k) => has(p, k)))
+    .filter((p) => named(p) && longDead(p) && kinds.some((k) => has(p, k)))
     .sort((a, b) => b.sitelinks - a.sitelinks || Number(a.qid.slice(1)) - Number(b.qid.slice(1)))
     .slice(0, limit);
   return chosen.flatMap((p) =>
@@ -111,6 +115,8 @@ async function open(page: Page, path: string, fixedNoon?: string) {
     }
   });
   if (fixedNoon) await page.clock.setFixedTime(new Date(`${fixedNoon}T12:00:00`));
+  // /calendar without a cemetery in the link opens once you have a haunt (decision 18e). After the clock, so it's fresh then.
+  await seedHaunt(page);
   await page.goto(path);
 }
 
@@ -442,6 +448,8 @@ test.describe("Haunted Calendar page", () => {
     await expect(first).toContainText("Leap Day Test Person died on this day in 1904");
 
     await page.clock.setFixedTime(new Date("2028-02-20T12:00:00"));
+    // A year on, yesterday's haunt is stale; keep one fresh at the new date (registered after the clock).
+    await seedHaunt(page);
     await page.reload();
     await expect(page.getByTestId("preview-event").first()).toHaveAttribute("data-date", "2028-02-29");
   });

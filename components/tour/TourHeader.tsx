@@ -1,55 +1,68 @@
-import Link from "next/link";
+import type { ReactNode } from "react";
 import type { Cemetery } from "@/lib/types";
 import { findAGraveCemeteryUrl, httpsUrl } from "@/lib/tour/links";
+import { SymbolPair } from "@/components/ui/Motifs";
+import { Lily } from "@/components/ui/symbols";
+import { ToolIcon } from "@/components/ui/tools";
+
+// The hub's header stays short so the stories start on the first screen (F1).
+// The tools moved to the haunt's toolkit (components/haunt/HauntToolkit.tsx)
+// and the outside links to the foot of the tour (TourLinks).
 
 /** Matches BURIALS_LIMIT in lib/data/wikidata.ts (kept literal so no server code ships to the browser). */
 const BURIALS_CAP = 80;
 
-export function TourHeader({ cemetery, people }: { cemetery: Cemetery; people: number }) {
+/**
+ * "Atlanta · cemetery in Atlanta, Georgia, USA" says the place twice: keep the
+ * longer one. Wikidata descriptions start lowercase; the line starts with a capital (N11).
+ */
+export function placeLine(locatedIn: string | null, description: string | null): string | null {
+  const place = locatedIn?.trim() || null;
+  const desc = description?.trim() || null;
+  const line = place && desc && desc.toLowerCase().includes(place.toLowerCase()) ? desc : [place, desc].filter(Boolean).join(" · ");
+  return line ? line.charAt(0).toUpperCase() + line.slice(1) : null;
+}
+
+export function TourHeader({ cemetery, people, children }: { cemetery: Cemetery; people: number; children?: ReactNode }) {
+  const meta = placeLine(cemetery.locatedIn, cemetery.description);
   return (
-    <header className="space-y-2">
-      <h1 className="font-display text-4xl leading-tight">{cemetery.name}</h1>
-      {(cemetery.locatedIn || cemetery.description) && (
-        <p className="text-muted">{[cemetery.locatedIn, cemetery.description].filter(Boolean).join(" · ")}</p>
-      )}
-      <p className="text-sm">
+    <header className="space-y-1">
+      {/* The same title row as every page (PageHeader): the haunt's sign and a lily beside the name. */}
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="font-display text-4xl leading-tight">{cemetery.name}</h1>
+        <SymbolPair death={<ToolIcon tool="haunt" className="h-5 w-5" />} life={<Lily className="h-5 w-5" />} className="shrink-0" />
+      </div>
+      {meta && <p>{meta}</p>}
+      <p className="text-sm text-muted">
         {people >= BURIALS_CAP
           ? `The ${people} best-known people buried here, from Wikidata.`
           : `${people} ${people === 1 ? "person" : "people"} buried here, from Wikidata.`}
       </p>
-      <p className="flex flex-wrap gap-x-4 text-sm">
-        {cemetery.findAGraveCemeteryId && (
-          <a
-            href={findAGraveCemeteryUrl(cemetery.findAGraveCemeteryId)}
-            className="tap inline-flex items-center underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Find a Grave cemetery page
-          </a>
-        )}
-        {cemetery.enwiki && (
-          <a href={httpsUrl(cemetery.enwiki)!} className="tap inline-flex items-center underline" target="_blank" rel="noopener noreferrer">
-            About this cemetery on Wikipedia
-          </a>
-        )}
-      </p>
-      {people > 0 && (
-        <div className="flex flex-wrap gap-2 pt-1">
-          <Link
-            href={`/spirit?cemetery=${cemetery.qid}#seance`}
-            className="tap inline-flex items-center rounded-xl border border-border bg-surface px-4 font-bold"
-          >
-            Start a séance here
-          </Link>
-          <Link
-            href={`/calendar?${new URLSearchParams({ cemetery: cemetery.qid, name: cemetery.name, ...(cemetery.locatedIn ? { place: cemetery.locatedIn } : {}) })}`}
-            className="tap inline-flex items-center rounded-xl border border-border bg-surface px-4 font-bold"
-          >
-            Haunt my calendar
-          </Link>
-        </div>
-      )}
+      {children}
     </header>
+  );
+}
+
+/** Find a Grave and Wikipedia for the cemetery itself, at the foot of the tour. */
+export function TourLinks({ cemetery }: { cemetery: Cemetery }) {
+  if (!cemetery.findAGraveCemeteryId && !cemetery.enwiki) return null;
+  return (
+    <p className="flex flex-wrap gap-x-4 text-sm">
+      {cemetery.findAGraveCemeteryId && (
+        <a
+          href={findAGraveCemeteryUrl(cemetery.findAGraveCemeteryId)}
+          className="tap inline-flex items-center underline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Find a Grave cemetery page
+        </a>
+      )}
+      {cemetery.enwiki && (
+        <a href={httpsUrl(cemetery.enwiki)!} className="tap inline-flex items-center underline" target="_blank" rel="noopener noreferrer">
+          About this cemetery on Wikipedia
+        </a>
+      )}
+    </p>
   );
 }

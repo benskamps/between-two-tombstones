@@ -65,8 +65,9 @@ function SavedLink() {
 
 function TopBar() {
   return (
-    <div className="mb-3 flex items-center justify-between gap-3">
-      <h1 className="font-display text-4xl leading-none">Gravitator</h1>
+    // The title sits where every page's does (y = 73, REVIEW-3 #6): top-aligned, the pill beside it.
+    <div className="mb-3 flex items-start justify-between gap-3">
+      <h1 className="font-display text-4xl leading-tight">Gravitator</h1>
       <SavedLink />
     </div>
   );

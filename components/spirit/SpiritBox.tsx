@@ -10,12 +10,22 @@ import {
   startNoise,
   type NoiseEngine,
 } from "@/lib/spirit/engine";
+import { shouldAutoSetHaunt } from "@/lib/haunt/haunt";
+import { getFreshHaunt, getHaunt, setHaunt } from "@/lib/haunt/store";
+import { useHaunt } from "@/lib/haunt/useHaunt";
 import { QID_RE, loadCemetery, type LoadResult, type SampleCemetery } from "@/lib/spirit/load";
 import { capsFromParam, createSession, formatDuration, stopMessage, type SpiritSession, type Utterance } from "@/lib/spirit/session";
 import { pickVoice, silenceVoices, speakFragment, speechAvailable } from "@/lib/spirit/voice";
 import { bankHasNames, buildWordBank } from "@/lib/spirit/wordbank";
+import { Sprout } from "@/components/ui/symbols";
+import { ReadoutStrip, SpokenWord, SweepDial, countOf } from "@/components/ui/Instrument";
 import { SEANCE_PITCH, SeanceJoin, SeanceStart } from "./SeanceStart";
 import { DISCLAIMER, MOURNERS, NO_SPEECH, audioContextClass, clock, subscribeNothing } from "./shared";
+
+/** Read in the Start handler only (the compiler can't tell a handler from render). */
+function wallClock(): number {
+  return Date.now();
+}
 
 /** Live objects a session needs; kept out of React state because they're not rendered. */
 type Runtime = {
@@ -29,11 +39,14 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
   const params = useSearchParams();
   const rawTour = params.get("cemetery");
   const tourQid = rawTour && QID_RE.test(rawTour) ? rawTour : null;
-  const tourIsSample = tourQid !== null && samples.some((s) => s.qid === tourQid);
+  // The cemetery in the link wins; otherwise the haunt (decision 18e); the first sample only as a last resort.
+  const haunt = useHaunt();
+  const extraQid = tourQid ?? haunt?.qid ?? null;
+  const extraIsSample = extraQid !== null && samples.some((s) => s.qid === extraQid);
   const { caps, test } = capsFromParam(params.get("test-caps"));
   const canSpeak = useSyncExternalStore(subscribeNothing, speechAvailable, () => true);
 
-  const [choice, setChoice] = useState<string>(tourQid ?? samples[0].qid);
+  const [choice, setChoice] = useState<string>(extraQid ?? samples[0].qid);
   const [results, setResults] = useState<Record<string, LoadResult>>({});
   const [running, setRunning] = useState(false);
   const [log, setLog] = useState<Utterance[]>([]);
@@ -57,10 +70,24 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
     return () => ctrl.abort();
   }, [choice, samples]);
 
-  // "/spirit?cemetery=Q…#seance" (e.g. from a tour) lands on the séance section, which renders after hydration.
+  // A cemetery from the link becomes the haunt once its burials load (then its name is known),
+  // unless it already is (the gate may have set it with its place from ?name=&place=), and
+  // never over a fresh haunt elsewhere (F11: a link is used, not adopted).
+  const tourResult = tourQid ? results[tourQid] : undefined;
+  const tourName = tourResult?.ok ? tourResult.cemetery.name : null;
   useEffect(() => {
-    if (window.location.hash === "#seance") document.getElementById("seance")?.scrollIntoView();
-  }, []);
+    if (tourQid && tourName && getHaunt()?.qid !== tourQid && shouldAutoSetHaunt(tourQid, getFreshHaunt(), null)) {
+      setHaunt({ qid: tourQid, name: tourName });
+    }
+  }, [tourQid, tourName]);
+
+  // "/spirit?cemetery=Q…#seance" (e.g. from a tour) lands on the séance section, which renders after hydration.
+  // "?join=1" (from a broken séance link, or "type a code") also puts the cursor in the room-code box.
+  const joining = params.get("join") !== null;
+  useEffect(() => {
+    if (window.location.hash === "#seance" || joining) document.getElementById("seance")?.scrollIntoView();
+    if (joining) document.getElementById("seance-room")?.focus({ preventScroll: true });
+  }, [joining]);
 
   // Stop on page hide and on unmount; close the audio context when leaving.
   useEffect(() => {
@@ -133,7 +160,7 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
     setLog([]);
     setStopNote(null);
     setRunning(true);
-    setEndsAt(Date.now() + caps.maxMs);
+    setEndsAt(wallClock() + caps.maxMs);
     session.start();
   }
 
@@ -154,12 +181,17 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
 
   const options = [
     ...samples.map((s) => ({ qid: s.qid, label: s.name, detail: s.place })),
-    ...(tourQid && !tourIsSample
+    ...(extraQid && !extraIsSample
       ? [
           {
-            qid: tourQid,
-            label: "The cemetery from your last tour",
-            detail: results[tourQid]?.ok ? (results[tourQid] as Extract<LoadResult, { ok: true }>).cemetery.name : tourQid,
+            qid: extraQid,
+            // A cemetery from the link (the tour's own links carry it) or, without one, the haunt.
+            label: tourQid ? "The cemetery from your last tour" : "Your haunt",
+            detail: results[extraQid]?.ok
+              ? (results[extraQid] as Extract<LoadResult, { ok: true }>).cemetery.name
+              : extraQid === haunt?.qid
+                ? haunt.name
+                : extraQid,
           },
         ]
       : []),
@@ -169,9 +201,9 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
 
   return (
     <div className="space-y-6">
-      <section aria-labelledby="spirit-pick" className="space-y-3">
+      <section aria-labelledby="spirit-pick" className="card space-y-3 p-4">
         <fieldset disabled={running} className="space-y-2">
-          <legend id="spirit-pick" className="font-display text-2xl">
+          <legend id="spirit-pick" className="mb-1 font-display text-2xl">
             Whose names
           </legend>
           {options.map((o) => (
@@ -196,7 +228,8 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
             </label>
           ))}
         </fieldset>
-        <div role="status" className="text-sm">
+        {/* Room for the names line up front, so the panel below doesn't move when the names arrive. */}
+        <div role="status" className="min-h-[5.25rem] text-sm">
           {!result && <p className="text-muted">Loading the names&hellip;</p>}
           {result && !result.ok && <p className="text-danger">{result.message} Pick a sample cemetery instead.</p>}
           {result?.ok && bank && (
@@ -221,28 +254,31 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
         </div>
       </section>
 
-      <section aria-label="Controls" className="space-y-4 rounded-xl border border-border bg-surface p-4">
+      {/* One instrument (L10.4): readouts, the dial, the voice, the controls and the captions log. */}
+      <section aria-label="Controls" className="instrument bezel space-y-4 p-4">
+        {/* Status, the voice count, and when it stops. The cemetery is in the picker and the header; the sweep is on its knob. */}
+        <ReadoutStrip
+          live={running}
+          status={running ? "Live" : "Standby"}
+          values={[
+            { label: "Voices", value: countOf(log.length, caps.maxUtterances) },
+            running && endsAt ? { label: "Ends", value: clock(endsAt) } : null,
+          ]}
+        />
+        <SweepDial running={running} stepMs={sweepMs} />
+        {/* The latest voice, big: the part people film. */}
+        <SpokenWord key={latest?.n ?? "idle"} testId="spirit-latest">{latest ? `…${latest.text}…` : running ? "…" : ""}</SpokenWord>
         <button
           type="button"
           onClick={running ? stop : start}
           disabled={!running && !ready}
-          className={`tap w-full rounded-xl px-6 py-5 text-2xl font-bold disabled:opacity-60 ${
-            running ? "border-2 border-danger text-danger" : "bg-accent text-accent-ink"
-          }`}
+          className={`btn btn-lg w-full text-2xl ${running ? "btn-stop" : "btn-primary"}`}
         >
           {running ? "Stop" : ready || result ? "Start" : "Loading…"}
         </button>
         <p className="font-bold">{DISCLAIMER}</p>
         {!canSpeak && <p className="text-danger">{NO_SPEECH}</p>}
         {audioNote && <p className="text-danger">{audioNote}</p>}
-        {/* The latest voice, big, right under the button: the part people film. */}
-        <p
-          aria-hidden="true"
-          className="min-h-[3.5rem] text-center font-display text-4xl leading-tight text-accent"
-          data-testid="spirit-latest"
-        >
-          {latest ? `…${latest.text}…` : running ? "…" : ""}
-        </p>
         {stopNote && (
           <p role="status" className="rounded-lg border border-border bg-surface-2 p-3 font-bold">
             {stopNote}
@@ -269,7 +305,7 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
               step={5}
               value={volume}
               onChange={(e) => changeVolume(Number(e.target.value))}
-              className="tap w-full accent-[var(--accent)]"
+              className="knob"
             />
           </label>
           <label className="block">
@@ -281,33 +317,39 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
               step={10}
               value={sweepMs}
               onChange={(e) => changeSweep(Number(e.target.value))}
-              className="tap w-full accent-[var(--accent)]"
+              className="knob"
             />
           </label>
         </div>
-        <p className="font-bold text-moss">{MOURNERS}</p>
+
+        <div className="space-y-2">
+          <h2 id="spirit-captions" className="label text-wisp">
+            What the box said
+          </h2>
+          <div role="log" aria-live="polite" aria-label="Captions" className="ticker">
+            <ol>
+              {log.map((u) => (
+                <li key={u.n} className="flex gap-3 border-b border-border py-1 last:border-b-0">
+                  <time dateTime={new Date(u.at).toISOString()} className="shrink-0 text-sm tabular-nums text-muted">
+                    {clock(u.at)}
+                  </time>
+                  <span className="font-bold">{u.text}</span>
+                </li>
+              ))}
+            </ol>
+            {log.length === 0 && !stopNote && (
+              <p className="py-1 text-sm text-muted">Captions of every voice show up here, with the time.</p>
+            )}
+          </div>
+        </div>
+        <p className="flex items-center gap-2 font-bold text-lichen">
+          {/* The panel's life sign: the living come first (REVIEW-3). */}
+          <Sprout className="h-5 w-5 shrink-0" />
+          {MOURNERS}
+        </p>
       </section>
 
-      <section aria-labelledby="spirit-captions" className="space-y-3">
-        <h2 id="spirit-captions" className="font-display text-2xl">
-          What the box said
-        </h2>
-        <ol role="log" aria-live="polite" aria-label="Captions" className="space-y-1">
-          {log.map((u) => (
-            <li key={u.n} className="flex gap-3 border-b border-border py-1">
-              <time dateTime={new Date(u.at).toISOString()} className="shrink-0 text-sm tabular-nums text-muted">
-                {clock(u.at)}
-              </time>
-              <span className="font-bold">{u.text}</span>
-            </li>
-          ))}
-        </ol>
-        {log.length === 0 && !stopNote && (
-          <p className="text-muted">Captions of every voice show up here, with the time.</p>
-        )}
-      </section>
-
-      <section id="seance" aria-labelledby="seance-heading" className="scroll-mt-4 space-y-4 rounded-xl border border-border bg-surface p-4">
+      <section id="seance" aria-labelledby="seance-heading" className="scroll-mt-4 space-y-4 card p-4">
         <h2 id="seance-heading" className="font-display text-2xl">
           Séance: every phone at once
         </h2>
@@ -322,15 +364,31 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
   );
 }
 
-/** Shown while the page reads the address bar; same copy, nothing live yet. */
+/** Shown while the page reads the address bar: the picker's card and the same instrument, standing by. */
 export function SpiritBoxFallback() {
   return (
-    <div className="space-y-4 rounded-xl border border-border bg-surface p-4">
-      <button type="button" disabled className="tap w-full rounded-xl bg-accent px-6 py-5 text-2xl font-bold text-accent-ink opacity-60">
-        Loading&hellip;
-      </button>
-      <p className="font-bold">{DISCLAIMER}</p>
-      <p className="font-bold text-moss">{MOURNERS}</p>
+    <div className="space-y-6">
+      {/* Roughly the picker's height (legend, two cemeteries, the names line), so the panel doesn't move down. */}
+      <div className="card space-y-3 p-4" aria-hidden="true">
+        <p className="mb-1 font-display text-2xl">Whose names</p>
+        <div className="h-[4.5rem] rounded-xl border border-border bg-surface" />
+        <div className="h-[4.5rem] rounded-xl border border-border bg-surface" />
+        <div className="h-[5.25rem]" />
+      </div>
+      <div className="instrument bezel space-y-4 p-4">
+        <ReadoutStrip live={false} status="Standby" />
+        <SweepDial running={false} stepMs={SWEEP_DEFAULT_MS} />
+        <SpokenWord testId="spirit-latest-fallback">{""}</SpokenWord>
+        <button type="button" disabled className="btn btn-primary btn-lg w-full text-2xl">
+          Loading&hellip;
+        </button>
+        <p className="font-bold">{DISCLAIMER}</p>
+        <p className="flex items-center gap-2 font-bold text-lichen">
+          {/* The panel's life sign: the living come first (REVIEW-3). */}
+          <Sprout className="h-5 w-5 shrink-0" />
+          {MOURNERS}
+        </p>
+      </div>
     </div>
   );
 }

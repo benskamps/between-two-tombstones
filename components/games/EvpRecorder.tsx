@@ -2,7 +2,11 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+import { ReadoutStrip } from "@/components/ui/Instrument";
+import { SymbolPair } from "@/components/ui/Motifs";
+import { Lily, Moth } from "@/components/ui/symbols";
+import { ToolTile } from "@/components/ui/tools";
 import { EVP_PLAYBACK_RATE, evpSeconds, micAvailable, micErrorMessage, reverseBuffer } from "@/lib/games/evp";
 
 type Phase = "idle" | "recording" | "processing" | "ready" | "playing";
@@ -33,10 +37,12 @@ export function EvpHubLink() {
   if (!mic) return null;
   return (
     <li>
-      <Link href="/games/evp" className="tap block rounded-xl border border-border bg-surface p-4">
-        <span className="font-display text-xl">EVP Recorder</span>
-        <span className="block text-muted">Record 15 seconds of the quiet, then hear it played backwards and slowed.</span>
-      </Link>
+      <ToolTile
+        tool="evp"
+        href="/games/evp"
+        title="EVP Recorder"
+        body="Record 15 seconds of the quiet, then hear it played backwards and slowed."
+      />
     </li>
   );
 }
@@ -247,10 +253,10 @@ export function EvpRecorder() {
     setPhase("ready");
   }
 
-  if (mic === null) return <p className="text-muted">Checking for a microphone&hellip;</p>;
+  if (mic === null) return <EvpPanel phase="idle" readout={["Standby"]} note="Checking for a microphone…" />;
   if (!mic) {
     return (
-      <p className="rounded-xl border border-border bg-surface p-4">
+      <p className="card p-4">
         This browser can&rsquo;t record from a microphone, so the EVP recorder is hidden.{" "}
         <Link href="/games" className="underline">
           Back to the games
@@ -259,58 +265,154 @@ export function EvpRecorder() {
     );
   }
 
-  return (
-    <div className="space-y-4 rounded-xl border border-border bg-surface p-4">
-      {phase === "recording" ? (
-        <button
-          type="button"
-          onClick={stopRecording}
-          className="tap w-full rounded-xl border-2 border-danger px-6 py-5 text-2xl font-bold text-danger"
-        >
-          Recording&hellip; {remaining} s (tap to stop early)
-        </button>
-      ) : (
-        <button
-          type="button"
-          onClick={record}
-          disabled={phase === "processing"}
-          className="tap w-full rounded-xl bg-accent px-6 py-5 text-2xl font-bold text-accent-ink disabled:opacity-60"
-        >
-          {phase === "processing"
-            ? "Reversing…"
-            : duration === null
-              ? `Record ${seconds} seconds`
-              : `Record again (${seconds} s)`}
-        </button>
-      )}
+  const elapsed = seconds - remaining;
+  const played = duration !== null ? duration / EVP_PLAYBACK_RATE : null;
+  const readout: string[] =
+    phase === "recording"
+      ? ["Rec", `${clock(elapsed)} / ${clock(seconds)}`]
+      : phase === "processing"
+        ? ["Reversing"]
+        : phase === "playing"
+          ? ["Playback", `${Math.round(EVP_PLAYBACK_RATE * 100)}%`, played !== null ? clock(played) : ""]
+          : phase === "ready"
+            ? ["Reversed", played !== null ? clock(played) : ""]
+            : ["Standby", clock(seconds)];
 
-      {(phase === "ready" || phase === "playing") && duration !== null && (
-        <div className="space-y-2">
+  return (
+    <div className="space-y-5">
+      <EvpPanel phase={phase} readout={readout.filter(Boolean)}>
+        {(phase === "ready" || phase === "playing") && duration !== null && (
           <p role="status">
             Recorded {duration.toFixed(1)} seconds. Played backwards at {Math.round(EVP_PLAYBACK_RATE * 100)}% speed it
             lasts {(duration / EVP_PLAYBACK_RATE).toFixed(1)} seconds.
           </p>
-          {phase === "playing" ? (
-            <button type="button" onClick={stopPlay} className="tap w-full rounded-xl border border-border px-5 font-bold">
+        )}
+        {(phase === "ready" || phase === "playing") &&
+          duration !== null &&
+          (phase === "playing" ? (
+            <button type="button" onClick={stopPlay} className="btn btn-ghost btn-lg w-full">
               Stop playback
             </button>
           ) : (
-            <button
-              type="button"
-              onClick={play}
-              className="tap w-full rounded-xl border-2 border-accent px-5 text-lg font-bold"
-            >
+            <button type="button" onClick={play} className="btn btn-primary btn-lg w-full">
               Play it backwards
             </button>
-          )}
-        </div>
-      )}
+          ))}
+        {/* One button element in this slot throughout, so focus stays on it from Record to Recording to Record again. */}
+        {phase === "recording" ? (
+          <button type="button" onClick={stopRecording} className="btn btn-lg w-full btn-stop">
+            Recording&hellip; {remaining} s (tap to stop early)
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={record}
+            disabled={phase === "processing"}
+            className={`btn btn-lg w-full ${duration === null ? "btn-primary" : "btn-ghost"}`}
+          >
+            {phase === "processing"
+              ? "Reversing…"
+              : duration === null
+                ? `Record ${seconds} seconds`
+                : `Record again (${seconds} s)`}
+          </button>
+        )}
 
-      {error && (
-        <p role="alert" className="text-danger">
-          {error}
+        {error && (
+          <p role="alert" className="text-danger">
+            {error}
+          </p>
+        )}
+      </EvpPanel>
+      <section aria-labelledby="evp-tips" className="card space-y-2 p-4">
+        <h2 id="evp-tips" className="flex items-center gap-2 font-display text-2xl">
+          <SymbolPair death={<Moth className="h-5 w-5" />} life={<Lily className="h-5 w-5" />} />
+          How to listen
+        </h2>
+        <ul className="list-disc space-y-1 pl-5 marker:text-muted">
+          <li>Hold still and keep quiet: your breathing and footsteps record too.</li>
+          <li>Shield the microphone from strong wind; a gust drowns out everything else.</li>
+          <li>Headphones help. Keep the volume low near mourners.</li>
+        </ul>
+      </section>
+    </div>
+  );
+}
+
+/** "0:07", or "0:02.9" with tenths for a recording's length. */
+function clock(sec: number): string {
+  const s = Math.max(0, sec);
+  const whole = Number.isInteger(s);
+  const m = Math.floor(s / 60);
+  const rest = s - m * 60;
+  return `${m}:${whole ? String(rest).padStart(2, "0") : rest.toFixed(1).padStart(4, "0")}`;
+}
+
+/**
+ * A seeded scribble of a waveform: two identical periods side by side (viewBox
+ * 400 × 100), so sliding it left by half loops without a seam.
+ */
+function wave(seed: number, amp: number): string {
+  let x = seed;
+  const rnd = () => {
+    x = (x * 1103515245 + 12345) % 2147483648;
+    return x / 2147483648;
+  };
+  const n = 64;
+  const ys = Array.from({ length: n }, (_, i) => {
+    const envelope = 0.3 + 0.7 * Math.abs(Math.sin((i / n) * Math.PI * 3));
+    return 50 + (rnd() * 2 - 1) * envelope * amp;
+  });
+  const pts: string[] = [];
+  for (let k = 0; k < 2; k++) ys.forEach((y, i) => pts.push(`${(k * 200 + (i / n) * 200).toFixed(1)} ${y.toFixed(1)}`));
+  pts.push(`400 ${ys[0].toFixed(1)}`);
+  return `M${pts.join("L")}`;
+}
+const LIVE_WAVE = wave(7, 40);
+const FLAT_WAVE = wave(3, 2.5);
+
+/** The recorder as an instrument: a readout strip, an oscilloscope, the controls, and the privacy line at its foot. */
+function EvpPanel({
+  phase,
+  readout,
+  note,
+  children,
+}: {
+  phase: Phase;
+  readout: string[];
+  note?: string;
+  children?: ReactNode;
+}) {
+  const live = phase === "recording" || phase === "playing";
+  const trace = phase === "idle" || phase === "processing" ? FLAT_WAVE : LIVE_WAVE;
+  return (
+    <div className="instrument bezel space-y-4 p-4" data-testid="evp-panel">
+      {/* The status first, then at most two values: one line, like every instrument. */}
+      <ReadoutStrip
+        testId="evp-readouts"
+        live={live}
+        status={readout[0] ?? "Standby"}
+        values={readout.slice(1).map((value) => ({ value }))}
+      />
+      <div className="evp-scope" data-phase={phase} aria-hidden="true">
+        <svg viewBox="0 0 400 100" preserveAspectRatio="none" className="evp-trace">
+          <path
+            d={trace}
+            fill="none"
+            stroke="currentColor"
+            strokeOpacity={0.25}
+            strokeWidth={5}
+            vectorEffect="non-scaling-stroke"
+          />
+          <path d={trace} fill="none" stroke="currentColor" strokeWidth={1.5} vectorEffect="non-scaling-stroke" />
+        </svg>
+      </div>
+      {note && (
+        <p role="status" className="text-muted">
+          {note}
         </p>
       )}
+      {children}
       <p className="text-sm text-muted">
         The recording stays on this phone. It is never uploaded or saved, and it&rsquo;s gone when you leave the page.
       </p>

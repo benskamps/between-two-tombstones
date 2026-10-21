@@ -1,6 +1,10 @@
+import { FenceDivider } from "@/components/ui/Motifs";
+
 export function SiteFooter() {
   return (
-    <footer className="mx-auto w-full max-w-2xl px-4 pb-24 pt-6 text-sm text-muted">
+    <footer className="mx-auto w-full max-w-2xl space-y-4 px-4 pb-24 pt-6 text-sm text-muted">
+      {/* Every page ends at the same wrought-iron fence. */}
+      <FenceDivider className="opacity-70" />
       <p>
         Data from{" "}
         <a className="underline" href="https://www.wikidata.org">Wikidata</a> (CC0),{" "}

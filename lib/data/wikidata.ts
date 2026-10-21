@@ -3,10 +3,12 @@
 // scripts/snapshot.mjs and scripts/hour0-probe.mjs (verified live on 10/20).
 // Everything here is uncached; lib/data/cached.ts wraps it in 'use cache: remote'.
 
+import { personName } from "@/lib/tour/text";
 import type { Cemetery, Person } from "@/lib/types";
 import { DataSourceError } from "./errors";
 import type { CemeterySearchResult, NearbyCemetery } from "./types";
-import { politeJson } from "./wikimedia";
+import { politeJson, REQUEST_PATH, type PoliteOptions } from "./wikimedia";
+import { titleFromUrl } from "./wikipedia";
 
 export const SPARQL_ENDPOINT = "https://query.wikidata.org/sparql";
 export const BURIALS_LIMIT = 80;
@@ -28,13 +30,18 @@ export function flattenBindings(json: SparqlJson): SparqlRow[] {
   return bindings.map((b) => Object.fromEntries(Object.entries(b).flatMap(([k, v]) => (v ? [[k, v.value]] : []))));
 }
 
-export async function sparql(query: string): Promise<SparqlRow[]> {
+/** Per-call overrides; every call keeps REQUEST_PATH's 2 s cap on rate-limit waits. */
+export type SparqlOptions = Pick<PoliteOptions, "timeoutMs" | "deadlineMs">;
+
+export async function sparql(query: string, opts: SparqlOptions = {}): Promise<SparqlRow[]> {
   const url = `${SPARQL_ENDPOINT}?format=json&query=${encodeURIComponent(query)}`;
   const json = await politeJson<SparqlJson>(url, {
     source: "Wikidata",
+    ...REQUEST_PATH,
     init: { headers: { Accept: "application/sparql-results+json" } },
     // The SPARQL endpoint was fine with back-to-back queries in Hour 0.
     spacingMs: 0,
+    ...opts,
   });
   return flattenBindings(json);
 }
@@ -67,6 +74,11 @@ export function pickPlace(places: string | undefined): string | null {
  * Birth and death come only from best-rank statements: Margaret Mitchell has a
  * preferred 1900-11-08 and a normal-rank 1900-11-09, and SAMPLE over all ranks
  * could pick the wrong one.
+ * Ties on sitelinks are broken by the QID's number, lowest (oldest item) first,
+ * so the LIMIT cut is the same on every run: without it Wikidata sometimes put
+ * other 1-sitelink people at the end of Oakland's 80. Numbers, not the IRI
+ * string, which would favour "Q1…" items such as a newer "Grave of Bobby Jones".
+ * scripts/burials.mjs has the same ORDER BY.
  */
 export const burialsQuery = (qid: string, limit = BURIALS_LIMIT) => `
 SELECT ?person ?personLabel ?personDescription
@@ -80,6 +92,17 @@ SELECT ?person ?personLabel ?personDescription
   (SAMPLE(?fag_) AS ?findAGraveId) (SAMPLE(?sitelinks_) AS ?sitelinks)
   (SAMPLE(?enwiki_) AS ?enwiki)
 WHERE {
+  # The top ${limit} people first (most sitelinks, ties by QID number), then the
+  # details for those only: Arlington lists 4,000+ people, and joining every
+  # OPTIONAL for all of them before the cut took 51 s or timed out.
+  {
+    SELECT DISTINCT ?person ?sitelinks_ WHERE {
+      ?person p:P119 ?top . ?top ps:P119 wd:${qid} .
+      OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }
+    }
+    ORDER BY DESC(?sitelinks_) xsd:integer(STRAFTER(STR(?person), "/entity/Q"))
+    LIMIT ${limit}
+  }
   ?person p:P119 ?burial . ?burial ps:P119 wd:${qid} .
   OPTIONAL { ?burial pq:P625 ?graveCoord_ }
   OPTIONAL { ?person p:P569 ?bst . ?bst a wikibase:BestRank ; psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }
@@ -91,22 +114,33 @@ WHERE {
   OPTIONAL { ?person wdt:P1442 ?graveImage_ }
   OPTIONAL { ?person wdt:P625 ?personCoord_ }
   OPTIONAL { ?person wdt:P535 ?fag_ }
-  OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }
   OPTIONAL { ?enwiki_ schema:about ?person ; schema:isPartOf <https://en.wikipedia.org/> }
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }
 GROUP BY ?person ?personLabel ?personDescription
-ORDER BY DESC(?sitelinks)
+ORDER BY DESC(?sitelinks) xsd:integer(STRAFTER(STR(?person), "/entity/Q"))
 LIMIT ${limit}`;
 
 /** A person without the Wikipedia summary yet, plus the article URL to fetch it. */
 export type PersonRow = { person: Omit<Person, "wikipedia">; enwiki: string | null };
 
+/**
+ * One person per row. A row whose label is only its QID (no English label)
+ * takes its name from the English Wikipedia title; with no article either, it
+ * is dropped (F20).
+ */
 export function parseBurialRows(rows: SparqlRow[]): PersonRow[] {
-  return rows.map((r) => ({
+  return rows.flatMap((r) => {
+    const name = personName(r.personLabel, r.enwiki ? titleFromUrl(r.enwiki) : null);
+    return name ? [toPersonRow(r, name)] : [];
+  });
+}
+
+function toPersonRow(r: SparqlRow, name: string): PersonRow {
+  return {
     person: {
       qid: idOf(r.person),
-      name: r.personLabel ?? idOf(r.person),
+      name,
       description: r.personDescription ?? null,
       birth: r.birth ?? null,
       birthPrecision: num(r.birthPrecision),
@@ -122,11 +156,22 @@ export function parseBurialRows(rows: SparqlRow[]): PersonRow[] {
       sitelinks: r.sitelinks ? Number(r.sitelinks) : 0,
     },
     enwiki: r.enwiki ?? null,
-  }));
+  };
 }
 
+/**
+ * The burials query is the one slow call: even with the top-80 subquery, a big
+ * cemetery took up to 14 s cold on WDQS (Green-Wood, 10/21). It gets 27 s per
+ * attempt instead of 15, and no retry after a timeout (the deadline leaves no
+ * room for one). The page gives up first, at BURIALS_BUDGET_MS (25 s) in
+ * lib/data/load.ts, outside the cache, so the failure keeps its "timeout" kind
+ * (an error thrown inside 'use cache' loses its message in production) and a
+ * query that finishes in the last 2 s still lands in the cache for the retry.
+ */
+export const BURIALS_FETCH = { timeoutMs: 27_000, deadlineMs: 28_000 } as const satisfies SparqlOptions;
+
 export async function fetchBurials(qid: string): Promise<PersonRow[]> {
-  return parseBurialRows(await sparql(burialsQuery(qid)));
+  return parseBurialRows(await sparql(burialsQuery(qid), BURIALS_FETCH));
 }
 
 // ---------------------------------------------------------------- cemetery facts
@@ -274,13 +319,58 @@ export function mentionsCemetery(q: string): boolean {
   return /\b(cemetery|cemetary|graveyard|churchyard|burial|memorial park|necropolis|friedhof|cimeti[eè]re|cimitero|cementerio)\b/i.test(q);
 }
 
+/** Fewer results than this, and no cemetery word: also search "<q> cemetery". */
+export const SEARCH_WIDEN_BELOW = 5;
+
+/** One entity search, filtered to cemeteries, in search order. */
+export async function fetchSearchOnce(q: string): Promise<CemeterySearchResult[]> {
+  return parseSearchRows(await sparql(searchQuery(q)));
+}
+
 /**
- * Entity search matches label prefixes, so "oakland" finds the city, not the
- * cemetery. When the words don't mention a cemetery and nothing came back,
- * try once more with " cemetery" added.
+ * The plain and the "<q> cemetery" results as one list: one entry per QID
+ * (the first seen wins), most people listed first; equal counts keep search
+ * order, plain results ahead. At most SEARCH_LIMIT.
  */
+export function mergeSearchResults(first: CemeterySearchResult[], second: CemeterySearchResult[]): CemeterySearchResult[] {
+  const seen = new Set<string>();
+  const merged: CemeterySearchResult[] = [];
+  for (const r of [...first, ...second]) {
+    if (seen.has(r.qid)) continue;
+    seen.add(r.qid);
+    merged.push(r);
+  }
+  // Array.prototype.sort is stable, so ties stay in search order.
+  return merged.sort((a, b) => (b.burials || 0) - (a.burials || 0)).slice(0, SEARCH_LIMIT);
+}
+
+/**
+ * Entity search matches label prefixes, so "oakland" finds the two cemeteries
+ * labelled "Oakland…" (West Chester, Pennsylvania first) but not the other 18
+ * "Oakland Cemetery" items. When the words don't mention a cemetery and fewer
+ * than 5 came back, also search "<q> cemetery", merge, and rank by people
+ * listed. At most 2 queries per search. `once` runs a single search: the
+ * cached one in the app (lib/data/load.ts), the plain fetch in tests.
+ *
+ * If the second search fails, the first results still stand; with none, the
+ * failure is thrown so the page names it (never "no matches" for an outage).
+ */
+export async function searchWithFallback(
+  q: string,
+  once: (q: string) => Promise<CemeterySearchResult[]> = fetchSearchOnce,
+): Promise<CemeterySearchResult[]> {
+  const first = await once(q);
+  if (first.length >= SEARCH_WIDEN_BELOW || mentionsCemetery(q)) return first;
+  let second: CemeterySearchResult[];
+  try {
+    second = await once(`${q} cemetery`);
+  } catch (err) {
+    if (first.length > 0) return first;
+    throw err;
+  }
+  return mergeSearchResults(first, second);
+}
+
 export async function fetchSearch(q: string): Promise<CemeterySearchResult[]> {
-  const first = parseSearchRows(await sparql(searchQuery(q)));
-  if (first.length > 0 || mentionsCemetery(q)) return first;
-  return parseSearchRows(await sparql(searchQuery(`${q} cemetery`)));
+  return searchWithFallback(q, fetchSearchOnce);
 }

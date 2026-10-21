@@ -12,10 +12,12 @@ type Props = {
   bitmap: ImageBitmap;
   corners: Quad;
   onChange: (q: Quad) => void;
+  /** A frame drawn around the photo only (the Stamp Kit's mat), not around the help line. */
+  matClassName?: string;
 };
 
 /** The photo with four draggable corner handles, a zoom loupe while moving one, and arrow-key nudging. */
-export function CornerFramer({ bitmap, corners, onChange }: Props) {
+export function CornerFramer({ bitmap, corners, onChange, matClassName }: Props) {
   const W = bitmap.width;
   const H = bitmap.height;
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -144,75 +146,77 @@ export function CornerFramer({ bitmap, corners, onChange }: Props) {
   return (
     <div>
       <p id="framer-help" className="mb-2 text-sm text-muted">
-        Drag each corner onto a corner of the stone&rsquo;s face. Or tab to a corner and use the arrow keys (hold Shift to
-        move 10 pixels).
+        Drag each corner onto a corner of the stone&rsquo;s face. Or tab to a corner and use the arrow keys (hold Shift
+        to move 10 pixels).
       </p>
-      <div ref={wrapRef} className="relative select-none touch-pan-y" data-testid="framer">
-        <canvas
-          ref={canvasRef}
-          className="block h-auto w-full rounded-lg"
-          role="img"
-          aria-label="Your photo, with the stone's face outlined"
-        />
-        <svg
-          viewBox={`0 0 ${W} ${H}`}
-          preserveAspectRatio="none"
-          className="pointer-events-none absolute inset-0 h-full w-full"
-          aria-hidden="true"
-        >
-          <path
-            d={`M0 0H${W}V${H}H0Z M${corners.map((p) => `${p.x} ${p.y}`).join(" L")}Z`}
-            fill="rgba(0,0,0,0.45)"
-            fillRule="evenodd"
-          />
-          <polygon
-            points={outline}
-            fill="none"
-            stroke="var(--accent)"
-            strokeWidth={2.5}
-            vectorEffect="non-scaling-stroke"
-          />
-        </svg>
-        {corners.map((p, i) => (
-          <button
-            key={CORNER_NAMES[i]}
-            type="button"
-            aria-label={`${CORNER_NAMES[i]} corner`}
-            aria-describedby="framer-help"
-            data-corner={i}
-            data-x={p.x}
-            data-y={p.y}
-            onPointerDown={onPointerDown(i)}
-            onPointerMove={onPointerMove(i)}
-            onPointerUp={onPointerUp(i)}
-            onPointerCancel={onPointerUp(i)}
-            onKeyDown={onKeyDown(i)}
-            onBlur={() => {
-              setNudging(false);
-              if (!dragging) setActive(null);
-            }}
-            className="tap absolute flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 touch-none items-center justify-center rounded-full"
-            style={{ left: `${(p.x / W) * 100}%`, top: `${(p.y / H) * 100}%` }}
-          >
-            <span
-              aria-hidden="true"
-              className={`block h-5 w-5 rounded-full border-2 border-black bg-accent shadow ${
-                active === i ? "scale-125" : ""
-              }`}
-            />
-          </button>
-        ))}
-        {showLoupe && (
+      <div className={matClassName}>
+        <div ref={wrapRef} className="relative select-none touch-pan-y" data-testid="framer">
           <canvas
-            ref={loupeRef}
-            aria-hidden="true"
-            data-testid="loupe"
-            className={`pointer-events-none absolute top-2 rounded-full border-4 border-accent shadow-lg ${
-              loupeOnLeft ? "left-2" : "right-2"
-            }`}
-            style={{ width: LOUPE, height: LOUPE }}
+            ref={canvasRef}
+            className="block h-auto w-full rounded-lg"
+            role="img"
+            aria-label="Your photo, with the stone's face outlined"
           />
-        )}
+          <svg
+            viewBox={`0 0 ${W} ${H}`}
+            preserveAspectRatio="none"
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            aria-hidden="true"
+          >
+            <path
+              d={`M0 0H${W}V${H}H0Z M${corners.map((p) => `${p.x} ${p.y}`).join(" L")}Z`}
+              fill="rgba(0,0,0,0.45)"
+              fillRule="evenodd"
+            />
+            <polygon
+              points={outline}
+              fill="none"
+              stroke="var(--accent)"
+              strokeWidth={2.5}
+              vectorEffect="non-scaling-stroke"
+            />
+          </svg>
+          {corners.map((p, i) => (
+            <button
+              key={CORNER_NAMES[i]}
+              type="button"
+              aria-label={`${CORNER_NAMES[i]} corner`}
+              aria-describedby="framer-help"
+              data-corner={i}
+              data-x={p.x}
+              data-y={p.y}
+              onPointerDown={onPointerDown(i)}
+              onPointerMove={onPointerMove(i)}
+              onPointerUp={onPointerUp(i)}
+              onPointerCancel={onPointerUp(i)}
+              onKeyDown={onKeyDown(i)}
+              onBlur={() => {
+                setNudging(false);
+                if (!dragging) setActive(null);
+              }}
+              className="tap absolute flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 touch-none items-center justify-center rounded-full"
+              style={{ left: `${(p.x / W) * 100}%`, top: `${(p.y / H) * 100}%` }}
+            >
+              <span
+                aria-hidden="true"
+                className={`block h-5 w-5 rounded-full border-2 border-black bg-accent shadow ${
+                  active === i ? "scale-125" : ""
+                }`}
+              />
+            </button>
+          ))}
+          {showLoupe && (
+            <canvas
+              ref={loupeRef}
+              aria-hidden="true"
+              data-testid="loupe"
+              className={`pointer-events-none absolute top-2 rounded-full border-4 border-accent shadow-lg ${
+                loupeOnLeft ? "left-2" : "right-2"
+              }`}
+              style={{ width: LOUPE, height: LOUPE }}
+            />
+          )}
+        </div>
       </div>
       <p className="sr-only" aria-live="polite">
         {announce}

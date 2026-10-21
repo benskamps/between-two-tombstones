@@ -1,0 +1,1607 @@
+{
+ "head": {
+  "vars": [
+   "c",
+   "label",
+   "description",
+   "dist",
+   "coord",
+   "places",
+   "fagc",
+   "enwiki",
+   "burials"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2008469"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Atlanta, Georgia, USA"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "0.069"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.371333 33.748722)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County|Atlanta"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "35955"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Atlanta)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "115"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117702125"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "All Saints Episcopal Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "2.893"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.38772 33.7715)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2163311"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117586680"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Clay Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.763"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.33184 33.75454)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2363351"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117497063"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Antioch Baptist Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.771"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.37393 33.71512)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2467143"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117620249"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Sylvester Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.439"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.32825 33.73255)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1126809"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q97957208"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "South-View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Atlanta, Georgia, US"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.188"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.373686 33.702361)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Atlanta"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "37101"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/South-View_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "54"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117516660"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Episcopal Church of the Epiphany Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.414"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.31942 33.77044)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2597858"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117626767"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Charles Elliott Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.747"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.42677 33.77346)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2432188"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117616149"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Chestnut Hill Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.8"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.34904 33.70046)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "33255"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117495754"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Parker Family Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "6.039"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.31001 33.73189)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "246969"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117523914"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "East View Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "6.041"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.30666 33.74961)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2182648"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117624979"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New Hope Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "6.073"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.34905 33.69783)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2280056"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7566302"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "South Bend Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Atlanta, Fulton County, Georgia, US"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "6.166"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.3597 33.6945)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Georgia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "36997"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/South_Bend_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117493882"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Cool Springs Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "6.219"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.32846 33.70637)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2289315"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117519769"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Rock Spring Presbyterian Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "6.241"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.3678 33.80502)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2272644"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7989746"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Westview Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Atlanta, Georgia"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "6.581"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.4431 33.7462)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Atlanta"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "37684"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Westview_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "105"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117563324"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Thomasville Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "7.248"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.34661 33.68733)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2456273"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117582884"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Old Hardman Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "7.722"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.31006 33.79561)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2289372"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117699063"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Gilbert Memorial Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "7.943"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.39813 33.68095)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2152302"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5604992"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Greenwood Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Atlanta, Georgia, USA"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.007"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.4539 33.7256)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Georgia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "34238"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Greenwood_Cemetery_(Atlanta)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "6"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117515717"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Peachtree Baptist Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.081"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.33512 33.8149)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2248163"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q26256325"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Utoy Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Historic cemetery in Fulton County, Atlanta, Georgia"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.147"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.45055556 33.71583333)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County|Atlanta|Georgia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1930643"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Utoy_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5248766"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Decatur Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Decatur, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.248"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.292222 33.782222)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Decatur"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "33600"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Decatur_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "12"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117587206"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Roseland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.306"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.41256 33.68235)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "36707"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117583656"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Elliott Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.439"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.4569 33.7769)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "33801"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117614537"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Mount Zion Methodist Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.696"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.40845 33.67691)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1936651"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q106601487"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lincoln Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Atlanta, Fulton County, Georgia, USA"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.848"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.466 33.764)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "35008"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "12"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117506200"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Mount Patmos Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.869"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.28015 33.72602)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2330018"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117578131"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Sharon Baptist Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "8.88"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.46787 33.75387)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2368934"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117522104"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Ousley Chapel Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.033"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.2784 33.72572)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2280048"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117559572"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Piney Grove Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.056"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.35919 33.82975)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2559373"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117538038"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Resthaven Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.136"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.2775 33.725)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "36586"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117445161"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Crest Lawn Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Atlanta, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.141"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.4428 33.8064)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Atlanta"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "33483"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "8"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117495107"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Hillcrest Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.311"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.4475 33.6936)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "34524"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117542396"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Philadelphia Baptist Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.405"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.47063 33.72831)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2663939"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117622571"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Webb Seavey Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.48"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.27157 33.73185)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2545748"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117617398"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Casey's Hill Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.706"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.44609 33.81087)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1971729"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117648414"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Mount Olive Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.766"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.37259 33.83683)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2411057"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117590829"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Mount Moriah Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in DeKalb County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.896"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.32345 33.82833)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "DeKalb County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2153417"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117443960"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monte Vista Biblical Gardens Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fulton County, Georgia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "9.935"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.46534 33.79332)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1961826"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   }
+  ]
+ }
+}

@@ -1,15 +1,8 @@
-import type { Viewport } from "next";
 import "./gravitator.css";
 
-// The Gravitator wears its own palette (half-mourning mauve on crepe black),
-// scoped to this wrapper; see gravitator.css.
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#130F15" },
-    { media: "(prefers-color-scheme: light)", color: "#FAF6F1" },
-  ],
-};
-
+// The Gravitator's look became the whole app's (decision 18). Its route names
+// (--g-*) alias the global palette; see gravitator.css. The theme color comes
+// from the root layout, which already uses the same crepe black.
 export default function GravitatorLayout({ children }: LayoutProps<"/gravitator">) {
   return <div className="gravitator">{children}</div>;
 }

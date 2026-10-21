@@ -13,6 +13,17 @@ SELECT ?person ?personLabel ?personDescription
   (SAMPLE(?fag_) AS ?findAGraveId) (SAMPLE(?sitelinks_) AS ?sitelinks)
   (SAMPLE(?enwiki_) AS ?enwiki)
 WHERE {
+  # The top ${limit} people first (most sitelinks, ties by QID number), then the
+  # details for those only: Arlington lists 4,000+ people, and joining every
+  # OPTIONAL for all of them before the cut took 51 s or timed out.
+  {
+    SELECT DISTINCT ?person ?sitelinks_ WHERE {
+      ?person p:P119 ?top . ?top ps:P119 wd:${qid} .
+      OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }
+    }
+    ORDER BY DESC(?sitelinks_) xsd:integer(STRAFTER(STR(?person), "/entity/Q"))
+    LIMIT ${limit}
+  }
   ?person p:P119 ?burial . ?burial ps:P119 wd:${qid} .
   OPTIONAL { ?burial pq:P625 ?graveCoord_ }
   # Best-rank statements only: Margaret Mitchell (Q173540) has a preferred
@@ -27,12 +38,14 @@ WHERE {
   OPTIONAL { ?person wdt:P1442 ?graveImage_ }
   OPTIONAL { ?person wdt:P625 ?personCoord_ }
   OPTIONAL { ?person wdt:P535 ?fag_ }
-  OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }
   OPTIONAL { ?enwiki_ schema:about ?person ; schema:isPartOf <https://en.wikipedia.org/> }
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }
 GROUP BY ?person ?personLabel ?personDescription
-ORDER BY DESC(?sitelinks)
+# Ties on sitelinks are broken by the QID's number (lowest first) so the LIMIT
+# cut is the same on every run. Keep this ORDER BY identical to burialsQuery in
+# lib/data/wikidata.ts.
+ORDER BY DESC(?sitelinks) xsd:integer(STRAFTER(STR(?person), "/entity/Q"))
 LIMIT ${limit}`;
 
 export const burials = (qid, limit) => sparql(burialsQuery(qid, limit));

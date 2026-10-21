@@ -88,8 +88,13 @@ export function asDataSourceError(err: unknown, fallback: DataSource): DataSourc
       // Fall through to the generic failure below.
     }
   }
-  return new DataSourceError(fallback, "unreachable", text, { cause: err });
+  // A production build replaces the message of an error thrown inside 'use cache'
+  // with a generic one (and adds a digest). Never show that text to a person.
+  return new DataSourceError(fallback, "unreachable", REDACTED.test(text) ? "the request failed." : text, { cause: err });
 }
+
+/** Next's production stand-in for a hidden server error message. */
+const REDACTED = /^An error occurred in the Server Components render\b/;
 
 /** JSON error response in the shape every route uses. */
 export function errorResponse(err: DataSourceError): Response {
