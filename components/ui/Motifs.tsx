@@ -1,10 +1,12 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
+import { litPath } from "@/lib/moon";
 import { RingedMoon } from "./symbols";
 
 /*
   Shared forms for the gothic retro-futurist skin. All decoration is CSS (see
-  app/globals.css: .arch, .card, .bezel, .instrument, .fence, .orbit-divider)
-  or inline SVG in currentColor, hidden from assistive tech.
+  app/globals.css: .arch, .card, .card-rule, .bezel, .instrument, .fence,
+  .orbit-divider, .moon-phases, .step, .specimen) or inline SVG in
+  currentColor, hidden from assistive tech.
 */
 
 /** A wrought-iron fence line with spear finials. */
@@ -18,6 +20,30 @@ export function OrbitDivider({ className = "" }: { className?: string }) {
     <div aria-hidden="true" className={`orbit-divider ${className}`}>
       <RingedMoon className="h-5 w-5" />
     </div>
+  );
+}
+
+/**
+ * Eight moon phases in a row, new to waning crescent; `tonight` (0 new … 4 full,
+ * from lib/moon) is lit in candle and ringed. Decorative.
+ */
+export function MoonPhases({ tonight = null, className = "" }: { tonight?: number | null; className?: string }) {
+  return (
+    <svg viewBox="0 0 200 24" className={`moon-phases ${className}`} aria-hidden="true" focusable="false">
+      {Array.from({ length: 8 }, (_, i) => {
+        const cx = 12.5 + i * 25;
+        const lit = litPath(i, cx, 12, 7.5);
+        return (
+          <g key={i} className={i === tonight ? "moon-tonight" : undefined}>
+            <circle cx={cx} cy={12} r={7.5} fill="none" stroke="currentColor" strokeWidth={1.2} />
+            {lit && <path d={lit} fill="currentColor" opacity={i === tonight ? 0.9 : 0.45} />}
+            {i === tonight && (
+              <circle cx={cx} cy={12} r={10.5} fill="none" stroke="currentColor" strokeWidth={0.8} opacity={0.6} />
+            )}
+          </g>
+        );
+      })}
+    </svg>
   );
 }
 
@@ -83,5 +109,55 @@ export function PageHeader({
       </div>
       {intro && <p className="text-muted">{intro}</p>}
     </header>
+  );
+}
+
+/**
+ * A numbered step's heading: the numeral in Atkinson inside a candle ring
+ * (never IM Fell's old-style figures), then the carved title. Screen readers
+ * hear "Step 2: Frame the stone".
+ */
+export function StepHeading({
+  n,
+  id,
+  as: Tag = "h2",
+  children,
+}: {
+  n: number;
+  id?: string;
+  as?: "h2" | "h3";
+  children: ReactNode;
+}) {
+  return (
+    <Tag id={id} className="step">
+      <span className="step-no" aria-hidden="true">
+        {n}
+      </span>
+      <span className="sr-only">Step {n}: </span>
+      <span className="font-display text-2xl leading-tight">{children}</span>
+    </Tag>
+  );
+}
+
+/**
+ * Something made or found, pinned up: two pins, a square window (on paper for
+ * ink, or anything that needs a light ground) and a tag underneath.
+ */
+export function Specimen({
+  paper = false,
+  tag,
+  children,
+  className = "",
+}: {
+  paper?: boolean;
+  tag: ReactNode;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <figure className={`specimen ${className}`}>
+      <div className={`specimen-window ${paper ? "specimen-paper" : ""}`}>{children}</div>
+      <figcaption className="specimen-tag">{tag}</figcaption>
+    </figure>
   );
 }

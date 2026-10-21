@@ -114,6 +114,17 @@ export function HourglassSprout(props: SymbolProps) {
   );
 }
 
+/** A sprout with two leaves: something new coming up (a found square, a birthday). */
+export function Sprout(props: SymbolProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 21v-8.5" />
+      <path d="M12 15c-3 0-5-1.8-5.5-4.8 3 0 5 1.8 5.5 4.8Z" />
+      <path d="M12 12.5c3 0 5-1.8 5.5-4.8-3 0-5 1.8-5.5 4.8Z" />
+    </Svg>
+  );
+}
+
 export function Planchette(props: SymbolProps) {
   return (
     <Svg {...props}>

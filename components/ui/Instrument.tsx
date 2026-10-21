@@ -6,6 +6,7 @@ import type { CSSProperties, ReactNode } from "react";
 
     <section className="instrument bezel space-y-4 p-4">   the panel (globals.css)
       <ReadoutStrip items={[...]} live />                  phosphor readouts
+      <SplitFlap value="KXMPRT" />                          a code, one cell per letter
       <SweepDial running stepMs={150} />                    a needle on a scale
       <SpokenWord key={id} testId="...">word</SpokenWord>   the big carved line
       ...controls (input.knob for ranges), a .ticker log...
@@ -32,6 +33,23 @@ export function ReadoutStrip({ items, live, testId = "readouts" }: { items: Read
         </span>
       ))}
     </div>
+  );
+}
+
+/**
+ * A split-flap readout, one cell per character: room codes for the party and
+ * the séance. The text content is exactly `value`, so it reads and copies as
+ * the code itself.
+ */
+export function SplitFlap({ value, small = false, testId }: { value: string; small?: boolean; testId?: string }) {
+  return (
+    <span className={`split-flap ${small ? "split-flap-sm" : ""}`} data-testid={testId}>
+      {[...value].map((ch, i) => (
+        <span key={i} className="split-flap-cell">
+          {ch}
+        </span>
+      ))}
+    </span>
   );
 }
 

@@ -10,10 +10,9 @@ import type { CalendarSample } from "@/lib/calendar/samples";
 import { localToday, readFeed, upcoming, ymdKey, type PreviewFeed } from "@/lib/calendar/upcoming";
 import { useHaunt } from "@/lib/haunt/useHaunt";
 import type { YMD } from "@/lib/stonemath";
-import { Sprout } from "@/components/ui/games/Sprout";
-import { Moth } from "@/components/ui/symbols";
-import "./almanac.css";
-import { litPath, moonPhaseIndex } from "./moon";
+import { MoonPhases } from "@/components/ui/Motifs";
+import { Moth, Sprout } from "@/components/ui/symbols";
+import { moonPhaseIndex } from "@/lib/moon";
 
 const PREVIEW_COUNT = 5;
 const SUBSCRIBE_LABEL = {
@@ -88,27 +87,6 @@ function dateParts(date: YMD, today: YMD) {
     year: date.y !== today.y ? String(date.y) : null,
     isToday,
   };
-}
-
-/** Eight moon phases across the top of the almanac page; tonight's is lit in candle. Decorative. */
-function MoonPhases({ tonight }: { tonight: number | null }) {
-  return (
-    <svg viewBox="0 0 200 24" className="almanac-phases" aria-hidden="true" focusable="false">
-      {Array.from({ length: 8 }, (_, i) => {
-        const cx = 12.5 + i * 25;
-        const lit = litPath(i, cx, 12, 7.5);
-        return (
-          <g key={i} className={i === tonight ? "almanac-tonight" : undefined}>
-            <circle cx={cx} cy={12} r={7.5} fill="none" stroke="currentColor" strokeWidth={1.2} />
-            {lit && <path d={lit} fill="currentColor" opacity={i === tonight ? 0.9 : 0.45} />}
-            {i === tonight && (
-              <circle cx={cx} cy={12} r={10.5} fill="none" stroke="currentColor" strokeWidth={0.8} opacity={0.6} />
-            )}
-          </g>
-        );
-      })}
-    </svg>
-  );
 }
 
 type Platform = "apple" | "google" | "outlook";
@@ -303,7 +281,7 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
         <span className="font-bold">Add birthdays too</span>
       </label>
 
-      <section aria-labelledby="preview-heading" className="almanac-page space-y-3">
+      <section aria-labelledby="preview-heading" className="card card-rule space-y-3 px-4 pb-4 pt-5">
         <MoonPhases tonight={today ? moonPhaseIndex(today) : null} />
         <h2 id="preview-heading" className="text-center font-display text-2xl">
           What you&rsquo;ll get
@@ -444,7 +422,7 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
                 value={links.feed}
                 onFocus={(e) => e.currentTarget.select()}
                 data-testid="feed-url"
-                className="field mt-1 w-full font-mono text-sm"
+                className="field mt-1 w-full text-sm"
               />
             </label>
             <button type="button" onClick={copy} className="btn btn-ghost">

@@ -7,7 +7,6 @@ import { ReadoutStrip } from "@/components/ui/Instrument";
 import { SymbolPair } from "@/components/ui/Motifs";
 import { Lily, Moth } from "@/components/ui/symbols";
 import { EVP_PLAYBACK_RATE, evpSeconds, micAvailable, micErrorMessage, reverseBuffer } from "@/lib/games/evp";
-import "./games.css";
 
 type Phase = "idle" | "recording" | "processing" | "ready" | "playing";
 

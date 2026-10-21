@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
-import { Lily, Moth } from "@/components/ui/symbols";
+import { SplitFlap } from "@/components/ui/Instrument";
+import { Lily, Moth, Sprout } from "@/components/ui/symbols";
 import {
   CENTER,
   bingoMessage,
@@ -16,11 +17,8 @@ import {
 } from "@/lib/games/bingo";
 import { SOLO_SEED_KEY, marksKey, parseMarks, readItem, subscribeStorage, writeItem } from "@/lib/games/storage";
 import { FREE_SQUARE, symbolById } from "@/lib/games/symbols";
-import { Sprout } from "@/components/ui/games/Sprout";
 import { BingoGlyph } from "./BingoGlyph";
 import { PartyShare } from "./PartyShare";
-import { RoomCode } from "./RoomCode";
-import "./games.css";
 
 function newSoloSeed() {
   // Ten letters of crypto randomness; same alphabet as room codes, just longer.
@@ -95,7 +93,7 @@ export function BingoGame() {
         <div className="instrument bezel flex flex-wrap items-center gap-x-4 gap-y-3 px-4 py-3">
           <span aria-hidden="true" className="flex items-center gap-3">
             <span className="label text-muted">Room</span>
-            <RoomCode code={party} small />
+            <SplitFlap value={party} small />
           </span>
           <p className="min-w-[12rem] flex-1">
             <strong>Party {party}.</strong> Everyone who opens this link has this same card.

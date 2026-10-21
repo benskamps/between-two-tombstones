@@ -351,7 +351,7 @@ export function SeanceBox({
           Bring in more phones
         </h2>
         <SeanceInvite code={room} path={seancePath(room, cemetery, inviteHash)} cemeteryName={cemeteryName} />
-        <Link href="/spirit" className="tap flex items-center justify-center rounded-xl border border-border px-5 font-bold">
+        <Link href="/spirit" className="btn btn-ghost w-full">
           Leave the séance
         </Link>
       </section>

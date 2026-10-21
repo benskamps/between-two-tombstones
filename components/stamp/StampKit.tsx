@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { ageFromDates, datesLine } from "@/lib/stamp/age";
 import { defaultQuad, isUsableQuad } from "@/lib/stamp/homography";
 import {
@@ -14,11 +14,11 @@ import {
   type StampText,
 } from "@/lib/stamp/types";
 import { ReadoutStrip } from "@/components/ui/Instrument";
+import { StepHeading } from "@/components/ui/Motifs";
 import { CornerFramer } from "./CornerFramer";
 import { ReadWithClaude } from "./ReadWithClaude";
 import { EmptySpecimens, RENDER_LABELS, StampPreviews, type PreviewUrls } from "./StampPreviews";
 import { StampClient, stampKitSupported, type RenderResult } from "./stampClient";
-import "./darkroom.css";
 
 /** Photos are downsized to this long side on the phone before anything else happens. */
 const MAX_WORK_SIDE = 2000;
@@ -270,9 +270,9 @@ export function StampKit() {
   return (
     <div className="space-y-6">
       <section aria-labelledby="step-photo" className="darkroom-easel bezel space-y-4">
-        <Step n={1} id="step-photo">
+        <StepHeading n={1} id="step-photo">
           Take or choose a photo
-        </Step>
+        </StepHeading>
         {!photo && (
           <div className="darkroom-mat">
             <EmptyStage />
@@ -338,9 +338,9 @@ export function StampKit() {
       {photo && corners && (
         <>
           <section aria-labelledby="step-frame" className="darkroom-easel bezel space-y-3">
-            <Step n={2} id="step-frame">
+            <StepHeading n={2} id="step-frame">
               Frame the stone
-            </Step>
+            </StepHeading>
             <CornerFramer bitmap={photo.bitmap} corners={corners} onChange={setCorners} matClassName="darkroom-mat" />
             {!cornersOk && (
               <p role="alert" className="text-danger">
@@ -359,9 +359,9 @@ export function StampKit() {
           </section>
 
           <section aria-labelledby="step-lift" className="card space-y-4 p-4">
-            <Step n={3} id="step-lift">
+            <StepHeading n={3} id="step-lift">
               Lift the carving
-            </Step>
+            </StepHeading>
             {/* The settings as a readout; the same facts are in the labels below. */}
             <ReadoutStrip
               testId="stamp-readouts"
@@ -448,9 +448,9 @@ export function StampKit() {
           </section>
 
           <section aria-labelledby="step-share" className="card space-y-3 p-4">
-            <Step n={4} id="step-share">
+            <StepHeading n={4} id="step-share">
               Add words, then save or share
-            </Step>
+            </StepHeading>
             <p className="text-muted">
               Optional. The name heads the ink stamp and the kit sheet; the age at death is the postage stamp&rsquo;s
               value.
@@ -552,19 +552,6 @@ export function StampKit() {
         </>
       )}
     </div>
-  );
-}
-
-/** A step heading: the number in Atkinson inside a ring (never IM Fell's old-style figures), then the carved title. */
-function Step({ n, id, children }: { n: number; id: string; children: ReactNode }) {
-  return (
-    <h2 id={id} className="darkroom-step">
-      <span className="darkroom-step-no" aria-hidden="true">
-        {n}
-      </span>
-      <span className="sr-only">Step {n}: </span>
-      <span className="font-display text-2xl leading-tight">{children}</span>
-    </h2>
   );
 }
 

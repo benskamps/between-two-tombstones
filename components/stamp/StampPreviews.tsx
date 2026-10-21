@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import "./darkroom.css";
+import { Specimen } from "@/components/ui/Motifs";
 
 export type PreviewUrls = { rubbing: string; ink: string; postage: string };
 
@@ -33,15 +33,19 @@ type Props = {
 };
 
 /** One output pinned up as a specimen card: its window (paper for the ink stamp), its name, its save link. */
-function Specimen({ kind, children, action }: { kind: keyof PreviewUrls; children: ReactNode; action?: ReactNode }) {
+function Output({ kind, children, action }: { kind: keyof PreviewUrls; children: ReactNode; action?: ReactNode }) {
   return (
-    <figure className="specimen">
-      <div className={`specimen-window ${kind === "ink" ? "specimen-paper" : ""}`}>{children}</div>
-      <figcaption className="specimen-tag">
-        <span className="label">{RENDER_LABELS[kind].title}</span>
-        {action}
-      </figcaption>
-    </figure>
+    <Specimen
+      paper={kind === "ink"}
+      tag={
+        <>
+          <span className="label">{RENDER_LABELS[kind].title}</span>
+          {action}
+        </>
+      }
+    >
+      {children}
+    </Specimen>
   );
 }
 
@@ -58,7 +62,7 @@ export function StampPreviews({ urls, busy, fileStem, renderMs, maskPixels, timi
       className="specimen-tray"
     >
       {KINDS.map((k) => (
-        <Specimen
+        <Output
           key={k}
           kind={k}
           action={
@@ -84,7 +88,7 @@ export function StampPreviews({ urls, busy, fileStem, renderMs, maskPixels, timi
           ) : (
             <span className="specimen-empty">{busy ? "Making…" : "Not made yet"}</span>
           )}
-        </Specimen>
+        </Output>
       ))}
     </div>
   );
@@ -120,7 +124,7 @@ export function EmptySpecimens() {
   return (
     <div className="specimen-tray specimen-tray-compact">
       {KINDS.map((k) => (
-        <Specimen key={k} kind={k}>
+        <Output key={k} kind={k}>
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -134,7 +138,7 @@ export function EmptySpecimens() {
           >
             {PLACEHOLDER[k]}
           </svg>
-        </Specimen>
+        </Output>
       ))}
     </div>
   );

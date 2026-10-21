@@ -103,7 +103,7 @@ export function SeanceJoin({ cemeteryQid, disabled }: { cemeteryQid: string; dis
           spellCheck={false}
           maxLength={12}
           disabled={disabled}
-          className="field flex-1 font-mono uppercase tracking-widest"
+          className="field field-code min-w-0 flex-1"
         />
         <button type="submit" disabled={disabled} className="btn btn-ghost">
           Join

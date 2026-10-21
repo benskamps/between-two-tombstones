@@ -1,4 +1,4 @@
-// The moon's phase for the Haunted Calendar's almanac ornament: which of eight
+// The moon's phase for the almanac ornament (MoonPhases in components/ui/Motifs.tsx): which of eight
 // phases a date falls in, and the lit part of each phase as an SVG path.
 
 import type { YMD } from "@/lib/stonemath";

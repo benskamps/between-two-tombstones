@@ -7,7 +7,6 @@ import { HauntGate } from "@/components/haunt/HauntGate";
 import { GateNeutral } from "@/components/haunt/PickHauntFirst";
 import { PageHeader } from "@/components/ui/Motifs";
 import { Candle, Lily, Moth, Planchette } from "@/components/ui/symbols";
-import "@/components/games/games.css";
 
 export const metadata: Metadata = {
   title: "Graveyard Games",

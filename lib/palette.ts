@@ -64,7 +64,9 @@ export const CSS_VAR: Record<Token, string> = {
  * Text sits on these too, so the test checks pairs on them as well.
  */
 export const MIXED: Record<string, { a: Token; b: Token; p: number; where: string }> = {
-  instrument: { a: "surface", b: "wisp", p: 92, where: ".instrument panels (spirit box, séance later)" },
+  instrument: { a: "surface", b: "wisp", p: 92, where: ".instrument panels (spirit box, séance, EVP, party code)" },
+  "lit-wisp": { a: "surface-2", b: "wisp", p: 86, where: "--lit-wisp: a found bingo square" },
+  "lit-candle": { a: "surface-2", b: "candle", p: 86, where: "--lit-candle: the free square" },
 };
 
 type Surface = Token | keyof typeof MIXED;
@@ -100,6 +102,8 @@ export const TEXT_PAIRS: [Token, Surface, string][] = [
   ["danger", "instrument", "Stop and error text on the instrument panel"],
   ["lichen", "instrument", "\"Turn it off near mourners.\" on the panel"],
   ["mauve", "instrument", "links on the panel"],
+  ["text", "lit-wisp", "a found bingo square's label"],
+  ["text", "lit-candle", "R.I.P. on the free square"],
   ["mauve-ink", "mauve", "primary pill buttons, Save, Use my location"],
   ["mauve-ink", "candle", "Go now, Start a tour here"],
   ["mauve-ink", "lichen", "the SAVE stamp while dragging right"],
@@ -114,7 +118,7 @@ export const TEXT_PAIRS: [Token, Surface, string][] = [
  * controls take `ash` instead (globals.css gives every text field an ash edge).
  */
 export const UI_PAIRS: [Token, Surface, string][] = [
-  ["ash", "bg", "text field edge on the page"],
+  ["ash", "bg", "text field edge on the page, an unfound bingo square on the board"],
   ["ash", "surface", "text field edge on a card"],
   ["ash", "surface-2", "text field edge in a row"],
   ["mauve", "bg", "primary pill fill on the page"],
@@ -129,6 +133,9 @@ export const UI_PAIRS: [Token, Surface, string][] = [
   ["mauve", "instrument", "knob rims and the primary pill on the panel"],
   ["ash", "instrument", "knob tracks and fields on the panel"],
   ["danger", "bg", "the Stop pill's edge"],
+  ["wisp", "lit-wisp", "a found bingo square's edge and glyph"],
+  ["candle", "lit-candle", "the free square's edge and candle"],
+  ["candle", "lit-wisp", "a completed line's edge on a found square"],
 ];
 
 /** color-mix(in srgb, a p%, b): straight interpolation of the sRGB components. */
