@@ -106,6 +106,11 @@ async function open(page: Page, path: string, fixedNoon?: string) {
   await page.addInitScript(() => {
     try {
       localStorage.setItem("btt-etiquette-seen", "1");
+      // /calendar without a cemetery in the link opens once you have a haunt (decision 18e).
+      localStorage.setItem(
+        "btt-haunt",
+        JSON.stringify({ qid: "Q2008469", name: "Oakland Cemetery", place: "Atlanta", at: "2026-10-21T00:00:00.000Z" }),
+      );
     } catch {
       // ignore
     }

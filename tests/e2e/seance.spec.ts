@@ -47,6 +47,18 @@ function seenEtiquette() {
   }
 }
 
+/** Tool pages open once you have a haunt (decision 18e); these tests start at Oakland. */
+function seedOaklandHaunt() {
+  try {
+    localStorage.setItem(
+      "btt-haunt",
+      JSON.stringify({ qid: "Q2008469", name: "Oakland Cemetery", place: "Atlanta", at: "2026-10-21T00:00:00.000Z" }),
+    );
+  } catch {
+    // ignore
+  }
+}
+
 function shiftClock(shiftMs: number) {
   const real = Date.now.bind(Date);
   Date.now = () => real() + shiftMs;
@@ -180,6 +192,8 @@ test.describe("séance", () => {
       phone(browser, baseURL, +120),
     ]);
     await a.grantPermissions(["clipboard-read", "clipboard-write"]);
+    // Only the host has a haunt (the spirit box needs one); B and C open links someone sent, which never need one.
+    await a.addInitScript(seedOaklandHaunt);
 
     // A hosts: starts a séance from the spirit page.
     const pa = await a.newPage();
@@ -344,6 +358,7 @@ test.describe("séance", () => {
 
   test("join a séance by typing its code, with the cemetery picked on the page", async ({ page }) => {
     await page.addInitScript(seenEtiquette);
+    await page.addInitScript(seedOaklandHaunt);
     await page.goto("/spirit");
     await page.getByLabel(/Sleepy Hollow Cemetery/).check();
     await expect(page.getByText(/people buried at Sleepy Hollow Cemetery died 75 or more years ago/)).toBeVisible();
@@ -370,6 +385,7 @@ test.describe("séance", () => {
 
   test("the party page starts a séance with the party's room code", async ({ browser, baseURL }) => {
     const ctx = await phone(browser, baseURL, 0);
+    await ctx.addInitScript(seedOaklandHaunt);
     const page = await ctx.newPage();
     const origin = new URL(baseURL!).origin;
     await page.goto("/games/party");

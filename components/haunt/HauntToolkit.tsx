@@ -49,12 +49,13 @@ export function HauntToolkit({ cemetery, people }: { cemetery: Pick<Cemetery, "q
           const Icon = t.icon;
           return (
             <li key={t.title}>
-              <Link href={t.href} className="tap flex h-full items-start gap-2 rounded-xl border border-border bg-surface-2 p-3">
-                <Icon className="mt-0.5 h-5 w-5 shrink-0 text-mauve" />
-                <span className="min-w-0">
-                  <span className="block font-bold leading-tight">{t.title}</span>
-                  <span className="mt-0.5 block text-sm leading-snug text-muted">{t.body}</span>
-                </span>
+              <Link
+                href={t.href}
+                title={t.body}
+                className="tap flex h-full min-h-14 items-center gap-2.5 rounded-xl border border-border bg-surface-2 px-3 py-2"
+              >
+                <Icon className="h-5 w-5 shrink-0 text-mauve" />
+                <span className="font-bold leading-tight">{t.title}</span>
               </Link>
             </li>
           );
