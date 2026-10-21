@@ -32,7 +32,10 @@ WHERE {
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }
 GROUP BY ?person ?personLabel ?personDescription
-ORDER BY DESC(?sitelinks)
+# Ties on sitelinks are broken by the QID's number (lowest first) so the LIMIT
+# cut is the same on every run. Keep this ORDER BY identical to burialsQuery in
+# lib/data/wikidata.ts.
+ORDER BY DESC(?sitelinks) xsd:integer(STRAFTER(STR(?person), "/entity/Q"))
 LIMIT ${limit}`;
 
 export const burials = (qid, limit) => sparql(burialsQuery(qid, limit));

@@ -15,7 +15,8 @@ import {
   type FeedOptions,
 } from "./feed";
 
-const NOW = new Date("2026-10-20T12:00:00Z");
+// After the bundled snapshots were fetched (10/21 ~03:05 UTC), so DTSTAMP is their fetchedAt.
+const NOW = new Date("2026-10-21T12:00:00Z");
 const SITE_URL = "https://between-two-tombstones.vercel.app";
 const OAKLAND = oakland as CemeterySnapshot;
 const SLEEPY = sleepyHollow as CemeterySnapshot;
@@ -247,7 +248,7 @@ describe("the whole feed", () => {
     expect(ics.events.length).toBeGreaterThan(30);
     for (const ev of ics.events) {
       expect(get(ev, "UID")).toMatch(/^Q\d+-(death|birth)@between-two-tombstones$/);
-      expect(get(ev, "DTSTAMP")).toBe("20261020T024103Z");
+      expect(get(ev, "DTSTAMP")).toBe("20261021T030502Z");
       expect(get(ev, "DTSTART")).toMatch(/^\d{8}$/);
       expect(get(ev, "RRULE")).toMatch(/^FREQ=YEARLY/);
       expect(get(ev, "TRANSP")).toBe("TRANSPARENT");

@@ -70,6 +70,11 @@ export function pickPlace(places: string | undefined): string | null {
  * Birth and death come only from best-rank statements: Margaret Mitchell has a
  * preferred 1900-11-08 and a normal-rank 1900-11-09, and SAMPLE over all ranks
  * could pick the wrong one.
+ * Ties on sitelinks are broken by the QID's number, lowest (oldest item) first,
+ * so the LIMIT cut is the same on every run: without it Wikidata sometimes put
+ * other 1-sitelink people at the end of Oakland's 80. Numbers, not the IRI
+ * string, which would favour "Q1…" items such as a newer "Grave of Bobby Jones".
+ * scripts/burials.mjs has the same ORDER BY.
  */
 export const burialsQuery = (qid: string, limit = BURIALS_LIMIT) => `
 SELECT ?person ?personLabel ?personDescription
@@ -99,7 +104,7 @@ WHERE {
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }
 GROUP BY ?person ?personLabel ?personDescription
-ORDER BY DESC(?sitelinks)
+ORDER BY DESC(?sitelinks) xsd:integer(STRAFTER(STR(?person), "/entity/Q"))
 LIMIT ${limit}`;
 
 /** A person without the Wikipedia summary yet, plus the article URL to fetch it. */

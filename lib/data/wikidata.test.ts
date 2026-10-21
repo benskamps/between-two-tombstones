@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import burialsJson from "./__fixtures__/sparql-burials-Q2008469.json";
 import factsJson from "./__fixtures__/sparql-facts-Q2008469.json";
@@ -36,6 +38,21 @@ describe("burials", () => {
     expect(q).toContain("GROUP BY ?person ?personLabel ?personDescription");
     expect(q).toContain("SAMPLE(?fag_)");
     expect(q).toMatch(/LIMIT 80$/);
+  });
+
+  it("breaks sitelink ties by QID number, exactly as scripts/burials.mjs does (the snapshots' query)", () => {
+    const orderBy = (q: string) => q.split("\n").filter((l) => l.startsWith("ORDER BY"));
+    expect(orderBy(burialsQuery("Q2008469"))).toEqual(['ORDER BY DESC(?sitelinks) xsd:integer(STRAFTER(STR(?person), "/entity/Q"))']);
+    const script = readFileSync(join(__dirname, "../../scripts/burials.mjs"), "utf8");
+    expect(orderBy(script)).toEqual(orderBy(burialsQuery("Q2008469")));
+    // The recorded answer (re-recorded with this query) is in that order: a stable LIMIT cut.
+    const raw = flattenBindings(burialsJson);
+    for (let i = 1; i < raw.length; i++) {
+      const [a, b] = [raw[i - 1], raw[i]];
+      const [sa, sb] = [Number(a.sitelinks ?? 0), Number(b.sitelinks ?? 0)];
+      expect(sa >= sb, `${a.person} before ${b.person}`).toBe(true);
+      if (sa === sb) expect(Number(a.person.split("/Q").pop()) < Number(b.person.split("/Q").pop())).toBe(true);
+    }
   });
 
   it("takes birth and death from best-rank statements only (regression: Margaret Mitchell)", () => {
