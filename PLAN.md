@@ -204,10 +204,19 @@ Owns (taking over from finished Lane 4): `lib/spirit/**`, `app/spirit/**`, `comp
 - Bonaventure (pinned at 400 m), slow 4G: 5.0 s.
 - Charleston (Magnolia pinned at 1.7 km), 3G: 16.2 s, because the pinned card isn't warmed. Fix queued (lane10-data-2).
 - The first story now sits at y≈250–310 of 839, against 684 before.
+- **After lane10-data-2 (81ff291, ~03:15 UTC), 3G:**
+  - Charleston: 8.3 s, down from 16.2 s. Magnolia may still have been cached from the earlier walk.
+  - Richmond (never loaded before; Shockoe Hill pinned at 1.6 km and warmed by /near): 10.2 s.
+  - Machine time only; the stranger's reading and tapping come on top.
 
 The environment allows the PR preview alias `between-two-tombstones-git-c-4feb29-benjamin-schippers-projects.vercel.app` (approved 10/21). Preview access uses a Vercel share link, expiring 10/22 02:00 UTC; the token is kept out of git.
 
-Open: the calendar e2e failed twice under load because burials tie at the 80-person cut-off (`ORDER BY DESC(?sitelinks)` only). A tie-breaker plus regenerated snapshots are queued (lane10-data-2).
+Fixed (lane10-data-2, merged 81ff291): burials tied at the 80-person cut-off now break by QID number, in both the live query and scripts/burials.mjs, and both snapshots were regenerated on 10/21.
+- Oakland: James Fairlie Cooper out, Henrik Bak in.
+- Sleepy Hollow: 5 people swapped, all with 5 sitelinks each.
+- Mitchell and Carnegie are still stop 1.
+
+P2 idea: limit burials to humans (`wdt:P31 wd:Q5`), so items like "Grave of Bobby Jones" can never land in a tour.
 
 Open: `seance.spec.ts` skewed-clock test failed once in the full prod run (2 workers, 10/21 ~01:25 UTC) and passed alone right after (max |A−B| 4 ms). The assertion that failed wasn't captured; not yet explained.
 
