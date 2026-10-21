@@ -191,13 +191,23 @@ Owns (taking over from finished Lane 4): `lib/spirit/**`, `app/spirit/**`, `comp
 ### Lane 10 — The skin and the haunt (Ben's feedback, decision 18) 🟦 started 10/21 ~01:40 UTC
 | ID | Tier | Item | Status |
 |---|---|---|---|
-| L10.1 | P0 | Foundation: Gravitator palette as global tokens, dark only (theme toggle and light tokens removed); tagline removed everywhere; type system (carved serif for names, space-age wide face for labels and readouts, Atkinson Hyperlegible for reading); shared motifs (arch-top headstone frame, wrought-iron and orbit dividers, stone grain, moon with orbit rings, moth, geometric botanicals); button, card and field primitives | 🟦 builder |
-| L10.2 | P0 | Home: two doors. Search a graveyard ("I'm here. Haunt me." location button + name search) and Plan a date (Gravitator) | 🟦 builder |
-| L10.3 | P0 | The haunt: opening a cemetery makes it your haunt (kept on the phone); the cemetery page is the haunt's hub with its tools; bottom nav changes once you have one; tool pages without a haunt show the doors, never a dead end; links that carry a cemetery set the haunt | 🟦 builder |
+| L10.1 | P0 | Foundation: Gravitator palette as global tokens, dark only (theme toggle and light tokens removed); tagline removed everywhere; type system (carved serif for names, space-age wide face for labels and readouts, Atkinson Hyperlegible for reading); shared motifs (arch-top headstone frame, wrought-iron and orbit dividers, stone grain, moon with orbit rings, moth, geometric botanicals); button, card and field primitives | ✅ merged 10/21 ~02:55 UTC (lane10-skin → PR #2, 1d93bdc). Michroma only on the one-word nav labels; muted #D2C8D6; ash edges on every control |
+| L10.2 | P0 | Home: two doors. Search a graveyard ("I'm here. Haunt me." location button + name search) and Plan a date (Gravitator) | ✅ merged (1d93bdc) |
+| L10.3 | P0 | The haunt: opening a cemetery makes it your haunt (kept on the phone); the cemetery page is the haunt's hub with its tools; bottom nav changes once you have one; tool pages without a haunt show the doors, never a dead end; links that carry a cemetery set the haunt | ✅ merged (1d93bdc): 12 h fresh haunt; `via=here|near` sets it, otherwise "Make this my haunt"; the gate remembers the tool for 30 min; links from friends never gated; etiquette is a hub card (decision 19b) |
 | L10.4 | P0 | Skin each surface (after L10.1 merges): tour + near + search; Stamp Kit; spirit box, séance, games, EVP (instrument panels); calendar, Gravitator, share pages | ⬜ |
 | L10.6 | P0 | Dedicated UI/UX review (Ben 10/21): nits and forecasted challenges on the plan, prod and the Lane 10 branch; a second pass on the foundation screenshots | ✅ pass 1 10/21 ~02:05 UTC: `docs/reviews/ux-review-2026-10-21.md` (F1–F28). Orchestrator re-checked F1 (toolkit above the stories, `TourView.tsx:122`), F2 (Charleston near list: 30 empty churchyards first) and F19 (2 of 80 Oakland extracts with junk) on prod. F1, F4–F17, F22–F26 and the shell nits went to the Lane 10 builder; F2, F17 (near side), F18–F20 and the near/search/StoryCard nits went to L10.7. Pass 2 on the screenshots: ⬜ |
-| L10.7 | P0 | Gate 2 data path (review F2, F18–F20): a "Best stories nearby" pin; empty cemeteries folded away; auto-open when within ~300 m of a cemetery with 5+ people listed (accuracy ≤ 300 m); search merges "<q> cemetery"; Wikipedia date junk cleaned; QID-as-name dropped. URL contract: `/near?lat&lon&acc`, `?via=near`, `?via=here`, `list=1` | 🟦 builder (`lane10-data`) |
+| L10.7 | P0 | Gate 2 data path (review F2, F18–F20): a "Best stories nearby" pin; empty cemeteries folded away; auto-open when within ~300 m of a cemetery with 5+ people listed (accuracy ≤ 300 m); search merges "<q> cemetery"; Wikipedia date junk cleaned; QID-as-name dropped. URL contract: `/near?lat&lon&acc`, `?via=near`, `?via=here`, `list=1` | ✅ merged 10/21 ~03:00 UTC (lane10-data, e916738) with follow-ups: bare-QID people named from their Wikipedia title (Nedom L. Angier, Ira O. McDaniel); the spirit box never speaks an ID; page requests cap rate-limit waits at ~2 s. Orchestrator fixed two integration tests (d531321): the séance bank goes through toSpiritPerson; the hand-off tests block the service worker. Full e2e 142/142 on the merged build (local prod) |
 | L10.5 | P0 | Re-run gates 3, 4, 7, 9, 10, 11 and the full e2e suite on the skinned preview; Lighthouse a11y ≥ 95 and perf ≥ 85 again | ⬜ |
+
+**Gate 2 re-timed on the Vercel preview (d531321), 10/21 ~03:10 UTC.** Pixel 7, 4× CPU, machine time only, each cemetery cold on this deployment:
+- Oakland, slow 4G, auto-open: 5 stories at 5.1 s.
+- Bonaventure (pinned at 400 m), slow 4G: 5.0 s.
+- Charleston (Magnolia pinned at 1.7 km), 3G: 16.2 s, because the pinned card isn't warmed. Fix queued (lane10-data-2).
+- The first story now sits at y≈250–310 of 839, against 684 before.
+
+The environment allows the PR preview alias `between-two-tombstones-git-c-4feb29-benjamin-schippers-projects.vercel.app` (approved 10/21). Preview access uses a Vercel share link, expiring 10/22 02:00 UTC; the token is kept out of git.
+
+Open: the calendar e2e failed twice under load because burials tie at the 80-person cut-off (`ORDER BY DESC(?sitelinks)` only). A tie-breaker plus regenerated snapshots are queued (lane10-data-2).
 
 Open: `seance.spec.ts` skewed-clock test failed once in the full prod run (2 workers, 10/21 ~01:25 UTC) and passed alone right after (max |A−B| 4 ms). The assertion that failed wasn't captured; not yet explained.
 
