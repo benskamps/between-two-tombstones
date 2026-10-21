@@ -25,7 +25,7 @@ export function SavedTourPage() {
     return (
       <div className="space-y-4">
         <PageHeader title="Saved tours" tool="saved" life={<Sprout className="h-5 w-5" />} />
-        <SavedToursList heading="Tours on this phone" />
+        <SavedToursList heading="Tours on this phone" level={2} />
       </div>
     );
   }
@@ -46,7 +46,7 @@ export function SavedTourPage() {
           <Link href={`/cemetery/${qid}`} className="btn btn-primary">
             Open it now
           </Link>
-          <SavedToursList heading="Tours on this phone" />
+          <SavedToursList heading="Tours on this phone" level={2} />
         </div>
       }
     />
