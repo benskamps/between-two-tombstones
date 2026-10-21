@@ -46,12 +46,7 @@ export function ReadWithClaude({ disabled, getImages }: Props) {
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted">Your photo is sent to Claude only when you tap this, and is not stored.</p>
-      <button
-        type="button"
-        onClick={read}
-        disabled={disabled || busy}
-        className="tap w-full rounded-xl border border-border bg-surface-2 px-4 font-bold disabled:opacity-60"
-      >
+      <button type="button" onClick={read} disabled={disabled || busy} className="btn btn-ghost w-full">
         {busy ? "Reading the stone…" : "Read with Claude"}
       </button>
       <div aria-live="polite" data-testid="reading" className="space-y-3">
@@ -61,7 +56,7 @@ export function ReadWithClaude({ disabled, getImages }: Props) {
           </p>
         )}
         {sections && (
-          <div className="space-y-2 rounded-xl border border-border bg-surface p-4">
+          <div className="space-y-2 rounded-xl border border-border bg-surface-2 p-4">
             <dl className="space-y-3">
               {sections.map((s) => (
                 <div key={s.label}>
@@ -76,7 +71,11 @@ export function ReadWithClaude({ disabled, getImages }: Props) {
                     </dd>
                   ) : (
                     s.lines.map((line, i) => (
-                      <dd key={i} className={s.label === "What the stone says" ? "whitespace-pre-wrap font-display text-lg" : ""}>
+                      // The stone's words keep their line breaks; Atkinson, since they carry dates (no old-style figures).
+                      <dd
+                        key={i}
+                        className={s.label === "What the stone says" ? "whitespace-pre-wrap text-lg tracking-wide" : ""}
+                      >
                         {line}
                       </dd>
                     ))
@@ -85,8 +84,8 @@ export function ReadWithClaude({ disabled, getImages }: Props) {
               ))}
             </dl>
             <p className="pt-1 text-sm text-muted">
-              Read by Claude from your photo{cached ? " (a saved reading of this same photo)" : ""}. [?] marks letters it
-              couldn&rsquo;t make out. Check names and dates against the stone.
+              Read by Claude from your photo{cached ? " (a saved reading of this same photo)" : ""}. [?] marks letters
+              it couldn&rsquo;t make out. Check names and dates against the stone.
             </p>
           </div>
         )}
