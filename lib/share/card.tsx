@@ -130,7 +130,7 @@ function geometry(format: CardFormat): Geometry {
  * the top, a few stars, the thin double rule, the wordmark top left and the
  * ringed moon top right (the brand).
  */
-function Frame({ g, tint = C.mauve, children }: { g: Geometry; tint?: string; children: ReactNode }) {
+function Frame({ g, tint = C.mauve, bare = false, children }: { g: Geometry; tint?: string; bare?: boolean; children: ReactNode }) {
   const { W, H, og, inset } = g;
   const rule = (i: number): CSSProperties => ({ ...abs(i, i, W - i * 2, H - i * 2) });
   return (
@@ -149,10 +149,12 @@ function Frame({ g, tint = C.mauve, children }: { g: Geometry; tint?: string; ch
       ))}
       <div style={{ ...rule(inset), border: `1.5px solid ${C.border}`, borderRadius: 18 }} />
       <div style={{ ...rule(inset + 7), border: `1px solid ${C.rule}`, borderRadius: 12 }} />
-      <div style={{ ...abs(og ? 54 : 84, og ? 50 : 96), ...label(og ? 15 : 26, C.mauve) }}>BETWEEN TWO TOMBSTONES</div>
-      <div style={abs(W - (og ? 48 : 80) - (og ? 84 : 150), og ? 36 : 80)}>
-        <Sign name="ringed-moon" size={og ? 84 : 150} color={C.candle} stroke={1.1} />
-      </div>
+      {!bare && <div style={{ ...abs(og ? 54 : 84, og ? 50 : 96), ...label(og ? 15 : 26, C.mauve) }}>BETWEEN TWO TOMBSTONES</div>}
+      {!bare && (
+        <div style={abs(W - (og ? 48 : 80) - (og ? 84 : 150), og ? 36 : 80)}>
+          <Sign name="ringed-moon" size={og ? 84 : 150} color={C.candle} stroke={1.1} />
+        </div>
+      )}
       {children}
     </div>
   );
@@ -441,7 +443,8 @@ function Generic({ kind, g }: { kind: ShareKind; g: Geometry }) {
   const { W, H, og } = g;
   const what = kind === "stop" ? "A stop on a cemetery tour" : kind === "tour" ? "A cemetery tour" : kind === "seance" ? "A séance invite" : "A graveyard party invite";
   return (
-    <Frame g={g}>
+    // The wordmark and the moon are the card here, so the corners stay empty.
+    <Frame g={g} bare>
       <div style={{ ...abs(0, 0, W, H), flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
         <Sign name="ringed-moon" size={og ? 120 : 220} color={C.candle} stroke={1.1} />
         <div style={{ ...carved(og ? 76 : 96), marginTop: og ? 18 : 40 }}>Between Two Tombstones</div>

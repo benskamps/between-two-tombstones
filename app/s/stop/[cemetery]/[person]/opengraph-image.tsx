@@ -1,4 +1,4 @@
-import { SHARE_IMAGE_ALT, shareImageFor } from "@/lib/share/page";
+import { SHARE_IMAGE_ALT, shareImageFor } from "@/lib/share/image-route";
 
 export const alt = SHARE_IMAGE_ALT.stop;
 export const size = { width: 1200, height: 630 };
