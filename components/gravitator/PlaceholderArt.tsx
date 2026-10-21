@@ -1,7 +1,10 @@
 // Drawn stand-in for cemeteries with no photo on Wikidata (most of them).
 // Three scenes, picked by QID so the same cemetery always gets the same one.
-// Colors come from the route palette (app/gravitator/gravitator.css). The
-// scenes sit high in the frame because the card's nameplate covers the bottom.
+// Colors come from the route palette (app/gravitator/gravitator.css) and the
+// app's tokens. The sky carries the app's ringed moon (the line art in
+// components/ui/symbols.tsx) and a few stars, so the Gravitator shares one
+// illustration language with the rest of the app. The scenes sit high in the
+// frame because the card's nameplate covers the bottom.
 
 function pick(qid: string): number {
   let h = 0;
@@ -9,15 +12,63 @@ function pick(qid: string): number {
   return h % 3;
 }
 
+// A faint starfield in the sky band (above the scenes, clear of the moon's ring).
+const STARS: [number, number, number][] = [
+  [28, 26, 1.1],
+  [64, 58, 0.8],
+  [96, 18, 1.3],
+  [138, 44, 0.9],
+  [172, 14, 0.8],
+  [206, 36, 1.2],
+  [238, 62, 0.8],
+  [262, 20, 1],
+  [22, 92, 0.8],
+  [118, 82, 0.7],
+];
+
+/** A four-point sparkle, the app's readout star, at (x, y). */
+function sparkle(x: number, y: number, r: number) {
+  const k = r * 0.22;
+  return `M${x} ${y - r}L${x + k} ${y - k}L${x + r} ${y}L${x + k} ${y + k}L${x} ${y + r}L${x - k} ${y + k}L${x - r} ${y}L${x - k} ${y - k}Z`;
+}
+
 function Sky() {
   return (
     <>
       <rect className="g-art-sky" x="0" y="0" width="400" height="300" />
+      <g className="fill-text" opacity={0.55}>
+        {STARS.map(([x, y, r]) => (
+          <circle key={`${x}-${y}`} cx={x} cy={y} r={r} />
+        ))}
+      </g>
+      <path
+        className="fill-wisp"
+        opacity={0.7}
+        d={`${sparkle(52, 40, 4.5)}${sparkle(196, 62, 3.5)}${sparkle(372, 54, 3)}`}
+      />
       {/* Low on the right, clear of the "Full profile" button in the corner. */}
-      <circle className="g-art-glow" cx="340" cy="112" r="50" />
-      {/* Crescent: a full moon with a sky-colored bite. */}
-      <circle className="g-art-moon" cx="340" cy="112" r="24" />
-      <circle className="g-art-sky" cx="351" cy="104" r="21" />
+      <circle className="g-art-glow" cx="340" cy="112" r="44" />
+      {/*
+        The ringed moon from components/ui/symbols.tsx, drawn at 4× (its 24-unit
+        grid centred on the old moon's spot): a line-art moon with its shaded
+        limb, an orbit ring whose back half passes behind it, and a small satellite.
+      */}
+      <g
+        transform="translate(340 112) scale(4) translate(-12 -12)"
+        className="stroke-mauve"
+        fill="none"
+        strokeWidth={0.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="12" r="6" />
+        <path d="M12 6a3.6 6 0 0 0 0 12" opacity={0.7} />
+        <g transform="rotate(-18 12 12)">
+          <path d="M1.5 12a10.5 3.2 0 0 0 21 0" />
+          <path d="M1.5 12a10.5 3.2 0 0 1 4.5-2.63M18 9.37A10.5 3.2 0 0 1 22.5 12" />
+          <circle cx="21.2" cy="13.2" r=".9" className="fill-mauve" stroke="none" />
+        </g>
+      </g>
     </>
   );
 }
