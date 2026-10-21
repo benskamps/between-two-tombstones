@@ -13,7 +13,8 @@ export default defineConfig({
   timeout: 30000,
   retries: 0,
   workers: 2,
-  use: { baseURL, ...devices["Pixel 7"], ...(proxyServer ? { proxy: { server: proxyServer } } : {}) },
+  // Local servers a remote run starts itself (the Wikidata-outage server) stay off the proxy.
+  use: { baseURL, ...devices["Pixel 7"], ...(proxyServer ? { proxy: { server: proxyServer, bypass: "localhost,127.0.0.1" } } : {}) },
   webServer: process.env.BASE_URL
     ? undefined
     : { command: "pnpm start -p 3100", url: baseURL, timeout: 60000, reuseExistingServer: true },
