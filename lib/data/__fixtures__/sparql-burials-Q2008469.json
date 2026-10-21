@@ -67,7 +67,7 @@
     },
     "occupations": {
      "type": "literal",
-     "value": "prose writer|novelist|journalist|screenwriter|writer"
+     "value": "prose writer|novelist|journalist|writer|screenwriter"
     },
     "image": {
      "type": "uri",
@@ -595,7 +595,7 @@
     },
     "occupations": {
      "type": "literal",
-     "value": "historian|politician|lawyer|writer|judge"
+     "value": "historian|politician|writer|lawyer|judge"
     },
     "image": {
      "type": "uri",
@@ -994,7 +994,7 @@
     },
     "occupations": {
      "type": "literal",
-     "value": "hymnwriter|politician|composer|writer"
+     "value": "hymnwriter|politician|writer|composer"
     },
     "image": {
      "type": "uri",
@@ -1124,7 +1124,7 @@
     },
     "occupations": {
      "type": "literal",
-     "value": "microbiologist|bacteriologist"
+     "value": "bacteriologist|microbiologist"
     },
     "image": {
      "type": "uri",
@@ -4339,7 +4339,7 @@
     },
     "occupations": {
      "type": "literal",
-     "value": "publisher|journalist"
+     "value": "journalist|publisher"
     },
     "image": {
      "type": "uri",
@@ -4449,7 +4449,7 @@
     },
     "occupations": {
      "type": "literal",
-     "value": "businessperson|politician|military personnel"
+     "value": "military personnel|politician|businessperson"
     },
     "findAGraveId": {
      "type": "literal",
@@ -4510,7 +4510,7 @@
     },
     "occupations": {
      "type": "literal",
-     "value": "baker|traiteur|entrepreneur"
+     "value": "traiteur|entrepreneur|baker"
     },
     "sitelinks": {
      "datatype": "http://www.w3.org/2001/XMLSchema#integer",

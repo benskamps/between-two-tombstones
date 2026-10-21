@@ -1,6 +1,5 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { burialsQuery as scriptBurialsQuery } from "../../scripts/burials.mjs";
 import burialsJson from "./__fixtures__/sparql-burials-Q2008469.json";
 import factsJson from "./__fixtures__/sparql-facts-Q2008469.json";
 import nearLakeViewJson from "./__fixtures__/sparql-near-lakeview.json";
@@ -40,11 +39,33 @@ describe("burials", () => {
     expect(q).toMatch(/LIMIT 80$/);
   });
 
-  it("breaks sitelink ties by QID number, exactly as scripts/burials.mjs does (the snapshots' query)", () => {
-    const orderBy = (q: string) => q.split("\n").filter((l) => l.startsWith("ORDER BY"));
-    expect(orderBy(burialsQuery("Q2008469"))).toEqual(['ORDER BY DESC(?sitelinks) xsd:integer(STRAFTER(STR(?person), "/entity/Q"))']);
-    const script = readFileSync(join(__dirname, "../../scripts/burials.mjs"), "utf8");
-    expect(orderBy(script)).toEqual(orderBy(burialsQuery("Q2008469")));
+  it("is the same query as scripts/burials.mjs (the snapshots' query), comments aside", () => {
+    const body = (q: string) =>
+      q
+        .split("\n")
+        .map((l) => l.trim())
+        .filter((l) => l && !l.startsWith("#"));
+    for (const qid of ["Q2008469", "Q216344"]) expect(body(scriptBurialsQuery(qid, 80))).toEqual(body(burialsQuery(qid, 80)));
+  });
+
+  it("picks the top 80 by sitelinks in a subquery before joining any details (big cemeteries: F-N1)", () => {
+    const lines = burialsQuery("Q216344")
+      .split("\n")
+      .map((l) => l.trim());
+    const at = (prefix: string) => lines.findIndex((l) => l.startsWith(prefix));
+    const inner = at("SELECT DISTINCT ?person ?sitelinks_ WHERE {");
+    expect(inner).toBeGreaterThan(0);
+    // The cut happens inside, before the first OPTIONAL detail join.
+    expect(lines.indexOf("LIMIT 80")).toBeGreaterThan(inner);
+    expect(lines.indexOf("LIMIT 80")).toBeLessThan(at("OPTIONAL { ?burial pq:P625"));
+    // Both ORDER BYs (the cut and the result) break sitelink ties by QID number.
+    expect(lines.filter((l) => l.startsWith("ORDER BY"))).toEqual([
+      'ORDER BY DESC(?sitelinks_) xsd:integer(STRAFTER(STR(?person), "/entity/Q"))',
+      'ORDER BY DESC(?sitelinks) xsd:integer(STRAFTER(STR(?person), "/entity/Q"))',
+    ]);
+  });
+
+  it("returns rows in that order: sitelinks, then QID number (a stable LIMIT cut)", () => {
     // The recorded answer (re-recorded with this query) is in that order: a stable LIMIT cut.
     const raw = flattenBindings(burialsJson);
     for (let i = 1; i < raw.length; i++) {
