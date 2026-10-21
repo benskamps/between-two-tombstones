@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { PartyLobby } from "@/components/games/PartyLobby";
+import { HauntGate } from "@/components/haunt/HauntGate";
+import { GateNeutral } from "@/components/haunt/PickHauntFirst";
 import { SAMPLE_CEMETERIES } from "@/lib/spirit/samples";
 
 export const metadata: Metadata = {
@@ -7,6 +10,8 @@ export const metadata: Metadata = {
   description:
     "Share one link and everyone plays Tombstone Bingo on the same card, or holds a séance where every phone speaks the same names at the same second.",
 };
+
+const KNOWN = SAMPLE_CEMETERIES.map(({ qid, name, place }) => ({ qid, name, place }));
 
 export default function PartyPage() {
   return (
@@ -18,7 +23,13 @@ export default function PartyPage() {
           the same names at the same second.
         </p>
       </header>
-      <PartyLobby samples={SAMPLE_CEMETERIES} />
+      {/* Starting a party needs a haunt; the party link it makes opens for anyone (see /games/bingo). */}
+      <Suspense fallback={<GateNeutral />}>
+        {/* ?join=1 (typing a friend's room code) opens without a haunt. */}
+        <HauntGate tool="/games/party" share={["join"]} known={KNOWN}>
+          <PartyLobby samples={SAMPLE_CEMETERIES} />
+        </HauntGate>
+      </Suspense>
     </div>
   );
 }

@@ -261,7 +261,7 @@ export function StampKit() {
     <div className="space-y-6">
       <section aria-labelledby="step-photo" className={sectionClass}>
         <h2 id="step-photo" className="font-display text-2xl">
-          1. Take or choose a photo
+          <span className="font-sans">1.</span> Take or choose a photo
         </h2>
         <p className="text-muted">
           Stand square to the stone, fill the frame with its face, and avoid your own shadow. The photo stays on your
@@ -309,7 +309,7 @@ export function StampKit() {
           <section aria-labelledby="step-frame" className={sectionClass}>
             <div className="flex items-center justify-between gap-2">
               <h2 id="step-frame" className="font-display text-2xl">
-                2. Frame the stone
+                <span className="font-sans">2.</span> Frame the stone
               </h2>
               <button
                 type="button"
@@ -329,7 +329,7 @@ export function StampKit() {
 
           <section aria-labelledby="step-lift" className={sectionClass}>
             <h2 id="step-lift" className="font-display text-2xl">
-              3. Lift the carving
+              <span className="font-sans">3.</span> Lift the carving
             </h2>
             <fieldset className="space-y-2">
               <legend className="font-bold">What to lift</legend>
@@ -407,7 +407,7 @@ export function StampKit() {
 
           <section aria-labelledby="step-share" className={sectionClass}>
             <h2 id="step-share" className="font-display text-2xl">
-              4. Add words, then save or share
+              <span className="font-sans">4.</span> Add words, then save or share
             </h2>
             <p className="text-sm text-muted">
               Optional. The name heads the ink stamp and the kit sheet; the age at death is the postage stamp&rsquo;s

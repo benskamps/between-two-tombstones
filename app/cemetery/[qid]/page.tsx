@@ -21,6 +21,11 @@ export const metadata: Metadata = {
 export default function CemeteryPage({ params }: PageProps<"/cemetery/[qid]">) {
   return (
     <>
+      {/* Story photos come from Commons: Special:FilePath redirects to the scaled copy on
+          thumb.wikimedia.org. Stop 1 is on the first screen (F1), so open both connections early
+          (React hoists these links into the head of the HTML). */}
+      <link rel="preconnect" href="https://commons.wikimedia.org" />
+      <link rel="preconnect" href="https://thumb.wikimedia.org" />
       <ServiceWorkerRegistrar />
       <Suspense fallback={<TourLoading />}>
         <Tour params={params} />

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { EvpHubLink } from "@/components/games/EvpRecorder";
+import { HauntGate } from "@/components/haunt/HauntGate";
+import { GateNeutral } from "@/components/haunt/PickHauntFirst";
 
 export const metadata: Metadata = {
   title: "Graveyard Games",
@@ -32,18 +35,22 @@ export default function GamesPage() {
         <h1 className="font-display text-4xl leading-tight">Graveyard Games</h1>
         <p className="text-muted">Something to do while you walk. Stay on the paths and give mourners space.</p>
       </header>
-      <ul className="grid gap-3">
-        {GAMES.map((g) => (
-          <li key={g.href}>
-            <Link href={g.href} className="tap block rounded-xl border border-border bg-surface p-4">
-              <span className="font-display text-xl">{g.title}</span>
-              <span className="block text-muted">{g.body}</span>
-            </Link>
-          </li>
-        ))}
-        {/* Only shown when this browser can record from a microphone. */}
-        <EvpHubLink />
-      </ul>
+      <Suspense fallback={<GateNeutral />}>
+        <HauntGate tool="/games">
+          <ul className="grid gap-3">
+            {GAMES.map((g) => (
+              <li key={g.href}>
+                <Link href={g.href} className="tap block rounded-xl border border-border bg-surface p-4">
+                  <span className="font-display text-xl">{g.title}</span>
+                  <span className="block text-muted">{g.body}</span>
+                </Link>
+              </li>
+            ))}
+            {/* Only shown when this browser can record from a microphone. */}
+            <EvpHubLink />
+          </ul>
+        </HauntGate>
+      </Suspense>
     </div>
   );
 }

@@ -261,8 +261,9 @@ export function SeanceBox({
         {audioNote && <p className="text-danger">{audioNote}</p>}
         <p
           aria-hidden="true"
-          className={`min-h-[3.5rem] text-center font-display leading-tight text-accent ${
-            phase === "countdown" ? "text-3xl" : "text-4xl"
+          className={`min-h-[3.5rem] text-center leading-tight text-accent ${
+            // The countdown is digits: Atkinson, since IM Fell's old-style figures misread (F9).
+            phase === "countdown" ? "font-sans text-3xl" : "font-display text-4xl"
           }`}
           data-testid="seance-latest"
         >
@@ -306,16 +307,18 @@ export function SeanceBox({
         <h2 id="seance-captions" className="font-display text-2xl">
           What the spirits said
         </h2>
-        <ol role="log" aria-live="polite" aria-label="Captions" className="space-y-1">
-          {log.map((u) => (
-            <li key={u.k} data-slot={u.k} className="flex gap-3 border-b border-border py-1">
-              <time dateTime={new Date(u.at).toISOString()} className="shrink-0 text-sm tabular-nums text-muted">
-                {clockTenths(u.at)}
-              </time>
-              <span className="font-bold">{u.text}</span>
-            </li>
-          ))}
-        </ol>
+        <div role="log" aria-live="polite" aria-label="Captions">
+          <ol className="space-y-1">
+            {log.map((u) => (
+              <li key={u.k} data-slot={u.k} className="flex gap-3 border-b border-border py-1">
+                <time dateTime={new Date(u.at).toISOString()} className="shrink-0 text-sm tabular-nums text-muted">
+                  {clockTenths(u.at)}
+                </time>
+                <span className="font-bold">{u.text}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
         {log.length === 0 && !stopNote && (
           <p className="text-muted">
             Each voice shows up here with the time it was due on the shared clock, so phones can be compared side by

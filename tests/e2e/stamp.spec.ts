@@ -1,6 +1,7 @@
 import { readFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
+import { seedHaunt } from "./fixtures/haunt";
 
 // The Stamp Kit end to end: fixture photo → corners (keyboard) → three renders,
 // timing under 4× CPU throttling, kit sheet / story downloads, and the
@@ -20,6 +21,8 @@ test.beforeEach(async ({ page }) => {
       // ignore
     }
   });
+  // The Stamp Kit opens once you have a haunt (decision 18e).
+  await seedHaunt(page);
 });
 
 async function currentJob(page: Page) {

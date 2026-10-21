@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { BingoGame } from "@/components/games/BingoGame";
+import { HauntGate } from "@/components/haunt/HauntGate";
 
 export const metadata: Metadata = {
   title: "Tombstone Bingo",
@@ -17,9 +18,11 @@ export default function BingoPage() {
           touch: no leaning on or climbing stones.
         </p>
       </header>
-      {/* The card depends on ?party= and on what this phone saved, so it renders in the browser. */}
-      <Suspense fallback={<p className="text-muted">Shuffling your card&hellip;</p>}>
-        <BingoGame />
+      {/* The card depends on ?party= and on what this phone saved, so it renders in the browser. A party link always opens. */}
+      <Suspense fallback={<p className="min-h-[85svh] text-muted">Shuffling your card&hellip;</p>}>
+        <HauntGate tool="/games/bingo" share={["party"]}>
+          <BingoGame />
+        </HauntGate>
       </Suspense>
     </div>
   );

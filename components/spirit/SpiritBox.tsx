@@ -10,6 +10,9 @@ import {
   startNoise,
   type NoiseEngine,
 } from "@/lib/spirit/engine";
+import { shouldAutoSetHaunt } from "@/lib/haunt/haunt";
+import { getFreshHaunt, getHaunt, setHaunt } from "@/lib/haunt/store";
+import { useHaunt } from "@/lib/haunt/useHaunt";
 import { QID_RE, loadCemetery, type LoadResult, type SampleCemetery } from "@/lib/spirit/load";
 import { capsFromParam, createSession, formatDuration, stopMessage, type SpiritSession, type Utterance } from "@/lib/spirit/session";
 import { pickVoice, silenceVoices, speakFragment, speechAvailable } from "@/lib/spirit/voice";
@@ -29,11 +32,14 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
   const params = useSearchParams();
   const rawTour = params.get("cemetery");
   const tourQid = rawTour && QID_RE.test(rawTour) ? rawTour : null;
-  const tourIsSample = tourQid !== null && samples.some((s) => s.qid === tourQid);
+  // The cemetery in the link wins; otherwise the haunt (decision 18e); the first sample only as a last resort.
+  const haunt = useHaunt();
+  const extraQid = tourQid ?? haunt?.qid ?? null;
+  const extraIsSample = extraQid !== null && samples.some((s) => s.qid === extraQid);
   const { caps, test } = capsFromParam(params.get("test-caps"));
   const canSpeak = useSyncExternalStore(subscribeNothing, speechAvailable, () => true);
 
-  const [choice, setChoice] = useState<string>(tourQid ?? samples[0].qid);
+  const [choice, setChoice] = useState<string>(extraQid ?? samples[0].qid);
   const [results, setResults] = useState<Record<string, LoadResult>>({});
   const [running, setRunning] = useState(false);
   const [log, setLog] = useState<Utterance[]>([]);
@@ -57,10 +63,24 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
     return () => ctrl.abort();
   }, [choice, samples]);
 
-  // "/spirit?cemetery=Q…#seance" (e.g. from a tour) lands on the séance section, which renders after hydration.
+  // A cemetery from the link becomes the haunt once its burials load (then its name is known),
+  // unless it already is (the gate may have set it with its place from ?name=&place=), and
+  // never over a fresh haunt elsewhere (F11: a link is used, not adopted).
+  const tourResult = tourQid ? results[tourQid] : undefined;
+  const tourName = tourResult?.ok ? tourResult.cemetery.name : null;
   useEffect(() => {
-    if (window.location.hash === "#seance") document.getElementById("seance")?.scrollIntoView();
-  }, []);
+    if (tourQid && tourName && getHaunt()?.qid !== tourQid && shouldAutoSetHaunt(tourQid, getFreshHaunt(), null)) {
+      setHaunt({ qid: tourQid, name: tourName });
+    }
+  }, [tourQid, tourName]);
+
+  // "/spirit?cemetery=Q…#seance" (e.g. from a tour) lands on the séance section, which renders after hydration.
+  // "?join=1" (from a broken séance link, or "type a code") also puts the cursor in the room-code box.
+  const joining = params.get("join") !== null;
+  useEffect(() => {
+    if (window.location.hash === "#seance" || joining) document.getElementById("seance")?.scrollIntoView();
+    if (joining) document.getElementById("seance-room")?.focus({ preventScroll: true });
+  }, [joining]);
 
   // Stop on page hide and on unmount; close the audio context when leaving.
   useEffect(() => {
@@ -154,12 +174,17 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
 
   const options = [
     ...samples.map((s) => ({ qid: s.qid, label: s.name, detail: s.place })),
-    ...(tourQid && !tourIsSample
+    ...(extraQid && !extraIsSample
       ? [
           {
-            qid: tourQid,
-            label: "The cemetery from your last tour",
-            detail: results[tourQid]?.ok ? (results[tourQid] as Extract<LoadResult, { ok: true }>).cemetery.name : tourQid,
+            qid: extraQid,
+            // A cemetery from the link (the tour's own links carry it) or, without one, the haunt.
+            label: tourQid ? "The cemetery from your last tour" : "Your haunt",
+            detail: results[extraQid]?.ok
+              ? (results[extraQid] as Extract<LoadResult, { ok: true }>).cemetery.name
+              : extraQid === haunt?.qid
+                ? haunt.name
+                : extraQid,
           },
         ]
       : []),
@@ -292,16 +317,18 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
         <h2 id="spirit-captions" className="font-display text-2xl">
           What the box said
         </h2>
-        <ol role="log" aria-live="polite" aria-label="Captions" className="space-y-1">
-          {log.map((u) => (
-            <li key={u.n} className="flex gap-3 border-b border-border py-1">
-              <time dateTime={new Date(u.at).toISOString()} className="shrink-0 text-sm tabular-nums text-muted">
-                {clock(u.at)}
-              </time>
-              <span className="font-bold">{u.text}</span>
-            </li>
-          ))}
-        </ol>
+        <div role="log" aria-live="polite" aria-label="Captions">
+          <ol className="space-y-1">
+            {log.map((u) => (
+              <li key={u.n} className="flex gap-3 border-b border-border py-1">
+                <time dateTime={new Date(u.at).toISOString()} className="shrink-0 text-sm tabular-nums text-muted">
+                  {clock(u.at)}
+                </time>
+                <span className="font-bold">{u.text}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
         {log.length === 0 && !stopNote && (
           <p className="text-muted">Captions of every voice show up here, with the time.</p>
         )}

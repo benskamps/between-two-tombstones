@@ -1,4 +1,5 @@
 import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
+import { seedHaunt } from "./fixtures/haunt";
 import oaklandJson from "../../data/snapshots/oakland-atlanta.json";
 import sleepyJson from "../../data/snapshots/sleepy-hollow.json";
 import { buildCalendar } from "../../lib/calendar/feed";
@@ -111,6 +112,8 @@ async function open(page: Page, path: string, fixedNoon?: string) {
     }
   });
   if (fixedNoon) await page.clock.setFixedTime(new Date(`${fixedNoon}T12:00:00`));
+  // /calendar without a cemetery in the link opens once you have a haunt (decision 18e). After the clock, so it's fresh then.
+  await seedHaunt(page);
   await page.goto(path);
 }
 
@@ -442,6 +445,8 @@ test.describe("Haunted Calendar page", () => {
     await expect(first).toContainText("Leap Day Test Person died on this day in 1904");
 
     await page.clock.setFixedTime(new Date("2028-02-20T12:00:00"));
+    // A year on, yesterday's haunt is stale; keep one fresh at the new date (registered after the clock).
+    await seedHaunt(page);
     await page.reload();
     await expect(page.getByTestId("preview-event").first()).toHaveAttribute("data-date", "2028-02-29");
   });

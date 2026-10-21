@@ -1,55 +1,44 @@
 @import "tailwindcss";
 
 /*
-  Two themes. "night" is the default dark look; "day" is high contrast for
-  reading in sunlight. The OS preference picks one; the toggle can override it
-  by setting data-theme on <html>.
+  Between Two Tombstones: gothic retro-futurism, dark only (decision 18).
+  Victorian mourning and graveyard forms crossed with space-age instruments.
+
+  The palette's hex values live in this :root block and in lib/palette.ts,
+  nowhere else; lib/palette.test.ts checks they match and that every text pair
+  reaches 4.5:1 and every control boundary 3:1. Everything below this block
+  uses the variables.
 */
 :root {
-  --bg: #0e110f;
-  --surface: #171c18;
-  --surface-2: #212922;
-  --border: #364036;
-  --text: #ece6d7;
-  --text-muted: #b3ae9c;
-  --accent: #e2ad4b;
-  --accent-ink: #14110a;
-  --moss: #9db58f;
-  --danger: #f08a6c;
-  --focus: #f5d27a;
+  --bg: #130F15;
+  --surface: #1D1720;
+  --surface-2: #2A2130;
+  --border: #43364B;
+  --text: #F1EADF;
+  --text-muted: #D2C8D6;
+  --mauve: #C7A2DC;
+  --mauve-ink: #1A1220;
+  --candle: #E2AD4B;
+  --lichen: #A3C293;
+  --ash: #8E8794;
+  --wisp: #86E3D3;
+  --danger: #F28B82;
+  --focus: #86E3D3;
   color-scheme: dark;
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="night"]) {
-    --bg: #fbf8f1;
-    --surface: #ffffff;
-    --surface-2: #efe9dc;
-    --border: #8f8878;
-    --text: #111111;
-    --text-muted: #3b3933;
-    --accent: #6e4300;
-    --accent-ink: #ffffff;
-    --moss: #2c4727;
-    --danger: #a3271b;
-    --focus: #1b4fd6;
-    color-scheme: light;
-  }
-}
+/* Roles: older class names keep working, so the whole app is skinned at once. */
+:root {
+  --accent: var(--mauve);
+  --accent-ink: var(--mauve-ink);
+  --moss: var(--lichen);
+  --edge: var(--ash);
+  --instrument: color-mix(in srgb, var(--surface) 92%, var(--wisp));
 
-:root[data-theme="day"] {
-  --bg: #fbf8f1;
-  --surface: #ffffff;
-  --surface-2: #efe9dc;
-  --border: #8f8878;
-  --text: #111111;
-  --text-muted: #3b3933;
-  --accent: #6e4300;
-  --accent-ink: #ffffff;
-  --moss: #2c4727;
-  --danger: #a3271b;
-  --focus: #1b4fd6;
-  color-scheme: light;
+  /* Stone grain: one pre-rendered 128px tile (public/textures/grain.png, under 5 KB; F23), not a live SVG filter. */
+  --grain: url("/textures/grain.png");
+  /* Wrought-iron fence: a spear-topped picket between two rails, repeated. Painted with currentColor through a mask. */
+  --fence: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='22' viewBox='0 0 18 22'%3E%3Cpath d='M9 .5 11.6 5H9.8V22H8.2V5H6.4Z'/%3E%3Ccircle cx='9' cy='8.6' r='1.5'/%3E%3Crect y='11.6' width='18' height='1.3'/%3E%3Crect y='18.6' width='18' height='1.3'/%3E%3C/svg%3E");
 }
 
 @theme inline {
@@ -61,18 +50,37 @@
   --color-muted: var(--text-muted);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
+  --color-mauve: var(--mauve);
+  --color-mauve-ink: var(--mauve-ink);
+  --color-candle: var(--candle);
+  --color-lichen: var(--lichen);
   --color-moss: var(--moss);
+  --color-ash: var(--ash);
+  --color-wisp: var(--wisp);
+  --color-edge: var(--edge);
   --color-danger: var(--danger);
   --font-sans: var(--font-body), system-ui, sans-serif;
   --font-display: var(--font-carved), Georgia, serif;
+  --font-label: var(--font-space), var(--font-body), system-ui, sans-serif;
 }
+
+/* ---------- Page ---------- */
 
 html {
   background: var(--bg);
 }
 
+/* A faint starfield: dots of different tile sizes so the field never looks gridded. */
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 120% 520px at 50% -140px, color-mix(in srgb, var(--mauve) 10%, transparent), transparent 70%),
+    radial-gradient(1px 1px at 23px 37px, color-mix(in srgb, var(--text) 55%, transparent), transparent),
+    radial-gradient(1px 1px at 141px 119px, color-mix(in srgb, var(--text) 40%, transparent), transparent),
+    radial-gradient(1.5px 1.5px at 67px 201px, color-mix(in srgb, var(--wisp) 45%, transparent), transparent),
+    radial-gradient(1px 1px at 289px 61px, color-mix(in srgb, var(--mauve) 50%, transparent), transparent);
+  background-size: 100% 640px, 173px 181px, 239px 223px, 311px 293px, 401px 367px;
+  background-repeat: no-repeat, repeat, repeat, repeat, repeat;
   color: var(--text);
   font-family: var(--font-body), system-ui, sans-serif;
   font-size: 1.0625rem;
@@ -90,6 +98,286 @@ body {
   min-width: 48px;
 }
 
+/*
+  Every text field gets an ash edge (3:1 or better on every surface). Unlayered,
+  so it wins over the hairline `border-border` utility the older fields use.
+*/
+:where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="hidden"], [type="color"]), select, textarea) {
+  border-color: var(--edge);
+}
+::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+/*
+  Anything you can tap that draws an edge gets the ash edge (3:1 or better),
+  never the decorative hairline: old `border-border` links, buttons and radio
+  cards included. Unlayered, so it wins over the utility.
+*/
+:where(a, button, summary, label).border-border,
+:where(a, button).card {
+  border-color: var(--edge);
+}
+:where(a, button).border-border {
+  border-width: 1.5px;
+}
+
+/* Sunlight and "increase contrast": captions become bone, hairlines become edges. */
+@media (prefers-contrast: more) {
+  :root {
+    --text-muted: var(--text);
+    --border: var(--ash);
+  }
+}
+
+/* Surfaces carry the stone grain. */
+.bg-surface,
+.bg-surface-2,
+.stone {
+  background-image: var(--grain);
+  background-size: 128px 128px;
+}
+
+/* ---------- Type ---------- */
+
+/*
+  The space-age face (Michroma) is for short labels only: four words or fewer,
+  uppercase, tracked out, never under 12px. Names and headings are carved
+  (IM Fell English); reading text and buttons are Atkinson Hyperlegible.
+*/
+.label {
+  font-family: var(--font-space), var(--font-body), system-ui, sans-serif;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.readout {
+  font-family: var(--font-space), var(--font-body), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+}
+
+/* ---------- Buttons: the Gravitator's pills, app-wide ---------- */
+
+.btn {
+  display: inline-flex;
+  min-height: 48px;
+  min-width: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  padding: 0 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+}
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.65;
+  cursor: default;
+}
+.btn-primary {
+  background: var(--mauve);
+  color: var(--mauve-ink);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mauve-ink) 25%, transparent);
+}
+.btn-candle {
+  background: var(--candle);
+  color: var(--mauve-ink);
+}
+.btn-ghost {
+  background-color: var(--surface);
+  color: var(--text);
+  border-width: 1.5px;
+  border-color: var(--edge);
+}
+.btn-lg {
+  min-height: 56px;
+  font-size: 1.125rem;
+}
+
+/* ---------- Fields ---------- */
+
+.field {
+  min-height: 48px;
+  min-width: 0;
+  border-radius: 999px;
+  border: 1.5px solid var(--edge);
+  background-color: var(--bg);
+  color: var(--text);
+  padding: 0 1.1rem;
+  box-shadow: inset 0 2px 6px -2px rgb(0 0 0 / 0.6);
+}
+
+/* ---------- Cards: rounded stone with a thin inner rule ---------- */
+
+.card {
+  position: relative;
+  border-radius: 1.1rem;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  background-image: var(--grain);
+  background-size: 128px 128px;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: calc(1.1rem - 4px);
+  border: 1px solid color-mix(in srgb, var(--border) 70%, var(--mauve));
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Instrument-bezel corner ticks: four little L marks inside a panel's corners. */
+.bezel {
+  position: relative;
+  --tick: color-mix(in srgb, var(--wisp) 55%, var(--border));
+}
+.bezel::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--tick), var(--tick)) top left / 11px 1.5px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) top left / 1.5px 11px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) top right / 11px 1.5px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) top right / 1.5px 11px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) bottom left / 11px 1.5px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) bottom left / 1.5px 11px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) bottom right / 11px 1.5px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) bottom right / 1.5px 11px no-repeat;
+}
+
+/* ---------- Arch-top headstone frame (hero art, doors, key cards) ---------- */
+
+.arch {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 50% 50% 1.1rem 1.1rem / 4.75rem 4.75rem 1.1rem 1.1rem;
+  background-color: var(--surface);
+  background-image: var(--grain);
+  background-size: 128px 128px;
+  padding: 3.25rem 1.25rem 1.5rem;
+}
+/* Optional deco double rule just inside the stone's edge. */
+.arch-rule::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50% 50% calc(1.1rem - 6px) calc(1.1rem - 6px) / calc(4.75rem - 6px) calc(4.75rem - 6px) calc(1.1rem - 6px) calc(1.1rem - 6px);
+  border: 1px solid color-mix(in srgb, var(--mauve) 35%, var(--border));
+  box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px color-mix(in srgb, var(--border) 80%, transparent);
+  pointer-events: none;
+}
+
+/*
+  ---------- Instrument panel (spirit box, séance: adopted in Lane 10.4) ----------
+  Text blocks inside a panel sit on .instrument-plate (no scanlines under words).
+*/
+
+.instrument {
+  position: relative;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--wisp) 40%, var(--border));
+  background-color: var(--instrument);
+  /* Scanlines over the panel; the glow sits inside the bezel. */
+  /* 4px period (whole device pixels at common DPRs once doubled), soft, at most 4%. */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--wisp) 4%, transparent) 0,
+    color-mix(in srgb, var(--wisp) 4%, transparent) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  box-shadow:
+    inset 0 0 28px -10px color-mix(in srgb, var(--wisp) 45%, transparent),
+    0 0 22px -12px color-mix(in srgb, var(--wisp) 60%, transparent);
+  --tick: color-mix(in srgb, var(--wisp) 70%, transparent);
+}
+
+.instrument-plate {
+  background-color: var(--instrument);
+  border-radius: 0.6rem;
+}
+
+/* ---------- Dividers ---------- */
+
+/* Wrought-iron fence with spear finials. */
+.fence {
+  display: block;
+  height: 22px;
+  color: color-mix(in srgb, var(--border) 60%, var(--text-muted));
+  background-color: currentColor;
+  -webkit-mask: var(--fence) left bottom / 18px 22px repeat-x;
+  mask: var(--fence) left bottom / 18px 22px repeat-x;
+}
+
+/* A hairline with a small ringed moon in the middle. */
+.orbit-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: color-mix(in srgb, var(--mauve) 70%, var(--border));
+}
+.orbit-divider::before,
+.orbit-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, currentColor);
+}
+.orbit-divider::after {
+  background: linear-gradient(to left, transparent, currentColor);
+}
+
+/* ---------- Motion: slow, CSS only, and off for reduced motion ---------- */
+
+@keyframes btt-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes btt-flicker {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+  40% {
+    opacity: 0.82;
+    transform: scale(0.94, 1.05);
+  }
+  70% {
+    opacity: 0.95;
+    transform: scale(1.03, 0.97);
+  }
+}
+/* One animated symbol per screen; it plays three times and rests, except inside an instrument panel. */
+.sym-orbit {
+  transform-box: view-box;
+  transform-origin: center;
+  animation: btt-orbit 48s linear 3;
+}
+.sym-flame {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: btt-flicker 2.8s ease-in-out 3;
+}
+.instrument :is(.sym-orbit, .sym-flame) {
+  animation-iteration-count: infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -98,4 +386,9 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* The first-run rules card hides once read (the layout's early script sets data-etq before paint). */
+[data-etq="seen"] .etq-notice {
+  display: none;
 }

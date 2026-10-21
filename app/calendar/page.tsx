@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { CalendarSubscribe, CalendarSubscribeFallback } from "@/components/calendar/CalendarSubscribe";
+import { HauntGate } from "@/components/haunt/HauntGate";
 import { CALENDAR_SAMPLES } from "@/lib/calendar/samples";
 import { SITE } from "@/lib/site";
 
@@ -9,6 +10,8 @@ export const metadata: Metadata = {
   description:
     "Subscribe to a cemetery and your calendar gets the death-days of people buried there, every year, each linking to their story.",
 };
+
+const KNOWN = CALENDAR_SAMPLES.map(({ qid, name, place }) => ({ qid, name, place }));
 
 export default function CalendarPage() {
   // Subscriptions only work from the public address: preview deployments sit
@@ -24,8 +27,17 @@ export default function CalendarPage() {
         </p>
       </header>
       {/* The picker reads ?cemetery= and the preview uses today's date: both only known in the browser. */}
-      <Suspense fallback={<CalendarSubscribeFallback />}>
-        <CalendarSubscribe samples={CALENDAR_SAMPLES} productionHost={productionHost} />
+      <Suspense
+        fallback={
+          <div className="min-h-[85svh]">
+            <CalendarSubscribeFallback />
+          </div>
+        }
+      >
+        {/* A calendar link (?cemetery=…) always opens; otherwise this needs a haunt. */}
+        <HauntGate tool="/calendar" known={KNOWN}>
+          <CalendarSubscribe samples={CALENDAR_SAMPLES} productionHost={productionHost} />
+        </HauntGate>
       </Suspense>
     </div>
   );

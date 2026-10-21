@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { SampleCemetery } from "@/lib/spirit/load";
+import { QID_RE } from "@/lib/spirit/load";
 import { readSeanceLink } from "@/lib/spirit/seance";
 import { capsFromParam } from "@/lib/spirit/session";
 import { SeanceBox } from "./SeanceBox";
@@ -19,13 +20,17 @@ export function SpiritModes({ samples }: { samples: SampleCemetery[] }) {
 
   if (link === null) return <SpiritBox samples={samples} />;
   if (!link.ok) {
+    // Never a dead end (F13): ?join=1 opens the room-code box with no haunt
+    // needed, on the host's cemetery when the link still names it.
+    const hostCemetery = params.get("cemetery");
+    const join = `/spirit?join=1${hostCemetery && QID_RE.test(hostCemetery) ? `&cemetery=${hostCemetery}` : ""}#seance`;
     return (
       <div className="space-y-3 rounded-xl border border-border bg-surface p-4">
-        <p role="alert" className="font-bold text-danger">
-          {link.message} Ask for the link again, or type the code on the spirit box page.
+        <p role="alert" className="text-danger">
+          <span className="font-bold">{link.message}</span> Ask for the link again, or type the room code instead.
         </p>
-        <Link href="/spirit#seance" className="tap flex items-center justify-center rounded-xl border border-border px-5 font-bold">
-          Go to the spirit box
+        <Link href={join} className="btn btn-primary w-full">
+          Type the room code
         </Link>
       </div>
     );

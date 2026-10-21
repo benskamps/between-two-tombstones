@@ -183,10 +183,13 @@ test.describe("security headers", () => {
       )
       .toBe(true);
 
-    // A real client interaction: close the first-run card if it opened, then flip the theme.
-    if (await page.locator("dialog[open]").count()) await page.keyboard.press("Escape");
-    await page.getByRole("button", { name: /theme/i }).click();
-    await expect(page.locator("html")).toHaveAttribute("data-theme", /^(day|night)$/);
+    // A real client interaction. (Dark only since decision 18, so no theme toggle; and since F6
+    // the first-run rules are a card on the cemetery page, not a popup here.) The location button
+    // is React's once hydrated (data-ready); a refusal comes back through a React state update.
+    const locate = page.locator("[data-locate]");
+    await expect(locate).toHaveAttribute("data-ready", "");
+    await locate.click();
+    await expect(page.getByRole("alert").filter({ hasText: "Location is turned off for this site" })).toBeVisible();
 
     const violations = await page.evaluate(
       () => (window as unknown as { __cspViolations: string[] }).__cspViolations,
@@ -299,8 +302,8 @@ test.describe("PWA manifest", () => {
       short_name: "Tombstones",
       start_url: "/",
       display: "standalone",
-      background_color: "#0e110f",
-      theme_color: "#0e110f",
+      background_color: "#130F15",
+      theme_color: "#130F15",
     });
     const icons: { src: string; sizes: string; type: string; purpose?: string }[] = manifest.icons;
     const want = [

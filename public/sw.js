@@ -27,7 +27,7 @@ const NAV_TIMEOUT_MS = 8000;
 const NO_CACHE_MARKER = "data-btt-nocache";
 
 const OFFLINE_HTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Offline · Between Two Tombstones</title>
-<style>body{font:1.1rem/1.5 system-ui,sans-serif;background:#0e110f;color:#ece6d7;margin:0;padding:1.5rem;max-width:40rem}a{color:#e2ad4b;display:inline-block;min-height:48px;line-height:48px}@media (prefers-color-scheme:light){body{background:#fbf8f1;color:#111}a{color:#6e4300}}</style></head>
+<style>body{font:1.1rem/1.5 system-ui,sans-serif;background:#130f15;color:#f1eadf;margin:0;padding:1.5rem;max-width:40rem;color-scheme:dark}a{color:#c7a2dc;display:inline-block;min-height:48px;line-height:48px}</style></head>
 <body><h1>You're offline</h1><p>This page wasn't saved on your phone. Tours you downloaded still open without a signal.</p><p><a href="/cemetery/saved">Open saved tours</a></p></body></html>`;
 
 function isSameOrigin(url) {

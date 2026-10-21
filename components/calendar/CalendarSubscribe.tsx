@@ -8,6 +8,7 @@ import type { EventKind } from "@/lib/calendar/kinds";
 import { feedPath, subscribeLinks } from "@/lib/calendar/params";
 import type { CalendarSample } from "@/lib/calendar/samples";
 import { localToday, readFeed, upcoming, ymdKey, type PreviewFeed } from "@/lib/calendar/upcoming";
+import { useHaunt } from "@/lib/haunt/useHaunt";
 import type { YMD } from "@/lib/stonemath";
 
 const PREVIEW_COUNT = 5;
@@ -91,9 +92,13 @@ export function CalendarSubscribeFallback() {
 
 export function CalendarSubscribe({ samples, productionHost }: { samples: CalendarSample[]; productionHost: string }) {
   const params = useSearchParams();
-  const preselect = params.get("cemetery");
-  const extraName = params.get("name");
-  const extraPlace = params.get("place");
+  // A calendar link's ?cemetery= wins; otherwise the haunt (decision 18e).
+  const haunt = useHaunt();
+  const fromLink = params.get("cemetery");
+  const linkValid = fromLink !== null && QID_RE.test(fromLink);
+  const preselect = linkValid ? fromLink : (haunt?.qid ?? fromLink);
+  const extraName = linkValid ? params.get("name") : (haunt?.name ?? null);
+  const extraPlace = linkValid ? params.get("place") : (haunt?.place ?? null);
   const extra = useMemo(
     () =>
       preselect && QID_RE.test(preselect) && !samples.some((s) => s.qid === preselect)

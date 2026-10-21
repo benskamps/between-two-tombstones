@@ -1,6 +1,6 @@
 # Between Two Tombstones
 
-> Between Two Tombstones (Macy's Graveyard Companion) is a free web app for visiting cemeteries. At any cemetery it finds the graves with the most interesting stories, walks you through them as a tour, and tells you how those people lived.
+> Between Two Tombstones is a free web app for visiting cemeteries. At any cemetery it finds the graves with the most interesting stories, walks you through them as a tour, and tells you how those people lived.
 
 It is an installable progressive web app for phones. There is no account or signup. Photos you take stay on your phone unless you choose "Read with Claude" on a headstone.
 

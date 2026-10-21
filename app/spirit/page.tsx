@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { HauntGate } from "@/components/haunt/HauntGate";
 import { SpiritBoxFallback } from "@/components/spirit/SpiritBox";
 import { SpiritModes } from "@/components/spirit/SpiritModes";
 import { SAMPLE_CEMETERIES } from "@/lib/spirit/samples";
@@ -9,6 +10,8 @@ export const metadata: Metadata = {
   description:
     "Static and low voices speaking the names of people buried at a cemetery who died at least 75 years ago. Séance mode makes every phone speak the same names at the same second.",
 };
+
+const KNOWN = SAMPLE_CEMETERIES.map(({ qid, name, place }) => ({ qid, name, place }));
 
 export default function SpiritPage() {
   return (
@@ -21,8 +24,18 @@ export default function SpiritPage() {
         </p>
       </header>
       {/* ?cemetery= and ?seance= come from the address bar, which is only known in the browser. */}
-      <Suspense fallback={<SpiritBoxFallback />}>
-        <SpiritModes samples={SAMPLE_CEMETERIES} />
+      {/* A séance link someone sent, or ?join=1 (type a room code), always opens; otherwise this needs a haunt. */}
+      {/* The fallback holds about the tool's height so the footer doesn't jump into view and out again (CLS). */}
+      <Suspense
+        fallback={
+          <div className="min-h-[85svh]">
+            <SpiritBoxFallback />
+          </div>
+        }
+      >
+        <HauntGate tool="/spirit" share={["seance", "join"]} known={KNOWN}>
+          <SpiritModes samples={SAMPLE_CEMETERIES} />
+        </HauntGate>
       </Suspense>
     </div>
   );

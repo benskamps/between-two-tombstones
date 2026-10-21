@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useActiveCemetery } from "@/lib/haunt/useHaunt";
 import { loadCemetery, type LoadResult, type SampleCemetery } from "@/lib/spirit/load";
 import { bankHasNames, buildWordBank } from "@/lib/spirit/wordbank";
 import { SEANCE_PITCH, SeanceStart } from "./SeanceStart";
@@ -11,7 +12,14 @@ import { SEANCE_PITCH, SeanceStart } from "./SeanceStart";
  * copy as fallback), so the bank hash in the link matches what joiners load.
  */
 export function PartySeance({ samples, partyCode }: { samples: SampleCemetery[]; partyCode: string | null }) {
-  const [choice, setChoice] = useState(samples[0].qid);
+  // The haunt (or the cemetery in the link) comes first; the samples stay as choices.
+  const active = useActiveCemetery();
+  const extra = active && !samples.some((s) => s.qid === active.qid) ? active : null;
+  const options = [
+    ...(extra ? [{ qid: extra.qid, name: extra.name ?? extra.qid, place: extra.place ?? "Your haunt" }] : []),
+    ...samples.map((s) => ({ qid: s.qid, name: s.name, place: s.place })),
+  ];
+  const [choice, setChoice] = useState(active?.qid ?? samples[0].qid);
   const [results, setResults] = useState<Record<string, LoadResult>>({});
   const result = results[choice];
   const bank = useMemo(() => (result?.ok ? buildWordBank(result.cemetery.people) : null), [result]);
@@ -33,7 +41,7 @@ export function PartySeance({ samples, partyCode }: { samples: SampleCemetery[];
       <p className="text-muted">{SEANCE_PITCH}</p>
       <fieldset className="space-y-2">
         <legend className="font-bold">Whose names</legend>
-        {samples.map((s) => (
+        {options.map((s) => (
           <label
             key={s.qid}
             className={`tap flex cursor-pointer items-center gap-3 rounded-xl border p-3 ${

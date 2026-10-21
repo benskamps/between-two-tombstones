@@ -1,4 +1,5 @@
 import { expect, test, type BrowserContext, type Page } from "@playwright/test";
+import { seedHaunt } from "./fixtures/haunt";
 import { makeCard } from "../../lib/games/bingo";
 
 // Lane 4: spirit box, Tombstone Bingo, graveyard party (Gate 7).
@@ -151,6 +152,7 @@ async function captions(page: Page): Promise<string[]> {
 
 const DISCLAIMER = /The spirits use your phone.s text-to-speech\./;
 
+
 // Chromium's fake microphone for the EVP tests: a real MediaStream that beeps,
 // with no permission prompt. Has no effect on pages that don't ask for the mic.
 test.use({
@@ -160,6 +162,7 @@ test.use({
 test.describe("spirit box", () => {
   test.beforeEach(async ({ context }) => {
     await context.addInitScript(seenEtiquette);
+    await seedHaunt(context);
   });
 
   test("starts from the tap, speaks inside it, logs every voice, and stops itself at the voice cap", async ({
@@ -367,6 +370,8 @@ test.describe("tombstone bingo", () => {
 
   test("solo players get their own card, kept across reloads", async ({ browser, baseURL }) => {
     const [a, b] = await Promise.all([newContext(browser, baseURL), newContext(browser, baseURL)]);
+    // Solo bingo (no party link) opens once you have a haunt.
+    await Promise.all([seedHaunt(a), seedHaunt(b)]);
     const [pa, pb] = await Promise.all([a.newPage(), b.newPage()]);
     await Promise.all([pa.goto("/games/bingo"), pb.goto("/games/bingo")]);
     const first = await cardSymbols(pa);
@@ -420,6 +425,8 @@ test.describe("graveyard party", () => {
       newContext(browser, baseURL),
     ]);
     await a.grantPermissions(["clipboard-read", "clipboard-write"]);
+    // The host and the code-typer have a haunt (the party lobby needs one); b, who only opens the link, has none.
+    await Promise.all([seedHaunt(a), seedHaunt(c)]);
     const pa = await a.newPage();
     await pa.goto("/games/party");
     await pa.getByRole("button", { name: "Start a party" }).click();
@@ -461,6 +468,7 @@ test.describe("graveyard party", () => {
 
   test("rejects a mistyped room code with a clear message", async ({ page }) => {
     await page.addInitScript(seenEtiquette);
+    await seedHaunt(page);
     await page.goto("/games/party");
     await page.getByLabel("Room code").fill("ABC");
     await page.getByRole("button", { name: "Join" }).click();
@@ -471,6 +479,7 @@ test.describe("graveyard party", () => {
 
 test("games hub lists bingo and party", async ({ page }) => {
   await page.addInitScript(seenEtiquette);
+  await seedHaunt(page);
   await page.goto("/games");
   await expect(page.getByRole("link", { name: /Tombstone Bingo/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /Graveyard Party/ })).toBeVisible();
@@ -519,6 +528,7 @@ test.describe("EVP recorder", () => {
     page,
   }) => {
     await page.addInitScript(seenEtiquette);
+    await seedHaunt(page);
     await page.addInitScript(probeEvp);
     const bodies: string[] = [];
     page.on("request", (req) => {
@@ -578,6 +588,7 @@ test.describe("EVP recorder", () => {
 
 test("EVP is hidden entirely when the browser has no getUserMedia", async ({ page }) => {
   await page.addInitScript(seenEtiquette);
+  await seedHaunt(page);
   await page.addInitScript(() => {
     Object.defineProperty(navigator, "mediaDevices", { value: undefined, configurable: true });
   });

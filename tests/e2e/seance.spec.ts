@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test, type Browser, type BrowserContext, type Page } from "@playwright/test";
+import { seedHaunt } from "./fixtures/haunt";
 import {
   SEANCE_EPOCH_MS,
   STEPS_PER_SLOT,
@@ -180,6 +181,8 @@ test.describe("séance", () => {
       phone(browser, baseURL, +120),
     ]);
     await a.grantPermissions(["clipboard-read", "clipboard-write"]);
+    // Only the host has a haunt (the spirit box needs one); B and C open links someone sent, which never need one.
+    await seedHaunt(a);
 
     // A hosts: starts a séance from the spirit page.
     const pa = await a.newPage();
@@ -344,6 +347,7 @@ test.describe("séance", () => {
 
   test("join a séance by typing its code, with the cemetery picked on the page", async ({ page }) => {
     await page.addInitScript(seenEtiquette);
+    await seedHaunt(page);
     await page.goto("/spirit");
     await page.getByLabel(/Sleepy Hollow Cemetery/).check();
     await expect(page.getByText(/people buried at Sleepy Hollow Cemetery died 75 or more years ago/)).toBeVisible();
@@ -370,6 +374,7 @@ test.describe("séance", () => {
 
   test("the party page starts a séance with the party's room code", async ({ browser, baseURL }) => {
     const ctx = await phone(browser, baseURL, 0);
+    await seedHaunt(ctx);
     const page = await ctx.newPage();
     const origin = new URL(baseURL!).origin;
     await page.goto("/games/party");

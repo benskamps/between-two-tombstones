@@ -47,6 +47,10 @@ export function SeanceInvite({ code, path, cemeteryName }: { code: string; path:
         <p className="font-mono text-4xl font-bold tracking-[0.3em]" data-testid="seance-code">
           {code}
         </p>
+        {/* Someone joining by code picks the same cemetery, so say which (F13). */}
+        <p className="text-sm">
+          Cemetery: <span className="font-bold">{cemeteryName}</span>. Anyone joining by code picks it first.
+        </p>
       </div>
       <label className="block">
         <span className="text-sm text-muted">Séance link</span>
