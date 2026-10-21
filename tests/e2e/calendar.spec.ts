@@ -62,8 +62,10 @@ function longDead(p: Person): boolean {
 
 function expectedUids(snap: CemeterySnapshot, kinds: ("death" | "birth")[], limit: number): string[] {
   const has = (p: Person, k: "death" | "birth") => (k === "death" ? p.deathPrecision : p.birthPrecision) === 11;
+  // The data layer drops people whose only label is their QID (F20): the snapshot has two at Oakland.
+  const named = (p: Person) => !/^Q\d+$/.test(p.name.trim());
   const chosen = snap.people
-    .filter((p) => longDead(p) && kinds.some((k) => has(p, k)))
+    .filter((p) => named(p) && longDead(p) && kinds.some((k) => has(p, k)))
     .sort((a, b) => b.sitelinks - a.sitelinks || Number(a.qid.slice(1)) - Number(b.qid.slice(1)))
     .slice(0, limit);
   return chosen.flatMap((p) =>
