@@ -178,6 +178,15 @@ test.describe("Wikidata outage (DISABLE_WIKIDATA=1)", () => {
     await expect(page.getByText(/No cemeteries with Wikidata entries/)).toHaveCount(0);
   });
 
+  test("/near with a good fix at Oakland still names the failure and opens nothing on its own", async ({ page }) => {
+    await page.goto(`${base}/near?lat=33.7489&lon=-84.3718&acc=20`);
+    await expect(page.getByTestId("source-failure")).toBeVisible();
+    await expect(page.getByTestId("failure-message")).toHaveText("Couldn't reach Wikidata. Try again in a minute, or open a saved tour.");
+    expect(new URL(page.url()).pathname).toBe("/near");
+    await expect(page.getByTestId("near-best")).toHaveCount(0);
+    await expect(page.getByText(/no one listed yet/)).toHaveCount(0);
+  });
+
   test("the API answers 503 with the source named", async ({ request }) => {
     const near = await request.get(`${base}/api/cemeteries/near?lat=47.6339&lon=-122.3158`);
     expect(near.status()).toBe(503);
