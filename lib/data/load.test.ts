@@ -16,7 +16,7 @@ const cached = vi.hoisted(() => ({
 }));
 vi.mock("./cached", () => cached);
 
-const { combineNear, loadCemetery, loadNearOsm, normalizeQuery, resetOsmCooldown } = await import("./load");
+const { combineNear, loadCemetery, loadNearOsm, loadSearch, normalizeQuery, resetOsmCooldown } = await import("./load");
 
 const rows = parseBurialRows(flattenBindings(burialsJson));
 const facts = parseCemeteryFacts("Q2008469", flattenBindings(factsJson));
@@ -190,5 +190,32 @@ describe("near", () => {
 
   it("normalizes search text for the cache key", () => {
     expect(normalizeQuery("  Lake   View Cemetery ")).toBe("lake view cemetery");
+  });
+});
+
+describe("search", () => {
+  const result = (qid: string, burials: number) => ({
+    qid,
+    name: `Cemetery ${qid}`,
+    description: null,
+    locatedIn: null,
+    region: null,
+    coord: null,
+    findAGraveCemeteryId: null,
+    enwiki: null,
+    burials,
+  });
+
+  it("caches each query on its own and widens a short one with \"<q> cemetery\" (2 cached calls at most)", async () => {
+    cached.cachedSearch.mockImplementation(async (q: string) => (q === "oakland" ? [result("Q1", 40), result("Q2008469", 115)] : [result("Q2008469", 115), result("Q3", 110)]));
+    const results = await loadSearch("  Oakland ");
+    expect(cached.cachedSearch.mock.calls.map(([q]) => q)).toEqual(["oakland", "oakland cemetery"]);
+    expect(results.map((r) => r.qid)).toEqual(["Q2008469", "Q3", "Q1"]);
+  });
+
+  it("names a Wikidata failure on the first query", async () => {
+    cached.cachedSearch.mockRejectedValue(wikidataDown());
+    await expect(loadSearch("oakland")).rejects.toMatchObject({ source: "Wikidata", kind: "unreachable" });
+    expect(cached.cachedSearch).toHaveBeenCalledTimes(1);
   });
 });

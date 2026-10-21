@@ -10,7 +10,7 @@ import { savedSnapshot } from "./samples";
 import type { BurialsResponse, CemeterySearchResult, NearbyCemetery, NearResponse, SourceStatus } from "./types";
 import { cleanExtract } from "@/lib/tour/text";
 import { parsePoint } from "@/lib/types";
-import { burialsQuery, hasRealName, NEAR_RADIUS_KM, type PersonRow } from "./wikidata";
+import { burialsQuery, hasRealName, NEAR_RADIUS_KM, searchWithFallback, type PersonRow } from "./wikidata";
 import { BATCH_SIZE, titleFromUrl } from "./wikipedia";
 
 /** A sample cemetery falls back to its saved copy if live data takes longer than this. */
@@ -280,6 +280,7 @@ export function normalizeQuery(q: string): string {
   return q.trim().replace(/\s+/g, " ").toLowerCase();
 }
 
+/** Cemetery search: each query cached on its own, widened with "<q> cemetery" when it finds few (at most 2 queries). */
 export async function loadSearch(q: string): Promise<CemeterySearchResult[]> {
-  return call("Wikidata", () => cachedSearch(normalizeQuery(q)));
+  return call("Wikidata", () => searchWithFallback(normalizeQuery(q), (query) => cachedSearch(query)));
 }

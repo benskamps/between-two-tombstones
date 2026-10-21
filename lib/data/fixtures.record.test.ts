@@ -42,6 +42,7 @@ describe.skipIf(!record)("record live fixtures", () => {
     await rawSparql("sparql-near-lakeview", nearQuery(47.6339, -122.3158));
     await rawSparql("sparql-search-lake-view-cemetery", searchQuery("lake view cemetery"));
     await rawSparql("sparql-search-oakland", searchQuery("oakland"));
+    await rawSparql("sparql-search-oakland-cemetery", searchQuery("oakland cemetery"));
     await rawSparql("sparql-near-manhattan", nearQuery(40.758, -73.9855));
     setTransportForTests(null);
 

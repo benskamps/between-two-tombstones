@@ -288,13 +288,58 @@ export function mentionsCemetery(q: string): boolean {
   return /\b(cemetery|cemetary|graveyard|churchyard|burial|memorial park|necropolis|friedhof|cimeti[eè]re|cimitero|cementerio)\b/i.test(q);
 }
 
+/** Fewer results than this, and no cemetery word: also search "<q> cemetery". */
+export const SEARCH_WIDEN_BELOW = 5;
+
+/** One entity search, filtered to cemeteries, in search order. */
+export async function fetchSearchOnce(q: string): Promise<CemeterySearchResult[]> {
+  return parseSearchRows(await sparql(searchQuery(q)));
+}
+
 /**
- * Entity search matches label prefixes, so "oakland" finds the city, not the
- * cemetery. When the words don't mention a cemetery and nothing came back,
- * try once more with " cemetery" added.
+ * The plain and the "<q> cemetery" results as one list: one entry per QID
+ * (the first seen wins), most people listed first; equal counts keep search
+ * order, plain results ahead. At most SEARCH_LIMIT.
  */
+export function mergeSearchResults(first: CemeterySearchResult[], second: CemeterySearchResult[]): CemeterySearchResult[] {
+  const seen = new Set<string>();
+  const merged: CemeterySearchResult[] = [];
+  for (const r of [...first, ...second]) {
+    if (seen.has(r.qid)) continue;
+    seen.add(r.qid);
+    merged.push(r);
+  }
+  // Array.prototype.sort is stable, so ties stay in search order.
+  return merged.sort((a, b) => (b.burials || 0) - (a.burials || 0)).slice(0, SEARCH_LIMIT);
+}
+
+/**
+ * Entity search matches label prefixes, so "oakland" finds the two cemeteries
+ * labelled "Oakland…" (West Chester, Pennsylvania first) but not the other 18
+ * "Oakland Cemetery" items. When the words don't mention a cemetery and fewer
+ * than 5 came back, also search "<q> cemetery", merge, and rank by people
+ * listed. At most 2 queries per search. `once` runs a single search: the
+ * cached one in the app (lib/data/load.ts), the plain fetch in tests.
+ *
+ * If the second search fails, the first results still stand; with none, the
+ * failure is thrown so the page names it (never "no matches" for an outage).
+ */
+export async function searchWithFallback(
+  q: string,
+  once: (q: string) => Promise<CemeterySearchResult[]> = fetchSearchOnce,
+): Promise<CemeterySearchResult[]> {
+  const first = await once(q);
+  if (first.length >= SEARCH_WIDEN_BELOW || mentionsCemetery(q)) return first;
+  let second: CemeterySearchResult[];
+  try {
+    second = await once(`${q} cemetery`);
+  } catch (err) {
+    if (first.length > 0) return first;
+    throw err;
+  }
+  return mergeSearchResults(first, second);
+}
+
 export async function fetchSearch(q: string): Promise<CemeterySearchResult[]> {
-  const first = parseSearchRows(await sparql(searchQuery(q)));
-  if (first.length > 0 || mentionsCemetery(q)) return first;
-  return parseSearchRows(await sparql(searchQuery(`${q} cemetery`)));
+  return searchWithFallback(q, fetchSearchOnce);
 }
