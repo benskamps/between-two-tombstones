@@ -6,7 +6,9 @@
 // What only prod can show: the real iMessage and Slack unfurls (Ben, gate 6).
 import { spawn, type ChildProcess } from "node:child_process";
 import { existsSync } from "node:fs";
+import path from "node:path";
 import { expect, test, type APIRequestContext, type APIResponse, type BrowserContext, type Page } from "@playwright/test";
+import { seedHaunt } from "./fixtures/haunt";
 
 const OAKLAND = "Q2008469";
 const MITCHELL = "Q173540"; // died 1949: the carved card
@@ -325,6 +327,56 @@ test.describe("making a share link", () => {
     await page.evaluate(() => Object.defineProperty(navigator, "share", { value: undefined, configurable: true }));
     await button.click();
     await expect(page.getByTestId("share-tour-status")).toHaveText("Link copied. Paste it into a message.");
+    expect(new URL(await page.evaluate(() => navigator.clipboard.readText())).pathname).toBe(`/s/tour/${OAKLAND}`);
+  });
+});
+
+test.describe("the Stamp Kit's share", () => {
+  /** A stone photo in, stamps rendered (the stamp spec covers the kit itself). */
+  async function stamps(page: Page, url: string) {
+    await page.goto(url);
+    await page.locator("#stamp-photo").setInputFiles(path.resolve("tests/fixtures/stones/SamuelSpencerGrave.jpg"));
+    await expect(page.getByTestId("framer")).toBeVisible({ timeout: 15_000 });
+    await expect.poll(async () => Number((await page.getByTestId("previews").getAttribute("data-job")) || 0), { timeout: 30_000 }).toBeGreaterThan(0);
+    await expect(page.getByTestId("previews")).toHaveAttribute("aria-busy", "false", { timeout: 30_000 });
+  }
+
+  test("the files go from the phone with the tour's link; with a person in the address, that stop's link", async ({ page }) => {
+    await seedHaunt(page);
+    await page.addInitScript(() => {
+      const w = window as unknown as { __shared: { files: number; url?: string }[] };
+      w.__shared = [];
+      Object.defineProperty(navigator, "canShare", { value: () => true, configurable: true });
+      Object.defineProperty(navigator, "share", {
+        value: async (d: { files: File[]; url?: string }) => void w.__shared.push({ files: d.files.length, url: d.url }),
+        configurable: true,
+      });
+    });
+    const sent = () => page.evaluate(() => (window as unknown as { __shared: { files: number; url?: string }[] }).__shared);
+
+    await stamps(page, "/stamp");
+    await page.getByRole("button", { name: "Share", exact: true }).click();
+    await expect(page.getByTestId("stamp-status")).toHaveText("Shared.");
+    let last = (await sent()).at(-1)!;
+    expect(last.files).toBe(4);
+    expect(new URL(last.url!).pathname).toBe(`/s/tour/${OAKLAND}`);
+
+    await stamps(page, `/stamp?cemetery=${OAKLAND}&name=Oakland+Cemetery&person=${MITCHELL}`);
+    await page.getByRole("button", { name: "Share", exact: true }).click();
+    await expect(page.getByTestId("stamp-status")).toHaveText("Shared.");
+    last = (await sent()).at(-1)!;
+    expect(new URL(last.url!).pathname).toBe(`/s/stop/${OAKLAND}/${MITCHELL}`);
+  });
+
+  test("without file sharing: the kit sheet is saved and the link is there to copy", async ({ page, context }) => {
+    await seedHaunt(page);
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.addInitScript(() => Object.defineProperty(navigator, "canShare", { value: () => false, configurable: true }));
+    await stamps(page, "/stamp");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Share", exact: true }).click()]);
+    expect(download.suggestedFilename()).toBe("headstone-kit-sheet.png");
+    await expect(page.getByTestId("stamp-status")).toContainText("the kit sheet was saved and the link to the tour copied");
+    expect(new URL(await page.getByTestId("stamp-link").inputValue()).pathname).toBe(`/s/tour/${OAKLAND}`);
     expect(new URL(await page.evaluate(() => navigator.clipboard.readText())).pathname).toBe(`/s/tour/${OAKLAND}`);
   });
 });
