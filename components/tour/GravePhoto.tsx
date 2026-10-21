@@ -37,7 +37,9 @@ export function GravePhoto({
   }
 
   return (
-    <figure className={kind === "grave" ? "space-y-1" : "flex items-end gap-3"}>
+    // A portrait is centered with its caption under it, so the card has no dead half beside a small
+    // thumbnail (REVIEW-2 N9). Same on plain cards: it's layout, not ornament.
+    <figure className={kind === "grave" ? "space-y-1" : "flex flex-col items-center gap-1 text-center"}>
       {/* Commons serves the scaled copy at a standard width; next/image would add nothing here. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -53,7 +55,7 @@ export function GravePhoto({
         className={
           kind === "grave"
             ? "h-auto max-h-80 w-full rounded-lg bg-surface-2 object-cover"
-            : "h-auto max-h-48 w-32 rounded-lg bg-surface-2 object-cover"
+            : "h-auto max-h-56 w-40 rounded-lg bg-surface-2 object-cover object-top"
         }
       />
       <figcaption className="text-xs text-muted">

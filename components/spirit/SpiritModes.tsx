@@ -25,7 +25,7 @@ export function SpiritModes({ samples }: { samples: SampleCemetery[] }) {
     const hostCemetery = params.get("cemetery");
     const join = `/spirit?join=1${hostCemetery && QID_RE.test(hostCemetery) ? `&cemetery=${hostCemetery}` : ""}#seance`;
     return (
-      <div className="space-y-3 rounded-xl border border-border bg-surface p-4">
+      <div className="space-y-3 card p-4">
         <p role="alert" className="text-danger">
           <span className="font-bold">{link.message}</span> Ask for the link again, or type the room code instead.
         </p>

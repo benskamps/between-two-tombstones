@@ -34,7 +34,7 @@ export function PartySeance({ samples, partyCode }: { samples: SampleCemetery[];
   }, [choice, samples]);
 
   return (
-    <section aria-labelledby="party-seance" className="space-y-3 rounded-xl border border-border bg-surface p-4">
+    <section aria-labelledby="party-seance" className="space-y-3 card p-4">
       <h2 id="party-seance" className="font-display text-2xl">
         Hold a séance
       </h2>

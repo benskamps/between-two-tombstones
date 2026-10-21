@@ -201,9 +201,9 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
 
   return (
     <div className="space-y-6">
-      <section aria-labelledby="spirit-pick" className="space-y-3">
+      <section aria-labelledby="spirit-pick" className="card space-y-3 p-4">
         <fieldset disabled={running} className="space-y-2">
-          <legend id="spirit-pick" className="font-display text-2xl">
+          <legend id="spirit-pick" className="mb-1 font-display text-2xl">
             Whose names
           </legend>
           {options.map((o) => (
@@ -344,7 +344,7 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
         <p className="font-bold text-moss">{MOURNERS}</p>
       </section>
 
-      <section id="seance" aria-labelledby="seance-heading" className="scroll-mt-4 space-y-4 rounded-xl border border-border bg-surface p-4">
+      <section id="seance" aria-labelledby="seance-heading" className="scroll-mt-4 space-y-4 card p-4">
         <h2 id="seance-heading" className="font-display text-2xl">
           Séance: every phone at once
         </h2>

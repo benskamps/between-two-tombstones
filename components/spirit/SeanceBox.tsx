@@ -346,7 +346,7 @@ export function SeanceBox({
         <p className="font-bold text-moss">{MOURNERS}</p>
       </section>
 
-      <section aria-labelledby="seance-invite" className="space-y-3 rounded-xl border border-border bg-surface p-4">
+      <section aria-labelledby="seance-invite" className="space-y-3 card p-4">
         <h2 id="seance-invite" className="font-display text-2xl">
           Bring in more phones
         </h2>
