@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import type { Pin } from "@/components/offline/store";
+import { ShareButton } from "@/components/share/ShareButton";
 import { SymbolPair } from "@/components/ui/Motifs";
 import { Candle, Fern, HourglassSprout, Lily, Moth, Poppy, RingedMoon } from "@/components/ui/symbols";
 import { needsRespectfulStyle } from "@/lib/respect";
@@ -11,6 +12,7 @@ import { diedDuring } from "@/lib/tour/periods";
 import { cardPhoto } from "@/lib/tour/photo";
 import type { Scored } from "@/lib/tour/score";
 import { cleanExtract } from "@/lib/tour/text";
+import { sharePath } from "@/lib/share/links";
 import { FoundItButton } from "./FoundItButton";
 import { GravePhoto } from "./GravePhoto";
 
@@ -223,6 +225,14 @@ export function StoryCard({
           {fag.kind === "memorial" ? "Find a Grave memorial" : "Search Find a Grave"}
         </a>
         <FoundItButton personQid={p.qid} cemeteryQid={cemeteryQid} name={p.name} pin={pin} onPinsChange={onPinsChange} />
+        {/* A link to this stop: its page and card are drawn from Wikidata and Wikipedia, never from what's typed (L5.2). */}
+        <ShareButton
+          kind="stop"
+          path={sharePath({ kind: "stop", cemetery: cemeteryQid, person: p.qid })}
+          title={p.name}
+          text={`${p.name}${life ? ` (${life})` : ""}, at ${cemeteryName}.`}
+          context={`${p.name}’s stop`}
+        />
       </footer>
     </article>
   );
