@@ -263,11 +263,23 @@ test.describe("the hub", () => {
       await document.fonts.ready;
       await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     });
-    const third = (await cards.nth(2).boundingBox())!;
-    const fourth = (await cards.nth(3).boundingBox())!;
-    const toolkit = (await kit(page).boundingBox())!;
-    const download = (await page.getByRole("button", { name: "Download this tour" }).boundingBox())!;
-    const walk = (await page.getByRole("button", { name: /Start the walk/ }).boundingBox())!;
+    await expect(page.getByRole("button", { name: "Download this tour" })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Start the walk/ })).toBeVisible();
+    await expect(kit(page)).toBeVisible();
+    // Read every position in one frame. Separate boundingBox() calls can straddle a reflow above the
+    // row (a photo that fails swaps its reserved box for a one-line note), which reads as a wrap.
+    const { third, fourth, toolkit, download, walk } = await page.evaluate(() => {
+      const top = (el: Element | null | undefined) => ({ y: el!.getBoundingClientRect().top });
+      const cardEls = document.querySelectorAll('[data-testid="story-card"]');
+      const buttons = [...document.querySelectorAll("button")];
+      return {
+        third: top(cardEls[2]),
+        fourth: top(cardEls[3]),
+        toolkit: top(document.querySelector('[data-testid="haunt-toolkit"]')),
+        download: top(buttons.find((b) => b.textContent?.trim() === "Download this tour")),
+        walk: top(buttons.find((b) => b.textContent?.startsWith("Start the walk"))),
+      };
+    });
     expect(toolkit.y).toBeGreaterThan(third.y);
     expect(toolkit.y).toBeLessThan(fourth.y);
     expect(download.y).toBeGreaterThan(third.y);
