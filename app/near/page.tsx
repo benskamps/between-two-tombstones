@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { unstable_rethrow } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 import { after } from "next/server";
 import { Suspense } from "react";
 import { ServiceWorkerRegistrar } from "@/components/offline/ServiceWorkerRegistrar";
 import { NearMeButton } from "@/components/shell/NearMeButton";
-import { CemeteryList, OsmOnlyList } from "@/components/tour/CemeteryList";
+import { OsmOnlyList } from "@/components/tour/CemeteryList";
 import { SearchForm } from "@/components/tour/SearchForm";
 import { SourceFailure } from "@/components/tour/SourceFailure";
 import { asDataSourceError } from "@/lib/data/errors";
 import { combineNear, loadCemetery, loadNearOsm, loadNearWikidata, osmWithin } from "@/lib/data/load";
+import { accuracyText, autoOpenTarget, bestNearby, hereHref, isApproximate, parseAccuracy, parseFlag, splitNear } from "@/lib/data/near";
 import type { NearbyCemetery } from "@/lib/data/types";
 import { parseLatLon } from "@/lib/data/validate";
+import { BestNearby, NearLinkList, UnlistedFold } from "./NearList";
 
 export const metadata: Metadata = {
   title: "Cemeteries near you",
@@ -33,18 +35,28 @@ export default function NearPage({ searchParams }: PageProps<"/near">) {
   );
 }
 
+/** No location yet (or one we can't read): the two ways to give one. */
+function AskForLocation({ invalid }: { invalid: boolean }) {
+  return (
+    <div className="space-y-4" data-testid="near-no-location">
+      <p role={invalid ? "alert" : undefined}>
+        {invalid ? "That link's location isn't one we can read. " : ""}Tap below to use your location, or search by name.
+      </p>
+      <NearMeButton />
+      <SearchForm />
+    </div>
+  );
+}
+
 async function NearResults({ searchParams }: Pick<PageProps<"/near">, "searchParams">) {
   const sp = await searchParams;
-  const at = parseLatLon(one(sp.lat), one(sp.lon));
-  if (!at.ok) {
-    return (
-      <div className="space-y-4">
-        <p role="alert">{at.message} Tap below to use your location, or search by name.</p>
-        <NearMeButton />
-        <SearchForm />
-      </div>
-    );
-  }
+  const rawLat = one(sp.lat);
+  const rawLon = one(sp.lon);
+  if (!rawLat?.trim() && !rawLon?.trim()) return <AskForLocation invalid={false} />;
+  const at = parseLatLon(rawLat, rawLon);
+  if (!at.ok) return <AskForLocation invalid />;
+  const accuracyM = parseAccuracy(one(sp.acc));
+  const listRequested = parseFlag(one(sp.list));
 
   let cemeteries: NearbyCemetery[];
   try {
@@ -57,14 +69,30 @@ async function NearResults({ searchParams }: Pick<PageProps<"/near">, "searchPar
 
   // Standing at a cemetery? Start loading its tour now so the tap opens fast.
   // Only the nearest one within 1 km with 5+ burials: Wikimedia's limits are tight.
+  // An auto-open target (below) is always this same cemetery: the nearest with 5+, within 300 m.
   const nearest = cemeteries.find((c) => c.burials >= WARM_MIN_BURIALS);
   if (nearest && nearest.distanceKm <= WARM_MAX_KM) {
     const warming = loadCemetery(nearest.qid).catch(() => undefined);
     after(() => warming);
   }
 
+  // "I'm here. Haunt me.": with a good fix (±300 m or better) and a cemetery
+  // with 5+ people within about 300 m, skip the list and open its tour.
+  const here = autoOpenTarget(cemeteries, accuracyM, listRequested);
+  if (here) redirect(hereHref(here.qid, at.lat, at.lon));
+
+  const best = bestNearby(cemeteries);
+  const { listed, unlisted } = splitNear(cemeteries, best);
+  const anyTour = Boolean(best) || listed.length > 0;
+
   return (
     <div className="space-y-5">
+      {isApproximate(accuracyM) && (
+        <p className="rounded-xl border border-border bg-surface p-3" data-testid="near-approx">
+          <span className="font-bold">Your location is approximate ({accuracyText(accuracyM)}).</span> Pick your cemetery from the list, or
+          search by name.
+        </p>
+      )}
       {cemeteries.length === 0 ? (
         <div className="space-y-3" data-testid="near-empty">
           <p>No cemeteries with Wikidata entries within 10 km. Try searching by name.</p>
@@ -72,10 +100,26 @@ async function NearResults({ searchParams }: Pick<PageProps<"/near">, "searchPar
         </div>
       ) : (
         <>
-          <p className="text-muted">
-            {cemeteries.length} within 10 km, nearest first. The more people listed, the better the tour.
-          </p>
-          <CemeteryList items={cemeteries} label="Cemeteries within 10 km" />
+          {best && <BestNearby cemetery={best} />}
+          {listed.length > 0 && (
+            <section aria-labelledby="near-listed-title" className="space-y-2">
+              <h2 id="near-listed-title" className="font-bold">
+                {best ? "Also nearby" : "Nearby"}
+              </h2>
+              <p className="text-sm text-muted">Nearest first. The more people listed, the better the tour.</p>
+              <NearLinkList items={listed} label={best ? "Other cemeteries with people listed" : "Cemeteries with people listed"} />
+            </section>
+          )}
+          {!anyTour && (
+            <div className="space-y-3" data-testid="near-no-tours">
+              <p>
+                None of the cemeteries within 10 km lists anyone on Wikidata yet, so there&rsquo;s no tour here. Try searching by name for one
+                farther away.
+              </p>
+              <SearchForm />
+            </div>
+          )}
+          {unlisted.length > 0 && <UnlistedFold items={unlisted} more={anyTour} />}
         </>
       )}
       <Suspense fallback={<p className="text-sm text-muted">Checking OpenStreetMap for cemeteries Wikidata doesn&rsquo;t have…</p>}>

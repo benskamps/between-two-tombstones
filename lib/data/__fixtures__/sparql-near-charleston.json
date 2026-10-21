@@ -1,0 +1,1587 @@
+{
+ "head": {
+  "vars": [
+   "c",
+   "label",
+   "description",
+   "dist",
+   "coord",
+   "places",
+   "fagc",
+   "enwiki",
+   "burials"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117518008"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Wilson-Shepheard Family Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "0.869"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94914 32.79639)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2348694"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117685611"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Kahal Kadosh Beth Elohim Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "0.986"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.945 32.81271)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2225093"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117495445"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Greater Saint Luke AME Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.015"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.95786 32.80392)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2186419"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117613848"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Calvary Episcopal Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.108"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94587 32.79408)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2323124"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117617264"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Bethany Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.184"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94861 32.81456)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "69499"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117671856"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Saint Lawrence Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.234"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.9447 32.81493)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1622996"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117563204"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lutheran Colored Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.266"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.93734 32.79602)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2452837"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117632553"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Brown Fellowship Society Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.309"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94802 32.81574)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1690138"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117522117"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Unity and Friendship Society Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.318"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94738 32.81585)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1690268"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117496774"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Friendly Union Society Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.319"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94865 32.81578)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2253736"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117674129"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Old Bethel United Methodist Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.321"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94864 32.8158)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1981726"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117673456"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Brotherly Association Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.325"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94733 32.81591)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1993778"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117498105"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Humane and Friendly Society Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.368"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94768 32.81629)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2194646"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117619348"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Greek Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.37"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94896 32.81621)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2298542"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117625785"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Lewis Christian Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.376"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94855 32.81631)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2330995"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117508411"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Heriot Street Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.422"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.95235 32.81597)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2379678"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117667416"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Saint John's Chapel Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.436"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.93666 32.79445)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2291404"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117609832"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Emanuel AME Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.441"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94841 32.81691)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2186976"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117626108"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "KKBI Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.442"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94796 32.81694)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2343585"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117550176"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Colored Scotch Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.456"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.93652 32.79431)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2572003"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q107337247"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Reserved Fellowship Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.493"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.947665 32.817415)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2298535"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117549090"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Morris Brown A.M.E. Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.5"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94848 32.81743)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2177205"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117507967"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Hampstedt Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.559"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.93608 32.7934)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2284803"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117581419"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Trinity AME Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.564"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94851 32.81801)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2298539"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117657443"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Memorial Baptist Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.573"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.95499 32.81645)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2253454"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117678388"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Friendly Charitable Association Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.581"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.95514 32.81647)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2337847"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117625904"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Francis Brown AME Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.591"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.95556 32.81637)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2337840"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117585653"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Morris Street Baptist Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.594"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.95554 32.81641)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2303315"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117653943"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Citadel Square Baptist Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.605"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.9558 32.8164)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "69384"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5151952"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Coming Street Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.636"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.942778 32.789722)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "70283"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "4"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Coming_Street_Cemetery"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12061438"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Magnolia Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "historic cemetery in Charleston, South Carolina"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.655"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.942222 32.818333)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "70585"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "102"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Magnolia_Cemetery_(Charleston,_South_Carolina)"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117693259"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New Life In Christ Baptist Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.683"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.95334 32.81817)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2327413"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117616492"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Zion Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.712"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.95412 32.81819)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2354579"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117504141"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Saint Patricks Catholic Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.906"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.93968 32.788)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2292086"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117602945"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monrovia Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.971"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.95503 32.82039)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2157942"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117612650"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monrovia Union Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "2.002"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.9528 32.82133)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2354472"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117570371"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Second Presbyterian Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "2.061"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.93427 32.78887)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2147953"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "7"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117582408"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Bethel United Methodist Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "2.28"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94083 32.78416)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2213104"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117556196"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Ephrath Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "2.306"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94161 32.78376)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2524113"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117629611"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Ferry Field Baptist Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Charleston County, South Carolina, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "2.306"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-79.94161 32.78376)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Charleston County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2348695"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   }
+  ]
+ }
+}
