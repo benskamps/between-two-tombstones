@@ -1,0 +1,1041 @@
+{
+ "head": {
+  "vars": [
+   "item",
+   "label",
+   "description",
+   "ordinal",
+   "places",
+   "state",
+   "country",
+   "coord",
+   "fagc",
+   "enwiki",
+   "burials"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2008469"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Atlanta, Georgia, USA"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "0"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fulton County|Atlanta"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Georgia"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.371333 33.748722)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "35955"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Atlanta)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "115"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q22023801"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Dallas, Texas, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "1"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Dallas"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Texas"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-96.7574 32.7625)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "5681"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Dallas,_Texas)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "33"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q22919919"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Sag Harbor, New York"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "2"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Sag Harbor"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New York"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-72.2937413 40.9923919)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "65499"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Sag_Harbor,_New_York)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "22"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q108856019"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Saint Paul, Minnesota"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "3"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Saint Paul"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Minnesota"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-93.0986023 44.9692001)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "82963"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(St._Paul,_Minnesota)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "110"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7073978"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Iowa City, Johnson County, Iowa, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "4"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Iowa City"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Iowa"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-91.52 41.67)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "95677"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Iowa_City,_Iowa)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "35"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7073979"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Yonkers, New York, USA"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "5"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Yonkers"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New York"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-73.8806 40.9397)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "65498"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Yonkers,_New_York)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "23"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q111187347"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakwood Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Warren, Ohio"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "6"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Warren"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Ohio"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-80.807354 41.232425)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "42495"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "22"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q111603086"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Montrose Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Montrose, Pennsylvania"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "7"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Montrose"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Pennsylvania"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.8843 41.8321)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "719276"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "12"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q101444902"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Keokuk, Iowa"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "8"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Keokuk"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Iowa"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-91.4064026 40.4019012)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "95674"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "18"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q111662645"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Princeton, Illinois"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "9"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Princeton"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Illinois"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-89.4831009 41.3650017)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "107273"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Princeton,_Illinois)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "8"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q22919920"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland-Fraternal Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Little Rock, Arkansas"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "10"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Little Rock"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Arkansas"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-92.261111111 34.728611111)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "55467"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland-Fraternal_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "21"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q109826508"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Tallahassee, Florida, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "11"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Tallahassee"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Florida"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-84.2857971 30.4517002)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "72378"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "12"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q110731967"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Shreveport, Louisiana, USA"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "12"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Shreveport"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Louisiana"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-93.7537918 32.5080185)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "681909"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "10"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q70667716"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Woodstock, Illinois"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "13"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Woodstock"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Illinois"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-88.4633801 42.3176134)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "107276"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "5"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q81432693"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Centerville, Iowa, USA"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "14"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Centerville"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Iowa"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-92.8633 40.7353)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "95691"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "6"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q111095673"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Clinton, Iowa, USA"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "15"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Clinton"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Iowa"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-90.1800003 41.8964005)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "95678"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q115133081"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Freeport, Illinois, United States"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "16"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Freeport"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Illinois"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-89.6631 42.2786)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "107275"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q110008093"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Sandusky, Ohio"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "17"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Perkins Township"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Ohio"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-82.6873398 41.4267807)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1612332"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "10"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q18155290"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Camden, Arkansas"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "18"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Camden"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Arkansas"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-92.8331 33.5933)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "53510"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Camden,_Arkansas)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7073977"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Oakland Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Fort Dodge, Iowa"
+    },
+    "ordinal": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#int",
+     "type": "literal",
+     "value": "19"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Fort Dodge"
+    },
+    "state": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Iowa"
+    },
+    "country": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "United States"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-94.179722 42.5125)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "95685"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Fort_Dodge,_Iowa)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "10"
+    }
+   }
+  ]
+ }
+}

@@ -8,8 +8,9 @@ import { asDataSourceError, DataSourceError, type DataSource } from "./errors";
 import { mergeOsm, type OsmCemetery } from "./overpass";
 import { savedSnapshot } from "./samples";
 import type { BurialsResponse, CemeterySearchResult, NearbyCemetery, NearResponse, SourceStatus } from "./types";
+import { cleanExtract, personName } from "@/lib/tour/text";
 import { parsePoint } from "@/lib/types";
-import { burialsQuery, NEAR_RADIUS_KM, type PersonRow } from "./wikidata";
+import { burialsQuery, NEAR_RADIUS_KM, searchWithFallback, type PersonRow } from "./wikidata";
 import { BATCH_SIZE, titleFromUrl } from "./wikipedia";
 
 /** A sample cemetery falls back to its saved copy if live data takes longer than this. */
@@ -49,9 +50,11 @@ export function assembleSnapshot(
   extracts: Record<string, WikipediaSummary>,
   fetchedAt: string,
 ): CemeterySnapshot {
-  const people: Person[] = rows.map(({ person, enwiki }) => {
+  // Rows cached before the F20 fix can still carry a bare QID as the name: repair it from the article title, or drop the row.
+  const people: Person[] = rows.flatMap(({ person, enwiki }) => {
     const title = enwiki ? titleFromUrl(enwiki) : null;
-    return { ...person, wikipedia: title ? extracts[title] ?? null : null };
+    const name = personName(person.name, title);
+    return name ? [{ ...person, name, wikipedia: title ? extracts[title] ?? null : null }] : [];
   });
   return {
     cemetery,
@@ -156,8 +159,52 @@ function fromSaved(saved: CemeterySnapshot, err: DataSourceError): BurialsRespon
   };
 }
 
+/**
+ * Every person a tour gets has a real name and clean story text, whichever
+ * cache entry or saved copy the data came from: parsing fixes new data, but
+ * cached rows live up to 7 days and the saved copies are fixed. A bare-QID
+ * name takes the English Wikipedia title (F20); with no article, the person
+ * is dropped.
+ */
+export function tidyPeople<T extends { people: Person[] }>(data: T): T {
+  let changed = false;
+  const people = data.people.flatMap((p) => {
+    const name = personName(p.name, p.wikipedia?.title);
+    if (!name) {
+      changed = true;
+      return [];
+    }
+    const extract = p.wikipedia ? cleanExtract(p.wikipedia.extract) : null;
+    if (name === p.name && (!p.wikipedia || extract === p.wikipedia.extract)) return [p];
+    changed = true;
+    return [{ ...p, name, wikipedia: p.wikipedia && { ...p.wikipedia, extract: extract! } }];
+  });
+  return changed ? { ...data, people } : data;
+}
+
+/**
+ * Loads still in flight, by QID. 'use cache' only shares an entry once it's
+ * stored, so a tour request that lands while /near's warm-up (or another
+ * visitor) is still loading the same cemetery would ask Wikimedia for it all
+ * again. It joins the running load instead. Settled loads leave the map, so
+ * the next request goes through the cache (and retries a failure) as before.
+ */
+const inFlight = new Map<string, Promise<CemeteryLoad>>();
+/** Cap on remembered in-flight loads; past it, loads simply run on their own. */
+export const MAX_IN_FLIGHT = 50;
+
 /** Live burials + stories for a cemetery; for the samples, the saved copy when live fails. */
-export async function loadCemetery(qid: string): Promise<CemeteryLoad> {
+export function loadCemetery(qid: string): Promise<CemeteryLoad> {
+  const running = inFlight.get(qid);
+  if (running) return running;
+  const load = loadCemeteryOnce(qid).finally(() => {
+    if (inFlight.get(qid) === load) inFlight.delete(qid);
+  });
+  if (inFlight.size < MAX_IN_FLIGHT) inFlight.set(qid, load);
+  return load;
+}
+
+async function loadCemeteryOnce(qid: string): Promise<CemeteryLoad> {
   const saved = savedSnapshot(qid);
   const stage: { source: DataSource } = { source: "Wikidata" };
   const budgetMs = saved ? SAMPLE_BUDGET_MS : LIVE_BUDGET_MS;
@@ -169,11 +216,11 @@ export async function loadCemetery(qid: string): Promise<CemeteryLoad> {
     );
     if (!live) return { status: "not-found", qid };
     // A sample whose stories partly failed gets them from its saved copy.
-    if (saved && live.missingStories > 0) return { status: "ok", data: backfillStories(live.data, saved) };
-    return { status: "ok", data: live.data };
+    if (saved && live.missingStories > 0) return { status: "ok", data: tidyPeople(backfillStories(live.data, saved)) };
+    return { status: "ok", data: tidyPeople(live.data) };
   } catch (e) {
     const err = asDataSourceError(e, stage.source);
-    if (saved) return { status: "ok", data: fromSaved(saved, err) };
+    if (saved) return { status: "ok", data: tidyPeople(fromSaved(saved, err)) };
     return { status: "error", error: err };
   }
 }
@@ -196,7 +243,10 @@ let osmLastFailure = "";
 export async function loadNearOsm(lat: number, lon: number): Promise<OsmLoad> {
   const now = Date.now();
   if (now < osmDownUntil) {
-    return { ok: false, message: `Couldn't reach OpenStreetMap a few minutes ago (${osmLastFailure}), so it was skipped. Showing Wikidata results only.` };
+    return {
+      ok: false,
+      message: `Couldn't reach OpenStreetMap a few minutes ago (${osmLastFailure.replace(/\.$/, "")}), so it was skipped. Showing Wikidata results only.`,
+    };
   }
   try {
     const r = await call("OpenStreetMap", () => cachedOsm(roundCoord(lat), roundCoord(lon), NEAR_RADIUS_KM));
@@ -258,6 +308,7 @@ export function normalizeQuery(q: string): string {
   return q.trim().replace(/\s+/g, " ").toLowerCase();
 }
 
+/** Cemetery search: each query cached on its own, widened with "<q> cemetery" when it finds few (at most 2 queries). */
 export async function loadSearch(q: string): Promise<CemeterySearchResult[]> {
-  return call("Wikidata", () => cachedSearch(normalizeQuery(q)));
+  return call("Wikidata", () => searchWithFallback(normalizeQuery(q), (query) => cachedSearch(query)));
 }

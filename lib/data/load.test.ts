@@ -16,7 +16,7 @@ const cached = vi.hoisted(() => ({
 }));
 vi.mock("./cached", () => cached);
 
-const { combineNear, loadCemetery, loadNearOsm, normalizeQuery, resetOsmCooldown } = await import("./load");
+const { combineNear, loadCemetery, loadNearOsm, loadSearch, normalizeQuery, resetOsmCooldown, tidyPeople } = await import("./load");
 
 const rows = parseBurialRows(flattenBindings(burialsJson));
 const facts = parseCemeteryFacts("Q2008469", flattenBindings(factsJson));
@@ -43,6 +43,7 @@ describe("loadCemetery", () => {
     expect(r.data.origin).toBe("live");
     expect(r.data.warnings).toEqual([]);
     expect(r.data.cemetery.name).toBe("Oakland Cemetery");
+    // All 80 recorded rows: the 2 whose label is their QID are named from their articles (F20).
     expect(r.data.people).toHaveLength(80);
     expect(r.data.people.find((p) => p.name === "Margaret Mitchell")?.wikipedia?.extract).toMatch(/^Margaret Munnerlyn Mitchell/);
     expect(r.data.sources.wikipedia.license).toBe("CC BY-SA 4.0");
@@ -89,6 +90,7 @@ describe("loadCemetery", () => {
     expect(r.status).toBe("ok");
     if (r.status !== "ok") return;
     expect(r.data.origin).toBe("live");
+    // All 80 recorded rows: the 2 whose label is their QID are named from their articles (F20).
     expect(r.data.people).toHaveLength(80);
     expect(r.data.people.every((p) => p.wikipedia === null)).toBe(true);
     expect(r.data.warnings[0]).toMatchObject({ source: "Wikipedia", code: "stories-missing", message: expect.stringMatching(/^Couldn't load \d+ of \d+ stories from Wikipedia/) });
@@ -129,6 +131,73 @@ describe("loadCemetery", () => {
     expect(r.data.warnings[0].message).toMatch(/^Wikipedia didn't answer for every story, so \d+ come from the copy saved on Oct 20, 2026\.$/);
   });
 
+  it("repairs or drops QID-named people and cleans story text in a cache entry written before the parse-time fixes", async () => {
+    const stale = [
+      ...rows,
+      // Written by the old parser: a bare QID as the name. One has an article, one doesn't.
+      { person: { ...rows[1].person, qid: "Q16162799", name: "Q16162799" }, enwiki: null },
+      { person: { ...rows[2].person, qid: "Q16162800", name: "Q16162800" }, enwiki: "https://en.wikipedia.org/wiki/Jane_Doe_(diarist)" },
+    ];
+    cached.cachedBurials.mockResolvedValue({ rows: stale, fetchedAt: "2026-10-20T02:15:00.000Z" });
+    cached.cachedCemeteryFacts.mockResolvedValue({ ...facts!, qid: "Q872253" });
+    const gordon = rows.find((r) => r.person.name === "John B. Gordon")!;
+    const title = gordon.enwiki!.split("/wiki/")[1].replaceAll("_", " ");
+    cached.cachedExtracts.mockImplementation(async (titles: string[]) => ({
+      ...(await summariesFor(titles)),
+      ...(titles.includes(title)
+        ? { [title]: { title, extract: "John Brown Gordon ((1832-02-06)February 6, 1832 – (1904-01-09)January 9, 1904) was a general.", url: gordon.enwiki! } }
+        : {}),
+    }));
+    const r = await loadCemetery("Q872253");
+    if (r.status !== "ok") throw new Error("expected ok");
+    expect(r.data.people.some((p) => p.qid === "Q16162799")).toBe(false);
+    expect(r.data.people.find((p) => p.qid === "Q16162800")?.name).toBe("Jane Doe");
+    expect(r.data.people.filter((p) => /^Q\d+$/.test(p.name))).toEqual([]);
+    expect(r.data.people.find((p) => p.name === "John B. Gordon")?.wikipedia?.extract).toBe(
+      "John Brown Gordon (February 6, 1832 – January 9, 1904) was a general.",
+    );
+  });
+
+  it("the saved Oakland copy comes back with real names and clean stories", async () => {
+    cached.cachedBurials.mockRejectedValue(wikidataDown());
+    const r = await loadCemetery("Q2008469");
+    if (r.status !== "ok") throw new Error("expected ok");
+    expect(r.data.origin).toBe("saved");
+    // The committed snapshot names two people by their QID; both have articles, so both come back named.
+    expect(r.data.people).toHaveLength(80);
+    expect(r.data.people.filter((p) => /^Q\d+$/.test(p.name))).toEqual([]);
+    expect(r.data.people.find((p) => p.qid === "Q6986296")?.name).toBe("Nedom L. Angier");
+    expect(r.data.people.find((p) => p.qid === "Q6066179")?.name).toBe("Ira O. McDaniel");
+    expect(r.data.people.find((p) => p.name === "John B. Gordon")?.wikipedia?.extract).toMatch(/^John Brown Gordon \(February 6, 1832 – /);
+    expect(r.data.people.find((p) => p.name === "Charles Collier")?.wikipedia?.extract).toMatch(/^Charles Augustus Collier \(July 19, 1848 – /);
+  });
+
+  it("tidyPeople drops a bare-QID person whose story didn't load (no title to name them by)", () => {
+    const p = { ...rows[0].person, qid: "Q1", name: "Q1", wikipedia: null };
+    const named = { ...rows[1].person, wikipedia: null };
+    expect(tidyPeople({ people: [p, named] }).people).toEqual([named]);
+  });
+
+  it("a request that lands while the same cemetery is loading joins that load (one set of Wikimedia calls)", async () => {
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    cached.cachedBurials.mockImplementation(async () => {
+      await gate;
+      return { rows, fetchedAt: "2026-10-20T02:15:00.000Z" };
+    });
+    cached.cachedCemeteryFacts.mockResolvedValue({ ...facts!, qid: "Q872253" });
+    cached.cachedExtracts.mockImplementation(summariesFor);
+    const warmUp = loadCemetery("Q872253");
+    const tour = loadCemetery("Q872253");
+    release();
+    const [a, b] = await Promise.all([warmUp, tour]);
+    expect(a).toBe(b);
+    expect(cached.cachedBurials).toHaveBeenCalledTimes(1);
+    // Once settled, the next request goes through the cache again (a failure is retried, never pinned).
+    await loadCemetery("Q872253");
+    expect(cached.cachedBurials).toHaveBeenCalledTimes(2);
+  });
+
   it("reports not-found when Wikidata has no such item", async () => {
     cached.cachedBurials.mockResolvedValue({ rows: [], fetchedAt: "2026-10-20T02:15:00.000Z" });
     cached.cachedCemeteryFacts.mockResolvedValue(null);
@@ -143,6 +212,7 @@ describe("near", () => {
     expect(first).toEqual({ ok: false, message: expect.stringContaining("All 3 Overpass mirrors failed") });
     const second = await loadNearOsm(47.6339, -122.3158);
     expect(second.ok).toBe(false);
+    expect(second).toMatchObject({ message: expect.stringContaining("(All 3 Overpass mirrors failed: overpass-api.de (unreachable)), so it was skipped") });
     expect(cached.cachedOsm).toHaveBeenCalledTimes(1);
 
     const combined = combineNear({ lat: 47.634, lon: -122.316 }, [], first);
@@ -154,5 +224,32 @@ describe("near", () => {
 
   it("normalizes search text for the cache key", () => {
     expect(normalizeQuery("  Lake   View Cemetery ")).toBe("lake view cemetery");
+  });
+});
+
+describe("search", () => {
+  const result = (qid: string, burials: number) => ({
+    qid,
+    name: `Cemetery ${qid}`,
+    description: null,
+    locatedIn: null,
+    region: null,
+    coord: null,
+    findAGraveCemeteryId: null,
+    enwiki: null,
+    burials,
+  });
+
+  it("caches each query on its own and widens a short one with \"<q> cemetery\" (2 cached calls at most)", async () => {
+    cached.cachedSearch.mockImplementation(async (q: string) => (q === "oakland" ? [result("Q1", 40), result("Q2008469", 115)] : [result("Q2008469", 115), result("Q3", 110)]));
+    const results = await loadSearch("  Oakland ");
+    expect(cached.cachedSearch.mock.calls.map(([q]) => q)).toEqual(["oakland", "oakland cemetery"]);
+    expect(results.map((r) => r.qid)).toEqual(["Q2008469", "Q3", "Q1"]);
+  });
+
+  it("names a Wikidata failure on the first query", async () => {
+    cached.cachedSearch.mockRejectedValue(wikidataDown());
+    await expect(loadSearch("oakland")).rejects.toMatchObject({ source: "Wikidata", kind: "unreachable" });
+    expect(cached.cachedSearch).toHaveBeenCalledTimes(1);
   });
 });

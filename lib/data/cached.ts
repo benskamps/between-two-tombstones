@@ -12,7 +12,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import type { Cemetery, WikipediaSummary } from "@/lib/types";
 import { fetchOsmCemeteries, type OsmCemetery } from "./overpass";
 import type { CemeterySearchResult, NearbyCemetery } from "./types";
-import { fetchBurials, fetchCemeteryFacts, fetchNearby, fetchSearch, type PersonRow } from "./wikidata";
+import { fetchBurials, fetchCemeteryFacts, fetchNearby, fetchSearchOnce, type PersonRow } from "./wikidata";
 import { fetchExtracts } from "./wikipedia";
 
 export async function cachedBurials(qid: string): Promise<{ rows: PersonRow[]; fetchedAt: string }> {
@@ -42,10 +42,11 @@ export async function cachedNearby(lat: number, lon: number): Promise<NearbyCeme
   return fetchNearby(lat, lon);
 }
 
+/** One search query. The "<q> cemetery" widening runs outside the cache (lib/data/load.ts), one entry per query. */
 export async function cachedSearch(q: string): Promise<CemeterySearchResult[]> {
   "use cache: remote";
   cacheLife("weeks");
-  return fetchSearch(q);
+  return fetchSearchOnce(q);
 }
 
 export async function cachedOsm(lat: number, lon: number, radiusKm: number): Promise<{ mirror: string; cemeteries: OsmCemetery[] }> {

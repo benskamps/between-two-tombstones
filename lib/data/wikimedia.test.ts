@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { USER_AGENT } from "@/lib/site";
 import { asDataSourceError, DataSourceError } from "./errors";
-import { DEFAULTS, parseRetryAfter, politeJson, setTransportForTests } from "./wikimedia";
+import { DEFAULTS, parseRetryAfter, politeJson, REQUEST_PATH, setTransportForTests } from "./wikimedia";
+import { sparql } from "./wikidata";
+import { fetchExtracts } from "./wikipedia";
 
 /** A fake clock + sleep that records every wait. */
 function fakeTime() {
@@ -149,6 +151,60 @@ describe("politeJson", () => {
   });
 });
 
+describe("page requests never sit out a rate limit (REQUEST_PATH)", () => {
+  const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
+
+  it("a 429 with Retry-After: 20 fails fast in real time, for Wikipedia batches and Wikidata queries alike", async () => {
+    for (const call of [() => fetchExtracts(["Margaret Mitchell"]), () => sparql("SELECT * WHERE {}")]) {
+      setTransportForTests(null);
+      const { fetchFn } = scripted([status(429, { "retry-after": "20" }), ok({ never: true })]);
+      setTransportForTests({ fetch: fetchFn }); // real clock and real sleep
+      const started = Date.now();
+      const err = await call().catch((e: unknown) => e);
+      expect(Date.now() - started).toBeLessThan(3_000);
+      expect(err).toMatchObject({ kind: "rate-limited", status: 429, retryAfterSeconds: 20 });
+      expect(fetchFn).toHaveBeenCalledTimes(1);
+    }
+  });
+
+  it("then fails fast for the rest of that window instead of waiting it out", async () => {
+    const time = fakeTime();
+    const { fetchFn } = scripted([status(429, { "retry-after": "20" })]);
+    setTransportForTests({ fetch: fetchFn, ...time });
+    await fetchExtracts(["A"]).catch(() => {});
+    const second = await fetchExtracts(["B"]).catch((e: unknown) => e);
+    expect(second).toMatchObject({ kind: "rate-limited" });
+    expect(fetchFn).toHaveBeenCalledTimes(1);
+    expect(sum(time.waits.filter((w) => w > 200))).toBe(0); // only spacing, no Retry-After waits
+  });
+
+  it("still rides out a short Retry-After, but never more than 2 s of retry waits in all", async () => {
+    const short = fakeTime();
+    const first = scripted([status(429, { "retry-after": "1" }), ok({ n: 1 })]);
+    setTransportForTests({ fetch: first.fetchFn, ...short });
+    await expect(politeJson("https://en.wikipedia.org/w/api.php", { source: "Wikipedia", ...REQUEST_PATH })).resolves.toEqual({ n: 1 });
+    expect(short.waits).toContain(1000);
+
+    const many = fakeTime();
+    const second = scripted([status(429, { "retry-after": "1" }), status(429, { "retry-after": "1" }), status(429, { "retry-after": "1" }), ok({})]);
+    setTransportForTests({ fetch: second.fetchFn, ...many });
+    await expect(politeJson("https://en.wikipedia.org/w/api.php", { source: "Wikipedia", ...REQUEST_PATH })).rejects.toMatchObject({ kind: "rate-limited" });
+    expect(second.fetchFn).toHaveBeenCalledTimes(3);
+    expect(sum(many.waits.filter((w) => w >= 1000))).toBeLessThanOrEqual(REQUEST_PATH.maxTotalWaitMs);
+
+    const flaky = fakeTime();
+    const third = scripted([status(502), status(502), status(502), ok({})]);
+    setTransportForTests({ fetch: third.fetchFn, ...flaky });
+    await expect(politeJson("https://query.wikidata.org/sparql", { source: "Wikidata", ...REQUEST_PATH })).rejects.toMatchObject({ status: 502 });
+    expect(sum(flaky.waits.filter((w) => w >= 1000))).toBeLessThanOrEqual(REQUEST_PATH.maxTotalWaitMs);
+  });
+
+  it("the generic default (used by fixture recording) still waits up to 20 s for a single retry", () => {
+    expect(DEFAULTS.maxWaitMs).toBe(20_000);
+    expect(REQUEST_PATH).toEqual({ maxWaitMs: 2_000, maxTotalWaitMs: 2_000 });
+  });
+});
+
 describe("asDataSourceError", () => {
   it("recovers source and kind from a plain Error that crossed a cache boundary", () => {
     const original = new DataSourceError("Wikipedia", "rate-limited", "en.wikipedia.org asked us to wait 46 s.", { status: 429, retryAfterSeconds: 46 });
@@ -163,5 +219,17 @@ describe("asDataSourceError", () => {
 
   it("falls back to 'unreachable' for the given source", () => {
     expect(asDataSourceError(new Error("boom"), "OpenStreetMap")).toMatchObject({ source: "OpenStreetMap", kind: "unreachable" });
+  });
+
+  it("never passes on the production build's hidden-error text (seen on /near when Overpass failed)", () => {
+    const redacted = Object.assign(
+      new Error(
+        "An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the nature of the error.",
+      ),
+      { digest: "1234567" },
+    );
+    const back = asDataSourceError(redacted, "OpenStreetMap");
+    expect(back).toMatchObject({ source: "OpenStreetMap", kind: "unreachable", detail: "the request failed." });
+    expect(back.userMessage).toBe("Couldn't reach OpenStreetMap. Try again in a minute, or open a saved tour.");
   });
 });

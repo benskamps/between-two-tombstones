@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { loadCemetery, parseBurials, routeError, type SampleCemetery } from "./load";
+import { loadCemetery, parseBurials, routeError, toSpiritPerson, type SampleCemetery } from "./load";
+import { SAMPLE_CEMETERIES } from "./samples";
 import { clampSweepMs, randomBandFrequency, SWEEP_MAX_MS, SWEEP_MIN_MS } from "./engine";
 import { pickVoice, voiceParams } from "./voice";
 
@@ -48,6 +49,30 @@ describe("parseBurials", () => {
     );
     expect(routeError(null, 404)).toContain("isn't available yet");
     expect(routeError(null, 500)).toContain("500");
+  });
+});
+
+describe("never an ID for a name (F20)", () => {
+  const base = { qid: "Q6986296", death: "1882-02-03T00:00:00Z", deathPrecision: 11, occupations: [] };
+
+  it("names a bare-QID person from the Wikipedia title, or leaves them out", () => {
+    expect(toSpiritPerson({ ...base, name: "Q6986296", wikipedia: { title: "Nedom L. Angier" } })?.name).toBe("Nedom L. Angier");
+    expect(toSpiritPerson({ ...base, name: "Q6986296", wikipedia: { title: "Nedom L. Angier (politician)" } })?.name).toBe("Nedom L. Angier");
+    expect(toSpiritPerson({ ...base, name: "Q6986296", wikipedia: null })).toBeNull();
+    expect(toSpiritPerson({ ...base, name: "Q6986296" })).toBeNull();
+    expect(toSpiritPerson({ ...base, name: "Margaret Mitchell" })?.name).toBe("Margaret Mitchell");
+  });
+
+  it("the bundled samples carry no QID names; Oakland's two unlabelled people come back by their article titles", () => {
+    for (const c of SAMPLE_CEMETERIES) expect(c.people.filter((p) => /^Q\d+$/.test(p.name.trim())), c.name).toEqual([]);
+    const oakland = SAMPLE_CEMETERIES.find((c) => c.qid === "Q2008469")!;
+    expect(oakland.people.find((p) => p.qid === "Q6986296")?.name).toBe("Nedom L. Angier");
+    expect(oakland.people.find((p) => p.qid === "Q6066179")?.name).toBe("Ira O. McDaniel");
+  });
+
+  it("a live snapshot from the route gets the same repair", () => {
+    const p = parseBurials({ ...snapshot, people: [{ ...base, name: "Q6986296", wikipedia: { title: "Nedom L. Angier" } }, { ...base, qid: "Q9", name: "Q9" }] });
+    expect(p?.people.map((x) => x.name)).toEqual(["Nedom L. Angier"]);
   });
 });
 

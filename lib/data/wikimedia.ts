@@ -5,7 +5,8 @@
 //   awaits a promise created by another request),
 // - times out after 15 s,
 // - retries 429/5xx and network failures at most 3 times, honoring Retry-After,
-//   and gives up instead of waiting longer than 20 s for any single retry,
+//   and gives up instead of waiting longer than 20 s for any single retry
+//   (2 s in all for page requests: REQUEST_PATH),
 // - stops at an overall deadline so a page never hangs on a dead source.
 //
 // DISABLE_WIKIDATA=1 (and DISABLE_WIKIPEDIA / DISABLE_OPENSTREETMAP) make every
@@ -22,6 +23,8 @@ export type PoliteOptions = {
   maxRetries?: number;
   /** Longest single wait before a retry; a longer Retry-After means give up now. */
   maxWaitMs?: number;
+  /** All waits before retries (Retry-After, backoff, another call's 429) added up; past it, give up now. */
+  maxTotalWaitMs?: number;
   /** Whole call, including waiting for a turn at the host. */
   deadlineMs?: number;
   /** Minimum gap between two requests to the same host. */
@@ -36,6 +39,14 @@ export const DEFAULTS = {
   spacingMs: 100,
   lockPollMs: 25,
 } as const;
+
+/**
+ * Every request a page makes (lib/data). Gate 2 gives a stranger 20 s to see
+ * five stories, so a page never sits out a rate limit: at most about 2 s of
+ * retry waits in all, then the call fails fast and the page shows what it has
+ * (a "stories missing" warning, or the saved copy for the samples).
+ */
+export const REQUEST_PATH = { maxWaitMs: 2_000, maxTotalWaitMs: 2_000 } as const satisfies Partial<PoliteOptions>;
 
 type Transport = {
   fetch: typeof fetch;
@@ -111,7 +122,10 @@ export async function politeJson<T>(url: string, opts: PoliteOptions): Promise<T
   const maxRetries = opts.maxRetries ?? DEFAULTS.maxRetries;
   const maxWaitMs = opts.maxWaitMs ?? DEFAULTS.maxWaitMs;
   const spacingMs = opts.spacingMs ?? DEFAULTS.spacingMs;
+  const maxTotalWaitMs = opts.maxTotalWaitMs ?? Infinity;
   const host = new URL(url).host;
+  /** Retry waits so far (not the turn at the host, not the spacing). */
+  let waited = 0;
 
   if (isSourceDisabled(source)) {
     throw new DataSourceError(source, "unreachable", `${source} is switched off on this server (DISABLE_${source.toUpperCase()}=1).`);
@@ -137,12 +151,13 @@ export async function politeJson<T>(url: string, opts: PoliteOptions): Promise<T
       const now = transport.now();
       const blockedFor = state.blockedUntil - now;
       if (blockedFor > 0) {
-        if (blockedFor > maxWaitMs || now + blockedFor >= deadline) {
+        if (blockedFor > maxWaitMs || waited + blockedFor > maxTotalWaitMs || now + blockedFor >= deadline) {
           throw new DataSourceError(source, "rate-limited", `${host} asked us to wait ${Math.ceil(blockedFor / 1000)} s.`, {
             status: 429,
             retryAfterSeconds: Math.ceil(blockedFor / 1000),
           });
         }
+        waited += blockedFor;
         await transport.sleep(blockedFor);
       }
       const gap = state.lastAt + spacingMs - transport.now();
@@ -182,9 +197,10 @@ export async function politeJson<T>(url: string, opts: PoliteOptions): Promise<T
         const kind = isTimeout(err) ? "timeout" : "unreachable";
         log(host, kind, transport.now() - sentAt, attempt);
         const backoff = Math.min(1000 * 2 ** attempt, maxWaitMs);
-        if (attempt >= maxRetries || transport.now() + backoff >= deadline) {
+        if (attempt >= maxRetries || waited + backoff > maxTotalWaitMs || transport.now() + backoff >= deadline) {
           throw new DataSourceError(source, kind, `${host}: ${describe(err)}`, { cause: err });
         }
+        waited += backoff;
         await transport.sleep(backoff);
         continue;
       }
@@ -198,7 +214,7 @@ export async function politeJson<T>(url: string, opts: PoliteOptions): Promise<T
       }
       const kind = res.status === 429 ? "rate-limited" : res.status === 503 || res.status === 504 ? "unreachable" : "bad-response";
       const waitMs = ra !== null ? ra * 1000 : Math.min(1000 * 2 ** attempt, maxWaitMs);
-      if (attempt >= maxRetries || waitMs > maxWaitMs || transport.now() + waitMs >= deadline) {
+      if (attempt >= maxRetries || waitMs > maxWaitMs || waited + waitMs > maxTotalWaitMs || transport.now() + waitMs >= deadline) {
         throw new DataSourceError(source, kind, `${host} answered ${res.status}${ra !== null ? ` and asked us to wait ${Math.ceil(ra)} s` : ""}.`, {
           status: res.status,
           retryAfterSeconds: ra ?? undefined,
@@ -206,6 +222,7 @@ export async function politeJson<T>(url: string, opts: PoliteOptions): Promise<T
       }
       // Drain the body so the connection can be reused.
       await res.body?.cancel().catch(() => {});
+      waited += waitMs;
       await transport.sleep(waitMs);
     }
   } finally {

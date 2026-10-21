@@ -3,9 +3,10 @@
 // batch fetched 80 summaries in 4 requests in Hour 0. Ported from
 // scripts/snapshot.mjs, including the redirect/normalization mapping.
 
+import { cleanExtract } from "@/lib/tour/text";
 import type { WikipediaSummary } from "@/lib/types";
 import { DataSourceError } from "./errors";
-import { politeJson } from "./wikimedia";
+import { politeJson, REQUEST_PATH } from "./wikimedia";
 
 export const WIKIPEDIA_API = "https://en.wikipedia.org/w/api.php";
 export const BATCH_SIZE = 20;
@@ -47,7 +48,7 @@ export function extractsUrl(titles: string[]): string {
   })}`;
 }
 
-/** Map each requested title to its page, following normalization and redirects. */
+/** Map each requested title to its page, following normalization and redirects. Extracts come back cleaned (lib/tour/text). */
 export function parseExtracts(requested: string[], json: QueryJson): Record<string, WikipediaSummary> {
   if (json.error) {
     throw new DataSourceError("Wikipedia", "bad-response", `Wikipedia API error: ${json.error.code} ${json.error.info}`);
@@ -64,8 +65,9 @@ export function parseExtracts(requested: string[], json: QueryJson): Record<stri
     let k = t;
     for (let hops = 0; alias.has(k) && hops < 3; hops++) k = alias.get(k)!;
     const p = byTitle.get(k);
-    if (p?.extract && p.fullurl) {
-      out[t] = { title: p.title, extract: p.extract, url: p.fullurl, revision: p.lastrevid };
+    const extract = p?.extract ? cleanExtract(p.extract) : "";
+    if (p && extract && p.fullurl) {
+      out[t] = { title: p.title, extract, url: p.fullurl, revision: p.lastrevid };
     }
   }
   return out;
@@ -77,7 +79,7 @@ export async function fetchExtracts(titles: string[]): Promise<Record<string, Wi
   const out: Record<string, WikipediaSummary> = {};
   for (let i = 0; i < unique.length; i += BATCH_SIZE) {
     const batch = unique.slice(i, i + BATCH_SIZE);
-    const json = await politeJson<QueryJson>(extractsUrl(batch), { source: "Wikipedia" });
+    const json = await politeJson<QueryJson>(extractsUrl(batch), { source: "Wikipedia", ...REQUEST_PATH });
     Object.assign(out, parseExtracts(batch, json));
   }
   return out;

@@ -42,7 +42,11 @@ describe.skipIf(!record)("record live fixtures", () => {
     await rawSparql("sparql-near-lakeview", nearQuery(47.6339, -122.3158));
     await rawSparql("sparql-search-lake-view-cemetery", searchQuery("lake view cemetery"));
     await rawSparql("sparql-search-oakland", searchQuery("oakland"));
+    await rawSparql("sparql-search-oakland-cemetery", searchQuery("oakland cemetery"));
     await rawSparql("sparql-near-manhattan", nearQuery(40.758, -73.9855));
+    // The review's two Gate 2 points (F2), rounded as lib/data/load.ts rounds them.
+    await rawSparql("sparql-near-charleston", nearQuery(32.804, -79.947));
+    await rawSparql("sparql-near-oakland", nearQuery(33.749, -84.372));
     setTransportForTests(null);
 
     if (!have("wikipedia-extracts-batch1")) {
