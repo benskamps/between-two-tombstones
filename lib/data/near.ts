@@ -25,6 +25,10 @@ export const MAX_ACCURACY_M = 300;
 
 const nearestFirst = (list: NearbyCemetery[]) => [...list].sort((a, b) => a.distanceKm - b.distanceKm);
 
+/** /near starts loading the nearest cemetery with 5+ people within 1 km before anyone taps… */
+export const WARM_MIN_PEOPLE = 5;
+export const WARM_MAX_KM = 1;
+
 /** The nearest cemetery with 10+ people within 2 km; if none, the nearest with 5+; else null. */
 export function bestNearby(list: NearbyCemetery[]): NearbyCemetery | null {
   const sorted = nearestFirst(list);
@@ -43,6 +47,21 @@ export function bestNearby(list: NearbyCemetery[]): NearbyCemetery | null {
 export function autoOpenTarget(list: NearbyCemetery[], accuracyM: number | null, listRequested = false): NearbyCemetery | null {
   if (listRequested || accuracyM === null || accuracyM > MAX_ACCURACY_M) return null;
   return nearestFirst(list).find((c) => c.burials >= AUTO_OPEN_MIN_PEOPLE && c.distanceKm <= AUTO_OPEN_MAX_KM) ?? null;
+}
+
+/**
+ * The tours /near loads ahead of a tap: the nearest cemetery with 5+ people
+ * within 1 km (where you're standing; an auto-open target is always this one),
+ * plus the pinned "Best stories nearby" card when it is a different cemetery,
+ * since that is the most likely tap (Magnolia at 1.7 km from the Charleston
+ * point). Pass best = null when /near is about to auto-open. At most 2 QIDs:
+ * one extra cemetery per render, because Wikimedia's limits are tight.
+ */
+export function warmTargets(list: NearbyCemetery[], best: NearbyCemetery | null): string[] {
+  const here = nearestFirst(list).find((c) => c.burials >= WARM_MIN_PEOPLE);
+  const out = here && here.distanceKm <= WARM_MAX_KM ? [here.qid] : [];
+  if (best && !out.includes(best.qid)) out.push(best.qid);
+  return out;
 }
 
 /** acc in meters from the URL; null when missing or not a plain non-negative number. */

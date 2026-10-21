@@ -9,7 +9,7 @@ import { SearchForm } from "@/components/tour/SearchForm";
 import { SourceFailure } from "@/components/tour/SourceFailure";
 import { asDataSourceError } from "@/lib/data/errors";
 import { combineNear, loadCemetery, loadNearOsm, loadNearWikidata, osmWithin } from "@/lib/data/load";
-import { accuracyText, autoOpenTarget, bestNearby, hereHref, isApproximate, parseAccuracy, parseFlag, splitNear } from "@/lib/data/near";
+import { accuracyText, autoOpenTarget, bestNearby, hereHref, isApproximate, parseAccuracy, parseFlag, splitNear, warmTargets } from "@/lib/data/near";
 import type { NearbyCemetery } from "@/lib/data/types";
 import { parseLatLon } from "@/lib/data/validate";
 import { BestNearby, NearLinkList, UnlistedFold } from "./NearList";
@@ -20,8 +20,6 @@ export const metadata: Metadata = {
 };
 
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
-const WARM_MAX_KM = 1;
-const WARM_MIN_BURIALS = 5;
 
 export default function NearPage({ searchParams }: PageProps<"/near">) {
   return (
@@ -67,21 +65,21 @@ async function NearResults({ searchParams }: Pick<PageProps<"/near">, "searchPar
     return <SourceFailure source={err.source} message={err.userMessage} retryHref={`/near?lat=${at.lat}&lon=${at.lon}`} />;
   }
 
-  // Standing at a cemetery? Start loading its tour now so the tap opens fast.
-  // Only the nearest one within 1 km with 5+ burials: Wikimedia's limits are tight.
-  // An auto-open target (below) is always this same cemetery: the nearest with 5+, within 300 m.
-  const nearest = cemeteries.find((c) => c.burials >= WARM_MIN_BURIALS);
-  if (nearest && nearest.distanceKm <= WARM_MAX_KM) {
-    const warming = loadCemetery(nearest.qid).catch(() => undefined);
-    after(() => warming);
-  }
-
   // "I'm here. Haunt me.": with a good fix (±300 m or better) and a cemetery
   // with 5+ people within about 300 m, skip the list and open its tour.
   const here = autoOpenTarget(cemeteries, accuracyM, listRequested);
+  const best = bestNearby(cemeteries);
+
+  // Start loading tours now so the tap opens fast: the nearest with 5+ people
+  // within 1 km (an auto-open target is always that one), plus the pinned
+  // "Best stories nearby" card unless we're auto-opening. At most one extra
+  // cemetery per render; loadCemetery joins a load that is already running.
+  for (const qid of warmTargets(cemeteries, here ? null : best)) {
+    const warming = loadCemetery(qid).catch(() => undefined);
+    after(() => warming);
+  }
   if (here) redirect(hereHref(here.qid, at.lat, at.lon));
 
-  const best = bestNearby(cemeteries);
   const { listed, unlisted } = splitNear(cemeteries, best);
   const anyTour = Boolean(best) || listed.length > 0;
 
