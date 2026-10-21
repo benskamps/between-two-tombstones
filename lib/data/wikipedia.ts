@@ -6,7 +6,7 @@
 import { cleanExtract } from "@/lib/tour/text";
 import type { WikipediaSummary } from "@/lib/types";
 import { DataSourceError } from "./errors";
-import { politeJson } from "./wikimedia";
+import { politeJson, REQUEST_PATH } from "./wikimedia";
 
 export const WIKIPEDIA_API = "https://en.wikipedia.org/w/api.php";
 export const BATCH_SIZE = 20;
@@ -79,7 +79,7 @@ export async function fetchExtracts(titles: string[]): Promise<Record<string, Wi
   const out: Record<string, WikipediaSummary> = {};
   for (let i = 0; i < unique.length; i += BATCH_SIZE) {
     const batch = unique.slice(i, i + BATCH_SIZE);
-    const json = await politeJson<QueryJson>(extractsUrl(batch), { source: "Wikipedia" });
+    const json = await politeJson<QueryJson>(extractsUrl(batch), { source: "Wikipedia", ...REQUEST_PATH });
     Object.assign(out, parseExtracts(batch, json));
   }
   return out;

@@ -5,7 +5,7 @@
 
 import { DataSourceError } from "./errors";
 import type { NearbyCemetery, OsmOnlyCemetery } from "./types";
-import { politeJson } from "./wikimedia";
+import { politeJson, REQUEST_PATH } from "./wikimedia";
 
 export const OVERPASS_MIRRORS = [
   "https://overpass-api.de/api/interpreter",
@@ -70,6 +70,7 @@ export async function fetchOsmCemeteries(lat: number, lon: number, radiusKm: num
     try {
       const json = await politeJson<OverpassJson>(mirror, {
         source: "OpenStreetMap",
+        ...REQUEST_PATH,
         init: { method: "POST", body, headers: { "Content-Type": "application/x-www-form-urlencoded" } },
         timeoutMs: MIRROR_TIMEOUT_MS,
         deadlineMs: MIRROR_TIMEOUT_MS + 2_000,

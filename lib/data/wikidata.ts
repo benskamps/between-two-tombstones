@@ -6,7 +6,7 @@
 import type { Cemetery, Person } from "@/lib/types";
 import { DataSourceError } from "./errors";
 import type { CemeterySearchResult, NearbyCemetery } from "./types";
-import { politeJson } from "./wikimedia";
+import { politeJson, REQUEST_PATH } from "./wikimedia";
 
 export const SPARQL_ENDPOINT = "https://query.wikidata.org/sparql";
 export const BURIALS_LIMIT = 80;
@@ -32,6 +32,7 @@ export async function sparql(query: string): Promise<SparqlRow[]> {
   const url = `${SPARQL_ENDPOINT}?format=json&query=${encodeURIComponent(query)}`;
   const json = await politeJson<SparqlJson>(url, {
     source: "Wikidata",
+    ...REQUEST_PATH,
     init: { headers: { Accept: "application/sparql-results+json" } },
     // The SPARQL endpoint was fine with back-to-back queries in Hour 0.
     spacingMs: 0,
