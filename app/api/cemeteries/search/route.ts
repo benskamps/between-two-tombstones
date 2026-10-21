@@ -11,7 +11,9 @@ export async function GET(req: NextRequest) {
   try {
     const results = await loadSearch(parsed.q);
     const body: SearchResponse = { query: parsed.q, results };
-    return Response.json(body, { headers: { "Cache-Control": "public, max-age=300, s-maxage=3600" } });
+    // No matches may be an upstream hiccup (lib/data/cached.ts), so the CDN doesn't keep them.
+    const cache = results.length > 0 ? "public, max-age=300, s-maxage=3600" : "public, max-age=60";
+    return Response.json(body, { headers: { "Cache-Control": cache } });
   } catch (e) {
     return errorResponse(asDataSourceError(e, "Wikidata"));
   }
