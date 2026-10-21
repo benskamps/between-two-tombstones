@@ -12,7 +12,8 @@ Model declaration: Ben's wording. (Built with Claude Code; the app calls Claude 
 
 - [ ] Production is live (Ben's deploy click) and the stranger pass is done.
 - [ ] Oakland Cemetery: check today's gate hours and its photography and filming rules. Personal phone video is usually fine; ask at the visitor center if unsure.
-- [ ] Screen brightness up on every phone (the app is dark only; outdoor glare). Volume up. Screen recording ready (iOS: Control Center → Screen Recording, long-press for mic on).
+- [ ] Screen brightness up on every phone, auto-brightness off (the app is dark only; outdoor glare). Volume up.
+- [ ] Film the phone screens as on-device screen recordings (iOS: Control Center → Screen Recording, long-press for mic on) and cut them together with the outdoor footage. A dark screen filmed outdoors goes muddy and mirrors the sky (review F21). If a phone must be on camera, film it in shade.
 - [ ] Two or three phones for the séance, each opened from the same link, each tapped Join.
 - [ ] "Download this tour" for Oakland on the main phone in case signal drops.
 - [ ] Pick a stone for the Stamp Kit yourself: old, legible, in shade. Not anyone who died recently, and not a monument that needs context the video can't give.
@@ -24,12 +25,12 @@ Model declaration: Ben's wording. (Built with Claude Code; the app calls Claude 
 |---|---|---|
 | 0:00 | Cold open: three phones on a bench near a grave, séance countdown | "The séance begins in 3… 2… 1…", static, then all three whisper the same name at once |
 | 0:15 | Title card | "Between Two Tombstones: a graveyard companion that works on real cemeteries" |
-| 0:20 | Main phone at the gate: Find cemeteries near me | Oakland Cemetery, 160 m away, 115 people listed |
-| 0:35 | Tour: Greatest hits | Margaret Mitchell's card: dates, age, the story, From Wikipedia, Find a Grave link |
+| 0:20 | Main phone just inside the gate: "I'm here. Haunt me." | Opens Oakland's tour directly, because you're standing in it (accuracy ±300 m or better). Outside the gate, "Best stories nearby" pins Oakland |
+| 0:35 | Tour: Greatest hits | Stop 01 / 80, Margaret Mitchell: the headstone card, dates, age, the story, her portrait, From Wikipedia, Find a Grave link |
 | 0:55 | Walk to three graves, tap I found it at each | "Best walking route" appears: the pins you add make the route |
-| 1:10 | Stamp Kit at the chosen stone | Photo → drag the corners → rubbing, ink stamp, postage stamp with their age as the value |
+| 1:10 | Stamp Kit at the chosen stone (from the haunt's toolkit) | Darkroom: photo → drag the corners → three specimen cards side by side: rubbing, ink stamp, postage stamp with their age as the value |
 | 1:35 | Read with Claude | Transcript with [?] where the carving is worn; it never guesses dates |
-| 1:50 | Séance, wider | Captions on two phones side by side, same words, same second |
+| 1:50 | Séance, wider | The same split-flap room code on two phones; both instrument panels speak the same name in the same second |
 | 2:05 | Haunted Calendar | Subscribe on the phone, open the calendar app: "Margaret Mitchell died on this day in 1949" → tap → her story card |
 | 2:20 | Gravitator, quick | Swipe right on Oakland: "It's a match" |
 | 2:30 | Close | Respect rules on screen: spirit box uses only people dead 75+ years; recent deaths get plain cards; etiquette card. "Built in four days with Claude Code. Open source." |
@@ -42,5 +43,5 @@ Model declaration: Ben's wording. (Built with Claude Code; the app calls Claude 
 
 ## Still to build before the video works end to end
 
-- Gate 6 needs share links with preview cards (Lane 5, after the stranger pass).
-- Real-phone checks: stamps under 5 s (gate 4), three stones read without invented dates (gate 5), two phones in a party (gate 7).
+- Gate 6 needs share links with preview cards (Lane 5.2). Partial work is saved on `lane5-share-links`; restarting it waits on Ben's go.
+- Real-phone checks: stamps under 5 s (gate 4), two phones in a party (gate 7), a downloaded tour opened offline (gate 3). Gate 5 (three stones read without invented dates) passed on prod 10/20.
