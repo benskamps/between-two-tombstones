@@ -239,7 +239,10 @@ let osmLastFailure = "";
 export async function loadNearOsm(lat: number, lon: number): Promise<OsmLoad> {
   const now = Date.now();
   if (now < osmDownUntil) {
-    return { ok: false, message: `Couldn't reach OpenStreetMap a few minutes ago (${osmLastFailure}), so it was skipped. Showing Wikidata results only.` };
+    return {
+      ok: false,
+      message: `Couldn't reach OpenStreetMap a few minutes ago (${osmLastFailure.replace(/\.$/, "")}), so it was skipped. Showing Wikidata results only.`,
+    };
   }
   try {
     const r = await call("OpenStreetMap", () => cachedOsm(roundCoord(lat), roundCoord(lon), NEAR_RADIUS_KM));

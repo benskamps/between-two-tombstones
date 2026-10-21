@@ -199,6 +199,7 @@ describe("near", () => {
     expect(first).toEqual({ ok: false, message: expect.stringContaining("All 3 Overpass mirrors failed") });
     const second = await loadNearOsm(47.6339, -122.3158);
     expect(second.ok).toBe(false);
+    expect(second).toMatchObject({ message: expect.stringContaining("(All 3 Overpass mirrors failed: overpass-api.de (unreachable)), so it was skipped") });
     expect(cached.cachedOsm).toHaveBeenCalledTimes(1);
 
     const combined = combineNear({ lat: 47.634, lon: -122.316 }, [], first);
