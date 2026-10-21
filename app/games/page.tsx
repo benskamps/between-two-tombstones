@@ -5,7 +5,8 @@ import { BingoGlyph } from "@/components/games/BingoGlyph";
 import { EvpHubLink } from "@/components/games/EvpRecorder";
 import { HauntGate } from "@/components/haunt/HauntGate";
 import { GateNeutral } from "@/components/haunt/PickHauntFirst";
-import { Candle, Planchette } from "@/components/ui/symbols";
+import { PageHeader } from "@/components/ui/games/PageHeader";
+import { Candle, Lily, Moth, Planchette } from "@/components/ui/symbols";
 import "@/components/games/games.css";
 
 export const metadata: Metadata = {
@@ -37,10 +38,12 @@ const GAMES: { href: string; title: string; body: string; art: ReactNode }[] = [
 export default function GamesPage() {
   return (
     <div className="space-y-5">
-      <header className="space-y-2">
-        <h1 className="font-display text-4xl leading-tight">Graveyard Games</h1>
-        <p className="text-muted">Something to do while you walk. Stay on the paths and give mourners space.</p>
-      </header>
+      <PageHeader
+        title="Graveyard Games"
+        death={<Moth className="h-5 w-5" />}
+        life={<Lily className="h-5 w-5" />}
+        intro={<>Something to do while you walk. Stay on the paths and give mourners space.</>}
+      />
       <Suspense fallback={<GateNeutral />}>
         <HauntGate tool="/games">
           <ul className="grid gap-3">

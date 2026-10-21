@@ -3,6 +3,8 @@ import { Suspense } from "react";
 import { HauntGate } from "@/components/haunt/HauntGate";
 import { GateNeutral } from "@/components/haunt/PickHauntFirst";
 import { StampKit } from "@/components/stamp/StampKit";
+import { PageHeader } from "@/components/ui/games/PageHeader";
+import { Fern, Gate } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {
   title: "Stamp Kit",
@@ -13,13 +15,17 @@ export const metadata: Metadata = {
 export default function StampPage() {
   return (
     <div className="space-y-6">
-      <header className="space-y-2">
-        <h1 className="font-display text-4xl leading-tight">Stamp Kit</h1>
-        <p className="text-muted">
-          Photograph a headstone and get a rubbing, an ink stamp and a postage stamp of it. Real rubbings wear stones
-          down; this one only needs a photo.
-        </p>
-      </header>
+      <PageHeader
+        title="Stamp Kit"
+        death={<Gate className="h-5 w-5" />}
+        life={<Fern className="h-5 w-5" />}
+        intro={
+          <>
+            Photograph a headstone and get a rubbing, an ink stamp and a postage stamp of it. Real rubbings wear stones
+            down; this one only needs a photo.
+          </>
+        }
+      />
       {/* Opens once you have a haunt (or the link names a cemetery); the haunt lives on the phone. */}
       <Suspense fallback={<GateNeutral />}>
         <HauntGate tool="/stamp">
