@@ -14,7 +14,7 @@ export function BestNearby({ cemetery }: { cemetery: NearbyCemetery }) {
         Best stories nearby
       </h2>
       <Link
-        href={nearHref(cemetery.qid)}
+        href={nearHref(cemetery.qid, cemetery.burials)}
         className="tap block rounded-xl border-2 border-accent bg-surface p-4"
         data-qid={cemetery.qid}
       >
@@ -33,7 +33,7 @@ export function NearLinkList({ items, label }: { items: NearbyCemetery[]; label:
     <ul className="grid gap-3" aria-label={label} data-testid="cemetery-list">
       {items.map((c) => (
         <li key={c.qid}>
-          <Link href={nearHref(c.qid)} className="tap block rounded-xl border border-border bg-surface p-4" data-qid={c.qid}>
+          <Link href={nearHref(c.qid, c.burials)} className="tap block rounded-xl border border-border bg-surface p-4" data-qid={c.qid}>
             <span className="font-display text-xl">{c.name}</span>
             <span className="block text-sm text-muted">{placeLine(c)}</span>
             <span className="block text-sm text-accent">{peopleText(c.burials)}</span>

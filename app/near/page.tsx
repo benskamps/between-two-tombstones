@@ -78,7 +78,7 @@ async function NearResults({ searchParams }: Pick<PageProps<"/near">, "searchPar
     const warming = loadCemetery(qid).catch(() => undefined);
     after(() => warming);
   }
-  if (here) redirect(hereHref(here.qid, at.lat, at.lon));
+  if (here) redirect(hereHref(here.qid, at.lat, at.lon, here.burials));
 
   const { listed, unlisted } = splitNear(cemeteries, best);
   const anyTour = Boolean(best) || listed.length > 0;

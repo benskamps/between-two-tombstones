@@ -21,10 +21,10 @@ beforeEach(() => {
 });
 
 describe("timeouts per Wikidata call", () => {
-  it("the burials query waits up to 25 s, once, and keeps the 2 s cap on rate-limit waits", async () => {
+  it("the burials query waits up to 27 s, once, and keeps the 2 s cap on rate-limit waits", async () => {
     await fetchBurials("Q216344");
     expect(calls).toHaveLength(1);
-    expect(calls[0].opts).toMatchObject({ source: "Wikidata", timeoutMs: 25_000, deadlineMs: 26_000, ...REQUEST_PATH });
+    expect(calls[0].opts).toMatchObject({ source: "Wikidata", timeoutMs: 27_000, deadlineMs: 28_000, ...REQUEST_PATH });
     expect(BURIALS_FETCH.timeoutMs).toBeGreaterThan(DEFAULTS.timeoutMs);
     // No room for a second attempt after a timeout: the deadline is within one backoff (1 s) of it.
     expect(BURIALS_FETCH.deadlineMs - BURIALS_FETCH.timeoutMs).toBeLessThanOrEqual(1_000);

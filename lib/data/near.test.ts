@@ -143,6 +143,10 @@ describe("URL params and text", () => {
   it("builds the contract URLs", () => {
     expect(nearHref("Q2008469")).toBe("/cemetery/Q2008469?via=near");
     expect(hereHref("Q2008469", 33.7489, -84.3718)).toBe("/cemetery/Q2008469?via=here&lat=33.7489&lon=-84.3718");
+    // With the people count, so a slow first load can say how big the cemetery is.
+    expect(nearHref("Q216344", 4359)).toBe("/cemetery/Q216344?via=near&n=4359");
+    expect(hereHref("Q2008469", 33.7489, -84.3718, 115)).toBe("/cemetery/Q2008469?via=here&lat=33.7489&lon=-84.3718&n=115");
+    expect(nearHref("Q1", 0)).toBe("/cemetery/Q1?via=near");
   });
 
   it("formats distance and people like the other lists", () => {

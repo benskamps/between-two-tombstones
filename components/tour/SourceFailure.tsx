@@ -17,11 +17,14 @@ export function SourceFailure({
   message,
   retryHref,
   showSearch = true,
+  title,
 }: {
   source: DataSource;
   message: string;
   retryHref: string;
   showSearch?: boolean;
+  /** Defaults to "<source> didn't answer". A big cemetery that timed out says so instead. */
+  title?: string;
 }) {
   return (
     <section
@@ -33,7 +36,7 @@ export function SourceFailure({
       data-btt-nocache=""
     >
       <h2 id="failure-title" className="font-display text-2xl">
-        {source} didn&rsquo;t answer
+        {title ?? <>{source} didn&rsquo;t answer</>}
       </h2>
       <p className="font-bold" data-testid="failure-message">
         {message}

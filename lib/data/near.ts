@@ -3,8 +3,8 @@
 //
 // URL contract with the home page and the cemetery hub (Lane 10):
 // - The location button opens /near?lat=…&lon=…&acc=<meters>. No acc: never auto-open.
-// - A cemetery picked from the list opens /cemetery/<qid>?via=near.
-// - Auto-open goes to /cemetery/<qid>?via=here&lat=…&lon=…; the hub's
+// - A cemetery picked from the list opens /cemetery/<qid>?via=near&n=<people listed>.
+// - Auto-open goes to /cemetery/<qid>?via=here&lat=…&lon=…&n=…; the hub's
 //   "Not here? See the others" links back to /near?lat=…&lon=…&list=1.
 // - list=1 turns auto-open off.
 
@@ -118,11 +118,18 @@ export function peopleText(n: number): string {
 }
 
 /** A cemetery picked from the near list. */
-export function nearHref(qid: string): string {
-  return `/cemetery/${qid}?via=near`;
+/** `n` = people listed, so a slow first load can say how big the cemetery is (lib/data/big.ts). */
+function tourHref(qid: string, params: Record<string, string>, burials?: number): string {
+  const q = new URLSearchParams(params);
+  if (burials && burials > 0) q.set("n", String(Math.round(burials)));
+  return `/cemetery/${qid}?${q}`;
+}
+
+export function nearHref(qid: string, burials?: number): string {
+  return tourHref(qid, { via: "near" }, burials);
 }
 
 /** Auto-open: the hub knows the visitor is standing here, and where to send "Not here?". */
-export function hereHref(qid: string, lat: number, lon: number): string {
-  return `/cemetery/${qid}?${new URLSearchParams({ via: "here", lat: String(lat), lon: String(lon) })}`;
+export function hereHref(qid: string, lat: number, lon: number, burials?: number): string {
+  return tourHref(qid, { via: "here", lat: String(lat), lon: String(lon) }, burials);
 }

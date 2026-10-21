@@ -161,11 +161,14 @@ function toPersonRow(r: SparqlRow, name: string): PersonRow {
 
 /**
  * The burials query is the one slow call: even with the top-80 subquery, a big
- * cemetery took up to 14 s cold on WDQS (Green-Wood, 10/21). It gets 25 s per
+ * cemetery took up to 14 s cold on WDQS (Green-Wood, 10/21). It gets 27 s per
  * attempt instead of 15, and no retry after a timeout (the deadline leaves no
- * room for one), so it fits the 35 s page budget with Wikipedia after it.
+ * room for one). The page gives up first, at BURIALS_BUDGET_MS (25 s) in
+ * lib/data/load.ts, outside the cache, so the failure keeps its "timeout" kind
+ * (an error thrown inside 'use cache' loses its message in production) and a
+ * query that finishes in the last 2 s still lands in the cache for the retry.
  */
-export const BURIALS_FETCH = { timeoutMs: 25_000, deadlineMs: 26_000 } as const satisfies SparqlOptions;
+export const BURIALS_FETCH = { timeoutMs: 27_000, deadlineMs: 28_000 } as const satisfies SparqlOptions;
 
 export async function fetchBurials(qid: string): Promise<PersonRow[]> {
   return parseBurialRows(await sparql(burialsQuery(qid), BURIALS_FETCH));

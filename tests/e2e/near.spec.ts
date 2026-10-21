@@ -32,12 +32,12 @@ test.describe("/near", () => {
     const best = page.getByTestId("near-best");
     await expect(best).toBeVisible({ timeout: 25_000 });
     await expect(best.getByRole("link")).toContainText("Magnolia Cemetery");
-    await expect(best.getByRole("link")).toHaveAttribute("href", "/cemetery/Q12061438?via=near");
+    await expect(best.getByRole("link")).toHaveAttribute("href", /^\/cemetery\/Q12061438\?via=near&n=\d+$/);
 
     // Every linked cemetery has someone listed, and every link says it came from the near list.
     const links = page.getByTestId("cemetery-list").getByRole("link");
     expect(await links.count()).toBeGreaterThan(0);
-    for (const href of await links.evaluateAll((els) => els.map((e) => e.getAttribute("href")))) expect(href).toMatch(/^\/cemetery\/Q\d+\?via=near$/);
+    for (const href of await links.evaluateAll((els) => els.map((e) => e.getAttribute("href")))) expect(href).toMatch(/^\/cemetery\/Q\d+\?via=near&n=[1-9]\d*$/);
     await expect(page.getByTestId("cemetery-list")).not.toContainText("No burials listed");
 
     // The rest are folded, closed, and plain text: no link to an empty tour.
@@ -51,7 +51,7 @@ test.describe("/near", () => {
 
   test("I'm here with a good fix: opens the tour straight away", async ({ page }) => {
     await page.goto(`/near?${OAKLAND_POINT}&acc=20`);
-    await page.waitForURL(/\/cemetery\/Q2008469\?via=here&lat=33\.7489&lon=-84\.3718$/, { timeout: 25_000 });
+    await page.waitForURL(/\/cemetery\/Q2008469\?via=here&lat=33\.7489&lon=-84\.3718&n=\d+$/, { timeout: 25_000 });
     await expect(page.getByRole("heading", { level: 1, name: "Oakland Cemetery" })).toBeVisible({ timeout: 25_000 });
     await expect(page.getByTestId("story-card")).toHaveCount(12, { timeout: 25_000 });
   });
@@ -61,7 +61,7 @@ test.describe("/near", () => {
       await page.goto(`/near?${q}`);
       await expect(page.getByTestId("near-best")).toBeVisible({ timeout: 25_000 });
       expect(new URL(page.url()).pathname).toBe("/near");
-      await expect(page.getByTestId("near-best").getByRole("link")).toHaveAttribute("href", "/cemetery/Q2008469?via=near");
+      await expect(page.getByTestId("near-best").getByRole("link")).toHaveAttribute("href", /^\/cemetery\/Q2008469\?via=near&n=\d+$/);
       await expect(page.getByTestId("near-approx")).toHaveCount(0);
     }
 
