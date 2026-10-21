@@ -183,10 +183,13 @@ test.describe("security headers", () => {
       )
       .toBe(true);
 
-    // A real client interaction: close the first-run card if it opened, then flip the theme.
-    if (await page.locator("dialog[open]").count()) await page.keyboard.press("Escape");
-    await page.getByRole("button", { name: /theme/i }).click();
-    await expect(page.locator("html")).toHaveAttribute("data-theme", /^(day|night)$/);
+    // A real client interaction (dark only since decision 18, so no theme toggle to flip): the
+    // first-run card is opened by an effect and closed by a React click handler that writes storage.
+    const card = page.getByRole("dialog", { name: "Before you go in" });
+    await expect(card).toBeVisible();
+    await card.getByRole("button", { name: "Got it" }).click();
+    await expect(card).toBeHidden();
+    expect(await page.evaluate(() => localStorage.getItem("btt-etiquette-seen"))).toBe("1");
 
     const violations = await page.evaluate(
       () => (window as unknown as { __cspViolations: string[] }).__cspViolations,
@@ -299,8 +302,8 @@ test.describe("PWA manifest", () => {
       short_name: "Tombstones",
       start_url: "/",
       display: "standalone",
-      background_color: "#0e110f",
-      theme_color: "#0e110f",
+      background_color: "#130F15",
+      theme_color: "#130F15",
     });
     const icons: { src: string; sizes: string; type: string; purpose?: string }[] = manifest.icons;
     const want = [

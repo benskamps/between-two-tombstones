@@ -12,7 +12,7 @@ Model declaration: Ben's wording. (Built with Claude Code; the app calls Claude 
 
 - [ ] Production is live (Ben's deploy click) and the stranger pass is done.
 - [ ] Oakland Cemetery: check today's gate hours and its photography and filming rules. Personal phone video is usually fine; ask at the visitor center if unsure.
-- [ ] Daylight theme on every phone (outdoor glare). Volume up. Screen recording ready (iOS: Control Center → Screen Recording, long-press for mic on).
+- [ ] Screen brightness up on every phone (the app is dark only; outdoor glare). Volume up. Screen recording ready (iOS: Control Center → Screen Recording, long-press for mic on).
 - [ ] Two or three phones for the séance, each opened from the same link, each tapped Join.
 - [ ] "Download this tour" for Oakland on the main phone in case signal drops.
 - [ ] Pick a stone for the Stamp Kit yourself: old, legible, in shade. Not anyone who died recently, and not a monument that needs context the video can't give.

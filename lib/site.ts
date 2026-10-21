@@ -2,7 +2,6 @@
 // match metadataBase or OG images break.
 export const SITE = {
   name: "Between Two Tombstones",
-  subtitle: "Macy's Graveyard Companion",
   description:
     "Find the graves worth visiting at any cemetery, take a walking tour, and read how those people lived.",
   url:
