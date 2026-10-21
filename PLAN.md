@@ -97,6 +97,7 @@ What it means:
 | 13 | 10/20 | **Wikimedia User-Agent** = `BetweenTwoTombstones/0.1 (https://github.com/benskamps/between-two-tombstones)` (`lib/site.ts`). The repo URL is the contact. |
 | 15 | 10/20 | **Gravitator (Ben's ask):** a dating-app swipe deck where the profiles are public cemeteries near you. Public only: excludes Wikidata family (Q73218016), private (Q107684101), animal (Q163778) and abandoned (Q107334193) cemeteries and anything with P576. Own palette scoped to the route: Victorian half-mourning mauve on crepe black, candle for Go now, a will-o'-the-wisp glow for matches. P1: runs in parallel, never ahead of the P0 gate. |
 | 16 | 10/20 | **Haunted Calendar + Séance mode locked in (Ben).** Calendar: subscribe to a cemetery and your real calendar gets yearly death-days (optionally birthdays) of people who died 25+ years ago, each linking to their story card; unsubscribing removes it all. Séance: every phone on a party link speaks the same spirit words at the same second from a shared seed + synced clock (`/api/time`), no server state. Both P1, database-free, built in parallel. |
+| 17 | 10/21 | **Closed by Ben 10/21 ~01:10 UTC.** (a) Keep Vercel's Git auto-deploy: merging a PR into `main` is the production click; PRs get automatic previews. (b) Stranger pass: Wednesday 10/21, Ben lines someone up. (c) Gate 6 share links (L5.2) start now on the PR branch with a preview for Ben; they reach production only when he merges. |
 | 14 | 10/20 | **Production deploys are Ben's click.** The Vercel project is not connected to Git auto-deploys for production. Claude deploys previews with the CLI; Ben promotes or runs `vercel --prod`. **Incident 10/20 ~03:56 and ~04:05 UTC:** `vercel deploy --yes` and then `vercel deploy --environment preview --yes` both created *production* deployments aliased to between-two-tombstones.vercel.app (live ~2 min and ~1 min). Orchestrator removed both (`vercel remove`); project back to zero deployments, prod URL 404 (checked via Vercel MCP). Working hypothesis (unverified): Vercel makes a project's first deployment production regardless of the requested environment. So the **first deploy is Ben's click**; Claude does no more deploys until a production deployment exists, then uses `--environment preview` and checks `vercel inspect` target before testing. Both builds succeeded on Vercel (Ready). **10/20 ~22:30 UTC: Ben said "ship it"; `main` (61ef04f, PR #1 merged) deployed to production with `vercel deploy --prod`.** That CLI deploy also linked the Vercel project to the GitHub repo (link created 22:22 UTC, production branch `main`): PRs now get automatic previews, and **merging to `main` deploys to production**. Claude never merges without Ben's explicit OK. |
 
 ---
@@ -189,7 +190,7 @@ Owns (taking over from finished Lane 4): `lib/spirit/**`, `app/spirit/**`, `comp
 | ID | Tier | Item | Status |
 |---|---|---|---|
 | L5.1 | P1 | `/c/[slug]` cemetery pages ("Famous graves at Lake View Cemetery") with JSON-LD `Cemetery` + `Person`; sitemap carries the top cemeteries | ⬜ |
-| L5.2 | P1 | Share: stamp, kit sheet, spirit box transcript card, tour recap. `/s/[signed payload]` pages with dynamic OG images (`next/og`; no `runtime` export: Next 16 rejects it with Cache Components, Node is the default), 1200×630 and 1080×1920. Web Share with files; fallback copy link + save image. One call to action per landing page | ⬜ |
+| L5.2 | P0 (gate 6; Ben 10/21: start now, off prod until merged) | Share: stamp, kit sheet, spirit box transcript card, tour recap. `/s/[signed payload]` pages with dynamic OG images (`next/og`; no `runtime` export: Next 16 rejects it with Cache Components, Node is the default), 1200×630 and 1080×1920. Web Share with files; fallback copy link + save image. One call to action per landing page | ⬜ |
 | L5.3 | P1 | Passport `/p` kept on the phone: stamps made, cemeteries visited, badges (oldest stone found, a Civil War veteran, 100+ years gone) | ⬜ |
 | L5.4 | P1 | Measure with Vercel Analytics custom events: `share_created`, `share_viewed`, `tour_started_from_share`, `party_created`, `party_joined` | ⬜ |
 | L5.5 | P1 | Guardrails: nothing unlocks only by sharing, no push notifications, no contact access, report button on every public page, a takedown path for families, respectful share cards for recent deaths | ⬜ |
@@ -205,12 +206,6 @@ Owns (taking over from finished Lane 4): `lib/spirit/**`, `app/spirit/**`, `comp
 
 ---
 
-## Open for Ben (10/21 00:05 UTC)
-
-1. Keep Vercel's Git auto-deploy on `main` (merge = ship), or turn it off and keep `vercel --prod` as a separate click. Claude recommends keeping it.
-2. Stranger pass (gate 2): who and when. Tomorrow is ideal.
-3. Gate 6 share links (Lane 5 L5.2): start now in parallel, or after the stranger pass. Claude recommends now, kept off production until Ben has seen them.
-
 ## Ben's clicks
 
 | # | Click | Status |
@@ -222,5 +217,5 @@ Owns (taking over from finished Lane 4): `lib/spirit/**`, `app/spirit/**`, `comp
 | 5 | Dedicated Anthropic API key with a workspace spend limit → paste into Vercel env as `ANTHROPIC_API_KEY` | ✅ 10/20: Production + Preview |
 | 6 | Every production deploy (`vercel --prod` or Promote in the dashboard) | ✅ first one 10/20 ("ship it") |
 | 7 | Domain purchase | ⏸ on hold |
-| 8 | A stranger for the stranger pass; filming at Oakland | ⬜ |
+| 8 | A stranger for the stranger pass; filming at Oakland | 🟨 stranger pass Wed 10/21 (Ben lines someone up); Oakland shoot Thu |
 | 9 | Any outreach or launch post (drafted, not sent) | ⬜ |
