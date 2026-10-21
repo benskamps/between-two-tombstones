@@ -172,6 +172,11 @@ function link(origin: string, room: string, bank: string | null = OAKLAND_HASH, 
   return `${origin}/spirit?seance=${room}&cemetery=${OAKLAND}${bank ? `&bank=${bank}` : ""}${extra}`;
 }
 
+/** The invite a host sends: the séance's share page (L5.2), whose one button opens link(). */
+function shareLink(origin: string, room: string, bank: string | null = OAKLAND_HASH, cemetery = OAKLAND) {
+  return `${origin}/s/seance/${cemetery}/${room}${bank ? `?b=${bank}` : ""}`;
+}
+
 test.describe("séance", () => {
   test("phones with skewed clocks speak the same words in the same slots; another room says something else", async ({
     browser,
@@ -196,17 +201,23 @@ test.describe("séance", () => {
     const code = (await pa.getByTestId("seance-code").textContent())!.trim();
     expect(code).toMatch(/^[A-HJKMNP-Z]{6}$/);
     const shared = await pa.getByTestId("seance-link").inputValue();
-    expect(shared).toBe(link(origin, code));
+    expect(shared).toBe(shareLink(origin, code));
     await pa.getByRole("button", { name: "Copy link" }).click();
     expect(await pa.evaluate(() => navigator.clipboard.readText())).toBe(shared);
     await pa.getByRole("link", { name: "Open the séance on this phone" }).click();
-    await expect(pa).toHaveURL(shared);
+    await expect(pa).toHaveURL(link(origin, code));
     await expect(pa.getByRole("heading", { name: `Séance ${code}` })).toBeVisible();
 
     const other = code === "BNSHEE" ? "GHSTXY" : "BNSHEE";
     const pb = await b.newPage();
     const pc = await c.newPage();
-    await Promise.all([pb.goto(shared), pc.goto(link(origin, other))]);
+    // B opens the invite as sent (the share page) and joins from its one button.
+    const joinFromInvite = async () => {
+      await pb.goto(shared);
+      await pb.getByRole("link", { name: "Join the séance" }).click();
+      await expect(pb).toHaveURL(link(origin, code));
+    };
+    await Promise.all([joinFromInvite(), pc.goto(link(origin, other))]);
     for (const p of [pa, pb, pc]) await expect(p.getByText(/Clock set from the server, to within about \d+ ms/)).toBeVisible();
     for (const p of [pa, pb]) await expect(p.getByText(MISMATCH)).toHaveCount(0);
 
@@ -339,13 +350,13 @@ test.describe("séance", () => {
     await page.goto(link(origin, "KXMPRT", "00000000"));
     await expect(page.getByText(MISMATCH)).toBeVisible();
     // The invite keeps the host's hash, so the next phone compares against the host too.
-    await expect(page.getByTestId("seance-link")).toHaveValue(link(origin, "KXMPRT", "00000000"));
+    await expect(page.getByTestId("seance-link")).toHaveValue(shareLink(origin, "KXMPRT", "00000000"));
     await page.goto(link(origin, "KXMPRT", OAKLAND_HASH));
     await expect(page.getByText(/people buried there died 75 or more years ago/)).toBeVisible();
     await expect(page.getByText(MISMATCH)).toHaveCount(0);
     await page.goto(link(origin, "KXMPRT", null));
     await expect(page.getByText(/You joined by room code, so this phone can.t check its names/)).toBeVisible();
-    await expect(page.getByTestId("seance-link")).toHaveValue(link(origin, "KXMPRT", OAKLAND_HASH));
+    await expect(page.getByTestId("seance-link")).toHaveValue(shareLink(origin, "KXMPRT", OAKLAND_HASH));
     await ctx.close();
   });
 
@@ -387,11 +398,11 @@ test.describe("séance", () => {
     await expect(page.getByText(`It uses your party’s room code, ${party}.`)).toBeVisible();
     await page.getByRole("button", { name: "Start a séance" }).click();
     await expect(page.getByTestId("seance-code")).toHaveText(party);
-    await expect(page.getByTestId("seance-link")).toHaveValue(link(origin, party));
+    await expect(page.getByTestId("seance-link")).toHaveValue(shareLink(origin, party));
     // Switching cemetery keeps the code and updates the link.
     await page.getByLabel(/Sleepy Hollow Cemetery/).check();
     await expect(page.getByTestId("seance-link")).toHaveValue(
-      new RegExp(`^${origin}/spirit\\?seance=${party}&cemetery=Q360779&bank=[0-9a-f]{8}$`),
+      new RegExp(`^${origin}/s/seance/Q360779/${party}\\?b=[0-9a-f]{8}$`),
     );
     await page.getByLabel(/Oakland Cemetery/).check();
     await page.getByRole("link", { name: "Open the séance on this phone" }).click();

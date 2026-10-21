@@ -9,7 +9,6 @@ import {
   STEP_MS,
   bankHash,
   createSeanceSession,
-  seancePath,
   seanceStopMessage,
   type SeanceSession,
   type SeanceUtterance,
@@ -357,7 +356,7 @@ export function SeanceBox({
         <h2 id="seance-invite" className="font-display text-2xl">
           Bring in more phones
         </h2>
-        <SeanceInvite code={room} path={seancePath(room, cemetery, inviteHash)} cemeteryName={cemeteryName} />
+        <SeanceInvite code={room} cemeteryQid={cemetery} bank={inviteHash} cemeteryName={cemeteryName} />
         <Link href="/spirit" className="btn btn-ghost w-full">
           Leave the séance
         </Link>

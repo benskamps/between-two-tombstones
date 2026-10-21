@@ -2,6 +2,9 @@
 
 import { useState, useSyncExternalStore } from "react";
 import { partyPath } from "@/lib/games/bingo";
+import { useActiveCemetery } from "@/lib/haunt/useHaunt";
+import { shareEvent } from "@/lib/share/analytics";
+import { sharePath } from "@/lib/share/links";
 import { SplitFlap } from "@/components/ui/Instrument";
 
 function subscribeNothing() {
@@ -20,16 +23,23 @@ function origin() {
  * The room code (as an instrument readout), the link, a copy button and
  * (where the phone has it) a share button. `showCode` is off where the page
  * already shows the code above (the party's own card).
+ *
+ * The link is the party's share page (/s/party/<cemetery>/<code>) when the
+ * cemetery is known (the haunt, or the one in the address): it unfurls with
+ * the room-code card in a chat, and its one button opens the party card.
+ * Inside <Suspense> (it reads the address).
  */
 export function PartyShare({ code, showCode = true }: { code: string; showCode?: boolean }) {
   const base = useSyncExternalStore(subscribeNothing, origin, () => "");
   const shareable = useSyncExternalStore(subscribeNothing, canWebShare, () => false);
+  const cemetery = useActiveCemetery();
   const [note, setNote] = useState<string | null>(null);
-  const link = `${base}${partyPath(code)}`;
+  const link = `${base}${cemetery ? sharePath({ kind: "party", cemetery: cemetery.qid, room: code }) : partyPath(code)}`;
 
   async function copy() {
     try {
       await navigator.clipboard.writeText(link);
+      shareEvent("share_created", "party", "copy");
       setNote("Link copied.");
     } catch {
       setNote("Couldn’t copy. Press and hold the link above to copy it.");
@@ -43,6 +53,7 @@ export function PartyShare({ code, showCode = true }: { code: string; showCode?:
         text: `Join my Tombstone Bingo party. Room code ${code}.`,
         url: link,
       });
+      shareEvent("share_created", "party", "share-sheet");
       setNote(null);
     } catch (e) {
       if ((e as DOMException)?.name !== "AbortError") setNote("Couldn’t open sharing. Copy the link instead.");

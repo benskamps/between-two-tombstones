@@ -1,6 +1,10 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import { useActiveCemetery } from "@/lib/haunt/useHaunt";
+import { shareEvent } from "@/lib/share/analytics";
+import { isShareQid, sharePath } from "@/lib/share/links";
 import { ageFromDates, datesLine } from "@/lib/stamp/age";
 import { defaultQuad, isUsableQuad } from "@/lib/stamp/homography";
 import {
@@ -54,6 +58,21 @@ function download(blob: Blob, filename: string) {
   setTimeout(() => URL.revokeObjectURL(url), 10000);
 }
 
+/**
+ * The link that goes out with the stamps: the stop's share page when the
+ * address names a person at its cemetery (?cemetery=Q…&person=Q…), else the
+ * tour of the cemetery in use (the haunt). The images themselves go as files,
+ * straight from the phone (decision 4); the link carries only IDs.
+ */
+function useStampLink(): string | null {
+  const params = useSearchParams();
+  const cemetery = useActiveCemetery();
+  if (!cemetery) return null;
+  const person = params.get("person");
+  if (cemetery.fromUrl && isShareQid(person)) return sharePath({ kind: "stop", cemetery: cemetery.qid, person });
+  return sharePath({ kind: "tour", cemetery: cemetery.qid });
+}
+
 export function StampKit() {
   const clientRef = useRef<StampClient | null>(null);
   const urlsRef = useRef<PreviewUrls | null>(null);
@@ -74,6 +93,9 @@ export function StampKit() {
   const [error, setError] = useState<string | null>(null);
   const [last, setLast] = useState<{ ms: number; maskPixels: number; job: number; timings: string } | null>(null);
   const [mainThread, setMainThread] = useState(false);
+  /** Shown when the files couldn't go out: the link to copy by hand. */
+  const [fallbackLink, setFallbackLink] = useState<string | null>(null);
+  const linkPath = useStampLink();
 
   // Tear down the worker and blob URLs when leaving the page.
   useEffect(() => {
@@ -220,10 +242,12 @@ export function StampKit() {
     const blobs = blobsRef.current;
     if (!client || !blobs) return;
     setSaving(true);
+    setFallbackLink(null);
     const who = name.trim();
     const shareText = who
       ? `A rubbing and stamps of ${who}'s headstone${datesLine(born, died) ? ` (${datesLine(born, died)})` : ""}, made from a photo with Between Two Tombstones. No stone was touched.`
       : "A rubbing and stamps made from a headstone photo with Between Two Tombstones. No stone was touched.";
+    const url = linkPath ? new URL(linkPath, window.location.origin).toString() : null;
     try {
       const { sheet } = await client.kit(text);
       const files = [
@@ -233,8 +257,16 @@ export function StampKit() {
         new File([blobs.postage], `${fileStem}-${RENDER_LABELS.postage.file}.png`, { type: "image/png" }),
       ];
       if (typeof navigator.canShare === "function" && navigator.canShare({ files })) {
+        // The images as files, and the tour's link (it unfurls with its card in a chat). Where files
+        // and a url can't go together, the link rides in the text instead.
+        const data: ShareData = url
+          ? navigator.canShare({ files, url })
+            ? { files, title: "Stamp Kit", text: shareText, url }
+            : { files, title: "Stamp Kit", text: `${shareText} ${url}` }
+          : { files, title: "Stamp Kit", text: shareText };
         try {
-          await navigator.share({ files, title: "Stamp Kit", text: shareText });
+          await navigator.share(data);
+          shareEvent("share_created", "stamp", "files");
           setStatus("Shared.");
           return;
         } catch (err) {
@@ -245,13 +277,21 @@ export function StampKit() {
           // Fall through to download + copy.
         }
       }
+      // No file sharing here: save the kit sheet, and copy the link to go with it.
       download(sheet, `${fileStem}-kit-sheet.png`);
+      shareEvent("share_created", "stamp", "download");
+      const copy = url ?? shareText;
       try {
-        await navigator.clipboard.writeText(shareText);
-        setStatus("This browser can't share files, so the kit sheet was saved and the caption copied.");
+        await navigator.clipboard.writeText(copy);
+        setStatus(
+          url
+            ? "This browser can't share files, so the kit sheet was saved and the link to the tour copied."
+            : "This browser can't share files, so the kit sheet was saved and the caption copied.",
+        );
       } catch {
-        setStatus(`This browser can't share files, so the kit sheet was saved. Caption: ${shareText}`);
+        setStatus(`This browser can't share files, so the kit sheet was saved.${url ? " Copy the link below to send with it." : ` Caption: ${shareText}`}`);
       }
+      if (url) setFallbackLink(url);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Couldn't share the stamps.");
     } finally {
@@ -538,6 +578,18 @@ export function StampKit() {
                 Save story size
               </button>
             </div>
+            {fallbackLink && (
+              <label className="block">
+                <span className="text-sm text-muted">Link to send with it</span>
+                <input
+                  readOnly
+                  value={fallbackLink}
+                  onFocus={(e) => e.currentTarget.select()}
+                  className="field mt-1 w-full text-sm"
+                  data-testid="stamp-link"
+                />
+              </label>
+            )}
           </section>
 
           <section aria-labelledby="step-read" className="darkroom-easel bezel space-y-3">
