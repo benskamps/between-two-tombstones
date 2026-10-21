@@ -7,6 +7,7 @@ import { findAGraveUrl } from "@/lib/tour/links";
 import { diedDuring } from "@/lib/tour/periods";
 import { cardPhoto } from "@/lib/tour/photo";
 import type { Scored } from "@/lib/tour/score";
+import { cleanExtract } from "@/lib/tour/text";
 import { FoundItButton } from "./FoundItButton";
 import { GravePhoto } from "./GravePhoto";
 
@@ -61,7 +62,8 @@ export function StoryCard({
   const occupations = occupationsLine(p.occupations);
   const fag = findAGraveUrl(p);
   const photo = cardPhoto(p, cemeteryName);
-  const paragraphs = (p.wikipedia?.extract ?? "").split(/\n+/).map((s) => s.trim()).filter(Boolean);
+  // Cleaned here too: cached (7 days) and downloaded tours keep text from before the parse-time fix.
+  const paragraphs = cleanExtract(p.wikipedia?.extract ?? "").split(/\n+/).map((s) => s.trim()).filter(Boolean);
   const [lead, ...rest] = paragraphs;
   const headingId = `stop-${p.qid}`;
 
@@ -89,8 +91,8 @@ export function StoryCard({
         {(life || age) && (
           <p className="font-bold">
             {life}
-            {life && age ? " · " : ""}
-            {age}
+            {life && age ? " " : ""}
+            {age && <span className="whitespace-nowrap">{life ? `· ${age}` : age}</span>}
           </p>
         )}
         {p.description && <p className="text-muted">{p.description}</p>}

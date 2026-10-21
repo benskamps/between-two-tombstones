@@ -29,6 +29,13 @@ describe("Wikipedia extracts", () => {
     expect(typeof mitchell.revision).toBe("number");
   });
 
+  it("cleans template debris out of new extracts (recorded: John B. Gordon's hidden ISO dates)", () => {
+    const raw = batch.response.query.pages.find((p) => p.title === "John B. Gordon")!.extract!;
+    expect(raw).toContain("((1832-02-06)February 6, 1832");
+    const out = parseExtracts(batch.titles, batch.response);
+    expect(out["John B. Gordon"].extract).toMatch(/^John Brown Gordon \(February 6, 1832 – January 9, 1904\) was /);
+  });
+
   it("follows normalization and redirects back to the requested title", () => {
     const out = parseExtracts(["foo_bar", "Old Name", "Missing"], {
       query: {
