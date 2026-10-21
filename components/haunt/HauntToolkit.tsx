@@ -62,16 +62,6 @@ export function HauntToolkit({
           </Link>
         )}
       </div>
-      {hub.other && (
-        <div className="flex flex-wrap items-center gap-2 px-1" data-testid="make-haunt">
-          <p className="min-w-0 flex-1 text-sm">
-            Your haunt is <span className="font-bold">{hub.other.name}</span>.
-          </p>
-          <button type="button" onClick={hub.makeHaunt} className="btn btn-primary">
-            Make this my haunt
-          </button>
-        </div>
-      )}
       {/* Four to a row on a phone (nothing hidden off-screen), one row from 640px. */}
       <ul className="grid grid-cols-4 gap-1.5 sm:grid-cols-7">
         {list.map((t) => {

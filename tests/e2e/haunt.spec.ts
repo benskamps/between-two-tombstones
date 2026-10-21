@@ -121,6 +121,8 @@ test.describe("home", () => {
     await page.getByRole("button", { name: HAUNT_ME }).click();
     expect(await page.evaluate(() => (window as unknown as { __geoCalls: number }).__geoCalls)).toBe(1);
     await expect(page.getByRole("alert").filter({ hasText: "Location is turned off for this site" })).toContainText("search by name below");
+    // The way on is the name field right below, so the cursor goes there (REVIEW-2 N7).
+    await expect(page.getByLabel("Or type the cemetery’s name")).toBeFocused();
     await expect(page).toHaveURL(/\/$/);
   });
 

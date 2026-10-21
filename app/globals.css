@@ -139,6 +139,21 @@ body {
   background-size: 128px 128px;
 }
 
+/* The header stays one line when the haunt badge shows: a smaller wordmark, and just the moon on a narrow phone. */
+header:has([data-testid="haunt-badge"]) .wordmark {
+  font-size: 1rem;
+}
+@media (max-width: 379px) {
+  header:has([data-testid="haunt-badge"]) .wordmark {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 /* ---------- Type ---------- */
 
 /*
@@ -274,7 +289,7 @@ body {
   background-color: var(--surface);
   background-image: var(--grain);
   background-size: 128px 128px;
-  padding: 3.25rem 1.25rem 1.5rem;
+  padding: 1.75rem 1.25rem 1.25rem;
 }
 /* Optional deco double rule just inside the stone's edge. */
 .arch-rule::before {

@@ -72,7 +72,7 @@ export function scorePerson(p: Person, opts: ScoreOptions = {}): Scored {
     score += WEIGHTS["century-gone"];
   }
   if (!needsRespectfulStyle(p, now) && hasUnusualDeath(p)) {
-    tags.push({ id: "unusual-death", label: "Unusual death" });
+    tags.push({ id: "unusual-death", label: "Notable death" });
     score += WEIGHTS["unusual-death"];
   }
   if (hasTrustedGravePhoto(p, opts.cemeteryName ?? null)) {

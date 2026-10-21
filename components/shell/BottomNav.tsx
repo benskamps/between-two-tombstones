@@ -54,7 +54,7 @@ export function BottomNav() {
                 >
                   <Icon className="h-5 w-5" />
                   <span
-                    className={`whitespace-nowrap font-label text-xs uppercase tracking-[0.08em] ${
+                    className={`whitespace-nowrap font-label text-[13px] uppercase tracking-[0.05em] ${
                       active ? "underline decoration-2 underline-offset-4" : ""
                     }`}
                   >

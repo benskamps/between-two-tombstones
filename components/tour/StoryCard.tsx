@@ -1,8 +1,11 @@
 "use client";
 
+import type { ReactNode } from "react";
 import type { Pin } from "@/components/offline/store";
+import { SymbolPair } from "@/components/ui/Motifs";
+import { Candle, Fern, HourglassSprout, Lily, Moth, Poppy, RingedMoon } from "@/components/ui/symbols";
 import { needsRespectfulStyle } from "@/lib/respect";
-import { ageAtDeath, formatAge, formatWikiDate, parseWikiDate } from "@/lib/tour/dates";
+import { ageAtDeath, formatAge, formatWikiDate, parseWikiDate, type WikiDate } from "@/lib/tour/dates";
 import { findAGraveUrl } from "@/lib/tour/links";
 import { diedDuring } from "@/lib/tour/periods";
 import { cardPhoto } from "@/lib/tour/photo";
@@ -12,6 +15,30 @@ import { FoundItButton } from "./FoundItButton";
 import { GravePhoto } from "./GravePhoto";
 
 const CARVED_NAME = "[text-shadow:0_-1px_0_rgba(0,0,0,0.55),0_1px_0_rgba(255,255,255,0.14)]";
+
+const SHORT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** "Nov 8, 1900": the carved card's inscription keeps both dates on one line. */
+export function shortDate(d: WikiDate | null): string | null {
+  if (!d) return null;
+  if (d.precision >= 11 && d.month >= 1 && d.day >= 1) return formatWikiDate(d)!.replace(/^\w+/, SHORT_MONTHS[d.month - 1]);
+  if (d.precision === 10 && d.month >= 1) return formatWikiDate(d)!.replace(/^\w+/, SHORT_MONTHS[d.month - 1]);
+  return formatWikiDate(d);
+}
+
+/** The death sign and the life sign at the apex of a carved card, picked by why the grave is on the tour. */
+function apexPair(tagIds: string[]): { death: ReactNode; life: ReactNode } {
+  const g = "h-6 w-6";
+  if (tagIds.includes("century-gone")) return { death: <HourglassSprout className={g} />, life: <Fern className={g} /> };
+  if (tagIds.includes("died-young")) return { death: <Candle className={g} />, life: <Poppy className={g} /> };
+  if (tagIds.includes("long-life")) return { death: <Moth className={g} />, life: <Lily className={g} /> };
+  return { death: <RingedMoon className={g} />, life: <Lily className={g} /> };
+}
+
+/** "01" for stop 1 of 80; the width follows the total. */
+function pad(n: number, total: number): string {
+  return String(n).padStart(Math.max(2, String(total).length), "0");
+}
 
 function lifeLine(birth: string | null, death: string | null): string | null {
   if (birth && death) return `${birth} – ${death}`;
@@ -33,6 +60,7 @@ function distanceText(m: number): string {
 export function StoryCard({
   scored,
   stop,
+  total,
   cemeteryQid,
   cemeteryName,
   pin,
@@ -45,6 +73,8 @@ export function StoryCard({
   storiesIncomplete?: boolean;
   scored: Scored;
   stop: number;
+  /** Stops in the whole tour, for "STOP 01 / 80" on carved cards. */
+  total?: number;
   cemeteryQid: string;
   cemeteryName: string;
   pin: Pin | undefined;
@@ -56,7 +86,8 @@ export function StoryCard({
   const plain = needsRespectfulStyle(p, now);
   const birth = parseWikiDate(p.birth, p.birthPrecision);
   const death = parseWikiDate(p.death, p.deathPrecision);
-  const life = lifeLine(formatWikiDate(birth), formatWikiDate(death));
+  // Plain cards keep the plain long form; carved ones get the inscription with short months.
+  const life = plain ? lifeLine(formatWikiDate(birth), formatWikiDate(death)) : lifeLine(shortDate(birth), shortDate(death));
   const age = formatAge(ageAtDeath(birth, death));
   const during = diedDuring(p.death, p.deathPrecision);
   const occupations = occupationsLine(p.occupations);
@@ -76,27 +107,52 @@ export function StoryCard({
       className={
         plain
           ? "space-y-3 rounded-xl border border-border bg-surface p-4"
-          : "space-y-3 rounded-b-xl rounded-t-[3rem] border border-border bg-surface px-4 pb-4 pt-7 shadow-[inset_0_2px_12px_rgba(0,0,0,0.35)]"
+          : // A headstone: the arch with its inner rule, a death/life pair at the apex (L10.4).
+            "arch arch-rule space-y-3 !px-4 !pb-4 !pt-6"
       }
     >
-      <header className={plain ? "space-y-1" : "space-y-1 text-center"}>
-        <p className="text-sm text-muted">Stop {stop}</p>
-        <h3
-          id={headingId}
-          data-testid="story-name"
-          className={plain ? "font-display text-2xl leading-tight" : `font-display text-3xl leading-tight tracking-wide ${CARVED_NAME}`}
-        >
-          {p.name}
-        </h3>
-        {(life || age) && (
-          <p className="font-bold">
-            {life}
-            {life && age ? " " : ""}
-            {age && <span className="whitespace-nowrap">{life ? `· ${age}` : age}</span>}
+      {plain ? (
+        <header className="space-y-1">
+          <p className="text-sm text-muted">Stop {stop}</p>
+          <h3 id={headingId} data-testid="story-name" className="font-display text-2xl leading-tight">
+            {p.name}
+          </h3>
+          {(life || age) && (
+            <p className="font-bold">
+              {life}
+              {life && age ? " " : ""}
+              {age && <span className="whitespace-nowrap">{life ? `· ${age}` : age}</span>}
+            </p>
+          )}
+          {p.description && <p className="text-muted">{p.description}</p>}
+        </header>
+      ) : (
+        <header className="space-y-1 text-center">
+          <SymbolPair className="justify-center" {...apexPair(scored.tags.map((t) => t.id))} />
+          <p className="label text-muted">
+            <span aria-hidden="true">
+              Stop {pad(stop, total ?? stop)}
+              {total ? ` / ${total}` : ""}
+            </span>
+            <span className="sr-only">
+              Stop {stop}
+              {total ? ` of ${total}` : ""}
+            </span>
           </p>
-        )}
-        {p.description && <p className="text-muted">{p.description}</p>}
-      </header>
+          <h3 id={headingId} data-testid="story-name" className={`font-display text-3xl leading-tight tracking-wide ${CARVED_NAME}`}>
+            {p.name}
+          </h3>
+          {/* The inscription: dates on one line (short months), the age under them, both in Atkinson (F9). */}
+          {(life || age) && (
+            <p className="font-bold">
+              {life && <span className="whitespace-nowrap">{life}</span>}
+              {life && age && <br />}
+              {age && <span className="whitespace-nowrap font-normal">{age}</span>}
+            </p>
+          )}
+          {p.description && <p className="text-muted">{p.description}</p>}
+        </header>
+      )}
 
       {occupations && <p className="text-sm">Worked as: {occupations}</p>}
 
