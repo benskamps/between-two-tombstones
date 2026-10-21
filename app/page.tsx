@@ -1,7 +1,7 @@
 import { Doors } from "@/components/haunt/Doors";
 import { FamousCemeteries } from "@/components/haunt/Famous";
 import { HauntReturn } from "@/components/haunt/HauntReturn";
-import { FenceDivider, OrbitDivider } from "@/components/ui/Motifs";
+import { OrbitDivider } from "@/components/ui/Motifs";
 
 export default function Home() {
   return (
@@ -20,8 +20,6 @@ export default function Home() {
       <OrbitDivider />
 
       <FamousCemeteries />
-
-      <FenceDivider className="opacity-70" />
     </div>
   );
 }
