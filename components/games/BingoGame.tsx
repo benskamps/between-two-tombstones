@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { Lily, Moth } from "@/components/ui/symbols";
 import {
   CENTER,
   bingoMessage,
@@ -15,7 +16,11 @@ import {
 } from "@/lib/games/bingo";
 import { SOLO_SEED_KEY, marksKey, parseMarks, readItem, subscribeStorage, writeItem } from "@/lib/games/storage";
 import { FREE_SQUARE, symbolById } from "@/lib/games/symbols";
+import { Sprout } from "@/components/ui/games/Sprout";
+import { BingoGlyph } from "./BingoGlyph";
 import { PartyShare } from "./PartyShare";
+import { RoomCode } from "./RoomCode";
+import "./games.css";
 
 function newSoloSeed() {
   // Ten letters of crypto randomness; same alphabet as room codes, just longer.
@@ -27,7 +32,11 @@ export function BingoGame() {
   const rawParty = params.get("party");
   const party = normalizeRoomCode(rawParty);
 
-  const soloSeed = useSyncExternalStore(subscribeStorage, () => readItem(SOLO_SEED_KEY), () => null);
+  const soloSeed = useSyncExternalStore(
+    subscribeStorage,
+    () => readItem(SOLO_SEED_KEY),
+    () => null,
+  );
   // First visit: make this player's own seed (not needed in a party).
   useEffect(() => {
     if (!party && soloSeed === null) writeItem(SOLO_SEED_KEY, newSoloSeed());
@@ -35,7 +44,11 @@ export function BingoGame() {
 
   const seed = party ? partySeed(party) : soloSeed;
   const card = useMemo(() => (seed ? makeCard(seed) : null), [seed]);
-  const rawMarks = useSyncExternalStore(subscribeStorage, () => (seed ? readItem(marksKey(seed)) : null), () => null);
+  const rawMarks = useSyncExternalStore(
+    subscribeStorage,
+    () => (seed ? readItem(marksKey(seed)) : null),
+    () => null,
+  );
   const marked = useMemo(() => parseMarks(rawMarks), [rawMarks]);
   const lines = completedLines(marked);
   const message = bingoMessage(lines);
@@ -66,6 +79,7 @@ export function BingoGame() {
   }
 
   const chosen = selected !== null ? symbolById(card[selected]) : null;
+  const found = [...marked].filter((i) => i !== CENTER && i >= 0 && i < card.length).length;
 
   return (
     <div className="space-y-5">
@@ -78,9 +92,15 @@ export function BingoGame() {
         </p>
       )}
       {party ? (
-        <p className="rounded-xl border border-accent bg-surface-2 p-3">
-          <strong>Party {party}.</strong> Everyone who opens this link has this same card.
-        </p>
+        <div className="instrument bezel flex flex-wrap items-center gap-x-4 gap-y-3 px-4 py-3">
+          <span aria-hidden="true" className="flex items-center gap-3">
+            <span className="label text-muted">Room</span>
+            <RoomCode code={party} small />
+          </span>
+          <p className="instrument-plate min-w-[12rem] flex-1">
+            <strong>Party {party}.</strong> Everyone who opens this link has this same card.
+          </p>
+        </div>
       ) : (
         <p className="text-muted">
           Your own card. Want everyone on the same card?{" "}
@@ -91,34 +111,56 @@ export function BingoGame() {
         </p>
       )}
 
-      <div
-        className="grid grid-cols-5 gap-1 rounded-xl border border-border bg-surface p-1"
-        data-testid="bingo-card"
-        role="group"
-        aria-label="Bingo card, 5 by 5. Tap a symbol when you find it."
-      >
-        {card.map((id, i) => {
-          const s = symbolById(id);
-          const isFree = i === CENTER;
-          const on = isFree || marked.has(i);
-          return (
-            <button
-              key={id}
-              type="button"
-              onClick={() => tap(i)}
-              aria-pressed={on}
-              data-symbol={id}
-              className={`tap flex aspect-square items-center justify-center rounded-lg p-1 text-center text-[0.7rem] font-bold leading-tight sm:text-sm ${
-                on ? "bg-accent text-accent-ink" : "bg-surface-2 text-text"
-              } ${winning.has(i) ? "ring-4 ring-[var(--focus)]" : ""} ${selected === i ? "outline outline-2 outline-[var(--text)]" : ""}`}
-            >
-              <span className={isFree ? "font-display text-base sm:text-xl" : undefined}>{s?.label ?? id}</span>
-            </button>
-          );
-        })}
+      <div className="space-y-2">
+        <div className="bingo-strip">
+          <span className="label">{party ? "Party card" : "Your card"}</span>
+          <span className="readout" data-testid="bingo-found">
+            Found {found} / {card.length - 1}
+          </span>
+        </div>
+        <div
+          className="bingo-board"
+          data-testid="bingo-card"
+          role="group"
+          aria-label="Bingo card, 5 by 5. Tap a symbol when you find it."
+        >
+          {card.map((id, i) => {
+            const s = symbolById(id);
+            const isFree = i === CENTER;
+            const on = isFree || marked.has(i);
+            const cls = [
+              "bingo-tile",
+              isFree && "bingo-free",
+              winning.has(i) && "bingo-win",
+              selected === i && "bingo-selected",
+            ]
+              .filter(Boolean)
+              .join(" ");
+            return (
+              <button key={id} type="button" onClick={() => tap(i)} aria-pressed={on} data-symbol={id} className={cls}>
+                <BingoGlyph id={id} className="bingo-glyph" animate={isFree} />
+                <span className="bingo-label">{s?.label ?? id}</span>
+                {on && !isFree && <Sprout className="bingo-bloom" />}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <div aria-live="polite" className="min-h-[3rem] rounded-xl bg-surface-2 p-3">
+      {message && (
+        <div key={message} className="bingo-plaque">
+          <span aria-hidden="true" className="bingo-art">
+            <Moth className="bingo-moth" />
+            <Lily className="bingo-lily" />
+          </span>
+          <p role="status" className="text-xl font-bold">
+            {message}
+          </p>
+        </div>
+      )}
+
+      <div aria-live="polite" className="card flex min-h-[4.5rem] items-start gap-3 p-4">
+        {chosen && <BingoGlyph id={chosen.id} className="mt-0.5 h-8 w-8 shrink-0 text-wisp" />}
         {chosen ? (
           <p>
             <strong>{chosen.name}:</strong> {chosen.meaning}
@@ -129,41 +171,38 @@ export function BingoGame() {
         )}
       </div>
 
-      {message && (
-        <p role="status" className="rounded-xl border-2 border-accent p-3 text-xl font-bold">
-          {message}
-        </p>
-      )}
-
       <div className="flex flex-wrap gap-2">
-        <button type="button" onClick={clearMarks} className="tap rounded-lg border border-border px-4 font-bold">
+        <button type="button" onClick={clearMarks} className="btn btn-ghost">
           Clear marks
         </button>
         {!party && (
-          <button type="button" onClick={newCard} className="tap rounded-lg border border-border px-4 font-bold">
+          <button type="button" onClick={newCard} className="btn btn-ghost">
             New card
           </button>
         )}
       </div>
 
       {party && (
-        <section aria-labelledby="invite" className="space-y-2 rounded-xl border border-border bg-surface p-4">
-          <h2 id="invite" className="font-display text-xl">
+        <section aria-labelledby="invite" className="card space-y-3 p-4">
+          <h2 id="invite" className="font-display text-2xl">
             Invite more people
           </h2>
-          <PartyShare code={party} />
+          <PartyShare code={party} showCode={false} />
         </section>
       )}
 
-      <details className="rounded-xl border border-border bg-surface p-4">
+      <details className="card p-4">
         <summary className="tap flex cursor-pointer items-center font-bold">What the symbols on this card mean</summary>
-        <dl className="mt-3 space-y-2">
+        <dl className="mt-3 space-y-3">
           {card.map((id) => {
             const s = symbolById(id) ?? FREE_SQUARE;
             return (
               <div key={id}>
-                <dt className="font-bold">{s.name}</dt>
-                <dd className="text-muted">{s.meaning}</dd>
+                <dt className="flex items-center gap-2 font-bold">
+                  <BingoGlyph id={s.id} className="h-6 w-6 shrink-0 text-muted" />
+                  {s.name}
+                </dt>
+                <dd className="pl-8 text-muted">{s.meaning}</dd>
               </div>
             );
           })}
