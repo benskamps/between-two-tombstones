@@ -25,7 +25,14 @@ export default function SpiritPage() {
       </header>
       {/* ?cemetery= and ?seance= come from the address bar, which is only known in the browser. */}
       {/* A séance link someone sent, or ?join=1 (type a room code), always opens; otherwise this needs a haunt. */}
-      <Suspense fallback={<SpiritBoxFallback />}>
+      {/* The fallback holds about the tool's height so the footer doesn't jump into view and out again (CLS). */}
+      <Suspense
+        fallback={
+          <div className="min-h-[85svh]">
+            <SpiritBoxFallback />
+          </div>
+        }
+      >
         <HauntGate tool="/spirit" share={["seance", "join"]} known={KNOWN}>
           <SpiritModes samples={SAMPLE_CEMETERIES} />
         </HauntGate>

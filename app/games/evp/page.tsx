@@ -18,7 +18,7 @@ export default function EvpPage() {
           around you, then listen to it backwards and slowed down. Wind and birds do strange things in reverse.
         </p>
       </header>
-      <Suspense fallback={<p className="text-muted">Checking for a microphone&hellip;</p>}>
+      <Suspense fallback={<p className="min-h-[85svh] text-muted">Checking for a microphone&hellip;</p>}>
         <HauntGate tool="/games/evp">
           <EvpRecorder />
         </HauntGate>

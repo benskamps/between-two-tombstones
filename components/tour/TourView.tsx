@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { preload } from "react-dom";
 import Link from "next/link";
 import { HauntToolkit } from "@/components/haunt/HauntToolkit";
 import { useHub } from "@/components/haunt/useHub";
@@ -14,6 +15,8 @@ import { forgetNext } from "@/lib/haunt/next";
 import { EtiquetteNotice } from "@/components/shell/EtiquetteNotice";
 import { buildStops, canRoute, locatedGraves, MIN_ROUTE_STOPS, MODES, PAGE_SIZE, type Mode } from "@/lib/tour/modes";
 import { distanceM } from "@/lib/tour/route";
+import { CARD_PHOTO_WIDTH, SMALL_PHOTO_WIDTH, commonsThumb } from "@/lib/tour/links";
+import { cardPhoto } from "@/lib/tour/photo";
 import { rankPeople } from "@/lib/tour/score";
 import { SourceFailure } from "./SourceFailure";
 import { StoryCard } from "./StoryCard";
@@ -129,6 +132,12 @@ export function TourView({ qid, initial, error, fallback }: Props) {
   const FIRST = 3;
   const firstStops = tour.stops.slice(0, FIRST);
   const laterStops = tour.stops.slice(FIRST);
+
+  // Stop 1 is on the first screen now, and its photo is often the largest thing there (LCP).
+  // The card's <img> is lazy; start fetching that one photo from the document head instead.
+  const leadPhoto = firstStops[0] ? cardPhoto(firstStops[0].person, data.cemetery.name) : null;
+  const leadThumb = leadPhoto ? commonsThumb(leadPhoto.src, leadPhoto.kind === "grave" ? CARD_PHOTO_WIDTH : SMALL_PHOTO_WIDTH) : null;
+  if (leadThumb && online) preload(leadThumb, { as: "image", fetchPriority: "high", referrerPolicy: "no-referrer" });
 
   return (
     <div className="space-y-4">

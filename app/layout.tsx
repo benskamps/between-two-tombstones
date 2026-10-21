@@ -45,7 +45,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ServiceWorkerRegistrar />
         <SiteJsonLd />
         <SiteHeader />
-        <main id="main" className="mx-auto w-full max-w-2xl flex-1 px-4 pb-6 pt-4">
+        {/* At least a screen tall: the footer starts below the fold, so content that streams in or
+            swaps after hydration never drags it into view (layout shift). */}
+        <main id="main" className="mx-auto min-h-svh w-full max-w-2xl flex-1 px-4 pb-6 pt-4">
           {children}
         </main>
         <SiteFooter />

@@ -27,7 +27,13 @@ export default function CalendarPage() {
         </p>
       </header>
       {/* The picker reads ?cemetery= and the preview uses today's date: both only known in the browser. */}
-      <Suspense fallback={<CalendarSubscribeFallback />}>
+      <Suspense
+        fallback={
+          <div className="min-h-[85svh]">
+            <CalendarSubscribeFallback />
+          </div>
+        }
+      >
         {/* A calendar link (?cemetery=…) always opens; otherwise this needs a haunt. */}
         <HauntGate tool="/calendar" known={KNOWN}>
           <CalendarSubscribe samples={CALENDAR_SAMPLES} productionHost={productionHost} />

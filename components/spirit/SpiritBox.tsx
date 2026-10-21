@@ -317,16 +317,18 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
         <h2 id="spirit-captions" className="font-display text-2xl">
           What the box said
         </h2>
-        <ol role="log" aria-live="polite" aria-label="Captions" className="space-y-1">
-          {log.map((u) => (
-            <li key={u.n} className="flex gap-3 border-b border-border py-1">
-              <time dateTime={new Date(u.at).toISOString()} className="shrink-0 text-sm tabular-nums text-muted">
-                {clock(u.at)}
-              </time>
-              <span className="font-bold">{u.text}</span>
-            </li>
-          ))}
-        </ol>
+        <div role="log" aria-live="polite" aria-label="Captions">
+          <ol className="space-y-1">
+            {log.map((u) => (
+              <li key={u.n} className="flex gap-3 border-b border-border py-1">
+                <time dateTime={new Date(u.at).toISOString()} className="shrink-0 text-sm tabular-nums text-muted">
+                  {clock(u.at)}
+                </time>
+                <span className="font-bold">{u.text}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
         {log.length === 0 && !stopNote && (
           <p className="text-muted">Captions of every voice show up here, with the time.</p>
         )}
