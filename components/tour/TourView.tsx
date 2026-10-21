@@ -13,6 +13,7 @@ import type { BurialsResponse } from "@/lib/data/types";
 import { countEligible } from "@/lib/haunt/eligibility";
 import { forgetNext } from "@/lib/haunt/next";
 import { EtiquetteNotice } from "@/components/shell/EtiquetteNotice";
+import { ShareButton } from "@/components/share/ShareButton";
 import { EmptyState } from "@/components/ui/Motifs";
 import { Gate } from "@/components/ui/symbols";
 import { buildStops, canRoute, locatedGraves, MIN_ROUTE_STOPS, MODES, PAGE_SIZE, type Mode } from "@/lib/tour/modes";
@@ -20,6 +21,7 @@ import { distanceM } from "@/lib/tour/route";
 import { CARD_PHOTO_WIDTH, SMALL_PHOTO_WIDTH, commonsThumb } from "@/lib/tour/links";
 import { cardPhoto } from "@/lib/tour/photo";
 import { rankPeople } from "@/lib/tour/score";
+import { sharePath } from "@/lib/share/links";
 import { SourceFailure } from "./SourceFailure";
 import { StoryCard } from "./StoryCard";
 import { TourHeader, TourLinks } from "./TourHeader";
@@ -249,6 +251,18 @@ export function TourView({ qid, initial, error, fallback }: Props) {
               </button>
             )}
             <DownloadTourButton data={data} />
+            {data.people.length > 0 && (
+              <div>
+                <ShareButton
+                  kind="tour"
+                  path={sharePath({ kind: "tour", cemetery: data.cemetery.qid })}
+                  title={`A tour of ${data.cemetery.name}`}
+                  text={`A tour of ${data.cemetery.name}: ${data.people.length} ${data.people.length === 1 ? "person" : "people"} listed.`}
+                  label="Share this tour"
+                  className="btn btn-ghost w-full"
+                />
+              </div>
+            )}
           </div>
           {positionError && (
             <p role="alert" className="text-sm text-danger">

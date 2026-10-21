@@ -2,6 +2,8 @@
 
 import { useState, useSyncExternalStore } from "react";
 import { SplitFlap } from "@/components/ui/Instrument";
+import { shareEvent } from "@/lib/share/analytics";
+import { sharePath } from "@/lib/share/links";
 import { subscribeNothing } from "./shared";
 
 function canWebShare() {
@@ -12,16 +14,32 @@ function origin() {
   return window.location.origin;
 }
 
-/** The séance room code, its link, a copy button and (where the phone has it) a share button. */
-export function SeanceInvite({ code, path, cemeteryName }: { code: string; path: string; cemeteryName: string }) {
+/**
+ * The séance room code, its link, a copy button and (where the phone has it) a
+ * share button. The link is the séance's share page (/s/seance/…): it unfurls
+ * with the room-code card in a chat, and its one button joins the séance.
+ */
+export function SeanceInvite({
+  code,
+  cemeteryQid,
+  bank,
+  cemeteryName,
+}: {
+  code: string;
+  cemeteryQid: string;
+  /** The host's bank hash, so joiners can check their names match. */
+  bank: string | null;
+  cemeteryName: string;
+}) {
   const base = useSyncExternalStore(subscribeNothing, origin, () => "");
   const shareable = useSyncExternalStore(subscribeNothing, canWebShare, () => false);
   const [note, setNote] = useState<string | null>(null);
-  const link = `${base}${path}`;
+  const link = `${base}${sharePath({ kind: "seance", cemetery: cemeteryQid, room: code, bank })}`;
 
   async function copy() {
     try {
       await navigator.clipboard.writeText(link);
+      shareEvent("share_created", "seance", "copy");
       setNote("Link copied.");
     } catch {
       setNote("Couldn’t copy. Press and hold the link above to copy it.");
@@ -35,6 +53,7 @@ export function SeanceInvite({ code, path, cemeteryName }: { code: string; path:
         text: `Join my séance at ${cemeteryName}. Room code ${code}.`,
         url: link,
       });
+      shareEvent("share_created", "seance", "share-sheet");
       setNote(null);
     } catch (e) {
       if ((e as DOMException)?.name !== "AbortError") setNote("Couldn’t open sharing. Copy the link instead.");

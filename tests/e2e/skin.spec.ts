@@ -131,7 +131,8 @@ test.describe("the instrument panel", () => {
     const shared = await page.evaluate(() => (window as unknown as { __shared: { text: string; url: string }[] }).__shared);
     expect(shared).toHaveLength(1);
     expect(shared[0].text).toContain("Oakland Cemetery");
-    expect(shared[0].url).toMatch(/\/spirit\?seance=[A-Z]{6}&cemetery=Q2008469&bank=[0-9a-f]{8}$/);
+    // The séance's share page (L5.2): it unfurls with the room-code card; its one button joins.
+    expect(shared[0].url).toMatch(/\/s\/seance\/Q2008469\/[A-Z]{6}\?b=[0-9a-f]{8}$/);
   });
 });
 

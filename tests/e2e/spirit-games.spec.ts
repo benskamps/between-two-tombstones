@@ -433,20 +433,24 @@ test.describe("graveyard party", () => {
 
     const code = (await pa.getByTestId("room-code").textContent())!.trim();
     expect(code).toMatch(/^[A-HJKMNP-Z]{6}$/);
+    const origin = new URL(baseURL!).origin;
     const link = await pa.getByTestId("party-link").inputValue();
-    expect(link).toBe(`${new URL(baseURL!).origin}/games/bingo?party=${code}`);
+    // The invite is the party's share page (L5.2) at the host's haunt: it unfurls with the room-code card.
+    expect(link).toBe(`${origin}/s/party/Q2008469/${code}`);
 
     await pa.getByRole("button", { name: "Copy link" }).click();
     await expect(pa.getByText("Link copied.")).toBeVisible();
     expect(await pa.evaluate(() => navigator.clipboard.readText())).toBe(link);
 
     await pa.getByRole("link", { name: "Open the party card" }).click();
-    await expect(pa).toHaveURL(link);
+    await expect(pa).toHaveURL(`${origin}/games/bingo?party=${code}`);
     const cardA = await cardSymbols(pa);
 
+    // The second browser opens the link as sent and taps its one button; the 10 s include that tap.
     const started = Date.now();
     const pb = await b.newPage();
     await pb.goto(link);
+    await pb.getByRole("link", { name: "Join the party" }).click();
     await expect(pb.getByTestId("bingo-card").getByRole("button")).toHaveCount(25, { timeout: 10000 });
     const cardB = await cardSymbols(pb);
     const elapsed = Date.now() - started;

@@ -54,7 +54,7 @@ export function SeanceStart({
           <Link href={path} className="btn btn-primary btn-lg w-full">
             Open the séance on this phone
           </Link>
-          <SeanceInvite code={code} path={path} cemeteryName={cemetery.name} />
+          <SeanceInvite code={code} cemeteryQid={cemetery.qid} bank={hash} cemeteryName={cemetery.name} />
         </div>
       )}
     </div>
