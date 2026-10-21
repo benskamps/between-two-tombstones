@@ -164,4 +164,16 @@ describe("asDataSourceError", () => {
   it("falls back to 'unreachable' for the given source", () => {
     expect(asDataSourceError(new Error("boom"), "OpenStreetMap")).toMatchObject({ source: "OpenStreetMap", kind: "unreachable" });
   });
+
+  it("never passes on the production build's hidden-error text (seen on /near when Overpass failed)", () => {
+    const redacted = Object.assign(
+      new Error(
+        "An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the nature of the error.",
+      ),
+      { digest: "1234567" },
+    );
+    const back = asDataSourceError(redacted, "OpenStreetMap");
+    expect(back).toMatchObject({ source: "OpenStreetMap", kind: "unreachable", detail: "the request failed." });
+    expect(back.userMessage).toBe("Couldn't reach OpenStreetMap. Try again in a minute, or open a saved tour.");
+  });
 });
