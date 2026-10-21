@@ -16,13 +16,13 @@
   --border: #43364B;
   --text: #F1EADF;
   --text-muted: #D2C8D6;
-  --mauve: #C7A2DC;
+  --mauve: #D6BAE6;
   --mauve-ink: #1A1220;
   --candle: #E2AD4B;
-  --lichen: #A3C293;
+  --lichen: #C3DBB6;
   --ash: #8E8794;
   --wisp: #86E3D3;
-  --danger: #F28B82;
+  --danger: #FFB3AA;
   --focus: #86E3D3;
   color-scheme: dark;
 }
@@ -200,6 +200,12 @@ body {
   border-width: 1.5px;
   border-color: var(--edge);
 }
+/* Stop on an instrument: a dark pill with a danger rim and label. */
+.btn-stop {
+  background: var(--bg);
+  color: var(--danger);
+  border-color: var(--danger);
+}
 .btn-lg {
   min-height: 56px;
   font-size: 1.125rem;
@@ -282,8 +288,9 @@ body {
 }
 
 /*
-  ---------- Instrument panel (spirit box, séance: adopted in Lane 10.4) ----------
-  Text blocks inside a panel sit on .instrument-plate (no scanlines under words).
+  ---------- Instrument panel (spirit box and séance) ----------
+  The panel itself is flat glass (reading text sits on plain --instrument, F22);
+  scanlines live only on the readout strip and the dial.
 */
 
 .instrument {
@@ -291,8 +298,14 @@ body {
   border-radius: 1rem;
   border: 1px solid color-mix(in srgb, var(--wisp) 40%, var(--border));
   background-color: var(--instrument);
-  /* Scanlines over the panel; the glow sits inside the bezel. */
-  /* 4px period (whole device pixels at common DPRs once doubled), soft, at most 4%. */
+  box-shadow:
+    inset 0 0 28px -10px color-mix(in srgb, var(--wisp) 45%, transparent),
+    0 0 22px -12px color-mix(in srgb, var(--wisp) 60%, transparent);
+  --tick: color-mix(in srgb, var(--wisp) 70%, transparent);
+}
+
+/* 4px period (whole device pixels at common DPRs once doubled), soft, at most 4%. */
+.scanlines {
   background-image: repeating-linear-gradient(
     to bottom,
     color-mix(in srgb, var(--wisp) 4%, transparent) 0,
@@ -300,15 +313,154 @@ body {
     transparent 2px,
     transparent 4px
   );
-  box-shadow:
-    inset 0 0 28px -10px color-mix(in srgb, var(--wisp) 45%, transparent),
-    0 0 22px -12px color-mix(in srgb, var(--wisp) 60%, transparent);
-  --tick: color-mix(in srgb, var(--wisp) 70%, transparent);
 }
 
-.instrument-plate {
-  background-color: var(--instrument);
+/* The phosphor readout strip: wisp on the dark glass, a little bloom. */
+.readout-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1rem;
   border-radius: 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--wisp) 30%, var(--border));
+  background-color: var(--bg);
+  padding: 0.5rem 0.75rem;
+  color: var(--wisp);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--wisp) 45%, transparent);
+}
+.readout-strip .readout {
+  white-space: nowrap;
+}
+.lamp {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: var(--ash);
+}
+.lamp[data-on="true"] {
+  background: var(--wisp);
+  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--wisp) 70%, transparent);
+}
+
+/*
+  The tuning dial: a scale of ticks and a needle that steps across it in time
+  with the band-pass filter (--step = the sweep interval). Transform only;
+  parked in the middle under reduced motion.
+*/
+.dial {
+  position: relative;
+  height: 2.5rem;
+  overflow: hidden;
+  border-radius: 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--wisp) 30%, var(--border));
+  background-color: var(--bg);
+  background-image:
+    repeating-linear-gradient(to right, color-mix(in srgb, var(--wisp) 55%, transparent) 0 1px, transparent 1px 25%),
+    repeating-linear-gradient(to right, color-mix(in srgb, var(--wisp) 30%, transparent) 0 1px, transparent 1px 5%);
+  background-size: 88% 45%, 88% 25%;
+  background-position: 6% 100%, 6% 100%;
+  background-repeat: no-repeat;
+}
+.dial-needle {
+  position: absolute;
+  inset: 4px 6% 4px 6%;
+  pointer-events: none;
+}
+.dial-needle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--wisp);
+  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--wisp) 65%, transparent);
+}
+.dial[data-running="true"] .dial-needle {
+  animation: btt-needle calc(var(--step, 150ms) * 12) steps(12, jump-none) infinite alternate;
+}
+.dial:not([data-running="true"]) .dial-needle {
+  transform: translateX(50%);
+  opacity: 0.55;
+}
+@keyframes btt-needle {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dial .dial-needle {
+    animation: none !important;
+    transform: translateX(50%);
+  }
+}
+
+/* The spoken word: carved, bone, with a faint ectoplasm glow (static). */
+.ecto {
+  text-shadow:
+    0 0 18px color-mix(in srgb, var(--wisp) 40%, transparent),
+    0 0 2px color-mix(in srgb, var(--wisp) 30%, transparent);
+}
+
+/* Dial-style range: a 28px knob with a tick, on a slim etched track. */
+input[type="range"].knob {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  min-height: 48px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"].knob::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, color-mix(in srgb, var(--wisp) 45%, var(--border)), var(--border));
+  border: 1px solid var(--edge);
+}
+input[type="range"].knob::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, color-mix(in srgb, var(--wisp) 45%, var(--border)), var(--border));
+  border: 1px solid var(--edge);
+}
+input[type="range"].knob::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -12px;
+  border-radius: 999px;
+  border: 2px solid var(--mauve);
+  background:
+    linear-gradient(var(--mauve), var(--mauve)) 50% 3px / 2px 9px no-repeat,
+    radial-gradient(circle, var(--surface-2) 0 60%, var(--surface) 61%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--wisp) 18%, transparent);
+}
+input[type="range"].knob::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 2px solid var(--mauve);
+  background:
+    linear-gradient(var(--mauve), var(--mauve)) 50% 3px / 2px 9px no-repeat,
+    radial-gradient(circle, var(--surface-2) 0 60%, var(--surface) 61%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--wisp) 18%, transparent);
+}
+
+/* Captions as a log inside the panel: newest on top, scrolls after a few lines. */
+.ticker {
+  max-height: 11rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--wisp) 25%, var(--border));
+  background-color: var(--bg);
+  padding: 0.25rem 0.75rem;
 }
 
 /* ---------- Dividers ---------- */

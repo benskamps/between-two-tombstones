@@ -31,13 +31,13 @@ export const PALETTE: Record<Token, string> = {
   border: "#43364B", // hairlines and card outlines only (decorative; see UI_PAIRS)
   text: "#F1EADF", // bone
   muted: "#D2C8D6", // captions, hints (raised for sunlight; never the only carrier of needed info)
-  mauve: "#C7A2DC", // half-mourning mauve: primary actions, links
+  mauve: "#D6BAE6", // half-mourning mauve: primary actions, links (lightened for sunlight, REVIEW-2 #8)
   "mauve-ink": "#1A1220", // text on any light fill (mauve, candle, lichen, ash, wisp)
   candle: "#E2AD4B", // warm highlight
-  lichen: "#A3C293", // living things
+  lichen: "#C3DBB6", // living things (lightened for sunlight)
   ash: "#8E8794", // control boundaries (fields), the Gravitator's pass tint
   wisp: "#86E3D3", // phosphor / ectoplasm glow for instruments
-  danger: "#F28B82", // errors
+  danger: "#FFB3AA", // errors (lightened for sunlight)
   focus: "#86E3D3", // focus ring (the wisp's glow)
 };
 
@@ -97,6 +97,9 @@ export const TEXT_PAIRS: [Token, Surface, string][] = [
   ["danger", "bg", "error text"],
   ["danger", "surface", "error text on cards"],
   ["danger", "surface-2", "error text in rows"],
+  ["danger", "instrument", "Stop and error text on the instrument panel"],
+  ["lichen", "instrument", "\"Turn it off near mourners.\" on the panel"],
+  ["mauve", "instrument", "links on the panel"],
   ["mauve-ink", "mauve", "primary pill buttons, Save, Use my location"],
   ["mauve-ink", "candle", "Go now, Start a tour here"],
   ["mauve-ink", "lichen", "the SAVE stamp while dragging right"],
@@ -123,6 +126,9 @@ export const UI_PAIRS: [Token, Surface, string][] = [
   ["focus", "surface-2", "focus ring in a row"],
   ["focus", "instrument", "focus ring on an instrument panel"],
   ["wisp", "instrument", "instrument glow edge"],
+  ["mauve", "instrument", "knob rims and the primary pill on the panel"],
+  ["ash", "instrument", "knob tracks and fields on the panel"],
+  ["danger", "bg", "the Stop pill's edge"],
 ];
 
 /** color-mix(in srgb, a p%, b): straight interpolation of the sRGB components. */

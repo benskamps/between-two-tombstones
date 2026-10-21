@@ -63,14 +63,15 @@ export function SeanceInvite({ code, path, cemeteryName }: { code: string; path:
         />
       </label>
       <div className="flex flex-wrap gap-2">
-        <button type="button" onClick={copy} className="tap rounded-lg border border-border px-4 font-bold">
-          Copy link
-        </button>
+        {/* Web Share where the phone has it: the quickest way to every other phone. */}
         {shareable && (
-          <button type="button" onClick={share} className="tap rounded-lg border border-border px-4 font-bold">
-            Share
+          <button type="button" onClick={share} className="btn btn-ghost">
+            Send the link
           </button>
         )}
+        <button type="button" onClick={copy} className="btn btn-ghost">
+          Copy link
+        </button>
       </div>
       {note && (
         <p role="status" className="text-sm">
