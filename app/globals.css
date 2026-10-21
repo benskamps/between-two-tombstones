@@ -8,6 +8,19 @@
   nowhere else; lib/palette.test.ts checks they match and that every text pair
   reaches 4.5:1 and every control boundary 3:1. Everything below this block
   uses the variables.
+
+  The primitives (stable names; other lanes build on them):
+  - Surfaces: .card (stone, inner rule), .arch + .arch-rule (headstone),
+    .bezel (corner ticks), .instrument (glass panel), .stone (grain only).
+  - Instrument parts: .readout-strip, .lamp, .dial + .dial-needle, .scanlines,
+    .ticker (a log), input.knob (28px dial thumbs), .ecto (glow), .materialize.
+    React wrappers: components/ui/Instrument.tsx.
+  - Type: .label and .readout (Michroma: short, redundant, uppercase, 12px+);
+    font-display (IM Fell: names and headings, never numbers); body Atkinson.
+  - Controls: .btn + .btn-primary | .btn-candle | .btn-ghost | .btn-stop,
+    .btn-lg; .field; .tap (48px).
+  - Dividers and ornaments: .fence, .orbit-divider; symbols in
+    components/ui/symbols.tsx, SymbolPair / ArchFrame in components/ui/Motifs.tsx.
 */
 :root {
   --bg: #130F15;
@@ -530,6 +543,34 @@ input[type="range"].knob::-moz-range-thumb {
     transform: scale(1.03, 0.97);
   }
 }
+/* A new word (or any newly arrived line) fades up into place. Instant under reduced motion. */
+@keyframes btt-materialize {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.materialize {
+  animation: btt-materialize 0.45s ease-out both;
+}
+
+/* The bottom nav's tabs fade in once the haunt is read, instead of popping (F25). */
+@keyframes btt-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+nav[aria-label="Main"] ul {
+  animation: btt-fade-in 0.18s ease-out both;
+}
+
 /* One animated symbol per screen; it plays three times and rests, except inside an instrument panel. */
 .sym-orbit {
   transform-box: view-box;

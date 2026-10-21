@@ -1,11 +1,18 @@
 import type { CSSProperties, ReactNode } from "react";
 
 /*
-  The spirit box and the séance share one instrument (L10.4): a phosphor
-  readout strip, a tuning dial whose needle steps with the band-pass filter,
-  the spoken word large in the carved face, and the captions as a log inside
-  the panel. Readouts repeat what the page already says in Atkinson, so they
-  are hidden from assistive tech and never carry instructions.
+  Instrument primitives (the space-age half of the skin). First used by the
+  spirit box and the séance; any tool can wear them:
+
+    <section className="instrument bezel space-y-4 p-4">   the panel (globals.css)
+      <ReadoutStrip items={[...]} live />                  phosphor readouts
+      <SweepDial running stepMs={150} />                    a needle on a scale
+      <SpokenWord key={id} testId="...">word</SpokenWord>   the big carved line
+      ...controls (input.knob for ranges), a .ticker log...
+    </section>
+
+  Readouts repeat what the page already says in Atkinson, so they are hidden
+  from assistive tech and never carry instructions.
 */
 
 export type Readout = { label?: string; value: string };
@@ -38,12 +45,15 @@ export function SweepDial({ running, stepMs }: { running: boolean; stepMs: numbe
   );
 }
 
-/** The latest voice, big, in the carved face with a faint glow: the part people film. */
+/**
+ * The big line in the carved face with a faint glow (the part people film).
+ * Give it a `key` per word at the call site and each new word materializes.
+ */
 export function SpokenWord({ children, testId, digits = false }: { children: ReactNode; testId: string; digits?: boolean }) {
   return (
     <p
       aria-hidden="true"
-      className={`ecto min-h-[3.5rem] text-center leading-tight text-text ${
+      className={`ecto materialize min-h-[3.5rem] text-center leading-tight text-text ${
         // Digits (a countdown) stay in Atkinson: IM Fell's old-style figures misread (F9).
         digits ? "font-sans text-3xl font-bold" : "font-display text-4xl"
       }`}

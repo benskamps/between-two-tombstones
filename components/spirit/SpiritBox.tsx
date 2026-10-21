@@ -17,7 +17,7 @@ import { QID_RE, loadCemetery, type LoadResult, type SampleCemetery } from "@/li
 import { capsFromParam, createSession, formatDuration, stopMessage, type SpiritSession, type Utterance } from "@/lib/spirit/session";
 import { pickVoice, silenceVoices, speakFragment, speechAvailable } from "@/lib/spirit/voice";
 import { bankHasNames, buildWordBank } from "@/lib/spirit/wordbank";
-import { ReadoutStrip, SpokenWord, SweepDial, countOf } from "./Instrument";
+import { ReadoutStrip, SpokenWord, SweepDial, countOf } from "@/components/ui/Instrument";
 import { SEANCE_PITCH, SeanceJoin, SeanceStart } from "./SeanceStart";
 import { DISCLAIMER, MOURNERS, NO_SPEECH, audioContextClass, clock, subscribeNothing } from "./shared";
 
@@ -266,7 +266,7 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
         />
         <SweepDial running={running} stepMs={sweepMs} />
         {/* The latest voice, big: the part people film. */}
-        <SpokenWord testId="spirit-latest">{latest ? `…${latest.text}…` : running ? "…" : ""}</SpokenWord>
+        <SpokenWord key={latest?.n ?? "idle"} testId="spirit-latest">{latest ? `…${latest.text}…` : running ? "…" : ""}</SpokenWord>
         <button
           type="button"
           onClick={running ? stop : start}

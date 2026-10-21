@@ -17,7 +17,7 @@ import {
 import { formatDuration, type SpiritCaps } from "@/lib/spirit/session";
 import { pickVoice, silenceVoices, speakFragment, speechAvailable, unlockSpeech } from "@/lib/spirit/voice";
 import { bankHasNames, buildWordBank } from "@/lib/spirit/wordbank";
-import { ReadoutStrip, SpokenWord, SweepDial, countOf } from "./Instrument";
+import { ReadoutStrip, SpokenWord, SweepDial, countOf } from "@/components/ui/Instrument";
 import { SeanceInvite } from "./SeanceInvite";
 import { DISCLAIMER, MOURNERS, NO_SPEECH, audioContextClass, clockTenths, subscribeNothing } from "./shared";
 
@@ -274,7 +274,7 @@ export function SeanceBox({
           ]}
         />
         <SweepDial running={running} stepMs={STEP_MS} />
-        <SpokenWord testId="seance-latest" digits={phase === "countdown"}>
+        <SpokenWord key={phase === "live" ? (latest?.k ?? "live") : phase} testId="seance-latest" digits={phase === "countdown"}>
           {big}
         </SpokenWord>
         <button
