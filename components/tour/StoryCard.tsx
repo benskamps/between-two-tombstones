@@ -174,7 +174,7 @@ export function StoryCard({
         </ul>
       )}
 
-      {photo && <GravePhoto src={photo.src} name={p.name} kind={photo.kind} />}
+      {photo && <GravePhoto src={photo.src} name={p.name} kind={photo.kind} priority={stop === 1} />}
 
       {lead ? (
         <div className="space-y-2">

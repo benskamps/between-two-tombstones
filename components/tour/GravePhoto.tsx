@@ -9,7 +9,18 @@ import { CARD_PHOTO_WIDTH, commonsFilePage, commonsThumb, SMALL_PHOTO_WIDTH } fr
  * shows some other cemetery) their portrait, labeled as such. If it can't
  * load, the card still reads and says why.
  */
-export function GravePhoto({ src, name, kind = "grave" }: { src: string; name: string; kind?: "grave" | "portrait" }) {
+export function GravePhoto({
+  src,
+  name,
+  kind = "grave",
+  priority = false,
+}: {
+  src: string;
+  name: string;
+  kind?: "grave" | "portrait";
+  /** Stop 1's photo is on the first screen and often the LCP element: load it eagerly, first. */
+  priority?: boolean;
+}) {
   const online = useOnline();
   const [failed, setFailed] = useState(false);
   const width = kind === "grave" ? CARD_PHOTO_WIDTH : SMALL_PHOTO_WIDTH;
@@ -34,7 +45,8 @@ export function GravePhoto({ src, name, kind = "grave" }: { src: string; name: s
         alt={kind === "grave" ? `Grave of ${name}` : `Portrait of ${name}`}
         width={width}
         height={kind === "grave" ? Math.round(width * 0.75) : Math.round(width * 1.25)}
-        loading="lazy"
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : "auto"}
         decoding="async"
         referrerPolicy="no-referrer"
         onError={() => setFailed(true)}
