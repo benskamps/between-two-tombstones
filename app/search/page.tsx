@@ -5,6 +5,8 @@ import { ServiceWorkerRegistrar } from "@/components/offline/ServiceWorkerRegist
 import { CemeteryList } from "@/components/tour/CemeteryList";
 import { SearchForm } from "@/components/tour/SearchForm";
 import { SourceFailure } from "@/components/tour/SourceFailure";
+import { PageHeader } from "@/components/ui/Motifs";
+import { Sprout } from "@/components/ui/symbols";
 import { asDataSourceError } from "@/lib/data/errors";
 import { loadSearch } from "@/lib/data/load";
 import type { CemeterySearchResult } from "@/lib/data/types";
@@ -21,7 +23,7 @@ export default function SearchPage({ searchParams }: PageProps<"/search">) {
   return (
     <div className="space-y-5">
       <ServiceWorkerRegistrar />
-      <h1 className="font-display text-3xl">Find a cemetery</h1>
+      <PageHeader title="Find a cemetery" tool="search" life={<Sprout className="h-5 w-5" />} />
       <Suspense
         fallback={
           <>

@@ -2,7 +2,7 @@
 
 import { useState, useSyncExternalStore } from "react";
 import { partyPath } from "@/lib/games/bingo";
-import { RoomCode } from "./RoomCode";
+import { SplitFlap } from "@/components/ui/Instrument";
 
 function subscribeNothing() {
   return () => {};
@@ -54,7 +54,7 @@ export function PartyShare({ code, showCode = true }: { code: string; showCode?:
       {showCode && (
         <div className="instrument bezel space-y-2 px-4 py-3">
           <p className="label text-muted">Room code</p>
-          <RoomCode code={code} testId="room-code" />
+          <SplitFlap value={code} testId="room-code" />
         </div>
       )}
       <label className="block">
@@ -63,19 +63,20 @@ export function PartyShare({ code, showCode = true }: { code: string; showCode?:
           readOnly
           value={link}
           onFocus={(e) => e.currentTarget.select()}
-          className="field mt-1 w-full font-mono text-sm"
+          className="field mt-1 w-full text-sm"
           data-testid="party-link"
         />
       </label>
       <div className="flex flex-wrap gap-2">
+        {/* Web Share where the phone has it: the quickest way to every other phone (as in the séance). */}
+        {shareable && (
+          <button type="button" onClick={share} className="btn btn-ghost">
+            Send the link
+          </button>
+        )}
         <button type="button" onClick={copy} className="btn btn-ghost">
           Copy link
         </button>
-        {shareable && (
-          <button type="button" onClick={share} className="btn btn-ghost">
-            Share
-          </button>
-        )}
       </div>
       {note && (
         <p role="status" className="text-sm">

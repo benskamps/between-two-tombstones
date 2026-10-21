@@ -83,7 +83,7 @@ export function PartyLobby({ samples }: { samples: SampleCemetery[] }) {
             autoComplete="off"
             spellCheck={false}
             maxLength={12}
-            className="field min-w-0 flex-1 font-bold uppercase tracking-[0.2em] placeholder:font-normal placeholder:normal-case placeholder:tracking-normal"
+            className="field field-code min-w-0 flex-1"
           />
           <button type="submit" className="btn btn-ghost">
             Join

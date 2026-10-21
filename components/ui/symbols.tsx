@@ -114,6 +114,17 @@ export function HourglassSprout(props: SymbolProps) {
   );
 }
 
+/** A sprout with two leaves: something new coming up (a found square, a birthday). */
+export function Sprout(props: SymbolProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 21v-8.5" />
+      <path d="M12 15c-3 0-5-1.8-5.5-4.8 3 0 5 1.8 5.5 4.8Z" />
+      <path d="M12 12.5c3 0 5-1.8 5.5-4.8-3 0-5 1.8-5.5 4.8Z" />
+    </Svg>
+  );
+}
+
 export function Planchette(props: SymbolProps) {
   return (
     <Svg {...props}>
@@ -169,6 +180,15 @@ export function Comet(props: SymbolProps) {
       <circle cx="16.4" cy="7.6" r="2.6" />
       <path d="M14.4 9.8 4 20.2M13.3 8.3 6.7 14.4M15.9 10.9 9.8 17.4" />
       <path d="M5.5 4.5v3M4 6h3" />
+    </Svg>
+  );
+}
+
+/** A sound trace: the EVP recorder. */
+export function Waveform(props: SymbolProps) {
+  return (
+    <Svg {...props}>
+      <path d="M2.5 12h3l1.5-4 2 9 2.5-12 2.5 14 2-9 1.5 4.5 1.2-2.5h3.3" />
     </Svg>
   );
 }

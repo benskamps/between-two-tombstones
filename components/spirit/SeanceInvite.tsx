@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
+import { SplitFlap } from "@/components/ui/Instrument";
 import { subscribeNothing } from "./shared";
 
 function canWebShare() {
@@ -42,23 +43,22 @@ export function SeanceInvite({ code, path, cemeteryName }: { code: string; path:
 
   return (
     <div className="space-y-3">
-      <div>
-        <p className="text-sm text-muted">Séance room code</p>
-        <p className="font-mono text-4xl font-bold tracking-[0.3em]" data-testid="seance-code">
-          {code}
-        </p>
-        {/* Someone joining by code picks the same cemetery, so say which (F13). */}
-        <p className="text-sm">
-          Cemetery: <span className="font-bold">{cemeteryName}</span>. Anyone joining by code picks it first.
-        </p>
+      {/* The same split-flap readout as the party's room code. */}
+      <div className="instrument bezel space-y-2 px-4 py-3">
+        <p className="label text-muted">Séance room code</p>
+        <SplitFlap value={code} testId="seance-code" />
       </div>
+      {/* Someone joining by code picks the same cemetery, so say which (F13). */}
+      <p className="text-sm">
+        Cemetery: <span className="font-bold">{cemeteryName}</span>. Anyone joining by code picks it first.
+      </p>
       <label className="block">
         <span className="text-sm text-muted">Séance link</span>
         <input
           readOnly
           value={link}
           onFocus={(e) => e.currentTarget.select()}
-          className="tap mt-1 w-full rounded-lg border border-border bg-bg px-3 font-mono text-sm"
+          className="field mt-1 w-full text-sm"
           data-testid="seance-link"
         />
       </label>

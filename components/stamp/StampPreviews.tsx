@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import "./darkroom.css";
+import { Specimen } from "@/components/ui/Motifs";
 
 export type PreviewUrls = { rubbing: string; ink: string; postage: string };
 
@@ -32,16 +32,20 @@ type Props = {
   job: number;
 };
 
-/** One output pinned up as a specimen card: its window (paper for the ink stamp), its name, its save link. */
-function Specimen({ kind, children, action }: { kind: keyof PreviewUrls; children: ReactNode; action?: ReactNode }) {
+/** One output pinned up as a specimen card: a paper window, its name, its save link. */
+function Output({ children, action, kind }: { kind: keyof PreviewUrls; children: ReactNode; action?: ReactNode }) {
   return (
-    <figure className="specimen">
-      <div className={`specimen-window ${kind === "ink" ? "specimen-paper" : ""}`}>{children}</div>
-      <figcaption className="specimen-tag">
-        <span className="label">{RENDER_LABELS[kind].title}</span>
-        {action}
-      </figcaption>
-    </figure>
+    <Specimen
+      paper
+      tag={
+        <>
+          <span className="label">{RENDER_LABELS[kind].title}</span>
+          {action}
+        </>
+      }
+    >
+      {children}
+    </Specimen>
   );
 }
 
@@ -55,10 +59,11 @@ export function StampPreviews({ urls, busy, fileStem, renderMs, maskPixels, timi
       data-mask-pixels={maskPixels ?? ""}
       data-timings={timings}
       aria-busy={busy}
-      className="specimen-tray"
+      // The three side by side, one frame for the camera (REVIEW-3).
+      className="specimen-tray specimen-tray-compact"
     >
       {KINDS.map((k) => (
-        <Specimen
+        <Output
           key={k}
           kind={k}
           action={
@@ -66,7 +71,7 @@ export function StampPreviews({ urls, busy, fileStem, renderMs, maskPixels, timi
               <a
                 href={urls[k]}
                 download={`${fileStem}-${RENDER_LABELS[k].file}.png`}
-                className="btn btn-ghost px-4 text-sm"
+                className="btn btn-ghost w-full px-3 text-sm"
               >
                 Save<span className="sr-only"> {RENDER_LABELS[k].title.toLowerCase()}</span>
               </a>
@@ -84,7 +89,7 @@ export function StampPreviews({ urls, busy, fileStem, renderMs, maskPixels, timi
           ) : (
             <span className="specimen-empty">{busy ? "Making…" : "Not made yet"}</span>
           )}
-        </Specimen>
+        </Output>
       ))}
     </div>
   );
@@ -120,7 +125,7 @@ export function EmptySpecimens() {
   return (
     <div className="specimen-tray specimen-tray-compact">
       {KINDS.map((k) => (
-        <Specimen key={k} kind={k}>
+        <Output key={k} kind={k}>
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -134,7 +139,7 @@ export function EmptySpecimens() {
           >
             {PLACEHOLDER[k]}
           </svg>
-        </Specimen>
+        </Output>
       ))}
     </div>
   );

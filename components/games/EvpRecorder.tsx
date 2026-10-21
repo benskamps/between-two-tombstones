@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+import { ReadoutStrip } from "@/components/ui/Instrument";
 import { SymbolPair } from "@/components/ui/Motifs";
 import { Lily, Moth } from "@/components/ui/symbols";
+import { ToolTile } from "@/components/ui/tools";
 import { EVP_PLAYBACK_RATE, evpSeconds, micAvailable, micErrorMessage, reverseBuffer } from "@/lib/games/evp";
-import "@/components/ui/games/skin-b-instrument.css";
-import "./games.css";
 
 type Phase = "idle" | "recording" | "processing" | "ready" | "playing";
 
@@ -37,26 +37,12 @@ export function EvpHubLink() {
   if (!mic) return null;
   return (
     <li>
-      <Link href="/games/evp" className="card tap flex items-center gap-4 p-4">
-        <span aria-hidden="true" className="games-medallion">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M2.5 12h3l1.5-4 2 9 2.5-12 2.5 14 2-9 1.5 4.5 1.2-2.5h3.3" />
-          </svg>
-        </span>
-        <span>
-          <span className="font-display text-xl">EVP Recorder</span>
-          <span className="block text-muted">
-            Record 15 seconds of the quiet, then hear it played backwards and slowed.
-          </span>
-        </span>
-      </Link>
+      <ToolTile
+        tool="evp"
+        href="/games/evp"
+        title="EVP Recorder"
+        body="Record 15 seconds of the quiet, then hear it played backwards and slowed."
+      />
     </li>
   );
 }
@@ -267,7 +253,7 @@ export function EvpRecorder() {
     setPhase("ready");
   }
 
-  if (mic === null) return <EvpPanel phase="idle" readout={["EVP", "Standby"]} note="Checking for a microphone…" />;
+  if (mic === null) return <EvpPanel phase="idle" readout={["Standby"]} note="Checking for a microphone…" />;
   if (!mic) {
     return (
       <p className="card p-4">
@@ -294,9 +280,9 @@ export function EvpRecorder() {
 
   return (
     <div className="space-y-5">
-      <EvpPanel phase={phase} readout={["EVP", ...readout.filter(Boolean)]}>
+      <EvpPanel phase={phase} readout={readout.filter(Boolean)}>
         {(phase === "ready" || phase === "playing") && duration !== null && (
-          <p role="status" className="instrument-plate">
+          <p role="status">
             Recorded {duration.toFixed(1)} seconds. Played backwards at {Math.round(EVP_PLAYBACK_RATE * 100)}% speed it
             lasts {(duration / EVP_PLAYBACK_RATE).toFixed(1)} seconds.
           </p>
@@ -333,7 +319,7 @@ export function EvpRecorder() {
         )}
 
         {error && (
-          <p role="alert" className="instrument-plate text-danger">
+          <p role="alert" className="text-danger">
             {error}
           </p>
         )}
@@ -401,14 +387,13 @@ function EvpPanel({
   const trace = phase === "idle" || phase === "processing" ? FLAT_WAVE : LIVE_WAVE;
   return (
     <div className="instrument bezel space-y-4 p-4" data-testid="evp-panel">
-      <div className="readout-strip scanlines" aria-hidden="true" data-testid="evp-readouts">
-        <span className="lamp" data-on={live ? "true" : "false"} />
-        {readout.map((r, i) => (
-          <span key={i} className="readout">
-            {r}
-          </span>
-        ))}
-      </div>
+      {/* The status first, then at most two values: one line, like every instrument. */}
+      <ReadoutStrip
+        testId="evp-readouts"
+        live={live}
+        status={readout[0] ?? "Standby"}
+        values={readout.slice(1).map((value) => ({ value }))}
+      />
       <div className="evp-scope" data-phase={phase} aria-hidden="true">
         <svg viewBox="0 0 400 100" preserveAspectRatio="none" className="evp-trace">
           <path
@@ -423,12 +408,12 @@ function EvpPanel({
         </svg>
       </div>
       {note && (
-        <p role="status" className="instrument-plate text-muted">
+        <p role="status" className="text-muted">
           {note}
         </p>
       )}
       {children}
-      <p className="instrument-plate text-sm text-muted">
+      <p className="text-sm text-muted">
         The recording stays on this phone. It is never uploaded or saved, and it&rsquo;s gone when you leave the page.
       </p>
     </div>

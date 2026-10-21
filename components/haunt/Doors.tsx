@@ -16,18 +16,18 @@ export function Doors({ idPrefix = "door", level = 2 }: { idPrefix?: string; lev
     // Compact enough that both doors' buttons sit above the fold on a Pixel 7 (REVIEW-2 N4).
     <div className="grid gap-4" data-testid="doors">
       <ArchFrame aria-labelledby={`${idPrefix}-search`} className="space-y-3 text-center">
-        <SymbolPair death={<RingedMoon className="h-5 w-5" />} life={<Lily className="h-5 w-5" />} />
+        <SymbolPair death={<RingedMoon className="h-7 w-7" />} life={<Lily className="h-7 w-7" />} />
         <H id={`${idPrefix}-search`} className="font-display text-3xl leading-tight">
           Search a graveyard
         </H>
-        <NearMeButton label="I’m here. Haunt me." hint="Uses your location" fallbackFieldId={`${idPrefix}-q`} />
+        <NearMeButton label="I’m here. Haunt me." hint="Uses your location" fallbackFieldId={`${idPrefix}-q`} yieldToHaunt />
         <div className="text-left">
           <SearchForm idPrefix={idPrefix} placeholder="e.g. Oakland Cemetery" label="Or type the cemetery’s name" />
         </div>
       </ArchFrame>
 
       <ArchFrame aria-labelledby={`${idPrefix}-date`} className="space-y-3 text-center">
-        <SymbolPair death={<Moth className="h-5 w-5" />} life={<Candle animate className="h-5 w-5" />} />
+        <SymbolPair death={<Moth className="h-7 w-7" />} life={<Candle animate className="h-7 w-7" />} />
         <H id={`${idPrefix}-date`} className="font-display text-3xl leading-tight">
           Plan a date
         </H>

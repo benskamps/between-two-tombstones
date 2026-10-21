@@ -40,13 +40,9 @@ export function SeanceStart({
 
   return (
     <div className="space-y-3">
-      {/* Before a séance exists, starting one is the main thing; after, opening it is (REVIEW-2). */}
-      <button
-        type="button"
-        onClick={start}
-        disabled={!ready}
-        className={`btn w-full ${code ? "btn-ghost" : "btn-primary btn-lg"}`}
-      >
+      {/* The séance is the second thing on its pages (after the spirit box, after a party), so starting one is
+          a ghost pill: one primary per screen (REVIEW-3 #8). Once it exists, opening it is the primary. */}
+      <button type="button" onClick={start} disabled={!ready} className="btn btn-ghost w-full">
         {code ? "Start a different séance" : "Start a séance"}
       </button>
       {ready && <p className="text-sm text-muted">The séance uses the names from {cemetery.name}.</p>}
@@ -103,7 +99,7 @@ export function SeanceJoin({ cemeteryQid, disabled }: { cemeteryQid: string; dis
           spellCheck={false}
           maxLength={12}
           disabled={disabled}
-          className="field flex-1 font-mono uppercase tracking-widest"
+          className="field field-code min-w-0 flex-1"
         />
         <button type="submit" disabled={disabled} className="btn btn-ghost">
           Join

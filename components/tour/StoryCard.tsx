@@ -35,6 +35,9 @@ function apexPair(tagIds: string[]): { death: ReactNode; life: ReactNode } {
   return { death: <RingedMoon className={g} />, life: <Lily className={g} /> };
 }
 
+/** A lead longer than this may run past the four lines the card shows, so it gets a "Read more". */
+const LEAD_CLAMP_CHARS = 160;
+
 /** "01" for stop 1 of 80; the width follows the total. */
 function pad(n: number, total: number): string {
   return String(n).padStart(Math.max(2, String(total).length), "0");
@@ -106,7 +109,7 @@ export function StoryCard({
       data-style={plain ? "plain" : "carved"}
       className={
         plain
-          ? "space-y-3 rounded-xl border border-border bg-surface p-4"
+          ? "card card-plain space-y-3 p-4"
           : // A headstone: the arch with its inner rule, a death/life pair at the apex (L10.4).
             "arch arch-rule space-y-3 !px-4 !pb-4 !pt-6"
       }
@@ -176,20 +179,24 @@ export function StoryCard({
 
       {lead ? (
         <div className="space-y-2">
-          <p data-testid="story-text">{lead}</p>
-          {/* The story first, then the photo: the words are what people came for, and the first screen
-              paints text instead of waiting on Commons' redirects for a picture (LCP). */}
-          {photo && <GravePhoto src={photo.src} name={p.name} kind={photo.kind} priority={stop === 1} />}
-          {rest.length > 0 && (
-            <details>
+          {/* About four lines of the story, then "Read more", then the photo: the portrait and the Find a Grave
+              row land inside the card's first screen (REVIEW-3). The words still paint before the picture (LCP). */}
+          <p data-testid="story-text" className="story-lead">
+            {lead}
+          </p>
+          {(rest.length > 0 || lead.length > LEAD_CLAMP_CHARS) && (
+            <details className="story-more">
               <summary className="tap flex cursor-pointer items-center font-bold text-accent">Read more</summary>
-              <div className="space-y-2 pt-1">
-                {rest.map((para, i) => (
-                  <p key={i}>{para}</p>
-                ))}
-              </div>
+              {rest.length > 0 && (
+                <div className="space-y-2 pt-1">
+                  {rest.map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))}
+                </div>
+              )}
             </details>
           )}
+          {photo && <GravePhoto src={photo.src} name={p.name} kind={photo.kind} priority={stop === 1} />}
           {p.wikipedia && (
             <p className="text-sm">
               <a href={p.wikipedia.url} className="underline" target="_blank" rel="noopener noreferrer">

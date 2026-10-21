@@ -4,8 +4,8 @@ import { CalendarSubscribe, CalendarSubscribeFallback } from "@/components/calen
 import { HauntGate } from "@/components/haunt/HauntGate";
 import { CALENDAR_SAMPLES } from "@/lib/calendar/samples";
 import { SITE } from "@/lib/site";
-import { PageHeader } from "@/components/ui/games/PageHeader";
-import { Poppy, RingedMoon } from "@/components/ui/symbols";
+import { PageHeader } from "@/components/ui/Motifs";
+import { Sprout } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {
   title: "Haunted Calendar",
@@ -23,8 +23,8 @@ export default function CalendarPage() {
     <div className="space-y-6">
       <PageHeader
         title="Haunted Calendar"
-        death={<RingedMoon className="h-5 w-5" />}
-        life={<Poppy className="h-5 w-5" />}
+        tool="calendar"
+        life={<Sprout className="h-5 w-5" />}
         intro={
           <>
             Subscribe to a cemetery and your calendar fills with the death-days of people buried there, every year. Each

@@ -52,7 +52,7 @@ export function DownloadTourButton({ data, onSaved }: { data: SavedTourData; onS
 
   if (state.kind === "saved") {
     return (
-      <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-surface-2 px-4 py-2" data-testid="offline-status">
+      <div className="card flex flex-wrap items-center gap-3 px-4 py-2" data-testid="offline-status">
         <p className="flex-1 text-sm">
           <span className="font-bold text-moss">Saved for offline use</span>
           <span className="text-muted"> · {formatWhen(state.savedAt)}. Every story on this page opens without a signal.</span>
@@ -60,7 +60,7 @@ export function DownloadTourButton({ data, onSaved }: { data: SavedTourData; onS
             <span className="block text-muted">The stories are on this phone; open them from Saved tours if this page won&rsquo;t load offline.</span>
           )}
         </p>
-        <button type="button" onClick={download} className="tap rounded-lg border border-border px-3 text-sm">
+        <button type="button" onClick={download} className="btn btn-ghost px-4 text-sm">
           Update copy
         </button>
       </div>
@@ -73,7 +73,7 @@ export function DownloadTourButton({ data, onSaved }: { data: SavedTourData; onS
         type="button"
         onClick={download}
         disabled={state.kind === "saving"}
-        className="tap w-full rounded-xl border border-border bg-surface-2 px-4 font-bold disabled:opacity-70"
+        className="btn btn-ghost w-full"
       >
         {state.kind === "saving" ? "Saving the tour…" : "Download this tour"}
       </button>

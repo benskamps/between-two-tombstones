@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { HourglassSprout } from "@/components/ui/symbols";
+import { RingedMoon } from "@/components/ui/symbols";
 import { NEXT_TOOLS } from "@/lib/haunt/haunt";
 import { rememberNext } from "@/lib/haunt/next";
 import { Doors } from "./Doors";
@@ -39,7 +39,7 @@ export function PickHauntFirst({ tool }: { tool: ToolPath }) {
   return (
     <section aria-labelledby="pick-haunt" className="space-y-6" data-testid="pick-haunt">
       <div className="card bezel space-y-2 px-5 py-6 text-center">
-        <HourglassSprout className="mx-auto h-8 w-8 text-lichen" />
+        <RingedMoon className="mx-auto h-8 w-8 text-mauve" />
         <h2 id="pick-haunt" className="font-display text-3xl leading-tight">
           Pick a haunt first
         </h2>

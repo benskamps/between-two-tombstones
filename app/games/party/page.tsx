@@ -4,8 +4,8 @@ import { PartyLobby } from "@/components/games/PartyLobby";
 import { HauntGate } from "@/components/haunt/HauntGate";
 import { GateNeutral } from "@/components/haunt/PickHauntFirst";
 import { SAMPLE_CEMETERIES } from "@/lib/spirit/samples";
-import { PageHeader } from "@/components/ui/games/PageHeader";
-import { Key, Lily } from "@/components/ui/symbols";
+import { PageHeader } from "@/components/ui/Motifs";
+import { Lily } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {
   title: "Graveyard Party",
@@ -20,7 +20,7 @@ export default function PartyPage() {
     <div className="space-y-5">
       <PageHeader
         title="Graveyard Party"
-        death={<Key className="h-5 w-5" />}
+        tool="party"
         life={<Lily className="h-5 w-5" />}
         intro={
           <>

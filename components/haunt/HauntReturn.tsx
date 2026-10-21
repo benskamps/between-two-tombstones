@@ -18,9 +18,9 @@ export function HauntReturn({ when }: { when: "fresh" | "stale" }) {
     if (!fresh) return null;
     return (
       <section aria-labelledby="haunt-return" className="card bezel flex items-center gap-3 px-4 py-3" data-testid="haunt-return">
-        <RingedMoon className="h-7 w-7 shrink-0 text-wisp" />
+        <RingedMoon className="h-7 w-7 shrink-0 text-mauve" />
         <div className="min-w-0 flex-1">
-          <h2 id="haunt-return" className="text-sm font-bold text-lichen">
+          <h2 id="haunt-return" className="text-sm font-bold text-muted">
             Your haunt
           </h2>
           <p className="truncate text-lg font-bold" title={fresh.name}>

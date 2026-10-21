@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
-import { Lily, Moth } from "@/components/ui/symbols";
+import { SplitFlap } from "@/components/ui/Instrument";
+import { Lily, Moth, Sprout } from "@/components/ui/symbols";
 import {
   CENTER,
   bingoMessage,
@@ -16,11 +17,8 @@ import {
 } from "@/lib/games/bingo";
 import { SOLO_SEED_KEY, marksKey, parseMarks, readItem, subscribeStorage, writeItem } from "@/lib/games/storage";
 import { FREE_SQUARE, symbolById } from "@/lib/games/symbols";
-import { Sprout } from "@/components/ui/games/Sprout";
 import { BingoGlyph } from "./BingoGlyph";
 import { PartyShare } from "./PartyShare";
-import { RoomCode } from "./RoomCode";
-import "./games.css";
 
 function newSoloSeed() {
   // Ten letters of crypto randomness; same alphabet as room codes, just longer.
@@ -95,9 +93,9 @@ export function BingoGame() {
         <div className="instrument bezel flex flex-wrap items-center gap-x-4 gap-y-3 px-4 py-3">
           <span aria-hidden="true" className="flex items-center gap-3">
             <span className="label text-muted">Room</span>
-            <RoomCode code={party} small />
+            <SplitFlap value={party} small />
           </span>
-          <p className="instrument-plate min-w-[12rem] flex-1">
+          <p className="min-w-[12rem] flex-1">
             <strong>Party {party}.</strong> Everyone who opens this link has this same card.
           </p>
         </div>
@@ -114,7 +112,7 @@ export function BingoGame() {
       <div className="space-y-2">
         <div className="bingo-strip">
           <span className="label">{party ? "Party card" : "Your card"}</span>
-          <span className="readout" data-testid="bingo-found">
+          <span className="readout text-lichen" data-testid="bingo-found">
             Found {found} / {card.length - 1}
           </span>
         </div>
@@ -160,7 +158,12 @@ export function BingoGame() {
       )}
 
       <div aria-live="polite" className="card flex min-h-[4.5rem] items-start gap-3 p-4">
-        {chosen && <BingoGlyph id={chosen.id} className="mt-0.5 h-8 w-8 shrink-0 text-wisp" />}
+        {chosen && (
+          <BingoGlyph
+            id={chosen.id}
+            className={`mt-0.5 h-8 w-8 shrink-0 ${selected !== null && marked.has(selected) ? "text-lichen" : "text-muted"}`}
+          />
+        )}
         {chosen ? (
           <p>
             <strong>{chosen.name}:</strong> {chosen.meaning}

@@ -4,23 +4,47 @@
   Between Two Tombstones: gothic retro-futurism, dark only (decision 18).
   Victorian mourning and graveyard forms crossed with space-age instruments.
 
+  Colour roles (REVIEW-3 #4): a colour says what something is, on every page.
+  - mauve:  you can act on it (buttons, links, the selected option, tool signs).
+  - candle: light and warmth (the darkroom's safelight, R.I.P., dates, a lit line).
+  - wisp:   a live instrument reading, only inside .instrument (readouts, the
+            dial, the split-flap code, the scope). Also the focus ring.
+  - lichen: alive, found or kept (a found square, a pinned grave, birthdays,
+            a saved tour, "Turn it off near mourners.").
+  - bone, muted, ash: reading text, captions and quiet labels, control edges.
+
   The palette's hex values live in this :root block and in lib/palette.ts,
   nowhere else; lib/palette.test.ts checks they match and that every text pair
   reaches 4.5:1 and every control boundary 3:1. Everything below this block
   uses the variables.
 
+  This file is the one stylesheet for the whole app (app/gravitator/gravitator.css
+  only aliases these tokens for that route). Order: tokens, page, type,
+  controls, surfaces, instrument parts, ornaments, steps and specimens, motion,
+  then "Tool pieces" (parts one tool wears, prefixed bingo-, evp-, darkroom-,
+  almanac-). Plain CSS, not CSS Modules: next.config.ts sends every
+  *.css through the Tailwind loader as global CSS, so a .module.css file would
+  not be scoped here.
+
   The primitives (stable names; other lanes build on them):
-  - Surfaces: .card (stone, inner rule), .arch + .arch-rule (headstone),
-    .bezel (corner ticks), .instrument (glass panel), .stone (grain only).
+  - Surfaces: .card (stone, inner rule) + .card-rule (ruled page), .arch +
+    .arch-rule (headstone), .bezel (corner ticks), .instrument (glass panel),
+    .stone (grain only); --lit-lichen and --lit-candle for a lit stone.
   - Instrument parts: .readout-strip, .lamp, .dial + .dial-needle, .scanlines,
-    .ticker (a log), input.knob (28px dial thumbs), .ecto (glow), .materialize.
-    React wrappers: components/ui/Instrument.tsx.
+    .ticker (a log), input.knob (28px dial thumbs), .split-flap (codes),
+    .ecto (glow), .materialize. React wrappers: components/ui/Instrument.tsx.
+  - Tools: .tool-medallion and .tool-chip; ToolTile and the one-sign-per-tool
+    map (TOOL_ICON) in components/ui/tools.tsx.
+  - Pinned and numbered: .specimen (+ -window, -paper, -tag, -tray),
+    .step + .step-no (Atkinson numeral in a candle ring); Specimen and
+    StepHeading in components/ui/Motifs.tsx.
   - Type: .label and .readout (Michroma: short, redundant, uppercase, 12px+);
     font-display (IM Fell: names and headings, never numbers); body Atkinson.
   - Controls: .btn + .btn-primary | .btn-candle | .btn-ghost | .btn-stop,
-    .btn-lg; .field; .tap (48px).
-  - Dividers and ornaments: .fence, .orbit-divider; symbols in
-    components/ui/symbols.tsx, SymbolPair / ArchFrame in components/ui/Motifs.tsx.
+    .btn-lg; .field (+ .field-code for room codes); .tap (48px).
+  - Dividers and ornaments: .fence, .orbit-divider, .moon-phases; symbols in
+    components/ui/symbols.tsx, SymbolPair / ArchFrame / MoonPhases in
+    components/ui/Motifs.tsx.
 */
 :root {
   --bg: #130F15;
@@ -47,6 +71,9 @@
   --moss: var(--lichen);
   --edge: var(--ash);
   --instrument: color-mix(in srgb, var(--surface) 92%, var(--wisp));
+  /* A lit stone: found (lichen: a found bingo square) or candle-lit (the free square, today in the almanac). */
+  --lit-lichen: color-mix(in srgb, var(--surface-2) 86%, var(--lichen));
+  --lit-candle: color-mix(in srgb, var(--surface-2) 86%, var(--candle));
 
   /* Stone grain: one pre-rendered 128px tile (public/textures/grain.png, under 5 KB; F23), not a live SVG filter. */
   --grain: url("/textures/grain.png");
@@ -72,6 +99,8 @@
   --color-wisp: var(--wisp);
   --color-edge: var(--edge);
   --color-danger: var(--danger);
+  --color-lit-lichen: var(--lit-lichen);
+  --color-lit-candle: var(--lit-candle);
   --font-sans: var(--font-body), system-ui, sans-serif;
   --font-display: var(--font-carved), Georgia, serif;
   --font-label: var(--font-space), var(--font-body), system-ui, sans-serif;
@@ -152,18 +181,18 @@ body {
   background-size: 128px 128px;
 }
 
-/* The header stays one line when the haunt badge shows: a smaller wordmark, and just the moon on a narrow phone. */
-header:has([data-testid="haunt-badge"]) .wordmark {
-  font-size: 1rem;
+/*
+  The wordmark is one size in every state (REVIEW-3 #3): small enough that the
+  header stays one line beside "Haunting: <name>", so nothing in the frame moves
+  when a haunt is set or on the way between the Gravitator and a tool. Narrow
+  phones get a slightly smaller one, also in every state.
+*/
+.wordmark {
+  font-size: 1.0625rem;
 }
 @media (max-width: 379px) {
-  header:has([data-testid="haunt-badge"]) .wordmark {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+  .wordmark {
+    font-size: 0.9375rem;
   }
 }
 
@@ -251,6 +280,17 @@ header:has([data-testid="haunt-badge"]) .wordmark {
   padding: 0 1.1rem;
   box-shadow: inset 0 2px 6px -2px rgb(0 0 0 / 0.6);
 }
+/* A field for a room code: typed letters bold, capitals and spaced out; the hint stays plain. */
+.field-code {
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.field-code::placeholder {
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+}
 
 /* ---------- Cards: rounded stone with a thin inner rule ---------- */
 
@@ -271,11 +311,49 @@ header:has([data-testid="haunt-badge"]) .wordmark {
   opacity: 0.45;
   pointer-events: none;
 }
+/* A card that reports a failure: a danger edge (the inner rule stays). */
+.card-alert {
+  border-color: var(--danger);
+}
+/* A plain card: the same stone and radius, no inner rule (recent deaths, F26). */
+.card-plain::before {
+  content: none;
+}
+/* A ruled page (the almanac's border): two hairlines inside the edge, the outer one candle-warm. */
+.card-rule::before {
+  inset: 5px;
+  border-radius: calc(1.1rem - 5px);
+  border-color: color-mix(in srgb, var(--candle) 30%, var(--border));
+  box-shadow:
+    inset 0 0 0 3px var(--surface),
+    inset 0 0 0 4px color-mix(in srgb, var(--border) 80%, transparent);
+  opacity: 1;
+}
+
+/*
+  A story card's lead paragraph: about four lines, so the portrait and the Find
+  a Grave row land inside the card's first screen. "Read more" (.story-more)
+  opens the rest and lets the lead run on.
+*/
+.story-lead {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+}
+article:has(.story-more[open]) .story-lead {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: none;
+  overflow: visible;
+}
 
 /* Instrument-bezel corner ticks: four little L marks inside a panel's corners. */
 .bezel {
   position: relative;
-  --tick: color-mix(in srgb, var(--wisp) 55%, var(--border));
+  /* Neutral by default; an .instrument's ticks are wisp, the darkroom's candle. */
+  --tick: color-mix(in srgb, var(--ash) 80%, var(--border));
 }
 .bezel::after {
   content: "";
@@ -343,21 +421,41 @@ header:has([data-testid="haunt-badge"]) .wordmark {
   );
 }
 
-/* The phosphor readout strip: wisp on the dark glass, a little bloom. */
+/*
+  The readout strip: one line on every instrument (lamp, status, at most two
+  values; ReadoutStrip in Instrument.tsx). Phosphor wisp on the dark glass; the
+  darkroom's is candle (data-tone). What doesn't fit is clipped, never wrapped.
+*/
 .readout-strip {
+  --tone: var(--wisp);
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 0.25rem 1rem;
+  gap: 0.625rem;
+  overflow: hidden;
   border-radius: 0.6rem;
-  border: 1px solid color-mix(in srgb, var(--wisp) 30%, var(--border));
+  border: 1px solid color-mix(in srgb, var(--tone) 30%, var(--border));
   background-color: var(--bg);
   padding: 0.5rem 0.75rem;
-  color: var(--wisp);
-  text-shadow: 0 0 6px color-mix(in srgb, var(--wisp) 45%, transparent);
+  color: var(--tone);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--tone) 45%, transparent);
+}
+.readout-strip[data-tone="candle"] {
+  --tone: var(--candle);
+}
+.readout-strip .lamp {
+  flex: none;
 }
 .readout-strip .readout {
+  flex: none;
+  font-size: 0.75rem;
   white-space: nowrap;
+}
+.readout-strip .readout:last-child {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .lamp {
   display: inline-block;
@@ -367,8 +465,8 @@ header:has([data-testid="haunt-badge"]) .wordmark {
   background: var(--ash);
 }
 .lamp[data-on="true"] {
-  background: var(--wisp);
-  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--wisp) 70%, transparent);
+  background: var(--tone, var(--wisp));
+  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--tone, var(--wisp)) 70%, transparent);
 }
 
 /*
@@ -491,6 +589,45 @@ input[type="range"].knob::-moz-range-thumb {
   padding: 0.25rem 0.75rem;
 }
 
+/*
+  A split-flap readout: one cell per character, wisp on black. For codes people
+  read aloud and type (room codes), so the face is Atkinson, not Michroma.
+*/
+.split-flap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.split-flap-cell {
+  display: inline-flex;
+  min-width: 2.15rem;
+  height: 2.9rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--wisp) 35%, var(--border));
+  background-color: var(--bg);
+  background-image: linear-gradient(
+    to bottom,
+    transparent calc(50% - 0.5px),
+    color-mix(in srgb, var(--bg) 70%, var(--border)) calc(50% - 0.5px),
+    color-mix(in srgb, var(--bg) 70%, var(--border)) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+  color: var(--wisp);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 0 6px color-mix(in srgb, var(--wisp) 40%, transparent);
+  box-shadow: inset 0 0 10px -4px color-mix(in srgb, var(--wisp) 60%, transparent);
+}
+.split-flap-sm .split-flap-cell {
+  min-width: 1.6rem;
+  height: 2.1rem;
+  font-size: 1.0625rem;
+}
+
 /* ---------- Dividers ---------- */
 
 /* Wrought-iron fence with spear finials. */
@@ -519,6 +656,194 @@ input[type="range"].knob::-moz-range-thumb {
 }
 .orbit-divider::after {
   background: linear-gradient(to left, transparent, currentColor);
+}
+
+/* Eight moon phases in a row (MoonPhases in Motifs.tsx); tonight's is lit in candle. */
+.moon-phases {
+  display: block;
+  width: 100%;
+  max-width: 22rem;
+  height: auto;
+  margin: 0 auto;
+  color: color-mix(in srgb, var(--text-muted) 70%, var(--border));
+}
+.moon-tonight {
+  color: var(--candle);
+}
+
+/* ---------- Numbered steps: an Atkinson numeral in a candle ring, then the carved title ---------- */
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.step-no {
+  display: inline-flex;
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, var(--candle) 70%, var(--border));
+  background-color: var(--bg);
+  color: var(--candle);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  box-shadow: inset 0 0 8px -3px color-mix(in srgb, var(--candle) 70%, transparent);
+}
+
+/* ---------- Tool tiles: each tool's one sign in a medallion (ToolTile in components/ui/tools.tsx) ---------- */
+
+.tool-medallion {
+  display: inline-flex;
+  flex: none;
+  width: 3.25rem;
+  height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--mauve) 40%, var(--border));
+  background-color: var(--bg);
+  color: var(--mauve);
+  box-shadow: inset 0 0 14px -6px color-mix(in srgb, var(--mauve) 55%, transparent);
+}
+.tool-medallion svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+.tool-medallion-sm {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+.tool-medallion-sm svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+/* The chip: four to a row on a phone. A tappable edge, so ash. */
+.tool-chip {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  border-radius: 0.9rem;
+  border: 1.5px solid var(--edge);
+  background-color: var(--surface-2);
+  background-image: var(--grain);
+  background-size: 128px 128px;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* ---------- Specimen cards: something made or found, pinned up (Specimen in Motifs.tsx) ---------- */
+
+.specimen-tray {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 640px) {
+  .specimen-tray {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+/* Three small cards in a row, at any width. */
+.specimen-tray-compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.specimen {
+  position: relative;
+  margin: 0;
+  border-radius: 0.9rem;
+  border: 1px solid var(--border);
+  background-color: var(--surface-2);
+  background-image: var(--grain);
+  background-size: 128px 128px;
+  padding: 1.1rem 0.75rem 0.6rem;
+}
+/* Two pins hold each card to the board. */
+.specimen::before,
+.specimen::after {
+  content: "";
+  position: absolute;
+  top: 0.4rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background-color: var(--ash);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--bg) 80%, transparent);
+}
+.specimen::before {
+  left: 0.6rem;
+}
+.specimen::after {
+  right: 0.6rem;
+}
+
+/* 4:5, the shape of most stones, so a portrait render fills it instead of sitting between black bars. */
+.specimen-window {
+  display: flex;
+  aspect-ratio: 4 / 5;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 0.4rem;
+  background-color: var(--bg);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+/* Paper backing, for ink on nothing (the ink stamp) or anything that needs a light ground. */
+.specimen-paper {
+  background-color: var(--text);
+  background-image: var(--grain);
+  background-size: 128px 128px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ash) 60%, var(--text));
+}
+.specimen-empty {
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+.specimen-paper .specimen-empty {
+  color: var(--mauve-ink);
+}
+.specimen-art {
+  width: 70%;
+  height: 70%;
+  color: color-mix(in srgb, var(--text-muted) 70%, var(--border));
+}
+.specimen-paper .specimen-art {
+  color: color-mix(in srgb, var(--mauve-ink) 55%, var(--text));
+}
+
+.specimen-tag {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.specimen-tray-compact .specimen {
+  padding-inline: 0.5rem;
+}
+/* In a row of three the tag stacks: the name, then its Save pill. */
+.specimen-tray-compact .specimen-tag {
+  min-height: 0;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 /* ---------- Motion: slow, CSS only, and off for reduced motion ---------- */
@@ -599,4 +924,419 @@ nav[aria-label="Main"] ul {
 /* The first-run rules card hides once read (the layout's early script sets data-etq before paint). */
 [data-etq="seen"] .etq-notice {
   display: none;
+}
+
+/*
+  ======================== Tool pieces ========================
+  Parts only one tool wears, prefixed with the tool's name. They build on the
+  primitives above and use tokens only. Motion is transform/opacity, plays a
+  few times and rests (except inside a running instrument), and is off under
+  reduced motion (block at the end).
+*/
+
+/* ---------- Tombstone Bingo: the plot and its stones ---------- */
+
+.bingo-board {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.3rem;
+  padding: 0.375rem;
+  border-radius: 1.1rem;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  background-image: var(--grain);
+  background-size: 128px 128px;
+  box-shadow: inset 0 2px 10px -4px color-mix(in srgb, var(--bg) 90%, transparent);
+}
+
+/* Each square is a small arch-topped stone with its symbol carved in. */
+.bingo-tile {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 48px;
+  aspect-ratio: 3 / 4;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.2rem;
+  padding: 0.65rem 0.0625rem 0.35rem;
+  border: 1.5px solid var(--ash);
+  border-radius: 50% 50% 0.45rem 0.45rem / 1.4rem 1.4rem 0.45rem 0.45rem;
+  background-color: var(--surface-2);
+  background-image: var(--grain);
+  background-size: 128px 128px;
+  color: var(--text);
+  /* Carved: a shadow under the top edge and a faint lit lip at the foot. */
+  box-shadow:
+    inset 0 3px 4px -1px color-mix(in srgb, var(--bg) 85%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--text) 12%, transparent);
+  /* 13 px labels and 30 px symbols: anything smaller blurs outdoors and on video (REVIEW-3). */
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  cursor: pointer;
+}
+
+.bingo-glyph {
+  flex: none;
+  width: 1.875rem;
+  height: 1.875rem;
+  color: var(--text-muted);
+}
+
+/* Long words ("hourglass", "Butterfly") break at a syllable, never mid-letter. */
+.bingo-label {
+  display: block;
+  max-width: 100%;
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+/* The last square tapped: a bone outline (the keyboard focus ring is the wisp one). */
+.bingo-selected {
+  outline: 2px solid var(--text);
+  outline-offset: 1px;
+}
+.bingo-selected:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Found: the stone comes alive in lichen, and a sprout comes up (lichen = found, kept, alive). */
+.bingo-tile[aria-pressed="true"] {
+  border-color: var(--lichen);
+  background-color: var(--lit-lichen);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--lichen) 45%, transparent),
+    inset 0 -10px 14px -10px color-mix(in srgb, var(--lichen) 55%, transparent),
+    0 0 10px -3px color-mix(in srgb, var(--lichen) 75%, transparent);
+}
+.bingo-tile[aria-pressed="true"] .bingo-glyph {
+  color: var(--lichen);
+}
+
+.bingo-bloom {
+  position: absolute;
+  top: 0.15rem;
+  right: 0.1rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--lichen);
+  transform-origin: 50% 100%;
+  animation: btt-bloom 700ms cubic-bezier(0.2, 0.9, 0.3, 1.3) 1 both;
+}
+
+/* The free square: a lit candle on R.I.P. */
+.bingo-free,
+.bingo-tile.bingo-free[aria-pressed="true"] {
+  border-color: var(--candle);
+  background-color: var(--lit-candle);
+}
+.bingo-tile.bingo-free[aria-pressed="true"] {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--candle) 45%, transparent),
+    0 0 10px -3px color-mix(in srgb, var(--candle) 75%, transparent);
+}
+.bingo-free .bingo-glyph,
+.bingo-tile.bingo-free[aria-pressed="true"] .bingo-glyph {
+  color: var(--candle);
+}
+.bingo-free .bingo-label {
+  font-family: var(--font-carved), Georgia, serif;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* A completed line: candlelight along it (the free square included). */
+.bingo-tile.bingo-win,
+.bingo-tile.bingo-win[aria-pressed="true"] {
+  border-color: var(--candle);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--candle) 60%, transparent),
+    0 0 0 1.5px var(--candle),
+    0 0 14px -2px color-mix(in srgb, var(--candle) 80%, transparent);
+}
+.bingo-tile.bingo-win .bingo-glyph {
+  color: var(--candle);
+}
+
+/* The label row over the board: quiet, not a live reading (no wisp outside an instrument). */
+.bingo-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0 0.25rem;
+  color: var(--text-muted);
+}
+
+/* A bingo: a small arched plaque that glows, a moth that lifts off and a lily that opens. */
+.bingo-plaque {
+  position: relative;
+  overflow: hidden;
+  border: 1.5px solid var(--candle);
+  border-radius: 50% 50% 1rem 1rem / 2.75rem 2.75rem 1rem 1rem;
+  background-color: var(--surface);
+  background-image: var(--grain);
+  background-size: 128px 128px;
+  padding: 2.25rem 1rem 1rem;
+  text-align: center;
+}
+.bingo-plaque::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 0%, color-mix(in srgb, var(--candle) 30%, transparent), transparent 70%);
+  opacity: 0.55;
+  pointer-events: none;
+  animation: btt-glow 1.4s ease-in-out 3 both;
+}
+.bingo-art {
+  position: absolute;
+  top: 0.55rem;
+  left: 50%;
+  display: flex;
+  gap: 0.5rem;
+  transform: translateX(-50%);
+}
+.bingo-art svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.bingo-moth {
+  color: var(--text-muted);
+  animation: btt-lift 2.4s ease-out 2 both;
+}
+.bingo-lily {
+  color: var(--lichen);
+  transform-origin: 50% 100%;
+  animation: btt-bloom 900ms cubic-bezier(0.2, 0.9, 0.3, 1.3) 1 both;
+}
+
+/* ---------- EVP recorder: the oscilloscope ---------- */
+
+.evp-scope {
+  position: relative;
+  height: 7.5rem;
+  overflow: hidden;
+  border-radius: 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--wisp) 35%, var(--border));
+  background-color: var(--bg);
+  /* Graticule: 8 × 4 divisions with a brighter centre line. */
+  background-image:
+    linear-gradient(
+      to bottom,
+      transparent calc(50% - 0.5px),
+      color-mix(in srgb, var(--wisp) 30%, transparent) calc(50% - 0.5px),
+      color-mix(in srgb, var(--wisp) 30%, transparent) calc(50% + 0.5px),
+      transparent calc(50% + 0.5px)
+    ),
+    linear-gradient(to bottom, color-mix(in srgb, var(--wisp) 12%, transparent) 1px, transparent 1px),
+    linear-gradient(to right, color-mix(in srgb, var(--wisp) 12%, transparent) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100% 25%,
+    12.5% 100%;
+  box-shadow: inset 0 0 24px -6px color-mix(in srgb, var(--wisp) 35%, transparent);
+}
+.evp-trace {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  color: var(--wisp);
+}
+/* The trace runs while recording (15 s at most) and while playing back, and stops with it. */
+.evp-scope[data-phase="recording"] .evp-trace {
+  animation: btt-sweep 1.6s linear infinite;
+}
+.evp-scope[data-phase="playing"] .evp-trace {
+  animation: btt-sweep 2.3s linear infinite reverse;
+}
+
+/*
+  ---------- Stamp Kit: a darkroom ----------
+  The photo sits on an easel under a candle-coloured safelight; the outputs are
+  pinned up as .specimen cards. Nothing here animates (Gate 4: the page stays
+  cheap to repaint while the stamps develop).
+*/
+
+.darkroom-easel {
+  position: relative;
+  border-radius: 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--candle) 30%, var(--border));
+  background-color: var(--surface);
+  background-image: var(--grain);
+  background-size: 128px 128px;
+  padding: 1rem;
+  /* The safelight: warm, low, from above. */
+  box-shadow:
+    inset 0 28px 40px -30px color-mix(in srgb, var(--candle) 45%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--bg) 60%, transparent);
+  --tick: color-mix(in srgb, var(--candle) 65%, var(--border));
+}
+
+/* The mat around the photo (or the empty stage before one). */
+.darkroom-mat {
+  border-radius: 0.6rem;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  padding: 0.5rem;
+  box-shadow: inset 0 2px 8px -2px color-mix(in srgb, var(--bg) 90%, transparent);
+}
+
+/* Before a photo: a stone drawn in dashes, with the four corner handles you'll drag. */
+.darkroom-empty-stage {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 11rem;
+  color: color-mix(in srgb, var(--candle) 55%, var(--text-muted));
+}
+
+/*
+  ---------- Haunted Calendar: a page from an almanac ----------
+  A .card.card-rule page with MoonPhases across the top, a readout of how many
+  death-days the year holds, and each coming date as an entry. Rows have a
+  fixed height so the page doesn't move when the preview arrives.
+*/
+
+.almanac-count {
+  display: flex;
+  min-height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  color: var(--candle);
+}
+.almanac-count:empty {
+  visibility: hidden;
+}
+.almanac-count::before,
+.almanac-count::after {
+  content: "";
+  flex: 1;
+  max-width: 3rem;
+  height: 1px;
+  background: color-mix(in srgb, var(--candle) 40%, transparent);
+}
+
+.almanac-entries {
+  display: grid;
+  gap: 0.5rem;
+}
+.almanac-entry {
+  display: grid;
+  min-height: 7.3rem;
+  grid-template-columns: 3.75rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background-color: var(--surface-2);
+  padding: 0.75rem 0.75rem 0.25rem;
+}
+
+/* The date block: month and weekday as small labels, the day large in Atkinson. */
+.almanac-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid color-mix(in srgb, var(--candle) 30%, var(--border));
+  padding-right: 0.5rem;
+  color: var(--text-muted);
+}
+.almanac-day {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--candle);
+  font-variant-numeric: tabular-nums;
+}
+/* Today: the entry is candle-lit. */
+.almanac-entry.almanac-today {
+  border-color: color-mix(in srgb, var(--candle) 70%, var(--border));
+  background-color: var(--lit-candle);
+}
+
+.almanac-kind {
+  display: inline-block;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-right: 0.35rem;
+  vertical-align: -0.15em;
+}
+.almanac-death {
+  color: var(--text-muted);
+}
+.almanac-birth {
+  color: var(--lichen);
+}
+
+/* Placeholder rows while the preview loads: the same size as the real ones. */
+.almanac-bar {
+  display: block;
+  height: 0.9rem;
+  border-radius: 999px;
+  background-color: var(--surface);
+}
+.almanac-summary {
+  min-height: 3.5rem;
+}
+
+/* ---------- Tool motion ---------- */
+
+@keyframes btt-bloom {
+  from {
+    opacity: 0;
+    transform: scale(0.2) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes btt-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes btt-lift {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes btt-sweep {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bingo-bloom,
+  .bingo-plaque::before,
+  .bingo-moth,
+  .bingo-lily,
+  .evp-scope .evp-trace {
+    animation: none;
+  }
 }

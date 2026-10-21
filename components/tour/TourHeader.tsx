@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 import type { Cemetery } from "@/lib/types";
 import { findAGraveCemeteryUrl, httpsUrl } from "@/lib/tour/links";
+import { SymbolPair } from "@/components/ui/Motifs";
+import { Lily } from "@/components/ui/symbols";
+import { ToolIcon } from "@/components/ui/tools";
 
 // The hub's header stays short so the stories start on the first screen (F1).
 // The tools moved to the haunt's toolkit (components/haunt/HauntToolkit.tsx)
@@ -24,7 +27,11 @@ export function TourHeader({ cemetery, people, children }: { cemetery: Cemetery;
   const meta = placeLine(cemetery.locatedIn, cemetery.description);
   return (
     <header className="space-y-1">
-      <h1 className="font-display text-4xl leading-tight">{cemetery.name}</h1>
+      {/* The same title row as every page (PageHeader): the haunt's sign and a lily beside the name. */}
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="font-display text-4xl leading-tight">{cemetery.name}</h1>
+        <SymbolPair death={<ToolIcon tool="haunt" className="h-5 w-5" />} life={<Lily className="h-5 w-5" />} className="shrink-0" />
+      </div>
       {meta && <p>{meta}</p>}
       <p className="text-sm text-muted">
         {people >= BURIALS_CAP

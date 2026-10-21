@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { geoErrorMessage } from "@/components/offline/hooks";
 import { removePin, savePin, type Pin } from "@/components/offline/store";
+import { Sprout } from "@/components/ui/symbols";
 
 /**
  * "I found it": takes the phone's position on tap and saves it as this grave's
@@ -67,9 +68,15 @@ export function FoundItButton({
 
   if (pin) {
     return (
-      <div className="flex flex-wrap items-center gap-2" data-testid="pinned">
-        <span className="text-sm font-bold text-moss">Pinned here (±{pin.accuracy} m)</span>
-        <button type="button" onClick={unpin} className="tap rounded-lg border border-border px-3 text-sm">
+      // Finding a grave is the app's clearest life moment: lichen, with a sprout (REVIEW-3).
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2" data-testid="pinned">
+        <span className="inline-flex items-center gap-1.5 text-sm text-lichen">
+          <Sprout className="h-5 w-5 shrink-0" />
+          <span>
+            <span className="font-bold">Found.</span> Pinned here (±{pin.accuracy} m)
+          </span>
+        </span>
+        <button type="button" onClick={unpin} className="btn btn-ghost px-4 text-sm">
           Remove pin<span className="sr-only"> for {name}</span>
         </button>
       </div>
@@ -82,7 +89,7 @@ export function FoundItButton({
         type="button"
         onClick={locate}
         disabled={busy}
-        className="tap rounded-lg bg-accent px-4 font-bold text-accent-ink disabled:opacity-70"
+        className="btn btn-ghost"
       >
         {busy ? "Getting your location…" : "I found it"}
         <span className="sr-only">: pin {name}&rsquo;s grave here</span>

@@ -9,6 +9,7 @@ const globals = read("../app/globals.css");
 const gravitator = read("../app/gravitator/gravitator.css");
 const manifest = read("../app/manifest.ts");
 const layout = read("../app/layout.tsx");
+const sw = read("../public/sw.js");
 
 /** The first :root { … } block in globals.css, as property → value. */
 function rootVars(): Record<string, string> {
@@ -73,6 +74,13 @@ describe("palette", () => {
       const cssVar = CSS_VAR[token as keyof typeof CSS_VAR];
       expect(gravitator, `--g-${g}`).toMatch(new RegExp(`--g-${g}:\\s*var\\(${cssVar}\\);`));
     }
+  });
+
+  it("the service worker's offline page (no CSS variables there) uses palette values only", () => {
+    const used = [...sw.matchAll(/#[0-9a-fA-F]{6}\b/g)].map((m) => m[0].toUpperCase());
+    expect(used.length).toBeGreaterThan(0);
+    const values = new Set(Object.values(PALETTE));
+    for (const hex of used) expect(values.has(hex), hex).toBe(true);
   });
 
   it("the manifest and the viewport theme color are the page background", () => {

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { BingoGame } from "@/components/games/BingoGame";
 import { HauntGate } from "@/components/haunt/HauntGate";
-import { PageHeader } from "@/components/ui/games/PageHeader";
-import { Candle, Poppy } from "@/components/ui/symbols";
+import { PageHeader } from "@/components/ui/Motifs";
+import { Lily } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {
   title: "Tombstone Bingo",
@@ -15,8 +15,8 @@ export default function BingoPage() {
     <div className="space-y-5">
       <PageHeader
         title="Tombstone Bingo"
-        death={<Candle className="h-5 w-5" />}
-        life={<Poppy className="h-5 w-5" />}
+        tool="bingo"
+        life={<Lily className="h-5 w-5" />}
         intro={
           <>
             Find these symbols carved on the stones. Five in a row, a column or a diagonal is a bingo. Look, don&rsquo;t

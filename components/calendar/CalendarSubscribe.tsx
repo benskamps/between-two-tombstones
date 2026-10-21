@@ -10,10 +10,9 @@ import type { CalendarSample } from "@/lib/calendar/samples";
 import { localToday, readFeed, upcoming, ymdKey, type PreviewFeed } from "@/lib/calendar/upcoming";
 import { useHaunt } from "@/lib/haunt/useHaunt";
 import type { YMD } from "@/lib/stonemath";
-import { Sprout } from "@/components/ui/games/Sprout";
-import { Moth } from "@/components/ui/symbols";
-import "./almanac.css";
-import { litPath, moonPhaseIndex } from "./moon";
+import { MoonPhases } from "@/components/ui/Motifs";
+import { Moth, Sprout } from "@/components/ui/symbols";
+import { moonPhaseIndex } from "@/lib/moon";
 
 const PREVIEW_COUNT = 5;
 const SUBSCRIBE_LABEL = {
@@ -88,27 +87,6 @@ function dateParts(date: YMD, today: YMD) {
     year: date.y !== today.y ? String(date.y) : null,
     isToday,
   };
-}
-
-/** Eight moon phases across the top of the almanac page; tonight's is lit in candle. Decorative. */
-function MoonPhases({ tonight }: { tonight: number | null }) {
-  return (
-    <svg viewBox="0 0 200 24" className="almanac-phases" aria-hidden="true" focusable="false">
-      {Array.from({ length: 8 }, (_, i) => {
-        const cx = 12.5 + i * 25;
-        const lit = litPath(i, cx, 12, 7.5);
-        return (
-          <g key={i} className={i === tonight ? "almanac-tonight" : undefined}>
-            <circle cx={cx} cy={12} r={7.5} fill="none" stroke="currentColor" strokeWidth={1.2} />
-            {lit && <path d={lit} fill="currentColor" opacity={i === tonight ? 0.9 : 0.45} />}
-            {i === tonight && (
-              <circle cx={cx} cy={12} r={10.5} fill="none" stroke="currentColor" strokeWidth={0.8} opacity={0.6} />
-            )}
-          </g>
-        );
-      })}
-    </svg>
-  );
 }
 
 type Platform = "apple" | "google" | "outlook";
@@ -268,7 +246,8 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
   return (
     <div className="space-y-6">
       <fieldset className="space-y-2">
-        <legend className="mb-2 font-bold">Cemetery</legend>
+        {/* The same picker, the same wording and tier as the spirit box's "Whose names" (REVIEW-3 #10). */}
+        <legend className="mb-2 font-display text-2xl leading-tight">Whose death-days</legend>
         {options.map((s) => (
           <label
             key={s.qid}
@@ -292,28 +271,33 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
         ))}
       </fieldset>
 
-      <label className="tap flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-surface p-3">
+      {/* Birthdays are the life half of the calendar: a lichen edge and a sprout, like the birthday rows. */}
+      <label
+        className={`tap flex cursor-pointer items-center gap-3 rounded-xl border-[1.5px] p-3 ${
+          birthdays ? "border-lichen bg-lit-lichen" : "border-lichen bg-surface"
+        }`}
+      >
         <input
           type="checkbox"
           role="switch"
           checked={birthdays}
           onChange={(e) => setBirthdays(e.currentTarget.checked)}
-          className="h-5 w-5 shrink-0 accent-[var(--accent)]"
+          className="h-5 w-5 shrink-0 accent-[var(--lichen)]"
         />
+        <Sprout className="h-5 w-5 shrink-0 text-lichen" />
         <span className="font-bold">Add birthdays too</span>
       </label>
 
-      <section aria-labelledby="preview-heading" className="almanac-page space-y-3">
+      <section aria-labelledby="preview-heading" className="card card-rule space-y-3 px-4 pb-4 pt-5">
         <MoonPhases tonight={today ? moonPhaseIndex(today) : null} />
         <h2 id="preview-heading" className="text-center font-display text-2xl">
           What you&rsquo;ll get
         </h2>
+        {/* A count once the feed is in (the line keeps its height before that); waiting is said in words below. */}
         <p className="readout almanac-count" aria-hidden="true">
           {feed
             ? `${plural(deaths, "death-day", "death-days")}${birthdays ? ` · ${plural(births, "birthday", "birthdays")}` : ""} a year`
-            : state?.status === "error"
-              ? "No signal"
-              : "Loading"}
+            : null}
         </p>
         {!state && (
           <>
@@ -386,7 +370,7 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
                           {href && (
                             <Link
                               href={href}
-                              className="tap inline-flex items-center text-sm underline underline-offset-4"
+                              className="tap inline-flex items-center text-sm text-mauve underline underline-offset-4"
                             >
                               Read their story
                             </Link>
@@ -444,7 +428,7 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
                 value={links.feed}
                 onFocus={(e) => e.currentTarget.select()}
                 data-testid="feed-url"
-                className="field mt-1 w-full font-mono text-sm"
+                className="field mt-1 w-full text-sm"
               />
             </label>
             <button type="button" onClick={copy} className="btn btn-ghost">

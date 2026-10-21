@@ -4,7 +4,7 @@ import { HauntGate } from "@/components/haunt/HauntGate";
 import { SpiritBoxFallback } from "@/components/spirit/SpiritBox";
 import { SpiritModes } from "@/components/spirit/SpiritModes";
 import { PageHeader } from "@/components/ui/Motifs";
-import { Candle, Planchette } from "@/components/ui/symbols";
+import { Candle } from "@/components/ui/symbols";
 import { SAMPLE_CEMETERIES } from "@/lib/spirit/samples";
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export default function SpiritPage() {
     <div className="space-y-6">
       <PageHeader
         title="Spirit Box"
-        death={<Planchette className="h-5 w-5" />}
+        tool="spirit"
         life={<Candle className="h-5 w-5" />}
         intro="Radio static, and low voices saying the names of people buried in the cemetery. Only people who died at least 75 years ago are used."
       />

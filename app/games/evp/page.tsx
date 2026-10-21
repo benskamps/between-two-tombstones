@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { EvpRecorder } from "@/components/games/EvpRecorder";
 import { HauntGate } from "@/components/haunt/HauntGate";
-import { PageHeader } from "@/components/ui/games/PageHeader";
-import { Comet, Fern } from "@/components/ui/symbols";
+import { PageHeader } from "@/components/ui/Motifs";
+import { Sprout } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {
   title: "EVP Recorder",
@@ -15,8 +15,8 @@ export default function EvpPage() {
     <div className="space-y-5">
       <PageHeader
         title="EVP Recorder"
-        death={<Comet className="h-5 w-5" />}
-        life={<Fern className="h-5 w-5" />}
+        tool="evp"
+        life={<Sprout className="h-5 w-5" />}
         intro={
           <>
             Ghost hunters call voices on tape &ldquo;electronic voice phenomena.&rdquo; Record 15 seconds of the quiet
