@@ -19,7 +19,7 @@ export function EtiquetteNotice() {
   }
 
   return (
-    <aside aria-labelledby="etq-title" className="etq-notice card space-y-1 px-4 py-3" data-testid="etiquette">
+    <aside aria-labelledby="etq-title" className="etq-notice card card-rule space-y-1 px-4 py-3" data-testid="etiquette">
       <p id="etq-title" className="font-bold">
         Before you go in: stay on the paths, give mourners space, no real rubbings.
       </p>
