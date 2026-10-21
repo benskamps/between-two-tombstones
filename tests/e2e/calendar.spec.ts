@@ -445,6 +445,8 @@ test.describe("Haunted Calendar page", () => {
     await expect(first).toContainText("Leap Day Test Person died on this day in 1904");
 
     await page.clock.setFixedTime(new Date("2028-02-20T12:00:00"));
+    // A year on, yesterday's haunt is stale; keep one fresh at the new date (registered after the clock).
+    await seedHaunt(page);
     await page.reload();
     await expect(page.getByTestId("preview-event").first()).toHaveAttribute("data-date", "2028-02-29");
   });

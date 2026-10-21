@@ -1,15 +1,19 @@
 import { describe, expect, it } from "vitest";
 import {
+  FRESH_MS,
   cemeteryFromParams,
   cemeteryQuery,
   cleanText,
   gateState,
   hauntInputFromUrl,
   hubHref,
+  isFresh,
   isShareLink,
   makeHaunt,
+  parseNext,
   parseHaunt,
   serializeHaunt,
+  shouldAutoSetHaunt,
   type Haunt,
 } from "./haunt";
 
@@ -125,5 +129,48 @@ describe("links", () => {
     );
     expect(cemeteryQuery({ qid: "Q872253", name: "Lake View Cemetery" }, false)).toBe("cemetery=Q872253");
     expect(hubHref({ qid: "Q2008469" })).toBe("/cemetery/Q2008469");
+  });
+});
+
+describe("freshness (F10)", () => {
+  const at = Date.parse("2026-10-21T02:00:00Z");
+  const h = { at: new Date(at).toISOString() };
+  it("is fresh for 12 hours, then stale", () => {
+    expect(isFresh(h, at)).toBe(true);
+    expect(isFresh(h, at + FRESH_MS - 1)).toBe(true);
+    expect(isFresh(h, at + FRESH_MS)).toBe(false);
+    expect(isFresh(h, at + 7 * 24 * 3_600_000)).toBe(false);
+  });
+  it("tolerates a minute of clock skew, not a haunt from the future", () => {
+    expect(isFresh(h, at - 30_000)).toBe(true);
+    expect(isFresh(h, at - 3_600_000)).toBe(false);
+    expect(isFresh({ at: "garbage" }, at)).toBe(false);
+  });
+});
+
+describe("shouldAutoSetHaunt (F11)", () => {
+  const sleepy: Haunt = { qid: "Q360779", name: "Sleepy Hollow Cemetery", at: NOW.toISOString() };
+  it("sets it when there's no fresh haunt", () => {
+    expect(shouldAutoSetHaunt("Q2008469", null, null)).toBe(true);
+  });
+  it("refreshes the same haunt", () => {
+    expect(shouldAutoSetHaunt("Q360779", sleepy, null)).toBe(true);
+  });
+  it("doesn't replace a fresh haunt elsewhere from a plain visit", () => {
+    expect(shouldAutoSetHaunt("Q2008469", sleepy, null)).toBe(false);
+    expect(shouldAutoSetHaunt("Q2008469", sleepy, "share")).toBe(false);
+  });
+  it("does when the visitor came from “I'm here” or the near list", () => {
+    expect(shouldAutoSetHaunt("Q2008469", sleepy, "here")).toBe(true);
+    expect(shouldAutoSetHaunt("Q2008469", sleepy, "near")).toBe(true);
+  });
+});
+
+describe("parseNext (F12)", () => {
+  it("accepts only our tool pages", () => {
+    for (const ok of ["/stamp", "/spirit", "/games", "/games/bingo", "/games/party", "/games/evp", "/calendar"]) expect(parseNext(ok)).toBe(ok);
+    for (const bad of [null, "", "/", "https://evil.example/stamp", "//evil.example", "/stamp?x=1", "/cemetery/Q1", "constructor", "__proto__"]) {
+      expect(parseNext(bad), String(bad)).toBeNull();
+    }
   });
 });

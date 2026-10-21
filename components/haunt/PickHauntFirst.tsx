@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 import { HourglassSprout } from "@/components/ui/symbols";
 import { NEXT_TOOLS } from "@/lib/haunt/haunt";
@@ -20,6 +21,14 @@ const WHY: Record<string, string> = {
   "/calendar": "The Haunted Calendar fills your calendar with the death-days of people buried at your haunt. Pick the cemetery below.",
 };
 
+/** Joining someone else's séance or party never needs a haunt (F13): the code box opens straight in. */
+const JOIN: Record<string, { href: string; label: string }> = {
+  "/spirit": { href: "/spirit?join=1#seance", label: "Joining a friend’s séance? Type the room code" },
+  "/games": { href: "/games/party?join=1", label: "Joining a friend’s party? Type the room code" },
+  "/games/bingo": { href: "/games/party?join=1", label: "Joining a friend’s party? Type the room code" },
+  "/games/party": { href: "/games/party?join=1", label: "Joining a friend’s party? Type the room code" },
+};
+
 /**
  * What a tool page shows without a haunt: say why, then the ways in. Never a
  * dead end, never an empty page. Remembers the tool, so the cemetery page you
@@ -35,6 +44,11 @@ export function PickHauntFirst({ tool }: { tool: ToolPath }) {
           Pick a haunt first
         </h2>
         <p>{WHY[tool]}</p>
+        {JOIN[tool] && (
+          <Link href={JOIN[tool].href} className="tap inline-flex items-center font-bold text-mauve underline underline-offset-4">
+            {JOIN[tool].label}
+          </Link>
+        )}
       </div>
       <Doors idPrefix="gate" level={3} />
       <FamousCemeteries id="gate-famous" />

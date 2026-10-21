@@ -492,6 +492,25 @@ test.describe("links someone sent open straight in, with no haunt", () => {
     await expect(page).toHaveURL(/\/spirit\?seance=KXMPRT&cemetery=Q360779$/);
   });
 
+  test("joining a friend's party by code needs no haunt either (F13)", async ({ page }) => {
+    await page.goto("/games/party");
+    await page.getByTestId("pick-haunt").getByRole("link", { name: /Joining a friend’s party\? Type the room code/ }).click();
+    await expect(page).toHaveURL(/\/games\/party\?join=1$/);
+    await expect(page.getByTestId("pick-haunt")).toHaveCount(0);
+    await expect(page.getByLabel("Room code")).toBeFocused();
+    await page.getByLabel("Room code").fill("kxm-prt");
+    await page.getByRole("button", { name: "Join" }).click();
+    await expect(page).toHaveURL(/\/games\/bingo\?party=KXMPRT$/);
+    await expect(page.getByTestId("bingo-card").getByRole("button")).toHaveCount(25);
+  });
+
+  test("the spirit box gate offers the séance code box (F13)", async ({ page }) => {
+    await page.goto("/spirit");
+    await page.getByTestId("pick-haunt").getByRole("link", { name: /Joining a friend’s séance\? Type the room code/ }).click();
+    await expect(page.getByTestId("pick-haunt")).toHaveCount(0);
+    await expect(page.getByLabel("Séance room code")).toBeFocused();
+  });
+
   test("a party room link", async ({ page }) => {
     await page.goto("/games/bingo?party=KXMPRT");
     await expect(page.getByTestId("bingo-card").getByRole("button")).toHaveCount(25);

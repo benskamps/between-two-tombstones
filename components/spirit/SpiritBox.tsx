@@ -10,7 +10,8 @@ import {
   startNoise,
   type NoiseEngine,
 } from "@/lib/spirit/engine";
-import { getHaunt, setHaunt } from "@/lib/haunt/store";
+import { shouldAutoSetHaunt } from "@/lib/haunt/haunt";
+import { getFreshHaunt, getHaunt, setHaunt } from "@/lib/haunt/store";
 import { useHaunt } from "@/lib/haunt/useHaunt";
 import { QID_RE, loadCemetery, type LoadResult, type SampleCemetery } from "@/lib/spirit/load";
 import { capsFromParam, createSession, formatDuration, stopMessage, type SpiritSession, type Utterance } from "@/lib/spirit/session";
@@ -63,11 +64,14 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
   }, [choice, samples]);
 
   // A cemetery from the link becomes the haunt once its burials load (then its name is known),
-  // unless it already is (the gate may have set it with its place from ?name=&place=).
+  // unless it already is (the gate may have set it with its place from ?name=&place=), and
+  // never over a fresh haunt elsewhere (F11: a link is used, not adopted).
   const tourResult = tourQid ? results[tourQid] : undefined;
   const tourName = tourResult?.ok ? tourResult.cemetery.name : null;
   useEffect(() => {
-    if (tourQid && tourName && getHaunt()?.qid !== tourQid) setHaunt({ qid: tourQid, name: tourName });
+    if (tourQid && tourName && getHaunt()?.qid !== tourQid && shouldAutoSetHaunt(tourQid, getFreshHaunt(), null)) {
+      setHaunt({ qid: tourQid, name: tourName });
+    }
   }, [tourQid, tourName]);
 
   // "/spirit?cemetery=Q…#seance" (e.g. from a tour) lands on the séance section, which renders after hydration.

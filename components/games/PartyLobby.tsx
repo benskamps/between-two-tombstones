@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { PartySeance } from "@/components/spirit/PartySeance";
 import { cryptoRandom, makeRoomCode, normalizeRoomCode, partyPath } from "@/lib/games/bingo";
 import type { SampleCemetery } from "@/lib/spirit/load";
@@ -14,6 +14,11 @@ import { PartyShare } from "./PartyShare";
  */
 export function PartyLobby({ samples }: { samples: SampleCemetery[] }) {
   const router = useRouter();
+  // ?join=1 (from "Joining a friend's party?"): straight to the room-code box.
+  const joining = useSearchParams().get("join") !== null;
+  useEffect(() => {
+    if (joining) document.getElementById("room")?.focus();
+  }, [joining]);
   const [code, setCode] = useState<string | null>(null);
   const [typed, setTyped] = useState("");
   const [error, setError] = useState<string | null>(null);
