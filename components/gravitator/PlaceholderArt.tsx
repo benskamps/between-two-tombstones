@@ -47,17 +47,18 @@ function Sky() {
         d={`${sparkle(52, 40, 4.5)}${sparkle(196, 62, 3.5)}${sparkle(372, 54, 3)}`}
       />
       {/* Low on the right, clear of the "Full profile" button in the corner. */}
-      <circle className="g-art-glow" cx="340" cy="112" r="44" />
+      <circle className="g-art-glow" cx="336" cy="124" r="40" />
       {/*
-        The ringed moon from components/ui/symbols.tsx, drawn at 4× (its 24-unit
-        grid centred on the old moon's spot): a line-art moon with its shaded
+        The ringed moon from components/ui/symbols.tsx, drawn at 3.6× (its 24-unit
+        grid centred a little lower and left of the old moon, so its ring clears
+        the "Full profile" button on a deck card): a line-art moon with its shaded
         limb, an orbit ring whose back half passes behind it, and a small satellite.
       */}
       <g
-        transform="translate(340 112) scale(4) translate(-12 -12)"
+        transform="translate(336 124) scale(3.6) translate(-12 -12)"
         className="stroke-mauve"
         fill="none"
-        strokeWidth={0.6}
+        strokeWidth={0.65}
         strokeLinecap="round"
         strokeLinejoin="round"
       >

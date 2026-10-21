@@ -345,7 +345,7 @@ export function EvpRecorder() {
         </h2>
         <ul className="list-disc space-y-1 pl-5 marker:text-muted">
           <li>Hold still and keep quiet: your breathing and footsteps record too.</li>
-          <li>Wind across the microphone turns into whispers when it&rsquo;s reversed.</li>
+          <li>Shield the microphone from strong wind; a gust drowns out everything else.</li>
           <li>Headphones help. Keep the volume low near mourners.</li>
         </ul>
       </section>
