@@ -47,6 +47,8 @@ describe.skipIf(!record)("record live fixtures", () => {
     // The review's two Gate 2 points (F2), rounded as lib/data/load.ts rounds them.
     await rawSparql("sparql-near-charleston", nearQuery(32.804, -79.947));
     await rawSparql("sparql-near-oakland", nearQuery(33.749, -84.372));
+    // Laurel Hill's south edge (review pass 2, N2), rounded as lib/data/load.ts rounds it.
+    await rawSparql("sparql-near-laurelhill", nearQuery(39.999, -75.188));
     setTransportForTests(null);
 
     if (!have("wikipedia-extracts-batch1")) {

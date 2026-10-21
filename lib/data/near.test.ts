@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import charlestonJson from "./__fixtures__/sparql-near-charleston.json";
+import laurelHillJson from "./__fixtures__/sparql-near-laurelhill.json";
 import lakeViewJson from "./__fixtures__/sparql-near-lakeview.json";
 import oaklandJson from "./__fixtures__/sparql-near-oakland.json";
 import {
@@ -22,6 +23,7 @@ import { flattenBindings, parseNearRows } from "./wikidata";
 // Recorded live 10/21 at the review's two Gate 2 points.
 const charleston = parseNearRows(flattenBindings(charlestonJson)); // 32.804, -79.947: 1.7 km from Magnolia
 const oakland = parseNearRows(flattenBindings(oaklandJson)); // 33.749, -84.372: inside Oakland Cemetery
+const laurelHill = parseNearRows(flattenBindings(laurelHillJson)); // 39.999, -75.188: Laurel Hill's south edge (review pass 2, N2)
 
 const c = (qid: string, distanceKm: number, burials: number): NearbyCemetery => ({
   qid,
@@ -49,6 +51,9 @@ describe("best stories nearby (F2)", () => {
 
   it("prefers 10+ within 2 km, else the nearest with 5+, else nothing", () => {
     expect(bestNearby([c("Q1", 0.5, 7), c("Q2", 1.9, 12), c("Q3", 0.1, 3)])?.qid).toBe("Q2");
+    // Among 10+ within 2 km, the most people listed (ties: the nearer).
+    expect(bestNearby([c("Q1", 0.3, 26), c("Q2", 0.55, 557), c("Q3", 2.1, 900)])?.qid).toBe("Q2");
+    expect(bestNearby([c("Q1", 0.3, 40), c("Q2", 0.6, 40)])?.qid).toBe("Q1");
     expect(bestNearby([c("Q1", 0.5, 7), c("Q2", 2.5, 40)])?.qid).toBe("Q1");
     expect(bestNearby([c("Q2", 2.5, 40), c("Q1", 4, 6)])?.qid).toBe("Q2");
     expect(bestNearby([c("Q1", 0.2, 4), c("Q2", 1, 0)])).toBeNull();
@@ -81,6 +86,23 @@ describe("auto-open for \"I'm here. Haunt me.\" (F2c, F17)", () => {
     expect(autoOpenTarget(oakland, 301)).toBeNull();
     expect(autoOpenTarget(oakland, 1200)).toBeNull();
     expect(autoOpenTarget(oakland, 20, true)).toBeNull();
+  });
+
+  it("between two cemeteries, shows the list instead of guessing (Laurel Hill's south edge)", () => {
+    const names = laurelHill.slice(0, 3).map((x) => `${x.name} ${x.burials}`);
+    expect(names).toEqual(["Mount Vernon Cemetery 26", "Mount Peace Cemetery 28", "Laurel Hill Cemetery 557"]);
+    expect(laurelHill[0].distanceKm).toBeLessThanOrEqual(0.3);
+    // Mount Vernon is within 300 m, but it isn't the pick and Laurel Hill is 545 m away: no auto-open…
+    expect(autoOpenTarget(laurelHill, 15)).toBeNull();
+    // …and the pinned card is Laurel Hill, with Mount Vernon first in the list below it.
+    expect(bestNearby(laurelHill)?.name).toBe("Laurel Hill Cemetery");
+    expect(splitNear(laurelHill, bestNearby(laurelHill)).listed[0].name).toBe("Mount Vernon Cemetery");
+    // Standing inside Laurel Hill instead: it is the pick, so it opens despite its neighbours.
+    expect(autoOpenTarget([c("LH", 0.1, 557), c("MV", 0.4, 26), c("MP", 0.5, 28)], 15)?.qid).toBe("LH");
+    // Not the pick, but nothing else with 5+ within 600 m: still opens.
+    expect(autoOpenTarget([c("Q1", 0.2, 8), c("Q2", 0.7, 12), c("Q3", 1.5, 300)], 15)?.qid).toBe("Q1");
+    // Not the pick and a rival within 600 m: the list.
+    expect(autoOpenTarget([c("Q1", 0.2, 8), c("Q2", 0.5, 6), c("Q3", 1.5, 300)], 15)).toBeNull();
   });
 
   it("needs 5+ people within about 300 m (nothing qualifies at the Charleston point)", () => {
@@ -144,8 +166,8 @@ describe("warm-up: tours /near loads before the tap", () => {
 
   it("adds at most one extra cemetery: the pinned one when it differs from the nearest", () => {
     const list = [c("Q1", 0.4, 6), c("Q2", 1.5, 40), c("Q3", 1.8, 90)];
-    expect(bestNearby(list)?.qid).toBe("Q2");
-    expect(warmTargets(list, bestNearby(list))).toEqual(["Q1", "Q2"]);
+    expect(bestNearby(list)?.qid).toBe("Q3");
+    expect(warmTargets(list, bestNearby(list))).toEqual(["Q1", "Q3"]);
     expect(warmTargets(list, null)).toEqual(["Q1"]);
     // Nearest 5+ beyond 1 km is not warmed for itself; the pinned card still is.
     expect(warmTargets([c("Q4", 1.2, 6), c("Q5", 1.9, 30)], bestNearby([c("Q4", 1.2, 6), c("Q5", 1.9, 30)]))).toEqual(["Q5"]);
