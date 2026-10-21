@@ -13,11 +13,11 @@ import {
   type StampSettings,
   type StampText,
 } from "@/lib/stamp/types";
+import { ReadoutStrip } from "@/components/ui/Instrument";
 import { CornerFramer } from "./CornerFramer";
 import { ReadWithClaude } from "./ReadWithClaude";
 import { EmptySpecimens, RENDER_LABELS, StampPreviews, type PreviewUrls } from "./StampPreviews";
 import { StampClient, stampKitSupported, type RenderResult } from "./stampClient";
-import "@/components/ui/games/skin-b-instrument.css";
 import "./darkroom.css";
 
 /** Photos are downsized to this long side on the phone before anything else happens. */
@@ -363,13 +363,16 @@ export function StampKit() {
               Lift the carving
             </Step>
             {/* The settings as a readout; the same facts are in the labels below. */}
-            <div className="readout-strip scanlines" aria-hidden="true" data-testid="stamp-readouts">
-              <span className="lamp" data-on={busy ? "true" : "false"} />
-              <span className="readout">Mode {settings.mode}</span>
-              <span className="readout">Grit {settings.grit}</span>
-              <span className="readout">Stroke {strokeLabel}</span>
-              {last && <span className="readout">Time {(last.ms / 1000).toFixed(1)} s</span>}
-            </div>
+            <ReadoutStrip
+              testId="stamp-readouts"
+              live={busy}
+              items={[
+                { label: "Mode", value: settings.mode },
+                { label: "Grit", value: String(settings.grit) },
+                { label: "Stroke", value: strokeLabel },
+                ...(last ? [{ label: "Time", value: `${(last.ms / 1000).toFixed(1)} s` }] : []),
+              ]}
+            />
             <fieldset className="space-y-2">
               <legend className="font-bold">What to lift</legend>
               <div className="grid gap-2 sm:grid-cols-3">

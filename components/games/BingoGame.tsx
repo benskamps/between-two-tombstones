@@ -97,7 +97,7 @@ export function BingoGame() {
             <span className="label text-muted">Room</span>
             <RoomCode code={party} small />
           </span>
-          <p className="instrument-plate min-w-[12rem] flex-1">
+          <p className="min-w-[12rem] flex-1">
             <strong>Party {party}.</strong> Everyone who opens this link has this same card.
           </p>
         </div>

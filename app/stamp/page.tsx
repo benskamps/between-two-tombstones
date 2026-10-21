@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { HauntGate } from "@/components/haunt/HauntGate";
 import { GateNeutral } from "@/components/haunt/PickHauntFirst";
 import { StampKit } from "@/components/stamp/StampKit";
-import { PageHeader } from "@/components/ui/games/PageHeader";
+import { PageHeader } from "@/components/ui/Motifs";
 import { Fern, Gate } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {

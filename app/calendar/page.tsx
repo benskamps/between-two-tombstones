@@ -4,7 +4,7 @@ import { CalendarSubscribe, CalendarSubscribeFallback } from "@/components/calen
 import { HauntGate } from "@/components/haunt/HauntGate";
 import { CALENDAR_SAMPLES } from "@/lib/calendar/samples";
 import { SITE } from "@/lib/site";
-import { PageHeader } from "@/components/ui/games/PageHeader";
+import { PageHeader } from "@/components/ui/Motifs";
 import { Poppy, RingedMoon } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {

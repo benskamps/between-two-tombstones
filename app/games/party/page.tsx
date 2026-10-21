@@ -4,7 +4,7 @@ import { PartyLobby } from "@/components/games/PartyLobby";
 import { HauntGate } from "@/components/haunt/HauntGate";
 import { GateNeutral } from "@/components/haunt/PickHauntFirst";
 import { SAMPLE_CEMETERIES } from "@/lib/spirit/samples";
-import { PageHeader } from "@/components/ui/games/PageHeader";
+import { PageHeader } from "@/components/ui/Motifs";
 import { Key, Lily } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {

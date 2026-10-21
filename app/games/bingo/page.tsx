@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { BingoGame } from "@/components/games/BingoGame";
 import { HauntGate } from "@/components/haunt/HauntGate";
-import { PageHeader } from "@/components/ui/games/PageHeader";
+import { PageHeader } from "@/components/ui/Motifs";
 import { Candle, Poppy } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {

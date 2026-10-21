@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { EvpRecorder } from "@/components/games/EvpRecorder";
 import { HauntGate } from "@/components/haunt/HauntGate";
-import { PageHeader } from "@/components/ui/games/PageHeader";
+import { PageHeader } from "@/components/ui/Motifs";
 import { Comet, Fern } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {

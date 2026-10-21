@@ -17,10 +17,13 @@ import type { CSSProperties, ReactNode } from "react";
 
 export type Readout = { label?: string; value: string };
 
-/** A row of short Michroma readouts in wisp, with a status lamp. Decorative: the same facts are in the text. */
-export function ReadoutStrip({ items, live }: { items: Readout[]; live: boolean }) {
+/**
+ * A row of short Michroma readouts in wisp, with a status lamp. Decorative: the same facts are in the text.
+ * `testId` defaults to "readouts"; give each strip on a page its own.
+ */
+export function ReadoutStrip({ items, live, testId = "readouts" }: { items: Readout[]; live: boolean; testId?: string }) {
   return (
-    <div className="readout-strip scanlines" aria-hidden="true" data-testid="readouts">
+    <div className="readout-strip scanlines" aria-hidden="true" data-testid={testId}>
       <span className="lamp" data-on={live ? "true" : "false"} />
       {items.map((r, i) => (
         <span key={i} className="readout">
