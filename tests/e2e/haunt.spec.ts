@@ -258,6 +258,11 @@ test.describe("the hub", () => {
     await openOakland(page);
     const cards = page.getByTestId("story-card");
     await expect(cards).toHaveCount(12, { timeout: 25_000 });
+    // Measure a settled page: every web font swapped in and two frames of layout after that.
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    });
     const third = (await cards.nth(2).boundingBox())!;
     const fourth = (await cards.nth(3).boundingBox())!;
     const toolkit = (await kit(page).boundingBox())!;

@@ -174,11 +174,12 @@ export function StoryCard({
         </ul>
       )}
 
-      {photo && <GravePhoto src={photo.src} name={p.name} kind={photo.kind} priority={stop === 1} />}
-
       {lead ? (
         <div className="space-y-2">
           <p data-testid="story-text">{lead}</p>
+          {/* The story first, then the photo: the words are what people came for, and the first screen
+              paints text instead of waiting on Commons' redirects for a picture (LCP). */}
+          {photo && <GravePhoto src={photo.src} name={p.name} kind={photo.kind} priority={stop === 1} />}
           {rest.length > 0 && (
             <details>
               <summary className="tap flex cursor-pointer items-center font-bold text-accent">Read more</summary>
@@ -198,11 +199,14 @@ export function StoryCard({
           )}
         </div>
       ) : (
-        <p className="text-muted" data-testid="story-text">
-          {storiesIncomplete
-            ? `No Wikipedia story loaded for ${p.name} this time. Wikipedia didn't answer every request; try again in a minute.`
-            : `There's no English Wikipedia article about ${p.name} yet.`}
-        </p>
+        <>
+          <p className="text-muted" data-testid="story-text">
+            {storiesIncomplete
+              ? `No Wikipedia story loaded for ${p.name} this time. Wikipedia didn't answer every request; try again in a minute.`
+              : `There's no English Wikipedia article about ${p.name} yet.`}
+          </p>
+          {photo && <GravePhoto src={photo.src} name={p.name} kind={photo.kind} priority={stop === 1} />}
+        </>
       )}
 
       {distanceM !== null && <p className="text-sm font-bold">{distanceText(distanceM)}</p>}

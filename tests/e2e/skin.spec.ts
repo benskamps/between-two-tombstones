@@ -32,6 +32,14 @@ function stubSpeech() {
 
 const panel = (page: Page) => page.locator('section[aria-label="Controls"]');
 
+/** Before reading boxes: every web font swapped in, then two frames of layout. */
+async function settle(page: Page) {
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  });
+}
+
 test.beforeEach(async ({ context }) => {
   await context.addInitScript(seenEtiquette);
   // The saved copies, so these never depend on live Wikidata.
@@ -135,6 +143,7 @@ test.describe("the story card", () => {
     await expect(stop).toHaveText(/^Stop 01 \/ \d+\s*Stop 1 of \d+$/);
     await expect(stop).toHaveCSS("font-family", /Michroma/);
     // Short months, both dates on one line, in Atkinson; the age on its own line, never stranded after a dot.
+    await settle(page);
     const dates = card.locator("header p.font-bold > span").first();
     await expect(dates).toHaveText(/^[A-Z][a-z]{2} \d{1,2}, \d{4} – [A-Z][a-z]{2} \d{1,2}, \d{4}$/);
     await expect(dates).toHaveCSS("white-space", "nowrap");
@@ -155,6 +164,7 @@ test.describe("layout and sunlight", () => {
     const banner = page.getByRole("banner");
     const name = banner.getByTestId("haunt-badge").locator("span[title]");
     await expect(name).toHaveAttribute("title", "All Saints Episcopal Church Cemetery of the Holy Comforter");
+    await settle(page);
     expect((await banner.boundingBox())!.height).toBeLessThanOrEqual(64);
     const word = banner.locator(".wordmark");
     if (await word.isVisible()) expect((await word.boundingBox())!.height).toBeLessThan(30);
@@ -162,6 +172,8 @@ test.describe("layout and sunlight", () => {
 
   test("both doors' buttons sit above the fold on a Pixel 7", async ({ page }) => {
     await page.goto("/");
+    await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link").first()).toBeVisible();
+    await settle(page);
     const navTop = (await page.getByRole("navigation", { name: "Main" }).boundingBox())!.y;
     const gravitator = (await page.getByRole("link", { name: "Open the Gravitator" }).boundingBox())!;
     expect(gravitator.y + gravitator.height).toBeLessThanOrEqual(navTop);
@@ -185,6 +197,8 @@ test.describe("layout and sunlight", () => {
     const offer = page.getByTestId("make-haunt");
     await expect(offer).toBeVisible({ timeout: 25_000 });
     const first = page.getByTestId("story-card").first();
+    await expect(first).toBeVisible();
+    await settle(page);
     expect((await offer.boundingBox())!.y).toBeLessThan((await first.boundingBox())!.y);
   });
 

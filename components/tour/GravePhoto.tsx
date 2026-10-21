@@ -55,7 +55,7 @@ export function GravePhoto({
         className={
           kind === "grave"
             ? "h-auto max-h-80 w-full rounded-lg bg-surface-2 object-cover"
-            : "h-auto max-h-56 w-40 rounded-lg bg-surface-2 object-cover object-top"
+            : "h-auto max-h-48 w-32 rounded-lg bg-surface-2 object-cover object-top"
         }
       />
       <figcaption className="text-xs text-muted">
