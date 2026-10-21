@@ -97,7 +97,7 @@ What it means:
 | 13 | 10/20 | **Wikimedia User-Agent** = `BetweenTwoTombstones/0.1 (https://github.com/benskamps/between-two-tombstones)` (`lib/site.ts`). The repo URL is the contact. |
 | 15 | 10/20 | **Gravitator (Ben's ask):** a dating-app swipe deck where the profiles are public cemeteries near you. Public only: excludes Wikidata family (Q73218016), private (Q107684101), animal (Q163778) and abandoned (Q107334193) cemeteries and anything with P576. Own palette scoped to the route: Victorian half-mourning mauve on crepe black, candle for Go now, a will-o'-the-wisp glow for matches. P1: runs in parallel, never ahead of the P0 gate. |
 | 16 | 10/20 | **Haunted Calendar + Séance mode locked in (Ben).** Calendar: subscribe to a cemetery and your real calendar gets yearly death-days (optionally birthdays) of people who died 25+ years ago, each linking to their story card; unsubscribing removes it all. Séance: every phone on a party link speaks the same spirit words at the same second from a shared seed + synced clock (`/api/time`), no server state. Both P1, database-free, built in parallel. |
-| 14 | 10/20 | **Production deploys are Ben's click.** The Vercel project is not connected to Git auto-deploys for production. Claude deploys previews with the CLI; Ben promotes or runs `vercel --prod`. **Incident 10/20 ~03:56 and ~04:05 UTC:** `vercel deploy --yes` and then `vercel deploy --environment preview --yes` both created *production* deployments aliased to between-two-tombstones.vercel.app (live ~2 min and ~1 min). Orchestrator removed both (`vercel remove`); project back to zero deployments, prod URL 404 (checked via Vercel MCP). Working hypothesis (unverified): Vercel makes a project's first deployment production regardless of the requested environment. So the **first deploy is Ben's click**; Claude does no more deploys until a production deployment exists, then uses `--environment preview` and checks `vercel inspect` target before testing. Both builds succeeded on Vercel (Ready). **10/20 ~22:30 UTC: Ben said "ship it"; `main` (61ef04f, PR #1 merged) deployed to production with `vercel deploy --prod`.** |
+| 14 | 10/20 | **Production deploys are Ben's click.** The Vercel project is not connected to Git auto-deploys for production. Claude deploys previews with the CLI; Ben promotes or runs `vercel --prod`. **Incident 10/20 ~03:56 and ~04:05 UTC:** `vercel deploy --yes` and then `vercel deploy --environment preview --yes` both created *production* deployments aliased to between-two-tombstones.vercel.app (live ~2 min and ~1 min). Orchestrator removed both (`vercel remove`); project back to zero deployments, prod URL 404 (checked via Vercel MCP). Working hypothesis (unverified): Vercel makes a project's first deployment production regardless of the requested environment. So the **first deploy is Ben's click**; Claude does no more deploys until a production deployment exists, then uses `--environment preview` and checks `vercel inspect` target before testing. Both builds succeeded on Vercel (Ready). **10/20 ~22:30 UTC: Ben said "ship it"; `main` (61ef04f, PR #1 merged) deployed to production with `vercel deploy --prod`.** That CLI deploy also linked the Vercel project to the GitHub repo (link created 22:22 UTC, production branch `main`): PRs now get automatic previews, and **merging to `main` deploys to production**. Claude never merges without Ben's explicit OK. |
 
 ---
 
@@ -204,6 +204,12 @@ Owns (taking over from finished Lane 4): `lib/spirit/**`, `app/spirit/**`, `comp
 | L6.4 | Submission: README section on what was built during the event, prior-work line (done), data sources and licenses; writeup ≤ 500 chars; model declaration (Ben's wording); screenshot; optional receipt = this Claude Code session link | ⬜ |
 
 ---
+
+## Open for Ben (10/21 00:05 UTC)
+
+1. Keep Vercel's Git auto-deploy on `main` (merge = ship), or turn it off and keep `vercel --prod` as a separate click. Claude recommends keeping it.
+2. Stranger pass (gate 2): who and when. Tomorrow is ideal.
+3. Gate 6 share links (Lane 5 L5.2): start now in parallel, or after the stranger pass. Claude recommends now, kept off production until Ben has seen them.
 
 ## Ben's clicks
 
