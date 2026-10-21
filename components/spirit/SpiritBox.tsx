@@ -228,7 +228,8 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
             </label>
           ))}
         </fieldset>
-        <div role="status" className="text-sm">
+        {/* Room for the names line up front, so the panel below doesn't move when the names arrive. */}
+        <div role="status" className="min-h-[5.25rem] text-sm">
           {!result && <p className="text-muted">Loading the names&hellip;</p>}
           {result && !result.ok && <p className="text-danger">{result.message} Pick a sample cemetery instead.</p>}
           {result?.ok && bank && (
@@ -359,18 +360,27 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
   );
 }
 
-/** Shown while the page reads the address bar: the same instrument, standing by, same copy. */
+/** Shown while the page reads the address bar: the picker's card and the same instrument, standing by. */
 export function SpiritBoxFallback() {
   return (
-    <div className="instrument bezel space-y-4 p-4">
-      <ReadoutStrip live={false} items={[{ value: "Standby" }]} />
-      <SweepDial running={false} stepMs={SWEEP_DEFAULT_MS} />
-      <SpokenWord testId="spirit-latest-fallback">{""}</SpokenWord>
-      <button type="button" disabled className="btn btn-primary btn-lg w-full text-2xl">
-        Loading&hellip;
-      </button>
-      <p className="font-bold">{DISCLAIMER}</p>
-      <p className="font-bold text-moss">{MOURNERS}</p>
+    <div className="space-y-6">
+      {/* Roughly the picker's height (legend, two cemeteries, the names line), so the panel doesn't move down. */}
+      <div className="card space-y-3 p-4" aria-hidden="true">
+        <p className="mb-1 font-display text-2xl">Whose names</p>
+        <div className="h-[4.5rem] rounded-xl border border-border bg-surface" />
+        <div className="h-[4.5rem] rounded-xl border border-border bg-surface" />
+        <div className="h-[5.25rem]" />
+      </div>
+      <div className="instrument bezel space-y-4 p-4">
+        <ReadoutStrip live={false} items={[{ value: "Standby" }]} />
+        <SweepDial running={false} stepMs={SWEEP_DEFAULT_MS} />
+        <SpokenWord testId="spirit-latest-fallback">{""}</SpokenWord>
+        <button type="button" disabled className="btn btn-primary btn-lg w-full text-2xl">
+          Loading&hellip;
+        </button>
+        <p className="font-bold">{DISCLAIMER}</p>
+        <p className="font-bold text-moss">{MOURNERS}</p>
+      </div>
     </div>
   );
 }

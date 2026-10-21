@@ -76,8 +76,11 @@ export function PageHeader({
 }) {
   return (
     <header className="space-y-2">
-      <SymbolPair death={death} life={life} />
-      <h1 className="font-display text-4xl leading-tight">{title}</h1>
+      {/* The pair sits beside the title, so every page's heading starts at the same height. */}
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="font-display text-4xl leading-tight">{title}</h1>
+        <SymbolPair death={death} life={life} className="shrink-0" />
+      </div>
       {intro && <p className="text-muted">{intro}</p>}
     </header>
   );
