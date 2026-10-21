@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 import { litPath } from "@/lib/moon";
 import { RingedMoon } from "./symbols";
+import { ToolIcon, type ToolId } from "./tools";
 
 /*
   Shared forms for the gothic retro-futurist skin. All decoration is CSS (see
@@ -85,21 +86,23 @@ export function ArchFrame<T extends ElementType = "section">({ as, rule = true, 
 }
 
 /**
- * The page title every tool shares: a death/life pair above a carved heading,
- * then one plain line in Atkinson. Same rhythm on every page, so moving from
- * home to a tool doesn't change the frame (L10.4).
+ * The page title every page shares: a carved heading with the page's tool sign
+ * (TOOL_ICON) and a life sign beside it, then one plain line in Atkinson. Same
+ * rhythm on every page, so moving from home to a tool doesn't change the frame
+ * (L10.4, REVIEW-3 #6).
  */
 export function PageHeader({
   title,
   intro,
-  death,
+  tool,
   life,
 }: {
   title: ReactNode;
   intro?: ReactNode;
-  death: ReactNode;
+  tool: ToolId;
   life: ReactNode;
 }) {
+  const death = <ToolIcon tool={tool} className="h-5 w-5" />;
   return (
     <header className="space-y-2">
       {/* The pair sits beside the title, so every page's heading starts at the same height. */}
@@ -159,5 +162,36 @@ export function Specimen({
       <div className={`specimen-window ${paper ? "specimen-paper" : ""}`}>{children}</div>
       <figcaption className="specimen-tag">{tag}</figcaption>
     </figure>
+  );
+}
+
+/**
+ * One shape for an empty or failed state (REVIEW-3 #12): a plain card, one
+ * sign, a carved title, one line in Atkinson and at most one way on.
+ */
+export function EmptyState({
+  title,
+  children,
+  sign,
+  action,
+  as: Heading = "h2",
+}: {
+  title: ReactNode;
+  children: ReactNode;
+  sign?: ReactNode;
+  action?: ReactNode;
+  as?: "h2" | "h3";
+}) {
+  return (
+    <div className="card space-y-3 p-5 text-center" data-testid="empty-state">
+      {sign && (
+        <span aria-hidden="true" className="mx-auto block w-fit text-mauve">
+          {sign}
+        </span>
+      )}
+      <Heading className="font-display text-2xl leading-tight">{title}</Heading>
+      <p>{children}</p>
+      {action}
+    </div>
   );
 }

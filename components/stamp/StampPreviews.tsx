@@ -32,11 +32,11 @@ type Props = {
   job: number;
 };
 
-/** One output pinned up as a specimen card: its window (paper for the ink stamp), its name, its save link. */
-function Output({ kind, children, action }: { kind: keyof PreviewUrls; children: ReactNode; action?: ReactNode }) {
+/** One output pinned up as a specimen card: a paper window, its name, its save link. */
+function Output({ children, action, kind }: { kind: keyof PreviewUrls; children: ReactNode; action?: ReactNode }) {
   return (
     <Specimen
-      paper={kind === "ink"}
+      paper
       tag={
         <>
           <span className="label">{RENDER_LABELS[kind].title}</span>
@@ -59,7 +59,8 @@ export function StampPreviews({ urls, busy, fileStem, renderMs, maskPixels, timi
       data-mask-pixels={maskPixels ?? ""}
       data-timings={timings}
       aria-busy={busy}
-      className="specimen-tray"
+      // The three side by side, one frame for the camera (REVIEW-3).
+      className="specimen-tray specimen-tray-compact"
     >
       {KINDS.map((k) => (
         <Output
@@ -70,7 +71,7 @@ export function StampPreviews({ urls, busy, fileStem, renderMs, maskPixels, timi
               <a
                 href={urls[k]}
                 download={`${fileStem}-${RENDER_LABELS[k].file}.png`}
-                className="btn btn-ghost px-4 text-sm"
+                className="btn btn-ghost w-full px-3 text-sm"
               >
                 Save<span className="sr-only"> {RENDER_LABELS[k].title.toLowerCase()}</span>
               </a>

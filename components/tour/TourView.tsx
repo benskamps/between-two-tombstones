@@ -13,6 +13,8 @@ import type { BurialsResponse } from "@/lib/data/types";
 import { countEligible } from "@/lib/haunt/eligibility";
 import { forgetNext } from "@/lib/haunt/next";
 import { EtiquetteNotice } from "@/components/shell/EtiquetteNotice";
+import { EmptyState } from "@/components/ui/Motifs";
+import { Gate } from "@/components/ui/symbols";
 import { buildStops, canRoute, locatedGraves, MIN_ROUTE_STOPS, MODES, PAGE_SIZE, type Mode } from "@/lib/tour/modes";
 import { distanceM } from "@/lib/tour/route";
 import { CARD_PHOTO_WIDTH, SMALL_PHOTO_WIDTH, commonsThumb } from "@/lib/tour/links";
@@ -210,9 +212,17 @@ export function TourView({ qid, initial, error, fallback }: Props) {
         )}
 
         {data.people.length === 0 ? (
-          <p className="rounded-xl border border-border px-4 py-3">
+          <EmptyState
+            title="No tour here yet"
+            sign={<Gate className="h-7 w-7" />}
+            action={
+              <Link href="/" className="btn btn-primary">
+                Find another cemetery
+              </Link>
+            }
+          >
             Wikidata doesn&rsquo;t list anyone buried here yet, so there&rsquo;s no tour. Try another cemetery nearby.
-          </p>
+          </EmptyState>
         ) : (
           <ol className="space-y-4" data-testid="tour-stops">
             {firstStops.map((s, i) => card(s, i))}
@@ -223,19 +233,19 @@ export function TourView({ qid, initial, error, fallback }: Props) {
         <section aria-label="Walking and saving" className="space-y-2">
           <div className="flex flex-wrap gap-2 [&>*]:min-w-[10rem] [&>*]:flex-1">
             {walking ? (
-              <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border px-4 py-2">
+              <div className="card flex flex-wrap items-center gap-3 px-4 py-2">
                 <p className="flex-1 text-sm">
                   {position ? `Following your location (±${Math.round(position.accuracy)} m).` : "Finding your location…"}{" "}
                   {wakeLockHeld && "The screen stays on while this tour is open."}
                 </p>
-                <button type="button" onClick={() => setWalking(false)} className="tap rounded-lg border border-border px-3 text-sm">
+                <button type="button" onClick={() => setWalking(false)} className="btn btn-ghost px-4 text-sm">
                   Stop following
                 </button>
               </div>
             ) : (
-              <button type="button" onClick={startWalk} className="tap flex flex-col items-center justify-center rounded-xl border border-border px-4 py-1 font-bold">
+              <button type="button" onClick={startWalk} className="btn btn-ghost flex-col !gap-0 py-1">
                 Start the walk
-                <span className="text-sm font-normal">uses your location</span>
+                <span className="text-sm font-normal text-muted">uses your location</span>
               </button>
             )}
             <DownloadTourButton data={data} />
@@ -262,7 +272,7 @@ export function TourView({ qid, initial, error, fallback }: Props) {
         )}
 
         {tour.remaining > 0 && (
-          <button type="button" onClick={() => setCount((c) => c + PAGE_SIZE)} className="tap w-full rounded-xl border border-border px-4 font-bold">
+          <button type="button" onClick={() => setCount((c) => c + PAGE_SIZE)} className="btn btn-ghost w-full">
             Show {Math.min(PAGE_SIZE, tour.remaining)} more stops ({tour.remaining} left)
           </button>
         )}

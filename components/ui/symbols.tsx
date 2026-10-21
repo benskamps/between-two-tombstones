@@ -184,6 +184,15 @@ export function Comet(props: SymbolProps) {
   );
 }
 
+/** A sound trace: the EVP recorder. */
+export function Waveform(props: SymbolProps) {
+  return (
+    <Svg {...props}>
+      <path d="M2.5 12h3l1.5-4 2 9 2.5-12 2.5 14 2-9 1.5 4.5 1.2-2.5h3.3" />
+    </Svg>
+  );
+}
+
 /** A small four-point star, for readouts and list bullets. */
 export function Star(props: SymbolProps) {
   return (

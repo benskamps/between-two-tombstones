@@ -246,7 +246,8 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
   return (
     <div className="space-y-6">
       <fieldset className="space-y-2">
-        <legend className="mb-2 font-bold">Cemetery</legend>
+        {/* The same picker, the same wording and tier as the spirit box's "Whose names" (REVIEW-3 #10). */}
+        <legend className="mb-2 font-display text-2xl leading-tight">Whose death-days</legend>
         {options.map((s) => (
           <label
             key={s.qid}
@@ -270,14 +271,20 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
         ))}
       </fieldset>
 
-      <label className="tap flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-surface p-3">
+      {/* Birthdays are the life half of the calendar: a lichen edge and a sprout, like the birthday rows. */}
+      <label
+        className={`tap flex cursor-pointer items-center gap-3 rounded-xl border-[1.5px] p-3 ${
+          birthdays ? "border-lichen bg-lit-lichen" : "border-lichen bg-surface"
+        }`}
+      >
         <input
           type="checkbox"
           role="switch"
           checked={birthdays}
           onChange={(e) => setBirthdays(e.currentTarget.checked)}
-          className="h-5 w-5 shrink-0 accent-[var(--accent)]"
+          className="h-5 w-5 shrink-0 accent-[var(--lichen)]"
         />
+        <Sprout className="h-5 w-5 shrink-0 text-lichen" />
         <span className="font-bold">Add birthdays too</span>
       </label>
 
@@ -286,12 +293,11 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
         <h2 id="preview-heading" className="text-center font-display text-2xl">
           What you&rsquo;ll get
         </h2>
+        {/* A count once the feed is in (the line keeps its height before that); waiting is said in words below. */}
         <p className="readout almanac-count" aria-hidden="true">
           {feed
             ? `${plural(deaths, "death-day", "death-days")}${birthdays ? ` · ${plural(births, "birthday", "birthdays")}` : ""} a year`
-            : state?.status === "error"
-              ? "No signal"
-              : "Loading"}
+            : null}
         </p>
         {!state && (
           <>
@@ -364,7 +370,7 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
                           {href && (
                             <Link
                               href={href}
-                              className="tap inline-flex items-center text-sm underline underline-offset-4"
+                              className="tap inline-flex items-center text-sm text-mauve underline underline-offset-4"
                             >
                               Read their story
                             </Link>

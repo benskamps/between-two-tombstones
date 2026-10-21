@@ -4,6 +4,15 @@
   Between Two Tombstones: gothic retro-futurism, dark only (decision 18).
   Victorian mourning and graveyard forms crossed with space-age instruments.
 
+  Colour roles (REVIEW-3 #4): a colour says what something is, on every page.
+  - mauve:  you can act on it (buttons, links, the selected option, tool signs).
+  - candle: light and warmth (the darkroom's safelight, R.I.P., dates, a lit line).
+  - wisp:   a live instrument reading, only inside .instrument (readouts, the
+            dial, the split-flap code, the scope). Also the focus ring.
+  - lichen: alive, found or kept (a found square, a pinned grave, birthdays,
+            a saved tour, "Turn it off near mourners.").
+  - bone, muted, ash: reading text, captions and quiet labels, control edges.
+
   The palette's hex values live in this :root block and in lib/palette.ts,
   nowhere else; lib/palette.test.ts checks they match and that every text pair
   reaches 4.5:1 and every control boundary 3:1. Everything below this block
@@ -12,18 +21,20 @@
   This file is the one stylesheet for the whole app (app/gravitator/gravitator.css
   only aliases these tokens for that route). Order: tokens, page, type,
   controls, surfaces, instrument parts, ornaments, steps and specimens, motion,
-  then "Tool pieces" (parts one tool wears, prefixed bingo-, games-, evp-,
-  darkroom-, almanac-). Plain CSS, not CSS Modules: next.config.ts sends every
+  then "Tool pieces" (parts one tool wears, prefixed bingo-, evp-, darkroom-,
+  almanac-). Plain CSS, not CSS Modules: next.config.ts sends every
   *.css through the Tailwind loader as global CSS, so a .module.css file would
   not be scoped here.
 
   The primitives (stable names; other lanes build on them):
   - Surfaces: .card (stone, inner rule) + .card-rule (ruled page), .arch +
     .arch-rule (headstone), .bezel (corner ticks), .instrument (glass panel),
-    .stone (grain only); --lit-wisp and --lit-candle for a lit stone.
+    .stone (grain only); --lit-lichen and --lit-candle for a lit stone.
   - Instrument parts: .readout-strip, .lamp, .dial + .dial-needle, .scanlines,
     .ticker (a log), input.knob (28px dial thumbs), .split-flap (codes),
     .ecto (glow), .materialize. React wrappers: components/ui/Instrument.tsx.
+  - Tools: .tool-medallion and .tool-chip; ToolTile and the one-sign-per-tool
+    map (TOOL_ICON) in components/ui/tools.tsx.
   - Pinned and numbered: .specimen (+ -window, -paper, -tag, -tray),
     .step + .step-no (Atkinson numeral in a candle ring); Specimen and
     StepHeading in components/ui/Motifs.tsx.
@@ -60,8 +71,8 @@
   --moss: var(--lichen);
   --edge: var(--ash);
   --instrument: color-mix(in srgb, var(--surface) 92%, var(--wisp));
-  /* A stone that has been lit: a found bingo square (wisp), the free square (candle). */
-  --lit-wisp: color-mix(in srgb, var(--surface-2) 86%, var(--wisp));
+  /* A lit stone: found (lichen: a found bingo square) or candle-lit (the free square, today in the almanac). */
+  --lit-lichen: color-mix(in srgb, var(--surface-2) 86%, var(--lichen));
   --lit-candle: color-mix(in srgb, var(--surface-2) 86%, var(--candle));
 
   /* Stone grain: one pre-rendered 128px tile (public/textures/grain.png, under 5 KB; F23), not a live SVG filter. */
@@ -88,6 +99,8 @@
   --color-wisp: var(--wisp);
   --color-edge: var(--edge);
   --color-danger: var(--danger);
+  --color-lit-lichen: var(--lit-lichen);
+  --color-lit-candle: var(--lit-candle);
   --font-sans: var(--font-body), system-ui, sans-serif;
   --font-display: var(--font-carved), Georgia, serif;
   --font-label: var(--font-space), var(--font-body), system-ui, sans-serif;
@@ -168,18 +181,18 @@ body {
   background-size: 128px 128px;
 }
 
-/* The header stays one line when the haunt badge shows: a smaller wordmark, and just the moon on a narrow phone. */
-header:has([data-testid="haunt-badge"]) .wordmark {
-  font-size: 1rem;
+/*
+  The wordmark is one size in every state (REVIEW-3 #3): small enough that the
+  header stays one line beside "Haunting: <name>", so nothing in the frame moves
+  when a haunt is set or on the way between the Gravitator and a tool. Narrow
+  phones get a slightly smaller one, also in every state.
+*/
+.wordmark {
+  font-size: 1.0625rem;
 }
 @media (max-width: 379px) {
-  header:has([data-testid="haunt-badge"]) .wordmark {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+  .wordmark {
+    font-size: 0.9375rem;
   }
 }
 
@@ -298,6 +311,14 @@ header:has([data-testid="haunt-badge"]) .wordmark {
   opacity: 0.45;
   pointer-events: none;
 }
+/* A card that reports a failure: a danger edge (the inner rule stays). */
+.card-alert {
+  border-color: var(--danger);
+}
+/* A plain card: the same stone and radius, no inner rule (recent deaths, F26). */
+.card-plain::before {
+  content: none;
+}
 /* A ruled page (the almanac's border): two hairlines inside the edge, the outer one candle-warm. */
 .card-rule::before {
   inset: 5px;
@@ -309,10 +330,30 @@ header:has([data-testid="haunt-badge"]) .wordmark {
   opacity: 1;
 }
 
+/*
+  A story card's lead paragraph: about four lines, so the portrait and the Find
+  a Grave row land inside the card's first screen. "Read more" (.story-more)
+  opens the rest and lets the lead run on.
+*/
+.story-lead {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+}
+article:has(.story-more[open]) .story-lead {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: none;
+  overflow: visible;
+}
+
 /* Instrument-bezel corner ticks: four little L marks inside a panel's corners. */
 .bezel {
   position: relative;
-  --tick: color-mix(in srgb, var(--wisp) 55%, var(--border));
+  /* Neutral by default; an .instrument's ticks are wisp, the darkroom's candle. */
+  --tick: color-mix(in srgb, var(--ash) 80%, var(--border));
 }
 .bezel::after {
   content: "";
@@ -380,21 +421,41 @@ header:has([data-testid="haunt-badge"]) .wordmark {
   );
 }
 
-/* The phosphor readout strip: wisp on the dark glass, a little bloom. */
+/*
+  The readout strip: one line on every instrument (lamp, status, at most two
+  values; ReadoutStrip in Instrument.tsx). Phosphor wisp on the dark glass; the
+  darkroom's is candle (data-tone). What doesn't fit is clipped, never wrapped.
+*/
 .readout-strip {
+  --tone: var(--wisp);
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 0.25rem 1rem;
+  gap: 0.625rem;
+  overflow: hidden;
   border-radius: 0.6rem;
-  border: 1px solid color-mix(in srgb, var(--wisp) 30%, var(--border));
+  border: 1px solid color-mix(in srgb, var(--tone) 30%, var(--border));
   background-color: var(--bg);
   padding: 0.5rem 0.75rem;
-  color: var(--wisp);
-  text-shadow: 0 0 6px color-mix(in srgb, var(--wisp) 45%, transparent);
+  color: var(--tone);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--tone) 45%, transparent);
+}
+.readout-strip[data-tone="candle"] {
+  --tone: var(--candle);
+}
+.readout-strip .lamp {
+  flex: none;
 }
 .readout-strip .readout {
+  flex: none;
+  font-size: 0.75rem;
   white-space: nowrap;
+}
+.readout-strip .readout:last-child {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .lamp {
   display: inline-block;
@@ -404,8 +465,8 @@ header:has([data-testid="haunt-badge"]) .wordmark {
   background: var(--ash);
 }
 .lamp[data-on="true"] {
-  background: var(--wisp);
-  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--wisp) 70%, transparent);
+  background: var(--tone, var(--wisp));
+  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--tone, var(--wisp)) 70%, transparent);
 }
 
 /*
@@ -636,6 +697,53 @@ input[type="range"].knob::-moz-range-thumb {
   box-shadow: inset 0 0 8px -3px color-mix(in srgb, var(--candle) 70%, transparent);
 }
 
+/* ---------- Tool tiles: each tool's one sign in a medallion (ToolTile in components/ui/tools.tsx) ---------- */
+
+.tool-medallion {
+  display: inline-flex;
+  flex: none;
+  width: 3.25rem;
+  height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--mauve) 40%, var(--border));
+  background-color: var(--bg);
+  color: var(--mauve);
+  box-shadow: inset 0 0 14px -6px color-mix(in srgb, var(--mauve) 55%, transparent);
+}
+.tool-medallion svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+.tool-medallion-sm {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+.tool-medallion-sm svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+/* The chip: four to a row on a phone. A tappable edge, so ash. */
+.tool-chip {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  border-radius: 0.9rem;
+  border: 1.5px solid var(--edge);
+  background-color: var(--surface-2);
+  background-image: var(--grain);
+  background-size: 128px 128px;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
 /* ---------- Specimen cards: something made or found, pinned up (Specimen in Motifs.tsx) ---------- */
 
 .specimen-tray {
@@ -683,9 +791,10 @@ input[type="range"].knob::-moz-range-thumb {
   right: 0.6rem;
 }
 
+/* 4:5, the shape of most stones, so a portrait render fills it instead of sitting between black bars. */
 .specimen-window {
   display: flex;
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 5;
   align-items: center;
   justify-content: center;
   overflow: hidden;
@@ -726,9 +835,15 @@ input[type="range"].knob::-moz-range-thumb {
   gap: 0.5rem;
   margin-top: 0.5rem;
 }
+.specimen-tray-compact .specimen {
+  padding-inline: 0.5rem;
+}
+/* In a row of three the tag stacks: the name, then its Save pill. */
 .specimen-tray-compact .specimen-tag {
   min-height: 0;
+  flex-direction: column;
   justify-content: center;
+  text-align: center;
 }
 
 /* ---------- Motion: slow, CSS only, and off for reduced motion ---------- */
@@ -824,8 +939,8 @@ nav[aria-label="Main"] ul {
 .bingo-board {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.375rem;
-  padding: 0.5rem;
+  gap: 0.3rem;
+  padding: 0.375rem;
   border-radius: 1.1rem;
   border: 1px solid var(--border);
   background-color: var(--bg);
@@ -845,7 +960,7 @@ nav[aria-label="Main"] ul {
   align-items: center;
   justify-content: flex-start;
   gap: 0.2rem;
-  padding: 0.75rem 0.125rem 0.3rem;
+  padding: 0.65rem 0.0625rem 0.35rem;
   border: 1.5px solid var(--ash);
   border-radius: 50% 50% 0.45rem 0.45rem / 1.4rem 1.4rem 0.45rem 0.45rem;
   background-color: var(--surface-2);
@@ -856,24 +971,27 @@ nav[aria-label="Main"] ul {
   box-shadow:
     inset 0 3px 4px -1px color-mix(in srgb, var(--bg) 85%, transparent),
     inset 0 -1px 0 color-mix(in srgb, var(--text) 12%, transparent);
-  font-size: 0.6875rem;
+  /* 13 px labels and 30 px symbols: anything smaller blurs outdoors and on video (REVIEW-3). */
+  font-size: 0.8125rem;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.1;
   text-align: center;
   cursor: pointer;
 }
 
 .bingo-glyph {
   flex: none;
-  width: 1.625rem;
-  height: 1.625rem;
+  width: 1.875rem;
+  height: 1.875rem;
   color: var(--text-muted);
 }
 
+/* Long words ("hourglass", "Butterfly") break at a syllable, never mid-letter. */
 .bingo-label {
   display: block;
   max-width: 100%;
-  overflow-wrap: anywhere;
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
 /* The last square tapped: a bone outline (the keyboard focus ring is the wisp one). */
@@ -886,17 +1004,17 @@ nav[aria-label="Main"] ul {
   outline-offset: 2px;
 }
 
-/* Found: the stone lights up with the wisp's phosphor, and a sprout comes up. */
+/* Found: the stone comes alive in lichen, and a sprout comes up (lichen = found, kept, alive). */
 .bingo-tile[aria-pressed="true"] {
-  border-color: var(--wisp);
-  background-color: var(--lit-wisp);
+  border-color: var(--lichen);
+  background-color: var(--lit-lichen);
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--wisp) 45%, transparent),
-    inset 0 -10px 14px -10px color-mix(in srgb, var(--wisp) 55%, transparent),
-    0 0 10px -3px color-mix(in srgb, var(--wisp) 75%, transparent);
+    inset 0 0 0 1px color-mix(in srgb, var(--lichen) 45%, transparent),
+    inset 0 -10px 14px -10px color-mix(in srgb, var(--lichen) 55%, transparent),
+    0 0 10px -3px color-mix(in srgb, var(--lichen) 75%, transparent);
 }
 .bingo-tile[aria-pressed="true"] .bingo-glyph {
-  color: var(--wisp);
+  color: var(--lichen);
 }
 
 .bingo-bloom {
@@ -945,14 +1063,14 @@ nav[aria-label="Main"] ul {
   color: var(--candle);
 }
 
-/* The readout row over the board. */
+/* The label row over the board: quiet, not a live reading (no wisp outside an instrument). */
 .bingo-strip {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0 0.25rem;
-  color: var(--wisp);
+  color: var(--text-muted);
 }
 
 /* A bingo: a small arched plaque that glows, a moth that lifts off and a lily that opens. */
@@ -996,26 +1114,6 @@ nav[aria-label="Main"] ul {
   color: var(--lichen);
   transform-origin: 50% 100%;
   animation: btt-bloom 900ms cubic-bezier(0.2, 0.9, 0.3, 1.3) 1 both;
-}
-
-/* ---------- Spirit games hub: a medallion beside each game ---------- */
-
-.games-medallion {
-  display: inline-flex;
-  flex: none;
-  width: 3.25rem;
-  height: 3.25rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--wisp) 35%, var(--border));
-  background-color: var(--bg);
-  color: var(--mauve);
-  box-shadow: inset 0 0 14px -6px color-mix(in srgb, var(--wisp) 60%, transparent);
-}
-.games-medallion svg {
-  width: 1.75rem;
-  height: 1.75rem;
 }
 
 /* ---------- EVP recorder: the oscilloscope ---------- */
@@ -1113,7 +1211,10 @@ nav[aria-label="Main"] ul {
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  color: var(--wisp);
+  color: var(--candle);
+}
+.almanac-count:empty {
+  visibility: hidden;
 }
 .almanac-count::before,
 .almanac-count::after {
@@ -1121,7 +1222,7 @@ nav[aria-label="Main"] ul {
   flex: 1;
   max-width: 3rem;
   height: 1px;
-  background: color-mix(in srgb, var(--wisp) 40%, transparent);
+  background: color-mix(in srgb, var(--candle) 40%, transparent);
 }
 
 .almanac-entries {
@@ -1157,8 +1258,10 @@ nav[aria-label="Main"] ul {
   color: var(--candle);
   font-variant-numeric: tabular-nums;
 }
-.almanac-today .almanac-day {
-  color: var(--wisp);
+/* Today: the entry is candle-lit. */
+.almanac-entry.almanac-today {
+  border-color: color-mix(in srgb, var(--candle) 70%, var(--border));
+  background-color: var(--lit-candle);
 }
 
 .almanac-kind {

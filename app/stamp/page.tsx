@@ -4,7 +4,7 @@ import { HauntGate } from "@/components/haunt/HauntGate";
 import { GateNeutral } from "@/components/haunt/PickHauntFirst";
 import { StampKit } from "@/components/stamp/StampKit";
 import { PageHeader } from "@/components/ui/Motifs";
-import { Fern, Gate } from "@/components/ui/symbols";
+import { Lily } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {
   title: "Stamp Kit",
@@ -17,8 +17,8 @@ export default function StampPage() {
     <div className="space-y-6">
       <PageHeader
         title="Stamp Kit"
-        death={<Gate className="h-5 w-5" />}
-        life={<Fern className="h-5 w-5" />}
+        tool="stamp"
+        life={<Lily className="h-5 w-5" />}
         intro={
           <>
             Photograph a headstone and get a rubbing, an ink stamp and a postage stamp of it. Real rubbings wear stones

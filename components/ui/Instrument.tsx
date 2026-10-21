@@ -5,7 +5,7 @@ import type { CSSProperties, ReactNode } from "react";
   spirit box and the séance; any tool can wear them:
 
     <section className="instrument bezel space-y-4 p-4">   the panel (globals.css)
-      <ReadoutStrip items={[...]} live />                  phosphor readouts
+      <ReadoutStrip status="Standby" values={[...]} live />  one line of phosphor readouts
       <SplitFlap value="KXMPRT" />                          a code, one cell per letter
       <SweepDial running stepMs={150} />                    a needle on a scale
       <SpokenWord key={id} testId="...">word</SpokenWord>   the big carved line
@@ -18,15 +18,37 @@ import type { CSSProperties, ReactNode } from "react";
 
 export type Readout = { label?: string; value: string };
 
+/** At most this many values after the status, so a strip stays one line on a phone. */
+export const MAX_READOUTS = 2;
+
 /**
- * A row of short Michroma readouts in wisp, with a status lamp. Decorative: the same facts are in the text.
- * `testId` defaults to "readouts"; give each strip on a page its own.
+ * One line of short Michroma readouts with a status lamp (REVIEW-3 #7): the
+ * lamp, the status word ("Standby", "Live", "Rec"…), then at most two values.
+ * The same shape on every instrument; anything that doesn't fit is clipped,
+ * never wrapped. Decorative: the same facts are in the text.
+ *
+ * `tone` is wisp on an .instrument (a live reading) and candle in the Stamp
+ * Kit's darkroom. `testId` defaults to "readouts"; give each strip on a page its own.
  */
-export function ReadoutStrip({ items, live, testId = "readouts" }: { items: Readout[]; live: boolean; testId?: string }) {
+export function ReadoutStrip({
+  status,
+  values = [],
+  live,
+  tone = "wisp",
+  testId = "readouts",
+}: {
+  status: string;
+  values?: (Readout | null | false)[];
+  live: boolean;
+  tone?: "wisp" | "candle";
+  testId?: string;
+}) {
+  const shown = values.filter((v): v is Readout => Boolean(v)).slice(0, MAX_READOUTS);
   return (
-    <div className="readout-strip scanlines" aria-hidden="true" data-testid={testId}>
+    <div className="readout-strip scanlines" data-tone={tone} aria-hidden="true" data-testid={testId}>
       <span className="lamp" data-on={live ? "true" : "false"} />
-      {items.map((r, i) => (
+      <span className="readout readout-status">{status}</span>
+      {shown.map((r, i) => (
         <span key={i} className="readout">
           {r.label ? `${r.label} ` : ""}
           {r.value}

@@ -358,20 +358,17 @@ export function StampKit() {
             </div>
           </section>
 
-          <section aria-labelledby="step-lift" className="card space-y-4 p-4">
+          <section aria-labelledby="step-lift" className="darkroom-easel bezel space-y-4">
             <StepHeading n={3} id="step-lift">
               Lift the carving
             </StepHeading>
             {/* The settings as a readout; the same facts are in the labels below. */}
             <ReadoutStrip
               testId="stamp-readouts"
+              tone="candle"
               live={busy}
-              items={[
-                { label: "Mode", value: settings.mode },
-                { label: "Grit", value: String(settings.grit) },
-                { label: "Stroke", value: strokeLabel },
-                ...(last ? [{ label: "Time", value: `${(last.ms / 1000).toFixed(1)} s` }] : []),
-              ]}
+              status={busy ? "Developing" : last ? "Ready" : "Standby"}
+              values={[{ value: settings.mode }, { label: "Grit", value: String(settings.grit) }]}
             />
             <fieldset className="space-y-2">
               <legend className="font-bold">What to lift</legend>
@@ -447,7 +444,7 @@ export function StampKit() {
             />
           </section>
 
-          <section aria-labelledby="step-share" className="card space-y-3 p-4">
+          <section aria-labelledby="step-share" className="darkroom-easel bezel space-y-3">
             <StepHeading n={4} id="step-share">
               Add words, then save or share
             </StepHeading>
@@ -543,7 +540,7 @@ export function StampKit() {
             </div>
           </section>
 
-          <section aria-labelledby="step-read" className="card space-y-3 p-4">
+          <section aria-labelledby="step-read" className="darkroom-easel bezel space-y-3">
             <h2 id="step-read" className="font-display text-2xl">
               Can&rsquo;t make out the words?
             </h2>

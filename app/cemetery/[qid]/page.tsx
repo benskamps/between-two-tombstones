@@ -4,6 +4,8 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { ServiceWorkerRegistrar } from "@/components/offline/ServiceWorkerRegistrar";
 import { TourView } from "@/components/tour/TourView";
+import { PageHeader } from "@/components/ui/Motifs";
+import { Sprout } from "@/components/ui/symbols";
 import { isSlowFailure, parsePeopleParam } from "@/lib/data/big";
 import { loadCemetery } from "@/lib/data/load";
 import { parseQid } from "@/lib/data/validate";
@@ -39,7 +41,7 @@ export default function CemeteryPage({ params, searchParams }: PageProps<"/cemet
 function TourLoading() {
   return (
     <div role="status" className="space-y-3">
-      <p className="font-display text-3xl">Gathering the stories…</p>
+      <p className="font-display text-4xl leading-tight">Gathering the stories…</p>
       <p className="text-muted">Asking Wikidata who&rsquo;s buried here and Wikipedia how they lived. This takes a few seconds the first time.</p>
     </div>
   );
@@ -50,10 +52,9 @@ async function Tour({ params, searchParams }: Pick<PageProps<"/cemetery/[qid]">,
   const parsed = parseQid(raw);
   if (!parsed.ok) {
     return (
-      <div role="alert" className="space-y-3">
-        <h1 className="font-display text-3xl">That isn&rsquo;t a cemetery we can look up</h1>
-        <p>{parsed.message}</p>
-        <Link href="/" className="tap inline-flex items-center underline">
+      <div role="alert" className="space-y-5">
+        <PageHeader title="That isn’t a cemetery we can look up" intro={parsed.message} tool="search" life={<Sprout className="h-5 w-5" />} />
+        <Link href="/" className="btn btn-primary">
           Find a cemetery
         </Link>
       </div>
@@ -66,10 +67,14 @@ async function Tour({ params, searchParams }: Pick<PageProps<"/cemetery/[qid]">,
 
   if (result.status === "not-found") {
     return (
-      <div role="alert" className="space-y-3">
-        <h1 className="font-display text-3xl">No such place on Wikidata</h1>
-        <p>Wikidata has no item {result.qid}. Check the link, or find the cemetery by name.</p>
-        <Link href="/" className="tap inline-flex items-center underline">
+      <div role="alert" className="space-y-5">
+        <PageHeader
+          title="No such place on Wikidata"
+          intro={`Wikidata has no item ${result.qid}. Check the link, or find the cemetery by name.`}
+          tool="search"
+          life={<Sprout className="h-5 w-5" />}
+        />
+        <Link href="/" className="btn btn-primary">
           Find a cemetery
         </Link>
       </div>

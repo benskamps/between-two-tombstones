@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { ArchFrame, SymbolPair } from "@/components/ui/Motifs";
+import { Lily, RingedMoon } from "@/components/ui/symbols";
 import { distanceText, nearHref, peopleText } from "@/lib/data/near";
 import type { NearbyCemetery } from "@/lib/data/types";
 
@@ -9,21 +11,19 @@ function placeLine(c: NearbyCemetery): string {
 /** The nearest cemetery with stories worth the walk, above the nearest-first list (F2). */
 export function BestNearby({ cemetery }: { cemetery: NearbyCemetery }) {
   return (
-    <section aria-labelledby="near-best-title" className="space-y-2" data-testid="near-best">
-      <h2 id="near-best-title" className="font-bold">
+    // An arch like the doors before it and the story cards after it, so the first walk stays carved (REVIEW-3 #6).
+    <ArchFrame aria-labelledby="near-best-title" className="space-y-2 text-center" data-testid="near-best">
+      <SymbolPair death={<RingedMoon className="h-5 w-5" />} life={<Lily className="h-5 w-5" />} />
+      <h2 id="near-best-title" className="font-bold text-muted">
         Best stories nearby
       </h2>
-      <Link
-        href={nearHref(cemetery.qid, cemetery.burials)}
-        className="tap block rounded-xl border-2 border-accent bg-surface p-4"
-        data-qid={cemetery.qid}
-      >
-        <span className="font-display text-2xl leading-tight">{cemetery.name}</span>
+      <Link href={nearHref(cemetery.qid, cemetery.burials)} className="tap block space-y-1" data-qid={cemetery.qid}>
+        <span className="block font-display text-3xl leading-tight">{cemetery.name}</span>
         <span className="block text-sm text-muted">{placeLine(cemetery)}</span>
-        <span className="block font-bold text-accent">{peopleText(cemetery.burials)}</span>
-        <span className="mt-2 block font-bold underline">Open the tour</span>
+        <span className="block font-bold">{peopleText(cemetery.burials)}</span>
+        <span className="btn btn-primary mt-2 w-full">Open the tour</span>
       </Link>
-    </section>
+    </ArchFrame>
   );
 }
 
@@ -33,10 +33,10 @@ export function NearLinkList({ items, label }: { items: NearbyCemetery[]; label:
     <ul className="grid gap-3" aria-label={label} data-testid="cemetery-list">
       {items.map((c) => (
         <li key={c.qid}>
-          <Link href={nearHref(c.qid, c.burials)} className="tap block rounded-xl border border-border bg-surface p-4" data-qid={c.qid}>
+          <Link href={nearHref(c.qid, c.burials)} className="card tap block p-4" data-qid={c.qid}>
             <span className="font-display text-xl">{c.name}</span>
             <span className="block text-sm text-muted">{placeLine(c)}</span>
-            <span className="block text-sm text-accent">{peopleText(c.burials)}</span>
+            <span className="block text-sm">{peopleText(c.burials)}</span>
           </Link>
         </li>
       ))}

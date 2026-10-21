@@ -112,7 +112,7 @@ export function BingoGame() {
       <div className="space-y-2">
         <div className="bingo-strip">
           <span className="label">{party ? "Party card" : "Your card"}</span>
-          <span className="readout" data-testid="bingo-found">
+          <span className="readout text-lichen" data-testid="bingo-found">
             Found {found} / {card.length - 1}
           </span>
         </div>
@@ -158,7 +158,12 @@ export function BingoGame() {
       )}
 
       <div aria-live="polite" className="card flex min-h-[4.5rem] items-start gap-3 p-4">
-        {chosen && <BingoGlyph id={chosen.id} className="mt-0.5 h-8 w-8 shrink-0 text-wisp" />}
+        {chosen && (
+          <BingoGlyph
+            id={chosen.id}
+            className={`mt-0.5 h-8 w-8 shrink-0 ${selected !== null && marked.has(selected) ? "text-lichen" : "text-muted"}`}
+          />
+        )}
         {chosen ? (
           <p>
             <strong>{chosen.name}:</strong> {chosen.meaning}

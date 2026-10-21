@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import { SavedToursList } from "@/components/tour/SavedToursList";
 import { TourView } from "@/components/tour/TourView";
+import { PageHeader } from "@/components/ui/Motifs";
+import { Sprout } from "@/components/ui/symbols";
 
 const QID_RE = /^Q[1-9]\d{0,11}$/;
 
@@ -22,7 +24,7 @@ export function SavedTourPage() {
   if (!QID_RE.test(qid)) {
     return (
       <div className="space-y-4">
-        <h1 className="font-display text-3xl">Saved tours</h1>
+        <PageHeader title="Saved tours" tool="saved" life={<Sprout className="h-5 w-5" />} />
         <SavedToursList heading="Tours on this phone" />
       </div>
     );
@@ -35,13 +37,15 @@ export function SavedTourPage() {
       error={null}
       fallback={
         <div role="alert" className="space-y-4">
-          <h1 className="font-display text-3xl">This tour isn&rsquo;t saved on this phone</h1>
-          <p>
-            Open it while you have a signal and tap &ldquo;Download this tour&rdquo;.{" "}
-            <Link href={`/cemetery/${qid}`} className="underline">
-              Open it now
-            </Link>
-          </p>
+          <PageHeader
+            title="This tour isn’t saved on this phone"
+            intro="Open it while you have a signal and tap “Download this tour”."
+            tool="saved"
+            life={<Sprout className="h-5 w-5" />}
+          />
+          <Link href={`/cemetery/${qid}`} className="btn btn-primary">
+            Open it now
+          </Link>
           <SavedToursList heading="Tours on this phone" />
         </div>
       }

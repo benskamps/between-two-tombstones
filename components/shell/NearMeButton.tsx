@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useState, useSyncExternalStore } from "react";
+import { useHaunt } from "@/lib/haunt/useHaunt";
 
 const ERRORS: Record<number, string> = {
   1: "Location is turned off for this site. Allow it in your browser settings, or search by name below.",
@@ -45,17 +46,22 @@ export function NearMeButton({
   label = "I’m here. Haunt me.",
   hint = "Uses your location",
   fallbackFieldId = "search-q",
+  yieldToHaunt = false,
 }: {
   label?: string;
   hint?: string;
   /** The name field right below: focus goes there when location fails (REVIEW-2 N7). /near's SearchForm is "search-q". */
   fallbackFieldId?: string;
+  /** On home, "Back to it" (your fresh haunt) is the one primary: this button becomes a ghost then (REVIEW-3 #8). */
+  yieldToHaunt?: boolean;
 }) {
   const router = useRouter();
   const hintId = useId();
   // false in the server HTML, true once React owns the button (then the early script steps aside).
   const ready = useSyncExternalStore(noSubscribe, () => true, () => false);
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+  const haunt = useHaunt();
+  const quiet = yieldToHaunt && Boolean(haunt);
 
   // When location fails, the name search below is the way on: put the cursor there.
   const failed = status.kind === "error";
@@ -100,7 +106,7 @@ export function NearMeButton({
         data-locate=""
         data-ready={ready ? "" : undefined}
         aria-describedby={hint ? hintId : undefined}
-        className="btn btn-primary btn-lg w-full"
+        className={`btn btn-lg w-full ${quiet ? "btn-ghost" : "btn-primary"}`}
       >
         {busy ? "Finding you…" : label}
       </button>

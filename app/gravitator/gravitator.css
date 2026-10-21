@@ -67,10 +67,12 @@ body:has(.gravitator) {
   background: var(--g-candle);
   color: var(--g-mauve-ink);
 }
+/* Ghost pills take the ash edge at 1.5 px, like every other ghost pill in the app (REVIEW-3 #13). */
 .g-btn-ghost {
   background: var(--g-surface);
   color: var(--g-text);
-  border-color: var(--g-border);
+  border-width: 1.5px;
+  border-color: var(--g-ash);
 }
 .g-btn-ash {
   background: var(--g-surface);
@@ -103,7 +105,8 @@ body:has(.gravitator) {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 1.5rem;
+  /* The app's card radius. */
+  border-radius: 1.1rem;
   border: 1px solid var(--g-border);
   background: var(--g-surface);
   box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.65);

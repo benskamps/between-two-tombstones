@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { HauntReturn } from "@/components/haunt/HauntReturn";
 import { MoonPhases, PageHeader } from "@/components/ui/Motifs";
-import { Fern, Gate } from "@/components/ui/symbols";
+import { Sprout } from "@/components/ui/symbols";
 
 export const metadata: Metadata = { title: "Page not found" };
 
@@ -17,8 +17,8 @@ export default function NotFound() {
       <PageHeader
         title="Page not found"
         intro="There’s no page at this address. The link may be old or mistyped."
-        death={<Gate className="h-5 w-5" />}
-        life={<Fern className="h-5 w-5" />}
+        tool="search"
+        life={<Sprout className="h-5 w-5" />}
       />
       <section aria-labelledby="nf-next" className="card card-rule space-y-4 px-4 pb-4 pt-5">
         {/* A new moon: nothing here tonight. */}

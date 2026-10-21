@@ -65,8 +65,8 @@ export const CSS_VAR: Record<Token, string> = {
  */
 export const MIXED: Record<string, { a: Token; b: Token; p: number; where: string }> = {
   instrument: { a: "surface", b: "wisp", p: 92, where: ".instrument panels (spirit box, séance, EVP, party code)" },
-  "lit-wisp": { a: "surface-2", b: "wisp", p: 86, where: "--lit-wisp: a found bingo square" },
-  "lit-candle": { a: "surface-2", b: "candle", p: 86, where: "--lit-candle: the free square" },
+  "lit-lichen": { a: "surface-2", b: "lichen", p: 86, where: "--lit-lichen: a found bingo square" },
+  "lit-candle": { a: "surface-2", b: "candle", p: 86, where: "--lit-candle: the free square, today in the almanac" },
 };
 
 type Surface = Token | keyof typeof MIXED;
@@ -102,8 +102,11 @@ export const TEXT_PAIRS: [Token, Surface, string][] = [
   ["danger", "instrument", "Stop and error text on the instrument panel"],
   ["lichen", "instrument", "\"Turn it off near mourners.\" on the panel"],
   ["mauve", "instrument", "links on the panel"],
-  ["text", "lit-wisp", "a found bingo square's label"],
-  ["text", "lit-candle", "R.I.P. on the free square"],
+  ["text", "lit-lichen", "a found bingo square's label"],
+  ["text", "lit-candle", "R.I.P. on the free square, today's almanac entry"],
+  ["muted", "lit-candle", "month and weekday on today's almanac entry"],
+  ["candle", "lit-candle", "today's date in the almanac"],
+  ["mauve", "lit-candle", "\"Read their story\" on today's almanac entry"],
   ["mauve-ink", "mauve", "primary pill buttons, Save, Use my location"],
   ["mauve-ink", "candle", "Go now, Start a tour here"],
   ["mauve-ink", "lichen", "the SAVE stamp while dragging right"],
@@ -133,9 +136,9 @@ export const UI_PAIRS: [Token, Surface, string][] = [
   ["mauve", "instrument", "knob rims and the primary pill on the panel"],
   ["ash", "instrument", "knob tracks and fields on the panel"],
   ["danger", "bg", "the Stop pill's edge"],
-  ["wisp", "lit-wisp", "a found bingo square's edge and glyph"],
+  ["lichen", "lit-lichen", "a found bingo square's edge, glyph and sprout"],
   ["candle", "lit-candle", "the free square's edge and candle"],
-  ["candle", "lit-wisp", "a completed line's edge on a found square"],
+  ["candle", "lit-lichen", "a completed line's edge on a found square"],
 ];
 
 /** color-mix(in srgb, a p%, b): straight interpolation of the sRGB components. */

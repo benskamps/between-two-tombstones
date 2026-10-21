@@ -56,9 +56,11 @@ test.describe("the instrument panel", () => {
     await expect(p).toHaveClass(/\binstrument\b/);
     const readouts = p.getByTestId("readouts");
     await expect(readouts).toHaveAttribute("aria-hidden", "true");
-    await expect(readouts).toContainText("At Oakland Cemetery");
+    // One line (REVIEW-3 #7): the status first, then at most two values.
+    await expect(readouts.locator(".readout").first()).toHaveText("Standby");
     await expect(readouts).toContainText("Voices 0/3");
-    await expect(readouts).toContainText("Sweep 150 ms");
+    expect(await readouts.locator(".readout").count()).toBeLessThanOrEqual(3);
+    expect((await readouts.boundingBox())!.height).toBeLessThan(44);
     await expect(readouts.locator(".readout").first()).toHaveCSS("font-family", /Michroma/);
     const dial = p.getByTestId("dial");
     await expect(dial).toHaveAttribute("data-running", "false");
@@ -96,9 +98,11 @@ test.describe("the instrument panel", () => {
     await expect(page.getByText(/Clock set from the server|Using this phone/)).toBeVisible();
     const p = panel(page);
     await expect(p).toHaveClass(/\binstrument\b/);
+    // The room code is the big split-flap at the top of the panel; the strip stays one line (REVIEW-3 #5, #7).
+    await expect(p.getByTestId("seance-room-code")).toHaveText("KXMPRT");
     const readouts = p.getByTestId("readouts");
-    await expect(readouts).toContainText("Room KXMPRT");
     await expect(readouts).toContainText(/Clock ±\d+ ms|Phone clock/);
+    expect((await readouts.boundingBox())!.height).toBeLessThan(44);
     await expect(p.getByRole("log", { name: "Captions" })).toBeVisible();
     await expect(p.getByText("Turn it off near mourners.")).toBeVisible();
     await expect(p.getByRole("button", { name: "Join the séance" })).toBeVisible();

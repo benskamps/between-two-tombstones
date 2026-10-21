@@ -7,6 +7,8 @@ import { NearMeButton } from "@/components/shell/NearMeButton";
 import { OsmOnlyList } from "@/components/tour/CemeteryList";
 import { SearchForm } from "@/components/tour/SearchForm";
 import { SourceFailure } from "@/components/tour/SourceFailure";
+import { PageHeader } from "@/components/ui/Motifs";
+import { Sprout } from "@/components/ui/symbols";
 import { asDataSourceError } from "@/lib/data/errors";
 import { combineNear, loadCemetery, loadNearOsm, loadNearWikidata, osmWithin } from "@/lib/data/load";
 import { accuracyText, autoOpenTarget, bestNearby, hereHref, isApproximate, parseAccuracy, parseFlag, splitNear, warmTargets } from "@/lib/data/near";
@@ -25,7 +27,7 @@ export default function NearPage({ searchParams }: PageProps<"/near">) {
   return (
     <div className="space-y-5">
       <ServiceWorkerRegistrar />
-      <h1 className="font-display text-3xl">Cemeteries near you</h1>
+      <PageHeader title="Cemeteries near you" tool="search" life={<Sprout className="h-5 w-5" />} />
       <Suspense fallback={<p role="status">Looking for cemeteries within 10 km…</p>}>
         <NearResults searchParams={searchParams} />
       </Suspense>
@@ -101,7 +103,7 @@ async function NearResults({ searchParams }: Pick<PageProps<"/near">, "searchPar
           {best && <BestNearby cemetery={best} />}
           {listed.length > 0 && (
             <section aria-labelledby="near-listed-title" className="space-y-2">
-              <h2 id="near-listed-title" className="font-bold">
+              <h2 id="near-listed-title" className="font-display text-2xl leading-tight">
                 {best ? "Also nearby" : "Nearby"}
               </h2>
               <p className="text-sm text-muted">Nearest first. The more people listed, the better the tour.</p>
@@ -141,7 +143,7 @@ async function OsmExtras({ lat, lon, wikidata }: { lat: number; lon: number; wik
   if (merged.osmOnly.length === 0) return null;
   return (
     <section aria-labelledby="osm-title" className="space-y-2">
-      <h2 id="osm-title" className="font-bold">
+      <h2 id="osm-title" className="font-display text-2xl leading-tight">
         Also mapped on OpenStreetMap
       </h2>
       <p className="text-sm text-muted">No tour for these: Wikidata doesn&rsquo;t list who&rsquo;s buried there.</p>

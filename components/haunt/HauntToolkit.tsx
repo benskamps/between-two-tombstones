@@ -1,27 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useSyncExternalStore, type ComponentType } from "react";
-import { Candle, Comet, Fern, HourglassSprout, Moth, Planchette, RingedMoon, type SymbolProps } from "@/components/ui/symbols";
+import { useSyncExternalStore } from "react";
+import { ToolTile, type ToolId } from "@/components/ui/tools";
 import { micAvailable } from "@/lib/games/evp";
 import type { Eligible } from "@/lib/haunt/eligibility";
 import { cemeteryQuery } from "@/lib/haunt/haunt";
 import type { Cemetery } from "@/lib/types";
 import type { Hub } from "./useHub";
 
-type Tool = { href: string; title: string; icon: ComponentType<SymbolProps>; needs?: "spirit" | "calendar" | "mic" };
+type Tool = { href: string; title: string; tool: ToolId; needs?: "spirit" | "calendar" | "mic" };
 
 function tools(cemetery: Pick<Cemetery, "qid" | "name" | "locatedIn">): Tool[] {
   // Every link carries the cemetery, so the tool opens on it even when this phone can't store the haunt.
   const q = cemeteryQuery({ qid: cemetery.qid, name: cemetery.name, place: cemetery.locatedIn });
   return [
-    { href: `/stamp?${q}`, title: "Stamp", icon: Fern },
-    { href: `/spirit?${q}`, title: "Spirit", icon: RingedMoon, needs: "spirit" },
-    { href: `/spirit?${q}#seance`, title: "Séance", icon: Planchette, needs: "spirit" },
-    { href: `/games/bingo?${q}`, title: "Bingo", icon: Comet },
-    { href: `/games/party?${q}`, title: "Party", icon: Candle },
-    { href: `/games/evp?${q}`, title: "EVP", icon: Moth, needs: "mic" },
-    { href: `/calendar?${q}`, title: "Calendar", icon: HourglassSprout, needs: "calendar" },
+    { href: `/stamp?${q}`, title: "Stamp", tool: "stamp" },
+    { href: `/spirit?${q}`, title: "Spirit", tool: "spirit", needs: "spirit" },
+    { href: `/spirit?${q}#seance`, title: "Séance", tool: "seance", needs: "spirit" },
+    { href: `/games/bingo?${q}`, title: "Bingo", tool: "bingo" },
+    { href: `/games/party?${q}`, title: "Party", tool: "party" },
+    { href: `/games/evp?${q}`, title: "EVP", tool: "evp", needs: "mic" },
+    { href: `/calendar?${q}`, title: "Calendar", tool: "calendar", needs: "calendar" },
   ];
 }
 
@@ -53,7 +53,7 @@ export function HauntToolkit({
   return (
     <section aria-labelledby="toolkit-title" className="card space-y-2 px-3 py-3" data-testid="haunt-toolkit">
       <div className="flex items-center justify-between gap-3 px-1">
-        <h2 id="toolkit-title" className="font-bold text-lichen">
+        <h2 id="toolkit-title" className="font-display text-2xl leading-tight">
           {hub.isHaunt ? "Your haunt" : `Tools at ${cemetery.name}`}
         </h2>
         {hub.isHaunt && (
@@ -64,20 +64,11 @@ export function HauntToolkit({
       </div>
       {/* Four to a row on a phone (nothing hidden off-screen), one row from 640px. */}
       <ul className="grid grid-cols-4 gap-1.5 sm:grid-cols-7">
-        {list.map((t) => {
-          const Icon = t.icon;
-          return (
-            <li key={t.title}>
-              <Link
-                href={t.href}
-                className="tap flex h-full flex-col items-center justify-center gap-0.5 rounded-xl border border-border bg-surface-2 px-1 py-1.5 text-sm font-bold"
-              >
-                <Icon className="h-5 w-5 text-mauve" />
-                {t.title}
-              </Link>
-            </li>
-          );
-        })}
+        {list.map((t) => (
+          <li key={t.title}>
+            <ToolTile variant="chip" tool={t.tool} href={t.href} title={t.title} />
+          </li>
+        ))}
       </ul>
       {eligible.spirit === 0 && (
         <p className="px-1 text-sm">No one listed here died 75 or more years ago, so there are no names for the spirit box or a séance.</p>

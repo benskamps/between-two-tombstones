@@ -17,7 +17,8 @@ import {
 import { formatDuration, type SpiritCaps } from "@/lib/spirit/session";
 import { pickVoice, silenceVoices, speakFragment, speechAvailable, unlockSpeech } from "@/lib/spirit/voice";
 import { bankHasNames, buildWordBank } from "@/lib/spirit/wordbank";
-import { ReadoutStrip, SpokenWord, SweepDial, countOf } from "@/components/ui/Instrument";
+import { Sprout } from "@/components/ui/symbols";
+import { ReadoutStrip, SplitFlap, SpokenWord, SweepDial } from "@/components/ui/Instrument";
 import { SeanceInvite } from "./SeanceInvite";
 import { DISCLAIMER, MOURNERS, NO_SPEECH, audioContextClass, clockTenths, subscribeNothing } from "./shared";
 
@@ -256,12 +257,15 @@ export function SeanceBox({
 
       {/* The same instrument as the spirit box; the dial steps with the shared schedule. */}
       <section aria-label="Controls" className="instrument bezel space-y-4 p-4">
+        {/* The room code, big: two phones side by side match before the first word lands (REVIEW-3). */}
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+          <p className="label text-muted">Room</p>
+          <SplitFlap value={room} testId="seance-room-code" />
+        </div>
         <ReadoutStrip
           live={phase === "live"}
-          items={[
-            { label: "Room", value: room },
-            { value: `At ${cemeteryName}` },
-            { label: "Voices", value: countOf(log.length, caps.maxUtterances) },
+          status={phase === "countdown" ? `T−${countdown ?? ""}` : phase === "live" ? "Live" : "Standby"}
+          values={[
             {
               value:
                 clockSync === null
@@ -270,7 +274,6 @@ export function SeanceBox({
                     ? `Clock ±${Math.max(1, Math.round(clockSync.rtt / 2))} ms`
                     : "Phone clock",
             },
-            { value: phase === "countdown" ? `T−${countdown ?? ""}` : phase === "live" ? "Live" : "Standby" },
           ]}
         />
         <SweepDial running={running} stepMs={STEP_MS} />
@@ -343,7 +346,11 @@ export function SeanceBox({
             )}
           </div>
         </div>
-        <p className="font-bold text-moss">{MOURNERS}</p>
+        <p className="flex items-center gap-2 font-bold text-lichen">
+          {/* The panel's life sign: the living come first (REVIEW-3). */}
+          <Sprout className="h-5 w-5 shrink-0" />
+          {MOURNERS}
+        </p>
       </section>
 
       <section aria-labelledby="seance-invite" className="space-y-3 card p-4">

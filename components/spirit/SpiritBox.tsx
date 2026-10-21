@@ -17,6 +17,7 @@ import { QID_RE, loadCemetery, type LoadResult, type SampleCemetery } from "@/li
 import { capsFromParam, createSession, formatDuration, stopMessage, type SpiritSession, type Utterance } from "@/lib/spirit/session";
 import { pickVoice, silenceVoices, speakFragment, speechAvailable } from "@/lib/spirit/voice";
 import { bankHasNames, buildWordBank } from "@/lib/spirit/wordbank";
+import { Sprout } from "@/components/ui/symbols";
 import { ReadoutStrip, SpokenWord, SweepDial, countOf } from "@/components/ui/Instrument";
 import { SEANCE_PITCH, SeanceJoin, SeanceStart } from "./SeanceStart";
 import { DISCLAIMER, MOURNERS, NO_SPEECH, audioContextClass, clock, subscribeNothing } from "./shared";
@@ -197,7 +198,6 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
   ];
 
   const latest = log[0];
-  const cemeteryName = result?.ok ? result.cemetery.name : (options.find((o) => o.qid === choice)?.label ?? choice);
 
   return (
     <div className="space-y-6">
@@ -256,13 +256,13 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
 
       {/* One instrument (L10.4): readouts, the dial, the voice, the controls and the captions log. */}
       <section aria-label="Controls" className="instrument bezel space-y-4 p-4">
+        {/* Status, the voice count, and when it stops. The cemetery is in the picker and the header; the sweep is on its knob. */}
         <ReadoutStrip
           live={running}
-          items={[
-            { value: `At ${cemeteryName}` },
+          status={running ? "Live" : "Standby"}
+          values={[
             { label: "Voices", value: countOf(log.length, caps.maxUtterances) },
-            { label: "Sweep", value: `${sweepMs} ms` },
-            { value: running && endsAt ? `Ends ${clock(endsAt)}` : "Standby" },
+            running && endsAt ? { label: "Ends", value: clock(endsAt) } : null,
           ]}
         />
         <SweepDial running={running} stepMs={sweepMs} />
@@ -342,7 +342,11 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
             )}
           </div>
         </div>
-        <p className="font-bold text-moss">{MOURNERS}</p>
+        <p className="flex items-center gap-2 font-bold text-lichen">
+          {/* The panel's life sign: the living come first (REVIEW-3). */}
+          <Sprout className="h-5 w-5 shrink-0" />
+          {MOURNERS}
+        </p>
       </section>
 
       <section id="seance" aria-labelledby="seance-heading" className="scroll-mt-4 space-y-4 card p-4">
@@ -372,14 +376,18 @@ export function SpiritBoxFallback() {
         <div className="h-[5.25rem]" />
       </div>
       <div className="instrument bezel space-y-4 p-4">
-        <ReadoutStrip live={false} items={[{ value: "Standby" }]} />
+        <ReadoutStrip live={false} status="Standby" />
         <SweepDial running={false} stepMs={SWEEP_DEFAULT_MS} />
         <SpokenWord testId="spirit-latest-fallback">{""}</SpokenWord>
         <button type="button" disabled className="btn btn-primary btn-lg w-full text-2xl">
           Loading&hellip;
         </button>
         <p className="font-bold">{DISCLAIMER}</p>
-        <p className="font-bold text-moss">{MOURNERS}</p>
+        <p className="flex items-center gap-2 font-bold text-lichen">
+          {/* The panel's life sign: the living come first (REVIEW-3). */}
+          <Sprout className="h-5 w-5 shrink-0" />
+          {MOURNERS}
+        </p>
       </div>
     </div>
   );
