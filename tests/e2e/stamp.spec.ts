@@ -1,6 +1,7 @@
 import { readFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
+import { seedHaunt } from "./fixtures/haunt";
 
 // The Stamp Kit end to end: fixture photo → corners (keyboard) → three renders,
 // timing under 4× CPU throttling, kit sheet / story downloads, and the
@@ -16,15 +17,12 @@ test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
     try {
       localStorage.setItem("btt-etiquette-seen", "1");
-      // The Stamp Kit opens once you have a haunt (decision 18e).
-      localStorage.setItem(
-        "btt-haunt",
-        JSON.stringify({ qid: "Q2008469", name: "Oakland Cemetery", place: "Atlanta", at: "2026-10-21T00:00:00.000Z" }),
-      );
     } catch {
       // ignore
     }
   });
+  // The Stamp Kit opens once you have a haunt (decision 18e).
+  await seedHaunt(page);
 });
 
 async function currentJob(page: Page) {

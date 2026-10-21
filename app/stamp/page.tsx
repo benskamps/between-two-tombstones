@@ -22,7 +22,7 @@ export default function StampPage() {
       </header>
       {/* Opens once you have a haunt (or the link names a cemetery); the haunt lives on the phone. */}
       <Suspense fallback={<GateNeutral />}>
-        <HauntGate tool="Stamp Kit">
+        <HauntGate tool="/stamp">
           <StampKit />
         </HauntGate>
       </Suspense>

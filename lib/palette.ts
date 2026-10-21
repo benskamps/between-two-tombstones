@@ -30,7 +30,7 @@ export const PALETTE: Record<Token, string> = {
   "surface-2": "#2A2130", // chips, rows inside cards
   border: "#43364B", // hairlines and card outlines only (decorative; see UI_PAIRS)
   text: "#F1EADF", // bone
-  muted: "#B9AEBF", // captions, hints
+  muted: "#D2C8D6", // captions, hints (raised for sunlight; never the only carrier of needed info)
   mauve: "#C7A2DC", // half-mourning mauve: primary actions, links
   "mauve-ink": "#1A1220", // text on any light fill (mauve, candle, lichen, ash, wisp)
   candle: "#E2AD4B", // warm highlight

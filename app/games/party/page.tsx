@@ -25,7 +25,7 @@ export default function PartyPage() {
       </header>
       {/* Starting a party needs a haunt; the party link it makes opens for anyone (see /games/bingo). */}
       <Suspense fallback={<GateNeutral />}>
-        <HauntGate tool="Graveyard Party" known={KNOWN}>
+        <HauntGate tool="/games/party" known={KNOWN}>
           <PartyLobby samples={SAMPLE_CEMETERIES} />
         </HauntGate>
       </Suspense>

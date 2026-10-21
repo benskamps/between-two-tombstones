@@ -1,30 +1,23 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useSyncExternalStore } from "react";
-import { cemeteryFromParams, type Haunt, type HauntInput, type UrlCemetery } from "./haunt";
-import { getHaunt, setHaunt, subscribeHaunt } from "./store";
+import { useSyncExternalStore } from "react";
+import { cemeteryFromParams, type Haunt, type UrlCemetery } from "./haunt";
+import { getFreshHaunt, getHaunt, subscribeHaunt } from "./store";
 
 /**
- * The haunt on this phone. `undefined` while it can't be known (the server
- * render and the hydration pass), so the first client render matches the HTML
- * exactly; then null (none) or the haunt.
+ * The haunt on this phone, if it's fresh (set in the last 12 hours). `undefined`
+ * while it can't be known (the server render and the hydration pass), so the
+ * first client render matches the HTML exactly; then null (none) or the haunt.
+ * Gates, the nav, the header and the tools' defaults all use this one.
  */
 export function useHaunt(): Haunt | null | undefined {
-  return useSyncExternalStore<Haunt | null | undefined>(subscribeHaunt, getHaunt, () => undefined);
+  return useSyncExternalStore<Haunt | null | undefined>(subscribeHaunt, getFreshHaunt, () => undefined);
 }
 
-/**
- * Makes this cemetery the haunt once it's known (the cemetery page calls this
- * with the tour it loaded). Re-runs only when the cemetery changes.
- */
-export function useSetHaunt(input: HauntInput | null): void {
-  const qid = input?.qid;
-  const name = input?.name;
-  const place = input?.place ?? undefined;
-  useEffect(() => {
-    if (qid && name) setHaunt({ qid, name, place });
-  }, [qid, name, place]);
+/** The stored haunt, fresh or not: for "Last time: … · Back to it". */
+export function useLastHaunt(): Haunt | null | undefined {
+  return useSyncExternalStore<Haunt | null | undefined>(subscribeHaunt, getHaunt, () => undefined);
 }
 
 /**

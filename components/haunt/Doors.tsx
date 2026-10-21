@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { NearMeButton } from "@/components/shell/NearMeButton";
 import { SearchForm } from "@/components/tour/SearchForm";
-import { ArchFrame, Eyebrow, SymbolPair } from "@/components/ui/Motifs";
+import { ArchFrame, SymbolPair } from "@/components/ui/Motifs";
 import { Candle, Lily, Moth, RingedMoon } from "@/components/ui/symbols";
 
 /**
@@ -15,14 +15,13 @@ export function Doors({ idPrefix = "door", level = 2 }: { idPrefix?: string; lev
   return (
     <div className="grid gap-6" data-testid="doors">
       <ArchFrame aria-labelledby={`${idPrefix}-search`} className="space-y-4 text-center">
-        <SymbolPair death={<RingedMoon animate className="h-7 w-7" />} life={<Lily className="h-7 w-7" />} />
+        <SymbolPair death={<RingedMoon className="h-7 w-7" />} life={<Lily className="h-7 w-7" />} />
         <H id={`${idPrefix}-search`} className="font-display text-3xl leading-tight">
           Search a graveyard
         </H>
         <NearMeButton label="I’m here. Haunt me." hint="Uses your location" />
-        <div className="space-y-2 text-left">
-          <Eyebrow className="text-center">or search by name</Eyebrow>
-          <SearchForm idPrefix={idPrefix} placeholder="Cemetery name" />
+        <div className="text-left">
+          <SearchForm idPrefix={idPrefix} placeholder="e.g. Oakland Cemetery" label="Or type the cemetery’s name" />
         </div>
       </ArchFrame>
 

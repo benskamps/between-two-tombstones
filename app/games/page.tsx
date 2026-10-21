@@ -36,7 +36,7 @@ export default function GamesPage() {
         <p className="text-muted">Something to do while you walk. Stay on the paths and give mourners space.</p>
       </header>
       <Suspense fallback={<GateNeutral />}>
-        <HauntGate tool="Graveyard Games">
+        <HauntGate tool="/games">
           <ul className="grid gap-3">
             {GAMES.map((g) => (
               <li key={g.href}>

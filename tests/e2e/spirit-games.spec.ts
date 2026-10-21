@@ -1,4 +1,5 @@
 import { expect, test, type BrowserContext, type Page } from "@playwright/test";
+import { seedHaunt } from "./fixtures/haunt";
 import { makeCard } from "../../lib/games/bingo";
 
 // Lane 4: spirit box, Tombstone Bingo, graveyard party (Gate 7).
@@ -151,18 +152,6 @@ async function captions(page: Page): Promise<string[]> {
 
 const DISCLAIMER = /The spirits use your phone.s text-to-speech\./;
 
-/** Tool pages open once you have a haunt (decision 18e); these tests start at Oakland. */
-function seedOaklandHaunt() {
-  try {
-    localStorage.setItem(
-      "btt-haunt",
-      JSON.stringify({ qid: "Q2008469", name: "Oakland Cemetery", place: "Atlanta", at: "2026-10-21T00:00:00.000Z" }),
-    );
-  } catch {
-    // ignore
-  }
-}
-
 
 // Chromium's fake microphone for the EVP tests: a real MediaStream that beeps,
 // with no permission prompt. Has no effect on pages that don't ask for the mic.
@@ -173,7 +162,7 @@ test.use({
 test.describe("spirit box", () => {
   test.beforeEach(async ({ context }) => {
     await context.addInitScript(seenEtiquette);
-    await context.addInitScript(seedOaklandHaunt);
+    await seedHaunt(context);
   });
 
   test("starts from the tap, speaks inside it, logs every voice, and stops itself at the voice cap", async ({
@@ -325,8 +314,7 @@ test.describe("spirit box", () => {
       }),
     );
     await page.goto("/spirit?cemetery=Q999999&test-caps=short");
-    // The cemetery from the link is the haunt now (decision 18e), so its option says so.
-    await expect(page.getByLabel(/Your haunt/)).toBeChecked();
+    await expect(page.getByLabel(/The cemetery from your last tour/)).toBeChecked();
     await expect(page.getByText("Test Hill Cemetery", { exact: true })).toBeVisible();
     await expect(page.getByText(/1 person buried at Test Hill Cemetery died 75 or more years ago/)).toBeVisible();
     await expect(page.getByText(/2 more recent or undated burials are left out/)).toBeVisible();
@@ -383,7 +371,7 @@ test.describe("tombstone bingo", () => {
   test("solo players get their own card, kept across reloads", async ({ browser, baseURL }) => {
     const [a, b] = await Promise.all([newContext(browser, baseURL), newContext(browser, baseURL)]);
     // Solo bingo (no party link) opens once you have a haunt.
-    await Promise.all([a.addInitScript(seedOaklandHaunt), b.addInitScript(seedOaklandHaunt)]);
+    await Promise.all([seedHaunt(a), seedHaunt(b)]);
     const [pa, pb] = await Promise.all([a.newPage(), b.newPage()]);
     await Promise.all([pa.goto("/games/bingo"), pb.goto("/games/bingo")]);
     const first = await cardSymbols(pa);
@@ -438,7 +426,7 @@ test.describe("graveyard party", () => {
     ]);
     await a.grantPermissions(["clipboard-read", "clipboard-write"]);
     // The host and the code-typer have a haunt (the party lobby needs one); b, who only opens the link, has none.
-    await Promise.all([a.addInitScript(seedOaklandHaunt), c.addInitScript(seedOaklandHaunt)]);
+    await Promise.all([seedHaunt(a), seedHaunt(c)]);
     const pa = await a.newPage();
     await pa.goto("/games/party");
     await pa.getByRole("button", { name: "Start a party" }).click();
@@ -480,7 +468,7 @@ test.describe("graveyard party", () => {
 
   test("rejects a mistyped room code with a clear message", async ({ page }) => {
     await page.addInitScript(seenEtiquette);
-    await page.addInitScript(seedOaklandHaunt);
+    await seedHaunt(page);
     await page.goto("/games/party");
     await page.getByLabel("Room code").fill("ABC");
     await page.getByRole("button", { name: "Join" }).click();
@@ -491,7 +479,7 @@ test.describe("graveyard party", () => {
 
 test("games hub lists bingo and party", async ({ page }) => {
   await page.addInitScript(seenEtiquette);
-  await page.addInitScript(seedOaklandHaunt);
+  await seedHaunt(page);
   await page.goto("/games");
   await expect(page.getByRole("link", { name: /Tombstone Bingo/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /Graveyard Party/ })).toBeVisible();
@@ -540,7 +528,7 @@ test.describe("EVP recorder", () => {
     page,
   }) => {
     await page.addInitScript(seenEtiquette);
-    await page.addInitScript(seedOaklandHaunt);
+    await seedHaunt(page);
     await page.addInitScript(probeEvp);
     const bodies: string[] = [];
     page.on("request", (req) => {
@@ -600,7 +588,7 @@ test.describe("EVP recorder", () => {
 
 test("EVP is hidden entirely when the browser has no getUserMedia", async ({ page }) => {
   await page.addInitScript(seenEtiquette);
-  await page.addInitScript(seedOaklandHaunt);
+  await seedHaunt(page);
   await page.addInitScript(() => {
     Object.defineProperty(navigator, "mediaDevices", { value: undefined, configurable: true });
   });

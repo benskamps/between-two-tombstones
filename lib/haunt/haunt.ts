@@ -22,6 +22,8 @@ export type HauntInput = { qid: string; name: string; place?: string | null };
 export type UrlCemetery = { qid: string; name?: string; place?: string };
 
 const QID_RE = /^Q[1-9]\d{0,11}$/;
+/** A haunt is fresh for 12 hours (F10): after that, it's "last time", not "now". */
+export const FRESH_MS = 12 * 60 * 60 * 1000;
 export const MAX_NAME = 120;
 export const MAX_PLACE = 80;
 
@@ -42,6 +44,39 @@ export function makeHaunt(input: HauntInput, now: Date = new Date()): Haunt | nu
   if (!isQid(qid) || !name) return null;
   const place = cleanText(input.place, MAX_PLACE);
   return { qid, name, ...(place ? { place } : {}), at: now.toISOString() };
+}
+
+/** Set within the last 12 hours (and not in the future by more than a minute of clock skew). */
+export function isFresh(h: Pick<Haunt, "at">, now: number = Date.now()): boolean {
+  const t = Date.parse(h.at);
+  if (Number.isNaN(t)) return false;
+  return now - t < FRESH_MS && t - now < 60_000;
+}
+
+/**
+ * Should opening this cemetery's page make it the haunt (F11)? Yes when the
+ * visitor came from "I'm here" or the nearby list, when there's no fresh haunt,
+ * or when it already is the haunt (that refreshes it). Otherwise the page
+ * offers "Make this my haunt" instead of switching on its own.
+ */
+export function shouldAutoSetHaunt(qid: string, fresh: Haunt | null, via: string | null): boolean {
+  if (via === "here" || via === "near") return true;
+  return !fresh || fresh.qid === qid;
+}
+
+/** Where a gate sends you back to once you have a haunt: only our own tool pages. */
+export const NEXT_TOOLS: Record<string, string> = {
+  "/stamp": "the Stamp Kit",
+  "/spirit": "the Spirit Box",
+  "/games": "the Graveyard Games",
+  "/games/bingo": "Tombstone Bingo",
+  "/games/party": "the Graveyard Party",
+  "/games/evp": "the EVP Recorder",
+  "/calendar": "the Haunted Calendar",
+};
+
+export function parseNext(raw: string | null | undefined): string | null {
+  return raw && Object.hasOwn(NEXT_TOOLS, raw) ? raw : null;
 }
 
 /** Reads what's stored; anything malformed (or from another app) is no haunt. */

@@ -1,12 +1,32 @@
+"use client";
+
+import { useEffect } from "react";
 import { HourglassSprout } from "@/components/ui/symbols";
+import { NEXT_TOOLS } from "@/lib/haunt/haunt";
+import { rememberNext } from "@/lib/haunt/next";
 import { Doors } from "./Doors";
 import { FamousCemeteries } from "./Famous";
 
+export type ToolPath = keyof typeof NEXT_TOOLS;
+
+/** Why each tool waits for a haunt, said truthfully (F12). */
+const WHY: Record<string, string> = {
+  "/stamp": "Every tool opens once you’ve picked your haunt, the cemetery you’re visiting. Pick it below and you’ll come back to the Stamp Kit from there.",
+  "/spirit": "The Spirit Box speaks the names of people buried at your haunt. Pick the cemetery you’re visiting below.",
+  "/games": "The games open once you’ve picked your haunt, the cemetery you’re visiting. Pick it below.",
+  "/games/bingo": "Bingo opens once you’ve picked your haunt, the cemetery you’re visiting. Pick it below. A friend’s party link always opens straight in.",
+  "/games/party": "A party starts at your haunt, the cemetery you’re visiting. Pick it below. A friend’s party link always opens straight in.",
+  "/games/evp": "The EVP Recorder opens once you’ve picked your haunt, the cemetery you’re visiting. Pick it below.",
+  "/calendar": "The Haunted Calendar fills your calendar with the death-days of people buried at your haunt. Pick the cemetery below.",
+};
+
 /**
  * What a tool page shows without a haunt: say why, then the ways in. Never a
- * dead end, never an empty page.
+ * dead end, never an empty page. Remembers the tool, so the cemetery page you
+ * end up on offers "Continue to …" (F12).
  */
-export function PickHauntFirst({ tool }: { tool: string }) {
+export function PickHauntFirst({ tool }: { tool: ToolPath }) {
+  useEffect(() => rememberNext(tool), [tool]);
   return (
     <section aria-labelledby="pick-haunt" className="space-y-6" data-testid="pick-haunt">
       <div className="card bezel space-y-2 px-5 py-6 text-center">
@@ -14,9 +34,7 @@ export function PickHauntFirst({ tool }: { tool: string }) {
         <h2 id="pick-haunt" className="font-display text-3xl leading-tight">
           Pick a haunt first
         </h2>
-        <p className="text-muted">
-          The {tool} works with the cemetery you&rsquo;re visiting. Find it below; every tool follows it from then on.
-        </p>
+        <p>{WHY[tool]}</p>
       </div>
       <Doors idPrefix="gate" level={3} />
       <FamousCemeteries id="gate-famous" />
@@ -24,7 +42,18 @@ export function PickHauntFirst({ tool }: { tool: string }) {
   );
 }
 
-/** Holds the space while the haunt is read on the phone (the server can't know it). */
+/**
+ * Holds the tool's place while the haunt is read on the phone (the server
+ * can't know it): its panel and a disabled button, never an empty page (F15).
+ */
 export function GateNeutral() {
-  return <div aria-busy="true" className="min-h-[60svh]" />;
+  return (
+    <div className="card space-y-4 p-5" aria-busy="true" data-testid="gate-loading">
+      <div className="h-4 w-2/3 rounded-full bg-surface-2" />
+      <div className="h-4 w-1/2 rounded-full bg-surface-2" />
+      <button type="button" disabled className="btn btn-primary w-full">
+        Loading…
+      </button>
+    </div>
+  );
 }

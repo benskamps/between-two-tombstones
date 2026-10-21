@@ -29,7 +29,7 @@ export default function CalendarPage() {
       {/* The picker reads ?cemetery= and the preview uses today's date: both only known in the browser. */}
       <Suspense fallback={<CalendarSubscribeFallback />}>
         {/* A calendar link (?cemetery=…) always opens; otherwise this needs a haunt. */}
-        <HauntGate tool="Haunted Calendar" known={KNOWN}>
+        <HauntGate tool="/calendar" known={KNOWN}>
           <CalendarSubscribe samples={CALENDAR_SAMPLES} productionHost={productionHost} />
         </HauntGate>
       </Suspense>

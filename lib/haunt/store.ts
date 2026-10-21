@@ -7,7 +7,7 @@
 // access is wrapped, and a copy is kept in memory so the haunt still works for
 // the rest of this page view and its client-side navigations.
 
-import { HAUNT_EVENT, HAUNT_KEY, makeHaunt, parseHaunt, serializeHaunt, type Haunt, type HauntInput } from "./haunt";
+import { HAUNT_EVENT, HAUNT_KEY, isFresh, makeHaunt, parseHaunt, serializeHaunt, type Haunt, type HauntInput } from "./haunt";
 
 let memory: string | null = null;
 /** True once a write to localStorage failed: from then on, memory is the truth. */
@@ -41,6 +41,12 @@ export function getHaunt(): Haunt | null {
     lastValue = parseHaunt(raw);
   }
   return lastValue;
+}
+
+/** The haunt if it was set in the last 12 hours, else null (F10). Same object while it stays fresh. */
+export function getFreshHaunt(): Haunt | null {
+  const h = getHaunt();
+  return h && isFresh(h) ? h : null;
 }
 
 /** Makes this cemetery the haunt. Returns what was kept, or null for bad input. */

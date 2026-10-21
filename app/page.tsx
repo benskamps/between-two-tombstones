@@ -11,9 +11,11 @@ export default function Home() {
         <p className="text-muted">Pick a cemetery. We find the graves with the best stories and walk you through them.</p>
       </section>
 
+      <HauntReturn when="fresh" />
+
       <Doors />
 
-      <HauntReturn />
+      <HauntReturn when="stale" />
 
       <OrbitDivider />
 

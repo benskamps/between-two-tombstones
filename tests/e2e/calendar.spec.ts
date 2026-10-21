@@ -1,4 +1,5 @@
 import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
+import { seedHaunt } from "./fixtures/haunt";
 import oaklandJson from "../../data/snapshots/oakland-atlanta.json";
 import sleepyJson from "../../data/snapshots/sleepy-hollow.json";
 import { buildCalendar } from "../../lib/calendar/feed";
@@ -106,16 +107,13 @@ async function open(page: Page, path: string, fixedNoon?: string) {
   await page.addInitScript(() => {
     try {
       localStorage.setItem("btt-etiquette-seen", "1");
-      // /calendar without a cemetery in the link opens once you have a haunt (decision 18e).
-      localStorage.setItem(
-        "btt-haunt",
-        JSON.stringify({ qid: "Q2008469", name: "Oakland Cemetery", place: "Atlanta", at: "2026-10-21T00:00:00.000Z" }),
-      );
     } catch {
       // ignore
     }
   });
   if (fixedNoon) await page.clock.setFixedTime(new Date(`${fixedNoon}T12:00:00`));
+  // /calendar without a cemetery in the link opens once you have a haunt (decision 18e). After the clock, so it's fresh then.
+  await seedHaunt(page);
   await page.goto(path);
 }
 

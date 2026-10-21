@@ -2,10 +2,10 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, type ReactNode } from "react";
-import { cemeteryFromParams, gateState, hauntInputFromUrl, isShareLink, type HauntInput } from "@/lib/haunt/haunt";
-import { setHaunt } from "@/lib/haunt/store";
+import { cemeteryFromParams, gateState, hauntInputFromUrl, isShareLink, shouldAutoSetHaunt, type HauntInput } from "@/lib/haunt/haunt";
+import { getFreshHaunt, setHaunt } from "@/lib/haunt/store";
 import { useHaunt } from "@/lib/haunt/useHaunt";
-import { GateNeutral, PickHauntFirst } from "./PickHauntFirst";
+import { GateNeutral, PickHauntFirst, type ToolPath } from "./PickHauntFirst";
 
 /**
  * Tool pages open once you have a haunt (decision 18e). Wrap in <Suspense>:
@@ -23,7 +23,8 @@ export function HauntGate({
   known = [],
   children,
 }: {
-  tool: string;
+  /** The tool's own path: picks the gate's copy and where "Continue to …" goes back to. */
+  tool: ToolPath;
   share?: string[];
   known?: HauntInput[];
   children: ReactNode;
@@ -35,12 +36,13 @@ export function HauntGate({
   const toSet = url ? hauntInputFromUrl(url, known) : null;
   const state = gateState({ shareLink: isShareLink(get, share), urlCemetery: url, haunt });
 
-  // Only the address the page opened with sets the haunt: a tool that later
-  // rewrites its own address (the calendar's picker) is browsing, not moving.
+  // Only the address the page opened with sets the haunt, and only when there's
+  // no fresh haunt already (F11: a link elsewhere is used, not adopted). A tool
+  // that later rewrites its own address (the calendar's picker) is browsing.
   const opened = useRef(toSet);
   useEffect(() => {
     const first = opened.current;
-    if (first) setHaunt(first);
+    if (first && shouldAutoSetHaunt(first.qid, getFreshHaunt(), null)) setHaunt(first);
   }, []);
 
   if (state === "unknown") return <GateNeutral />;

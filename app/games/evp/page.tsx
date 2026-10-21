@@ -19,7 +19,7 @@ export default function EvpPage() {
         </p>
       </header>
       <Suspense fallback={<p className="text-muted">Checking for a microphone&hellip;</p>}>
-        <HauntGate tool="EVP Recorder">
+        <HauntGate tool="/games/evp">
           <EvpRecorder />
         </HauntGate>
       </Suspense>

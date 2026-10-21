@@ -20,7 +20,7 @@ export default function BingoPage() {
       </header>
       {/* The card depends on ?party= and on what this phone saved, so it renders in the browser. A party link always opens. */}
       <Suspense fallback={<p className="text-muted">Shuffling your card&hellip;</p>}>
-        <HauntGate tool="Tombstone Bingo" share={["party"]}>
+        <HauntGate tool="/games/bingo" share={["party"]}>
           <BingoGame />
         </HauntGate>
       </Suspense>

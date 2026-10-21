@@ -15,7 +15,7 @@
   --surface-2: #2A2130;
   --border: #43364B;
   --text: #F1EADF;
-  --text-muted: #B9AEBF;
+  --text-muted: #D2C8D6;
   --mauve: #C7A2DC;
   --mauve-ink: #1A1220;
   --candle: #E2AD4B;
@@ -35,8 +35,8 @@
   --edge: var(--ash);
   --instrument: color-mix(in srgb, var(--surface) 92%, var(--wisp));
 
-  /* Stone grain: fractal noise as faint bone speckle, tiled. Cheap: one small image, rasterized once. */
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  /* Stone grain: one pre-rendered 128px tile (public/textures/grain.png, under 5 KB; F23), not a live SVG filter. */
+  --grain: url("/textures/grain.png");
   /* Wrought-iron fence: a spear-topped picket between two rails, repeated. Painted with currentColor through a mask. */
   --fence: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='22' viewBox='0 0 18 22'%3E%3Cpath d='M9 .5 11.6 5H9.8V22H8.2V5H6.4Z'/%3E%3Ccircle cx='9' cy='8.6' r='1.5'/%3E%3Crect y='11.6' width='18' height='1.3'/%3E%3Crect y='18.6' width='18' height='1.3'/%3E%3C/svg%3E");
 }
@@ -110,12 +110,33 @@ body {
   opacity: 1;
 }
 
+/*
+  Anything you can tap that draws an edge gets the ash edge (3:1 or better),
+  never the decorative hairline: old `border-border` links, buttons and radio
+  cards included. Unlayered, so it wins over the utility.
+*/
+:where(a, button, summary, label).border-border,
+:where(a, button).card {
+  border-color: var(--edge);
+}
+:where(a, button).border-border {
+  border-width: 1.5px;
+}
+
+/* Sunlight and "increase contrast": captions become bone, hairlines become edges. */
+@media (prefers-contrast: more) {
+  :root {
+    --text-muted: var(--text);
+    --border: var(--ash);
+  }
+}
+
 /* Surfaces carry the stone grain. */
 .bg-surface,
 .bg-surface-2,
 .stone {
   background-image: var(--grain);
-  background-size: 180px 180px;
+  background-size: 128px 128px;
 }
 
 /* ---------- Type ---------- */
@@ -176,7 +197,8 @@ body {
 .btn-ghost {
   background-color: var(--surface);
   color: var(--text);
-  border-color: var(--border);
+  border-width: 1.5px;
+  border-color: var(--edge);
 }
 .btn-lg {
   min-height: 56px;
@@ -204,7 +226,7 @@ body {
   border: 1px solid var(--border);
   background-color: var(--surface);
   background-image: var(--grain);
-  background-size: 180px 180px;
+  background-size: 128px 128px;
 }
 .card::before {
   content: "";
@@ -245,7 +267,7 @@ body {
   border-radius: 50% 50% 1.1rem 1.1rem / 4.75rem 4.75rem 1.1rem 1.1rem;
   background-color: var(--surface);
   background-image: var(--grain);
-  background-size: 180px 180px;
+  background-size: 128px 128px;
   padding: 3.25rem 1.25rem 1.5rem;
 }
 /* Optional deco double rule just inside the stone's edge. */
@@ -259,7 +281,10 @@ body {
   pointer-events: none;
 }
 
-/* ---------- Instrument panel (spirit box, séance: adopted in Lane 10.4) ---------- */
+/*
+  ---------- Instrument panel (spirit box, séance: adopted in Lane 10.4) ----------
+  Text blocks inside a panel sit on .instrument-plate (no scanlines under words).
+*/
 
 .instrument {
   position: relative;
@@ -267,15 +292,23 @@ body {
   border: 1px solid color-mix(in srgb, var(--wisp) 40%, var(--border));
   background-color: var(--instrument);
   /* Scanlines over the panel; the glow sits inside the bezel. */
+  /* 4px period (whole device pixels at common DPRs once doubled), soft, at most 4%. */
   background-image: repeating-linear-gradient(
     to bottom,
-    color-mix(in srgb, var(--wisp) 6%, transparent) 0 1px,
-    transparent 1px 3px
+    color-mix(in srgb, var(--wisp) 4%, transparent) 0,
+    color-mix(in srgb, var(--wisp) 4%, transparent) 1px,
+    transparent 2px,
+    transparent 4px
   );
   box-shadow:
     inset 0 0 28px -10px color-mix(in srgb, var(--wisp) 45%, transparent),
     0 0 22px -12px color-mix(in srgb, var(--wisp) 60%, transparent);
   --tick: color-mix(in srgb, var(--wisp) 70%, transparent);
+}
+
+.instrument-plate {
+  background-color: var(--instrument);
+  border-radius: 0.6rem;
 }
 
 /* ---------- Dividers ---------- */
@@ -330,15 +363,19 @@ body {
     transform: scale(1.03, 0.97);
   }
 }
+/* One animated symbol per screen; it plays three times and rests, except inside an instrument panel. */
 .sym-orbit {
   transform-box: view-box;
   transform-origin: center;
-  animation: btt-orbit 48s linear infinite;
+  animation: btt-orbit 48s linear 3;
 }
 .sym-flame {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-  animation: btt-flicker 2.8s ease-in-out infinite;
+  animation: btt-flicker 2.8s ease-in-out 3;
+}
+.instrument :is(.sym-orbit, .sym-flame) {
+  animation-iteration-count: infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -349,4 +386,9 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* The first-run rules card hides once read (the layout's early script sets data-etq before paint). */
+[data-etq="seen"] .etq-notice {
+  display: none;
 }

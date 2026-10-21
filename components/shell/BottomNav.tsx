@@ -28,38 +28,44 @@ function hauntItems(h: Haunt): Item[] {
 
 export function BottomNav() {
   const pathname = usePathname() ?? "/";
-  // The server can't know the haunt: it renders the doors, and the phone swaps in the haunt's tools.
+  // The server can't know the haunt (it lives on the phone). Until it's read,
+  // the bar keeps its height with no tabs, so it doesn't flip from the doors'
+  // tabs to the haunt's on every load (F25).
   const haunt = useHaunt();
-  const items = haunt ? hauntItems(haunt) : DOORS;
+  const items = haunt === undefined ? null : haunt ? hauntItems(haunt) : DOORS;
   return (
     <nav
       aria-label="Main"
       className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)]"
     >
-      <ul className={`mx-auto grid max-w-2xl ${items.length === 4 ? "grid-cols-4" : "grid-cols-3"}`}>
-        {items.map((item) => {
-          const active = item.match(pathname);
-          const Icon = item.icon;
-          return (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={`tap flex h-16 flex-col items-center justify-center gap-1 ${active ? "text-mauve" : "text-muted"}`}
-              >
-                <Icon className="h-5 w-5" />
-                <span
-                  className={`whitespace-nowrap font-label text-xs uppercase tracking-[0.08em] ${
-                    active ? "underline decoration-2 underline-offset-4" : ""
-                  }`}
+      {items === null ? (
+        <div className="h-16" aria-hidden="true" />
+      ) : (
+        <ul className={`mx-auto grid max-w-2xl ${items.length === 4 ? "grid-cols-4" : "grid-cols-3"}`}>
+          {items.map((item) => {
+            const active = item.match(pathname);
+            const Icon = item.icon;
+            return (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`tap flex h-16 flex-col items-center justify-center gap-1 ${active ? "text-mauve" : "text-muted"}`}
                 >
-                  {item.label}
-                </span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+                  <Icon className="h-5 w-5" />
+                  <span
+                    className={`whitespace-nowrap font-label text-xs uppercase tracking-[0.08em] ${
+                      active ? "underline decoration-2 underline-offset-4" : ""
+                    }`}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </nav>
   );
 }

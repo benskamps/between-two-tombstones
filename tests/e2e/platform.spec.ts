@@ -183,13 +183,13 @@ test.describe("security headers", () => {
       )
       .toBe(true);
 
-    // A real client interaction (dark only since decision 18, so no theme toggle to flip): the
-    // first-run card is opened by an effect and closed by a React click handler that writes storage.
-    const card = page.getByRole("dialog", { name: "Before you go in" });
-    await expect(card).toBeVisible();
-    await card.getByRole("button", { name: "Got it" }).click();
-    await expect(card).toBeHidden();
-    expect(await page.evaluate(() => localStorage.getItem("btt-etiquette-seen"))).toBe("1");
+    // A real client interaction. (Dark only since decision 18, so no theme toggle; and since F6
+    // the first-run rules are a card on the cemetery page, not a popup here.) The location button
+    // is React's once hydrated (data-ready); a refusal comes back through a React state update.
+    const locate = page.locator("[data-locate]");
+    await expect(locate).toHaveAttribute("data-ready", "");
+    await locate.click();
+    await expect(page.getByRole("alert").filter({ hasText: "Location is turned off for this site" })).toBeVisible();
 
     const violations = await page.evaluate(
       () => (window as unknown as { __cspViolations: string[] }).__cspViolations,

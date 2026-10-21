@@ -261,8 +261,9 @@ export function SeanceBox({
         {audioNote && <p className="text-danger">{audioNote}</p>}
         <p
           aria-hidden="true"
-          className={`min-h-[3.5rem] text-center font-display leading-tight text-accent ${
-            phase === "countdown" ? "text-3xl" : "text-4xl"
+          className={`min-h-[3.5rem] text-center leading-tight text-accent ${
+            // The countdown is digits: Atkinson, since IM Fell's old-style figures misread (F9).
+            phase === "countdown" ? "font-sans text-3xl" : "font-display text-4xl"
           }`}
           data-testid="seance-latest"
         >

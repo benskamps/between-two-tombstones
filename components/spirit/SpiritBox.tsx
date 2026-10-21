@@ -71,9 +71,12 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
   }, [tourQid, tourName]);
 
   // "/spirit?cemetery=Q…#seance" (e.g. from a tour) lands on the séance section, which renders after hydration.
+  // "?join=1" (from a broken séance link, or "type a code") also puts the cursor in the room-code box.
+  const joining = params.get("join") !== null;
   useEffect(() => {
-    if (window.location.hash === "#seance") document.getElementById("seance")?.scrollIntoView();
-  }, []);
+    if (window.location.hash === "#seance" || joining) document.getElementById("seance")?.scrollIntoView();
+    if (joining) document.getElementById("seance-room")?.focus({ preventScroll: true });
+  }, [joining]);
 
   // Stop on page hide and on unmount; close the audio context when leaving.
   useEffect(() => {
@@ -171,7 +174,8 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
       ? [
           {
             qid: extraQid,
-            label: "Your haunt",
+            // A cemetery from the link (the tour's own links carry it) or, without one, the haunt.
+            label: tourQid ? "The cemetery from your last tour" : "Your haunt",
             detail: results[extraQid]?.ok
               ? (results[extraQid] as Extract<LoadResult, { ok: true }>).cemetery.name
               : extraQid === haunt?.qid

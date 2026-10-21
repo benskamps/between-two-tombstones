@@ -9,8 +9,8 @@ const FAMOUS = [
 export function FamousCemeteries({ id = "famous" }: { id?: string }) {
   return (
     <section aria-labelledby={id} className="space-y-3">
-      <h2 id={id} className="label text-center text-muted">
-        or start with a famous one
+      <h2 id={id} className="text-center font-bold">
+        Or start with a famous one
       </h2>
       <ul className="grid gap-3 sm:grid-cols-2">
         {FAMOUS.map((s) => (
