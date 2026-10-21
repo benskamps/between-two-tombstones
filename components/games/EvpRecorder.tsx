@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { SymbolPair } from "@/components/ui/Motifs";
-import { Fern, Moth } from "@/components/ui/symbols";
+import { Lily, Moth } from "@/components/ui/symbols";
 import { EVP_PLAYBACK_RATE, evpSeconds, micAvailable, micErrorMessage, reverseBuffer } from "@/lib/games/evp";
 import "@/components/ui/games/skin-b-instrument.css";
 import "./games.css";
@@ -340,7 +340,7 @@ export function EvpRecorder() {
       </EvpPanel>
       <section aria-labelledby="evp-tips" className="card space-y-2 p-4">
         <h2 id="evp-tips" className="flex items-center gap-2 font-display text-2xl">
-          <SymbolPair death={<Moth className="h-5 w-5" />} life={<Fern className="h-5 w-5" />} />
+          <SymbolPair death={<Moth className="h-5 w-5" />} life={<Lily className="h-5 w-5" />} />
           How to listen
         </h2>
         <ul className="list-disc space-y-1 pl-5 marker:text-muted">
