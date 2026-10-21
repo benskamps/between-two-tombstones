@@ -165,6 +165,26 @@ describe("loadCemetery", () => {
     expect(r.data.people.find((p) => p.name === "Charles Collier")?.wikipedia?.extract).toMatch(/^Charles Augustus Collier \(July 19, 1848 – /);
   });
 
+  it("a request that lands while the same cemetery is loading joins that load (one set of Wikimedia calls)", async () => {
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    cached.cachedBurials.mockImplementation(async () => {
+      await gate;
+      return { rows, fetchedAt: "2026-10-20T02:15:00.000Z" };
+    });
+    cached.cachedCemeteryFacts.mockResolvedValue({ ...facts!, qid: "Q872253" });
+    cached.cachedExtracts.mockImplementation(summariesFor);
+    const warmUp = loadCemetery("Q872253");
+    const tour = loadCemetery("Q872253");
+    release();
+    const [a, b] = await Promise.all([warmUp, tour]);
+    expect(a).toBe(b);
+    expect(cached.cachedBurials).toHaveBeenCalledTimes(1);
+    // Once settled, the next request goes through the cache again (a failure is retried, never pinned).
+    await loadCemetery("Q872253");
+    expect(cached.cachedBurials).toHaveBeenCalledTimes(2);
+  });
+
   it("reports not-found when Wikidata has no such item", async () => {
     cached.cachedBurials.mockResolvedValue({ rows: [], fetchedAt: "2026-10-20T02:15:00.000Z" });
     cached.cachedCemeteryFacts.mockResolvedValue(null);

@@ -178,8 +178,29 @@ export function tidyPeople<T extends { people: Person[] }>(data: T): T {
   return changed ? { ...data, people } : data;
 }
 
+/**
+ * Loads still in flight, by QID. 'use cache' only shares an entry once it's
+ * stored, so a tour request that lands while /near's warm-up (or another
+ * visitor) is still loading the same cemetery would ask Wikimedia for it all
+ * again. It joins the running load instead. Settled loads leave the map, so
+ * the next request goes through the cache (and retries a failure) as before.
+ */
+const inFlight = new Map<string, Promise<CemeteryLoad>>();
+/** Cap on remembered in-flight loads; past it, loads simply run on their own. */
+export const MAX_IN_FLIGHT = 50;
+
 /** Live burials + stories for a cemetery; for the samples, the saved copy when live fails. */
-export async function loadCemetery(qid: string): Promise<CemeteryLoad> {
+export function loadCemetery(qid: string): Promise<CemeteryLoad> {
+  const running = inFlight.get(qid);
+  if (running) return running;
+  const load = loadCemeteryOnce(qid).finally(() => {
+    if (inFlight.get(qid) === load) inFlight.delete(qid);
+  });
+  if (inFlight.size < MAX_IN_FLIGHT) inFlight.set(qid, load);
+  return load;
+}
+
+async function loadCemeteryOnce(qid: string): Promise<CemeteryLoad> {
   const saved = savedSnapshot(qid);
   const stage: { source: DataSource } = { source: "Wikidata" };
   const budgetMs = saved ? SAMPLE_BUDGET_MS : LIVE_BUDGET_MS;
