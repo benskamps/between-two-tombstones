@@ -56,7 +56,7 @@ test.describe("Oakland Cemetery tour", () => {
     for (let i = 0; i < 10 && (await more.count()) > 0; i++) await more.click();
     const jackson = page.getByTestId("story-card").filter({ has: page.getByTestId("story-name").filter({ hasText: "Maynard Jackson" }) });
     await expect(jackson).toHaveAttribute("data-style", "plain");
-    await expect(jackson.getByText("Unusual death")).toHaveCount(0);
+    await expect(jackson.getByText("Notable death")).toHaveCount(0);
     await expect(page.getByTestId("story-card").first()).toHaveAttribute("data-style", "carved");
   });
 

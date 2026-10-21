@@ -9,12 +9,15 @@ import { findAGraveCemeteryUrl, httpsUrl } from "@/lib/tour/links";
 /** Matches BURIALS_LIMIT in lib/data/wikidata.ts (kept literal so no server code ships to the browser). */
 const BURIALS_CAP = 80;
 
-/** "Atlanta · cemetery in Atlanta, Georgia, USA" says the place twice: keep the longer one. */
+/**
+ * "Atlanta · cemetery in Atlanta, Georgia, USA" says the place twice: keep the
+ * longer one. Wikidata descriptions start lowercase; the line starts with a capital (N11).
+ */
 export function placeLine(locatedIn: string | null, description: string | null): string | null {
   const place = locatedIn?.trim() || null;
   const desc = description?.trim() || null;
-  if (place && desc && desc.toLowerCase().includes(place.toLowerCase())) return desc;
-  return [place, desc].filter(Boolean).join(" · ") || null;
+  const line = place && desc && desc.toLowerCase().includes(place.toLowerCase()) ? desc : [place, desc].filter(Boolean).join(" · ");
+  return line ? line.charAt(0).toUpperCase() + line.slice(1) : null;
 }
 
 export function TourHeader({ cemetery, people, children }: { cemetery: Cemetery; people: number; children?: ReactNode }) {

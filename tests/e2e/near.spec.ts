@@ -23,7 +23,8 @@ test.describe("/near", () => {
     const ask = page.getByTestId("near-no-location");
     await expect(ask).toContainText("Tap below to use your location, or search by name.");
     await expect(page.getByText(/lat \(−90 to 90\)/)).toHaveCount(0);
-    await expect(ask.getByRole("button", { name: /near me/i })).toBeVisible();
+    // Same words as home's door (L10.4: NearMeButton's default label is "I’m here. Haunt me.").
+    await expect(ask.getByRole("button", { name: /^I.m here\. Haunt me\.$/ })).toBeVisible();
     await expect(ask.getByRole("search")).toBeVisible();
   });
 

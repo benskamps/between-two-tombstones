@@ -9,7 +9,18 @@ import { CARD_PHOTO_WIDTH, commonsFilePage, commonsThumb, SMALL_PHOTO_WIDTH } fr
  * shows some other cemetery) their portrait, labeled as such. If it can't
  * load, the card still reads and says why.
  */
-export function GravePhoto({ src, name, kind = "grave" }: { src: string; name: string; kind?: "grave" | "portrait" }) {
+export function GravePhoto({
+  src,
+  name,
+  kind = "grave",
+  priority = false,
+}: {
+  src: string;
+  name: string;
+  kind?: "grave" | "portrait";
+  /** Stop 1's photo is on the first screen and often the LCP element: load it eagerly, first. */
+  priority?: boolean;
+}) {
   const online = useOnline();
   const [failed, setFailed] = useState(false);
   const width = kind === "grave" ? CARD_PHOTO_WIDTH : SMALL_PHOTO_WIDTH;
@@ -26,7 +37,9 @@ export function GravePhoto({ src, name, kind = "grave" }: { src: string; name: s
   }
 
   return (
-    <figure className={kind === "grave" ? "space-y-1" : "flex items-end gap-3"}>
+    // A portrait is centered with its caption under it, so the card has no dead half beside a small
+    // thumbnail (REVIEW-2 N9). Same on plain cards: it's layout, not ornament.
+    <figure className={kind === "grave" ? "space-y-1" : "flex flex-col items-center gap-1 text-center"}>
       {/* Commons serves the scaled copy at a standard width; next/image would add nothing here. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -34,14 +47,15 @@ export function GravePhoto({ src, name, kind = "grave" }: { src: string; name: s
         alt={kind === "grave" ? `Grave of ${name}` : `Portrait of ${name}`}
         width={width}
         height={kind === "grave" ? Math.round(width * 0.75) : Math.round(width * 1.25)}
-        loading="lazy"
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : "auto"}
         decoding="async"
         referrerPolicy="no-referrer"
         onError={() => setFailed(true)}
         className={
           kind === "grave"
             ? "h-auto max-h-80 w-full rounded-lg bg-surface-2 object-cover"
-            : "h-auto max-h-48 w-32 rounded-lg bg-surface-2 object-cover"
+            : "h-auto max-h-48 w-32 rounded-lg bg-surface-2 object-cover object-top"
         }
       />
       <figcaption className="text-xs text-muted">

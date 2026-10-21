@@ -41,12 +41,27 @@ export function nearHref(pos: GeolocationPosition): string {
  * (data-locate); this picks up its state once mounted. Every failure says so
  * and points at the name search below it; with no signal, at the saved tours.
  */
-export function NearMeButton({ label = "Find cemeteries near me", hint }: { label?: string; hint?: string }) {
+export function NearMeButton({
+  label = "I’m here. Haunt me.",
+  hint = "Uses your location",
+  fallbackFieldId = "search-q",
+}: {
+  label?: string;
+  hint?: string;
+  /** The name field right below: focus goes there when location fails (REVIEW-2 N7). /near's SearchForm is "search-q". */
+  fallbackFieldId?: string;
+}) {
   const router = useRouter();
   const hintId = useId();
   // false in the server HTML, true once React owns the button (then the early script steps aside).
   const ready = useSyncExternalStore(noSubscribe, () => true, () => false);
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+
+  // When location fails, the name search below is the way on: put the cursor there.
+  const failed = status.kind === "error";
+  useEffect(() => {
+    if (failed) document.getElementById(fallbackFieldId)?.focus();
+  }, [failed, fallbackFieldId]);
 
   // A tap that landed before hydration: show where it got to.
   useEffect(() => {
@@ -57,6 +72,7 @@ export function NearMeButton({ label = "Find cemeteries near me", hint }: { labe
   }, []);
 
   function locate() {
+    if (status.kind === "busy") return;
     if (typeof navigator.onLine === "boolean" && !navigator.onLine) {
       setStatus({ kind: "offline" });
       return;
@@ -79,7 +95,8 @@ export function NearMeButton({ label = "Find cemeteries near me", hint }: { labe
       <button
         type="button"
         onClick={locate}
-        disabled={busy}
+        // aria-disabled, not disabled: a disabled button drops focus to <body> (REVIEW-2 N7).
+        aria-disabled={busy || undefined}
         data-locate=""
         data-ready={ready ? "" : undefined}
         aria-describedby={hint ? hintId : undefined}
@@ -93,7 +110,7 @@ export function NearMeButton({ label = "Find cemeteries near me", hint }: { labe
         </p>
       )}
       {status.kind === "offline" && (
-        <p role="alert" className="mt-2 text-danger">
+        <p role="alert" className="mt-2 rounded-lg border-l-4 border-danger bg-bg px-3 py-2 text-left font-bold text-text">
           No signal. Your saved tours still open.{" "}
           <Link href="/cemetery/saved" className="tap inline-flex items-center font-bold text-mauve underline underline-offset-4">
             Open saved tours
@@ -101,7 +118,8 @@ export function NearMeButton({ label = "Find cemeteries near me", hint }: { labe
         </p>
       )}
       {status.kind === "error" && (
-        <p role="alert" className="mt-2 text-danger">
+        // Bone and bold with a danger edge: readable in sunlight (REVIEW-2 #8).
+        <p role="alert" className="mt-2 rounded-lg border-l-4 border-danger bg-bg px-3 py-2 text-left font-bold text-text">
           {status.message}
         </p>
       )}

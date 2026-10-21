@@ -117,6 +117,7 @@ export function TourView({ qid, initial, error, fallback }: Props) {
         <StoryCard
           scored={s}
           stop={i + 1}
+          total={ranked.length}
           cemeteryQid={data.cemetery.qid}
           cemeteryName={data.cemetery.name}
           pin={pins[s.person.qid]}
@@ -148,6 +149,18 @@ export function TourView({ qid, initial, error, fallback }: Props) {
           </Link>
         )}
       </TourHeader>
+
+      {/* The header names a different haunt: offer the switch right here, not four screens down (REVIEW-2 N6). */}
+      {hub.other && (
+        <div className="card flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2" data-testid="make-haunt">
+          <p className="min-w-0 flex-1">
+            Your haunt is <span className="font-bold">{hub.other.name}</span>.
+          </p>
+          <button type="button" onClick={hub.makeHaunt} className="btn btn-primary">
+            Make this my haunt
+          </button>
+        </div>
+      )}
 
       {hub.continueTo && (
         <Link href={hub.continueTo.href} onClick={forgetNext} className="btn btn-primary w-full" data-testid="continue-to">

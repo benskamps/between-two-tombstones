@@ -3,6 +3,8 @@ import { Suspense } from "react";
 import { HauntGate } from "@/components/haunt/HauntGate";
 import { SpiritBoxFallback } from "@/components/spirit/SpiritBox";
 import { SpiritModes } from "@/components/spirit/SpiritModes";
+import { PageHeader } from "@/components/ui/Motifs";
+import { Candle, Planchette } from "@/components/ui/symbols";
 import { SAMPLE_CEMETERIES } from "@/lib/spirit/samples";
 
 export const metadata: Metadata = {
@@ -16,13 +18,12 @@ const KNOWN = SAMPLE_CEMETERIES.map(({ qid, name, place }) => ({ qid, name, plac
 export default function SpiritPage() {
   return (
     <div className="space-y-6">
-      <header className="space-y-2">
-        <h1 className="font-display text-4xl leading-tight">Spirit Box</h1>
-        <p className="text-muted">
-          Radio static, and low voices saying the names of people buried in the cemetery. Only people who died at
-          least 75 years ago are used.
-        </p>
-      </header>
+      <PageHeader
+        title="Spirit Box"
+        death={<Planchette className="h-5 w-5" />}
+        life={<Candle className="h-5 w-5" />}
+        intro="Radio static, and low voices saying the names of people buried in the cemetery. Only people who died at least 75 years ago are used."
+      />
       {/* ?cemetery= and ?seance= come from the address bar, which is only known in the browser. */}
       {/* A séance link someone sent, or ?join=1 (type a room code), always opens; otherwise this needs a haunt. */}
       {/* The fallback holds about the tool's height so the footer doesn't jump into view and out again (CLS). */}

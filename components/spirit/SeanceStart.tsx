@@ -40,11 +40,12 @@ export function SeanceStart({
 
   return (
     <div className="space-y-3">
+      {/* Before a séance exists, starting one is the main thing; after, opening it is (REVIEW-2). */}
       <button
         type="button"
         onClick={start}
         disabled={!ready}
-        className="tap w-full rounded-xl bg-accent px-5 py-3 text-lg font-bold text-accent-ink disabled:opacity-60"
+        className={`btn w-full ${code ? "btn-ghost" : "btn-primary btn-lg"}`}
       >
         {code ? "Start a different séance" : "Start a séance"}
       </button>
@@ -54,13 +55,10 @@ export function SeanceStart({
       )}
       {code && path && cemetery && (
         <div className="space-y-3">
-          <SeanceInvite code={code} path={path} cemeteryName={cemetery.name} />
-          <Link
-            href={path}
-            className="tap flex items-center justify-center rounded-xl border-2 border-accent px-5 text-center font-bold"
-          >
+          <Link href={path} className="btn btn-primary btn-lg w-full">
             Open the séance on this phone
           </Link>
+          <SeanceInvite code={code} path={path} cemeteryName={cemetery.name} />
         </div>
       )}
     </div>
@@ -105,9 +103,9 @@ export function SeanceJoin({ cemeteryQid, disabled }: { cemeteryQid: string; dis
           spellCheck={false}
           maxLength={12}
           disabled={disabled}
-          className="tap min-w-0 flex-1 rounded-xl border border-border bg-bg px-4 font-mono uppercase tracking-widest"
+          className="field flex-1 font-mono uppercase tracking-widest"
         />
-        <button type="submit" disabled={disabled} className="tap rounded-xl border border-border px-5 font-bold disabled:opacity-60">
+        <button type="submit" disabled={disabled} className="btn btn-ghost">
           Join
         </button>
       </div>

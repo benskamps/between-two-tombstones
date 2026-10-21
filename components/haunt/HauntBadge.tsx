@@ -11,10 +11,10 @@ export function HauntBadge() {
   return (
     <Link
       href={hubHref(haunt)}
-      className="tap flex min-w-0 max-w-[50%] shrink-0 flex-col items-end justify-center text-right leading-tight"
+      className="tap flex min-w-0 flex-1 flex-col items-end justify-center text-right leading-tight"
       data-testid="haunt-badge"
     >
-      <span className="text-sm text-lichen">Haunting:</span>{" "}
+      <span className="text-sm whitespace-nowrap text-lichen">Haunting:</span>{" "}
       <span className="w-full truncate font-bold text-text" title={haunt.name}>
         {haunt.name}
       </span>

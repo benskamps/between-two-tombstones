@@ -121,6 +121,8 @@ test.describe("home", () => {
     await page.getByRole("button", { name: HAUNT_ME }).click();
     expect(await page.evaluate(() => (window as unknown as { __geoCalls: number }).__geoCalls)).toBe(1);
     await expect(page.getByRole("alert").filter({ hasText: "Location is turned off for this site" })).toContainText("search by name below");
+    // The way on is the name field right below, so the cursor goes there (REVIEW-2 N7).
+    await expect(page.getByLabel("Or type the cemetery’s name")).toBeFocused();
     await expect(page).toHaveURL(/\/$/);
   });
 
@@ -256,6 +258,11 @@ test.describe("the hub", () => {
     await openOakland(page);
     const cards = page.getByTestId("story-card");
     await expect(cards).toHaveCount(12, { timeout: 25_000 });
+    // Measure a settled page: every web font swapped in and two frames of layout after that.
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    });
     const third = (await cards.nth(2).boundingBox())!;
     const fourth = (await cards.nth(3).boundingBox())!;
     const toolkit = (await kit(page).boundingBox())!;

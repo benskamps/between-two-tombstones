@@ -57,3 +57,31 @@ export function ArchFrame<T extends ElementType = "section">({ as, rule = true, 
     </Tag>
   );
 }
+
+/**
+ * The page title every tool shares: a death/life pair above a carved heading,
+ * then one plain line in Atkinson. Same rhythm on every page, so moving from
+ * home to a tool doesn't change the frame (L10.4).
+ */
+export function PageHeader({
+  title,
+  intro,
+  death,
+  life,
+}: {
+  title: ReactNode;
+  intro?: ReactNode;
+  death: ReactNode;
+  life: ReactNode;
+}) {
+  return (
+    <header className="space-y-2">
+      {/* The pair sits beside the title, so every page's heading starts at the same height. */}
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="font-display text-4xl leading-tight">{title}</h1>
+        <SymbolPair death={death} life={life} className="shrink-0" />
+      </div>
+      {intro && <p className="text-muted">{intro}</p>}
+    </header>
+  );
+}

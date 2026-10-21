@@ -5,10 +5,19 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import { syncClock, type ClockSync } from "@/lib/spirit/clock";
 import { SWEEP_DEFAULT_MS, speechSeconds, startNoise, type NoiseEngine } from "@/lib/spirit/engine";
 import { loadCemetery, type LoadResult, type SampleCemetery } from "@/lib/spirit/load";
-import { bankHash, createSeanceSession, seancePath, seanceStopMessage, type SeanceSession, type SeanceUtterance } from "@/lib/spirit/seance";
+import {
+  STEP_MS,
+  bankHash,
+  createSeanceSession,
+  seancePath,
+  seanceStopMessage,
+  type SeanceSession,
+  type SeanceUtterance,
+} from "@/lib/spirit/seance";
 import { formatDuration, type SpiritCaps } from "@/lib/spirit/session";
 import { pickVoice, silenceVoices, speakFragment, speechAvailable, unlockSpeech } from "@/lib/spirit/voice";
 import { bankHasNames, buildWordBank } from "@/lib/spirit/wordbank";
+import { ReadoutStrip, SpokenWord, SweepDial, countOf } from "@/components/ui/Instrument";
 import { SeanceInvite } from "./SeanceInvite";
 import { DISCLAIMER, MOURNERS, NO_SPEECH, audioContextClass, clockTenths, subscribeNothing } from "./shared";
 
@@ -245,30 +254,40 @@ export function SeanceBox({
         )}
       </section>
 
-      <section aria-label="Controls" className="space-y-4 rounded-xl border border-border bg-surface p-4">
+      {/* The same instrument as the spirit box; the dial steps with the shared schedule. */}
+      <section aria-label="Controls" className="instrument bezel space-y-4 p-4">
+        <ReadoutStrip
+          live={phase === "live"}
+          items={[
+            { label: "Room", value: room },
+            { value: `At ${cemeteryName}` },
+            { label: "Voices", value: countOf(log.length, caps.maxUtterances) },
+            {
+              value:
+                clockSync === null
+                  ? "Clock syncing"
+                  : clockSync.source === "server"
+                    ? `Clock ±${Math.max(1, Math.round(clockSync.rtt / 2))} ms`
+                    : "Phone clock",
+            },
+            { value: phase === "countdown" ? `T−${countdown ?? ""}` : phase === "live" ? "Live" : "Standby" },
+          ]}
+        />
+        <SweepDial running={running} stepMs={STEP_MS} />
+        <SpokenWord key={phase === "live" ? (latest?.k ?? "live") : phase} testId="seance-latest" digits={phase === "countdown"}>
+          {big}
+        </SpokenWord>
         <button
           type="button"
           onClick={running ? stop : join}
           disabled={!running && !ready}
-          className={`tap w-full rounded-xl px-6 py-5 text-2xl font-bold disabled:opacity-60 ${
-            running ? "border-2 border-danger text-danger" : "bg-accent text-accent-ink"
-          }`}
+          className={`btn btn-lg w-full text-2xl ${running ? "btn-stop" : "btn-primary"}`}
         >
           {running ? "Stop" : result ? "Join the séance" : "Loading…"}
         </button>
         <p className="font-bold">{DISCLAIMER}</p>
         {!canSpeak && <p className="text-danger">{NO_SPEECH}</p>}
         {audioNote && <p className="text-danger">{audioNote}</p>}
-        <p
-          aria-hidden="true"
-          className={`min-h-[3.5rem] text-center leading-tight text-accent ${
-            // The countdown is digits: Atkinson, since IM Fell's old-style figures misread (F9).
-            phase === "countdown" ? "font-sans text-3xl" : "font-display text-4xl"
-          }`}
-          data-testid="seance-latest"
-        >
-          {big}
-        </p>
         {/* Screen readers get the countdown here; the captions log announces the voices. */}
         <p className="sr-only" aria-live="polite">
           {phase === "countdown" && countdown !== null ? `The séance begins in ${countdown}` : ""}
@@ -296,38 +315,38 @@ export function SeanceBox({
             step={5}
             value={volume}
             onChange={(e) => changeVolume(Number(e.target.value))}
-            className="tap w-full accent-[var(--accent)]"
+            className="knob"
           />
         </label>
         <p className="text-sm text-muted">The static steps in time with the other phones, so there’s no sweep control.</p>
+
+        <div className="space-y-2">
+          <h2 id="seance-captions" className="label text-wisp">
+            What the spirits said
+          </h2>
+          <div role="log" aria-live="polite" aria-label="Captions" className="ticker">
+            <ol>
+              {log.map((u) => (
+                <li key={u.k} data-slot={u.k} className="flex gap-3 border-b border-border py-1 last:border-b-0">
+                  <time dateTime={new Date(u.at).toISOString()} className="shrink-0 text-sm tabular-nums text-muted">
+                    {clockTenths(u.at)}
+                  </time>
+                  <span className="font-bold">{u.text}</span>
+                </li>
+              ))}
+            </ol>
+            {log.length === 0 && !stopNote && (
+              <p className="py-1 text-sm text-muted">
+                Each voice shows up here with the time it was due on the shared clock, so phones can be compared side
+                by side.
+              </p>
+            )}
+          </div>
+        </div>
         <p className="font-bold text-moss">{MOURNERS}</p>
       </section>
 
-      <section aria-labelledby="seance-captions" className="space-y-3">
-        <h2 id="seance-captions" className="font-display text-2xl">
-          What the spirits said
-        </h2>
-        <div role="log" aria-live="polite" aria-label="Captions">
-          <ol className="space-y-1">
-            {log.map((u) => (
-              <li key={u.k} data-slot={u.k} className="flex gap-3 border-b border-border py-1">
-                <time dateTime={new Date(u.at).toISOString()} className="shrink-0 text-sm tabular-nums text-muted">
-                  {clockTenths(u.at)}
-                </time>
-                <span className="font-bold">{u.text}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
-        {log.length === 0 && !stopNote && (
-          <p className="text-muted">
-            Each voice shows up here with the time it was due on the shared clock, so phones can be compared side by
-            side.
-          </p>
-        )}
-      </section>
-
-      <section aria-labelledby="seance-invite" className="space-y-3 rounded-xl border border-border bg-surface p-4">
+      <section aria-labelledby="seance-invite" className="space-y-3 card p-4">
         <h2 id="seance-invite" className="font-display text-2xl">
           Bring in more phones
         </h2>

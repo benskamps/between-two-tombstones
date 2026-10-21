@@ -9,9 +9,11 @@ export function SiteHeader() {
         Skip to content
       </a>
       <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-1">
-        <Link href="/" className="tap flex min-w-0 items-center gap-2">
+        {/* One line, always: the wordmark never wraps; with a haunt it shrinks (and on a narrow phone it
+            leaves just the moon, which still links home), and the haunt's name truncates (REVIEW-2 N3). */}
+        <Link href="/" className="tap flex min-w-0 shrink-0 items-center gap-2" aria-label="Between Two Tombstones, home">
           <RingedMoon className="h-6 w-6 shrink-0 text-mauve" />
-          <span className="font-display text-xl leading-tight">Between Two Tombstones</span>
+          <span className="wordmark whitespace-nowrap font-display text-xl leading-tight">Between Two Tombstones</span>
         </Link>
         <HauntBadge />
       </div>
