@@ -4,8 +4,10 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { ServiceWorkerRegistrar } from "@/components/offline/ServiceWorkerRegistrar";
 import { TourView } from "@/components/tour/TourView";
+import { isSlowFailure, parsePeopleParam } from "@/lib/data/big";
 import { loadCemetery } from "@/lib/data/load";
 import { parseQid } from "@/lib/data/validate";
+import { SlowCemetery } from "./SlowCemetery";
 
 // The shared layout's BottomNav reads usePathname() outside <Suspense>, which a
 // dynamic [qid] segment can't prerender. Until the layout wraps it in
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
   description: "The graves worth visiting here, with how those people lived.",
 };
 
-export default function CemeteryPage({ params }: PageProps<"/cemetery/[qid]">) {
+export default function CemeteryPage({ params, searchParams }: PageProps<"/cemetery/[qid]">) {
   return (
     <>
       {/* Story photos come from Commons: Special:FilePath redirects to the scaled copy on
@@ -28,7 +30,7 @@ export default function CemeteryPage({ params }: PageProps<"/cemetery/[qid]">) {
       <link rel="preconnect" href="https://thumb.wikimedia.org" />
       <ServiceWorkerRegistrar />
       <Suspense fallback={<TourLoading />}>
-        <Tour params={params} />
+        <Tour params={params} searchParams={searchParams} />
       </Suspense>
     </>
   );
@@ -43,7 +45,7 @@ function TourLoading() {
   );
 }
 
-async function Tour({ params }: Pick<PageProps<"/cemetery/[qid]">, "params">) {
+async function Tour({ params, searchParams }: Pick<PageProps<"/cemetery/[qid]">, "params" | "searchParams">) {
   const { qid: raw } = await params;
   const parsed = parseQid(raw);
   if (!parsed.ok) {
@@ -73,14 +75,20 @@ async function Tour({ params }: Pick<PageProps<"/cemetery/[qid]">, "params">) {
       </div>
     );
   }
+  // Keys: a refresh after the slow-cemetery retry swaps the failed view for a fresh live one.
   if (result.status === "error") {
+    // A Wikidata timeout (a big cemetery, N1) retries once from the browser before failing; an outage doesn't (Gate 8).
+    const slow = isSlowFailure(result.error.source, result.error.kind);
+    const people = slow ? parsePeopleParam((await searchParams).n) : null;
     return (
       <TourView
+        key="failed"
         qid={parsed.qid}
         initial={null}
         error={{ source: result.error.source, message: result.error.userMessage }}
+        fallback={slow ? <SlowCemetery qid={parsed.qid} people={people} /> : undefined}
       />
     );
   }
-  return <TourView qid={parsed.qid} initial={result.data} error={null} />;
+  return <TourView key="live" qid={parsed.qid} initial={result.data} error={null} />;
 }

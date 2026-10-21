@@ -3,14 +3,14 @@
 //
 // URL contract with the home page and the cemetery hub (Lane 10):
 // - The location button opens /near?lat=…&lon=…&acc=<meters>. No acc: never auto-open.
-// - A cemetery picked from the list opens /cemetery/<qid>?via=near.
-// - Auto-open goes to /cemetery/<qid>?via=here&lat=…&lon=…; the hub's
+// - A cemetery picked from the list opens /cemetery/<qid>?via=near&n=<people listed>.
+// - Auto-open goes to /cemetery/<qid>?via=here&lat=…&lon=…&n=…; the hub's
 //   "Not here? See the others" links back to /near?lat=…&lon=…&list=1.
 // - list=1 turns auto-open off.
 
 import type { NearbyCemetery } from "./types";
 
-/** "Best stories nearby": the nearest cemetery with this many people listed… */
+/** "Best stories nearby": the cemetery with the most people listed among those with this many… */
 export const BEST_MIN_PEOPLE = 10;
 /** …within this distance; otherwise the nearest with FALLBACK_MIN_PEOPLE at any distance. */
 export const BEST_MAX_KM = 2;
@@ -22,6 +22,8 @@ export const AUTO_OPEN_MAX_KM = 0.3;
 export const AUTO_OPEN_MIN_PEOPLE = 5;
 /** …and only when the phone's fix is at least this good. Worse than this, we say so. */
 export const MAX_ACCURACY_M = 300;
+/** Another cemetery with 5+ people this close makes "which one are you in?" a guess. */
+export const AUTO_OPEN_RIVAL_KM = 0.6;
 
 const nearestFirst = (list: NearbyCemetery[]) => [...list].sort((a, b) => a.distanceKm - b.distanceKm);
 
@@ -29,24 +31,34 @@ const nearestFirst = (list: NearbyCemetery[]) => [...list].sort((a, b) => a.dist
 export const WARM_MIN_PEOPLE = 5;
 export const WARM_MAX_KM = 1;
 
-/** The nearest cemetery with 10+ people within 2 km; if none, the nearest with 5+; else null. */
+/**
+ * The pinned card: among cemeteries with 10+ people within 2 km, the one with
+ * the most people listed (ties: the nearer); if none, the nearest with 5+;
+ * else null. Most people, not nearest: at Laurel Hill's south edge the nearest
+ * with 10+ is Mount Vernon (26 people, 260 m), next to Laurel Hill (557, 550 m).
+ */
 export function bestNearby(list: NearbyCemetery[]): NearbyCemetery | null {
   const sorted = nearestFirst(list);
-  return (
-    sorted.find((c) => c.burials >= BEST_MIN_PEOPLE && c.distanceKm <= BEST_MAX_KM) ??
-    sorted.find((c) => c.burials >= FALLBACK_MIN_PEOPLE) ??
-    null
-  );
+  const big = sorted.filter((c) => c.burials >= BEST_MIN_PEOPLE && c.distanceKm <= BEST_MAX_KM);
+  if (big.length > 0) return big.reduce((a, b) => (b.burials > a.burials ? b : a));
+  return sorted.find((c) => c.burials >= FALLBACK_MIN_PEOPLE) ?? null;
 }
 
 /**
  * The cemetery to open without showing the list: the nearest with 5+ people
- * within 300 m, and only with a fix of ±300 m or better. Unknown accuracy,
- * a worse fix, or list=1 → null (show the list).
+ * within 300 m, with a fix of ±300 m or better, and only when that is not a
+ * guess: it is also the pinned "Best stories nearby" pick, or no other
+ * cemetery with 5+ people is within 600 m. Unknown accuracy, a worse fix,
+ * list=1, or two cemeteries in play → null (show the list with the pin).
  */
 export function autoOpenTarget(list: NearbyCemetery[], accuracyM: number | null, listRequested = false): NearbyCemetery | null {
   if (listRequested || accuracyM === null || accuracyM > MAX_ACCURACY_M) return null;
-  return nearestFirst(list).find((c) => c.burials >= AUTO_OPEN_MIN_PEOPLE && c.distanceKm <= AUTO_OPEN_MAX_KM) ?? null;
+  const sorted = nearestFirst(list);
+  const target = sorted.find((c) => c.burials >= AUTO_OPEN_MIN_PEOPLE && c.distanceKm <= AUTO_OPEN_MAX_KM);
+  if (!target) return null;
+  if (bestNearby(list)?.qid === target.qid) return target;
+  const rival = sorted.some((c) => c.qid !== target.qid && c.burials >= AUTO_OPEN_MIN_PEOPLE && c.distanceKm <= AUTO_OPEN_RIVAL_KM);
+  return rival ? null : target;
 }
 
 /**
@@ -106,11 +118,18 @@ export function peopleText(n: number): string {
 }
 
 /** A cemetery picked from the near list. */
-export function nearHref(qid: string): string {
-  return `/cemetery/${qid}?via=near`;
+/** `n` = people listed, so a slow first load can say how big the cemetery is (lib/data/big.ts). */
+function tourHref(qid: string, params: Record<string, string>, burials?: number): string {
+  const q = new URLSearchParams(params);
+  if (burials && burials > 0) q.set("n", String(Math.round(burials)));
+  return `/cemetery/${qid}?${q}`;
+}
+
+export function nearHref(qid: string, burials?: number): string {
+  return tourHref(qid, { via: "near" }, burials);
 }
 
 /** Auto-open: the hub knows the visitor is standing here, and where to send "Not here?". */
-export function hereHref(qid: string, lat: number, lon: number): string {
-  return `/cemetery/${qid}?${new URLSearchParams({ via: "here", lat: String(lat), lon: String(lon) })}`;
+export function hereHref(qid: string, lat: number, lon: number, burials?: number): string {
+  return tourHref(qid, { via: "here", lat: String(lat), lon: String(lon) }, burials);
 }

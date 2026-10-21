@@ -7,7 +7,7 @@ import { personName } from "@/lib/tour/text";
 import type { Cemetery, Person } from "@/lib/types";
 import { DataSourceError } from "./errors";
 import type { CemeterySearchResult, NearbyCemetery } from "./types";
-import { politeJson, REQUEST_PATH } from "./wikimedia";
+import { politeJson, REQUEST_PATH, type PoliteOptions } from "./wikimedia";
 import { titleFromUrl } from "./wikipedia";
 
 export const SPARQL_ENDPOINT = "https://query.wikidata.org/sparql";
@@ -30,7 +30,10 @@ export function flattenBindings(json: SparqlJson): SparqlRow[] {
   return bindings.map((b) => Object.fromEntries(Object.entries(b).flatMap(([k, v]) => (v ? [[k, v.value]] : []))));
 }
 
-export async function sparql(query: string): Promise<SparqlRow[]> {
+/** Per-call overrides; every call keeps REQUEST_PATH's 2 s cap on rate-limit waits. */
+export type SparqlOptions = Pick<PoliteOptions, "timeoutMs" | "deadlineMs">;
+
+export async function sparql(query: string, opts: SparqlOptions = {}): Promise<SparqlRow[]> {
   const url = `${SPARQL_ENDPOINT}?format=json&query=${encodeURIComponent(query)}`;
   const json = await politeJson<SparqlJson>(url, {
     source: "Wikidata",
@@ -38,6 +41,7 @@ export async function sparql(query: string): Promise<SparqlRow[]> {
     init: { headers: { Accept: "application/sparql-results+json" } },
     // The SPARQL endpoint was fine with back-to-back queries in Hour 0.
     spacingMs: 0,
+    ...opts,
   });
   return flattenBindings(json);
 }
@@ -88,6 +92,17 @@ SELECT ?person ?personLabel ?personDescription
   (SAMPLE(?fag_) AS ?findAGraveId) (SAMPLE(?sitelinks_) AS ?sitelinks)
   (SAMPLE(?enwiki_) AS ?enwiki)
 WHERE {
+  # The top ${limit} people first (most sitelinks, ties by QID number), then the
+  # details for those only: Arlington lists 4,000+ people, and joining every
+  # OPTIONAL for all of them before the cut took 51 s or timed out.
+  {
+    SELECT DISTINCT ?person ?sitelinks_ WHERE {
+      ?person p:P119 ?top . ?top ps:P119 wd:${qid} .
+      OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }
+    }
+    ORDER BY DESC(?sitelinks_) xsd:integer(STRAFTER(STR(?person), "/entity/Q"))
+    LIMIT ${limit}
+  }
   ?person p:P119 ?burial . ?burial ps:P119 wd:${qid} .
   OPTIONAL { ?burial pq:P625 ?graveCoord_ }
   OPTIONAL { ?person p:P569 ?bst . ?bst a wikibase:BestRank ; psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }
@@ -99,7 +114,6 @@ WHERE {
   OPTIONAL { ?person wdt:P1442 ?graveImage_ }
   OPTIONAL { ?person wdt:P625 ?personCoord_ }
   OPTIONAL { ?person wdt:P535 ?fag_ }
-  OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }
   OPTIONAL { ?enwiki_ schema:about ?person ; schema:isPartOf <https://en.wikipedia.org/> }
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }
@@ -145,8 +159,19 @@ function toPersonRow(r: SparqlRow, name: string): PersonRow {
   };
 }
 
+/**
+ * The burials query is the one slow call: even with the top-80 subquery, a big
+ * cemetery took up to 14 s cold on WDQS (Green-Wood, 10/21). It gets 27 s per
+ * attempt instead of 15, and no retry after a timeout (the deadline leaves no
+ * room for one). The page gives up first, at BURIALS_BUDGET_MS (25 s) in
+ * lib/data/load.ts, outside the cache, so the failure keeps its "timeout" kind
+ * (an error thrown inside 'use cache' loses its message in production) and a
+ * query that finishes in the last 2 s still lands in the cache for the retry.
+ */
+export const BURIALS_FETCH = { timeoutMs: 27_000, deadlineMs: 28_000 } as const satisfies SparqlOptions;
+
 export async function fetchBurials(qid: string): Promise<PersonRow[]> {
-  return parseBurialRows(await sparql(burialsQuery(qid)));
+  return parseBurialRows(await sparql(burialsQuery(qid), BURIALS_FETCH));
 }
 
 // ---------------------------------------------------------------- cemetery facts

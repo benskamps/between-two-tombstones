@@ -198,6 +198,35 @@ describe("loadCemetery", () => {
     expect(cached.cachedBurials).toHaveBeenCalledTimes(2);
   });
 
+  it("stops waiting for a big cemetery's burials at 25 s and names a timeout, outside the cache (N1)", async () => {
+    vi.useFakeTimers();
+    try {
+      cached.cachedBurials.mockReturnValue(new Promise(() => {})); // Wikidata never answers
+      const pending = loadCemetery("Q216344");
+      await vi.advanceTimersByTimeAsync(24_999);
+      let settled = false;
+      void pending.then(() => (settled = true));
+      await vi.advanceTimersByTimeAsync(0);
+      expect(settled).toBe(false);
+      await vi.advanceTimersByTimeAsync(1);
+      const r = await pending;
+      expect(r).toMatchObject({ status: "error", error: { source: "Wikidata", kind: "timeout" } });
+      if (r.status === "error") expect(r.error.userMessage).toBe("Wikidata took too long to answer. Try again in a minute, or open a saved tour.");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("SIMULATE_SLOW_BURIALS makes the listed cemeteries time out at once (e2e hook)", async () => {
+    vi.stubEnv("SIMULATE_SLOW_BURIALS", "Q216344, Q239043");
+    try {
+      expect(await loadCemetery("Q239043")).toMatchObject({ status: "error", error: { source: "Wikidata", kind: "timeout" } });
+      expect(cached.cachedBurials).not.toHaveBeenCalled();
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
   it("reports not-found when Wikidata has no such item", async () => {
     cached.cachedBurials.mockResolvedValue({ rows: [], fetchedAt: "2026-10-20T02:15:00.000Z" });
     cached.cachedCemeteryFacts.mockResolvedValue(null);

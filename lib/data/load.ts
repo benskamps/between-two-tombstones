@@ -17,6 +17,13 @@ import { BATCH_SIZE, titleFromUrl } from "./wikipedia";
 export const SAMPLE_BUDGET_MS = 12_000;
 /** Any other cemetery has no fallback, so it may wait longer. */
 export const LIVE_BUDGET_MS = 35_000;
+/**
+ * The burials query alone: past this the page stops waiting and names a
+ * timeout (the browser then retries once, app/cemetery/[qid]). Shorter than
+ * the query's own timeout (BURIALS_FETCH), so the classification happens here,
+ * outside the cache, and a late answer still fills the cache.
+ */
+export const BURIALS_BUDGET_MS = 25_000;
 /** The near API waits this long for OpenStreetMap after Wikidata answers. */
 export const OSM_EXTRA_WAIT_MS = 4_000;
 /** After every Overpass mirror fails, skip OpenStreetMap for this long. */
@@ -28,6 +35,15 @@ async function call<T>(source: DataSource, fn: () => Promise<T>): Promise<T> {
   } catch (err) {
     throw asDataSourceError(err, source);
   }
+}
+
+/**
+ * Test hook, like DISABLE_WIKIDATA: SIMULATE_SLOW_BURIALS=Q216344,Q239043 makes
+ * those cemeteries' burials time out at once, so e2e can walk the slow path.
+ */
+function simulatedSlowBurials(qid: string): boolean {
+  const list = process.env.SIMULATE_SLOW_BURIALS;
+  return Boolean(list) && list!.split(",").map((s) => s.trim()).includes(qid);
 }
 
 function withBudget<T>(work: Promise<T>, ms: number, onTimeout: () => DataSourceError): Promise<T> {
@@ -76,7 +92,16 @@ type LiveResult = { data: BurialsResponse; missingStories: number; wikipediaErro
 
 async function loadLive(qid: string, stage: { source: DataSource }): Promise<LiveResult | null> {
   stage.source = "Wikidata";
-  const { rows, fetchedAt } = await call("Wikidata", () => cachedBurials(qid));
+  if (simulatedSlowBurials(qid)) {
+    throw new DataSourceError("Wikidata", "timeout", `Burials for ${qid} timed out (SIMULATE_SLOW_BURIALS).`);
+  }
+  const { rows, fetchedAt } = await call("Wikidata", () =>
+    withBudget(
+      cachedBurials(qid),
+      BURIALS_BUDGET_MS,
+      () => new DataSourceError("Wikidata", "timeout", `No list of burials from Wikidata within ${BURIALS_BUDGET_MS / 1000} s.`),
+    ),
+  );
   const titles = [
     ...new Set(
       rows.flatMap((r) => {

@@ -1,0 +1,1643 @@
+{
+ "head": {
+  "vars": [
+   "c",
+   "label",
+   "description",
+   "dist",
+   "coord",
+   "places",
+   "fagc",
+   "enwiki",
+   "burials"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q68136606"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Mount Vernon Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "0.26"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.185 39.999444)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "45549"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Mount_Vernon_Cemetery_(Philadelphia)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "26"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6922681"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Mount Peace Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "0.49"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.1824 39.998)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1628663"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Mount_Peace_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "28"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6499849"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Laurel Hill Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "0.545"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.1875 40.003889)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "45266"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Laurel_Hill_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "557"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q90620614"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "St. James-the-Less Episcopal Churchyard"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "church cemetery in Philadelphia, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "0.721"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.182167 40.0037041)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1607201"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "61"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7077342"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Odd Fellows Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "1.875"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.1728 39.9868)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Pennsylvania"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2672576"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Odd_Fellows_Cemetery_(Philadelphia)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q139394421"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American Mechanics Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "former cemetery in Philadelphia, Pennsylvania, USA"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "2.005"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.17017 39.98723)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2705239"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q112688593"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Saint Asaph Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Bala Cynwyd, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.341"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.2269363 40.0026512)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Bala Cynwyd"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1975693"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "7"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7985717"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "West Laurel Hill Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Bala Cynwyd, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.46"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.223056 40.014722)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Lower Merion Township"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "46602"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/West_Laurel_Hill_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "276"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4906792"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Fair Hill Burial Ground"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.553"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.1464 39.9967)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "44792"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Fair_Hill_Burial_Ground"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "32"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117677732"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Saint Stephen's Roman Catholic Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.584"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.15167 40.01526)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2343061"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q22919911"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "defunct cemetery in Philadelphia, Pennsylvania, USA"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.591"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.153 39.981)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1995136"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Monument_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117652276"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Saint Timothy's Episcopal Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.715"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.21073 40.02752)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "372031"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117511588"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Germantown Preparatory Meeting of Friends Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.903"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.17228 40.03197)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1040415"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "6"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117491804"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Cathedral Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.933"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.21739 39.97172)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "45686"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Cathedral_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "15"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117661159"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Saint John the Baptist Catholic Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.948"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.21953 40.02503)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "370752"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117538247"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Hood Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "3.957"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.1622 40.0286)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "45141"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117552771"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Trinity Lutheran Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.022"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.16852 40.03195)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1967281"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q110158236"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Saint Luke's Episcopal Churchyard"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Germantown, Philadelphia, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.117"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.1709671 40.0336533)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Germantown"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1962458"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "13"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117605572"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Market Square Presbyterian Church Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.124"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.17222 40.03407)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2300502"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117666614"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Bethany German Lutheran Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.255"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.21707 40.03012)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1981173"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q100708601"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Westminster Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Bala Cynwyd, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.294"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.2285995 40.0219002)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Lower Merion Township"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "46614"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "26"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q102226455"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Leverington Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia, Pennsylvania, USA"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.352"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.2118988 40.0335999)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "45934"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Leverington_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "6"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117651883"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Germantown Mennonite Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.776"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.17899 40.0414)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1962800"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7898523"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Upper Burial Ground"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "historic cemetery in Germantown, Philadelphia, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "4.998"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.180833 40.043611)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Pennsylvania"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2443545"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Upper_Burial_Ground"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q119860492"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Friends Western Burial Ground"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "defunct cemetery in Philadelphia, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.072"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.16695 39.95633)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1965286"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q49525429"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Merion Memorial Park"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Bala Cynwyd, Pennsylvania, United States of America"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.291"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.244444444 40.018888888)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Montgomery County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1962566"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "14"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q116796984"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "New Cathedral Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.346"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.12685 40.00985)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "45597"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/New_Cathedral_Cemetery_(Philadelphia)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "7"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117670325"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Saint Mary of the Assumption Roman Catholic Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.483"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.2269 40.0383)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2154153"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q111181660"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Mikveh Israel Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Jewish cemetery in West Philadelphia, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.535"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.23029 39.96121)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2195597"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Mikveh_Israel_Cemetery_(Beth_El_Emeth)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117667429"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Sisters of Mercy Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Montgomery County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.541"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.25144 40.01006)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Montgomery County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2205787"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117490195"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Germantown Church of the Brethren Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.637"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.18408 40.04961)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2227342"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q18386260"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Palmer Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in the Fishtown neighborhood of Philadelphia, Pennsylvania, USA"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.667"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.1296 39.9746)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "45725"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Palmer_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q112130552"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Saint John the Evangelist Roman Catholic Church Graveyard"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.783"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.1614838 39.9511261)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1992243"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "5"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q105089875"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "First Dutch Reformed Church Burial Ground"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.807"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.150191 39.955552)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2431460"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7775731"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "The Woodlands"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "US historic landmark and cemetery in Philadelphia, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.929"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.203056 39.946944)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "46665"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/The_Woodlands_(Philadelphia)"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "216"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117639691"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Greenmount Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "5.942"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.1219 40.0161)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "44991"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "6"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q117537487"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Saint Anne's Catholic Parish Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia County, Pennsylvania, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "6.208"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.11844 39.98236)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia County"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "409474"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "0"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q5108770"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Christ Church Burial Ground"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "6.225"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.14811 39.952095)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "44588"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Christ_Church_Burial_Ground"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "55"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q111902787"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Arch Street Friends Meeting House Burial Ground"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Philadelphia, Pennsylvania"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "6.317"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.1460419 39.9521561)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "1966377"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "21"
+    }
+   },
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2893494"
+    },
+    "label": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Mikveh Israel Cemetery"
+    },
+    "description": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Philadelphia, United States"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "6.511"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(-75.156153 39.945769)"
+    },
+    "places": {
+     "type": "literal",
+     "value": "Philadelphia"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "45414"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Mikveh_Israel_Cemetery"
+    },
+    "burials": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    }
+   }
+  ]
+ }
+}
