@@ -62,6 +62,10 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  // Vercel restores .next/cache between builds. On 10/21 a production build restored the
+  // previous production build's Turbopack cache and shipped stale CSS (the app's own rules
+  // missing). Builds on Vercel start cold; local builds keep the cache.
+  experimental: { turbopackFileSystemCacheForBuild: !process.env.VERCEL },
   turbopack: {
     rules: {
       "*.css": {
