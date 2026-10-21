@@ -40,7 +40,7 @@ export function PartyLobby({ samples }: { samples: SampleCemetery[] }) {
 
   return (
     <div className="space-y-6">
-      <section aria-labelledby="start" className="space-y-3 rounded-xl border border-border bg-surface p-4">
+      <section aria-labelledby="start" className="card space-y-3 p-4">
         <h2 id="start" className="font-display text-2xl">
           Start a party
         </h2>
@@ -48,27 +48,25 @@ export function PartyLobby({ samples }: { samples: SampleCemetery[] }) {
           You get a link and a room code. Everyone who opens the link gets the same bingo card. Nothing is sent to a
           server; the card comes from the code.
         </p>
-        <button
-          type="button"
-          onClick={startParty}
-          className="tap w-full rounded-xl bg-accent px-5 py-3 text-lg font-bold text-accent-ink"
-        >
-          {code ? "Start a different party" : "Start a party"}
-        </button>
+        {/* Once there's a code, opening the card is the one primary action; the start button stays put (keeps focus). */}
         {code && (
           <div className="space-y-3">
             <PartyShare code={code} />
-            <Link
-              href={partyPath(code)}
-              className="tap flex items-center justify-center rounded-xl border-2 border-accent px-5 font-bold"
-            >
+            <Link href={partyPath(code)} className="btn btn-primary btn-lg w-full">
               Open the party card
             </Link>
           </div>
         )}
+        <button
+          type="button"
+          onClick={startParty}
+          className={code ? "btn btn-ghost w-full" : "btn btn-primary btn-lg w-full"}
+        >
+          {code ? "Start a different party" : "Start a party"}
+        </button>
       </section>
 
-      <section aria-labelledby="join" className="space-y-3 rounded-xl border border-border bg-surface p-4">
+      <section aria-labelledby="join" className="card space-y-3 p-4">
         <h2 id="join" className="font-display text-2xl">
           Join a party
         </h2>
@@ -85,9 +83,9 @@ export function PartyLobby({ samples }: { samples: SampleCemetery[] }) {
             autoComplete="off"
             spellCheck={false}
             maxLength={12}
-            className="tap min-w-0 flex-1 rounded-xl border border-border bg-bg px-4 font-mono uppercase tracking-widest"
+            className="field min-w-0 flex-1 font-bold uppercase tracking-[0.2em] placeholder:font-normal placeholder:normal-case placeholder:tracking-normal"
           />
-          <button type="submit" className="tap rounded-xl border border-border px-5 font-bold">
+          <button type="submit" className="btn btn-ghost">
             Join
           </button>
         </form>

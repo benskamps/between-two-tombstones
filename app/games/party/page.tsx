@@ -4,6 +4,8 @@ import { PartyLobby } from "@/components/games/PartyLobby";
 import { HauntGate } from "@/components/haunt/HauntGate";
 import { GateNeutral } from "@/components/haunt/PickHauntFirst";
 import { SAMPLE_CEMETERIES } from "@/lib/spirit/samples";
+import { PageHeader } from "@/components/ui/games/PageHeader";
+import { Key, Lily } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {
   title: "Graveyard Party",
@@ -16,13 +18,17 @@ const KNOWN = SAMPLE_CEMETERIES.map(({ qid, name, place }) => ({ qid, name, plac
 export default function PartyPage() {
   return (
     <div className="space-y-5">
-      <header className="space-y-2">
-        <h1 className="font-display text-4xl leading-tight">Graveyard Party</h1>
-        <p className="text-muted">
-          Play Tombstone Bingo together: one link, the same card on every phone. Or hold a séance: every phone speaks
-          the same names at the same second.
-        </p>
-      </header>
+      <PageHeader
+        title="Graveyard Party"
+        death={<Key className="h-5 w-5" />}
+        life={<Lily className="h-5 w-5" />}
+        intro={
+          <>
+            Play Tombstone Bingo together: one link, the same card on every phone. Or hold a séance: every phone speaks
+            the same names at the same second.
+          </>
+        }
+      />
       {/* Starting a party needs a haunt; the party link it makes opens for anyone (see /games/bingo). */}
       <Suspense fallback={<GateNeutral />}>
         {/* ?join=1 (typing a friend's room code) opens without a haunt. */}

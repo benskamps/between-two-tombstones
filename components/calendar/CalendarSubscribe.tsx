@@ -10,8 +10,23 @@ import type { CalendarSample } from "@/lib/calendar/samples";
 import { localToday, readFeed, upcoming, ymdKey, type PreviewFeed } from "@/lib/calendar/upcoming";
 import { useHaunt } from "@/lib/haunt/useHaunt";
 import type { YMD } from "@/lib/stonemath";
+import { Sprout } from "@/components/ui/games/Sprout";
+import { Moth } from "@/components/ui/symbols";
+import "./almanac.css";
+import { litPath, moonPhaseIndex } from "./moon";
 
 const PREVIEW_COUNT = 5;
+const SUBSCRIBE_LABEL = {
+  apple: "Add to Apple Calendar",
+  google: "Add to Google Calendar",
+  outlook: "Add to Outlook",
+} as const;
+
+/** The three subscribe buttons, the detected platform's first. */
+function order(platform: Platform | null): Platform[] {
+  const first = platform ?? "google";
+  return [first, ...(["apple", "google", "outlook"] as const).filter((p) => p !== first)];
+}
 const QID_RE = /^Q[1-9]\d{0,9}$/;
 
 /** A cemetery passed in from its tour page (`?cemetery=&name=&place=`), not one of the samples. */
@@ -30,7 +45,8 @@ const FETCH_TIMEOUT_MS = 10_000;
 
 const NOT_PUBLIC =
   "Subscribing works once the app is on its public address; preview links ask for a login your calendar can’t do.";
-const HOW_TO_STOP = "To stop the haunting, remove the subscription from your calendar app; nothing is stored about you.";
+const HOW_TO_STOP =
+  "To stop the haunting, remove the subscription from your calendar app; nothing is stored about you.";
 const RESPECT = "Only people who died at least 25 years ago are included.";
 
 type FeedState = { status: "ok"; feed: PreviewFeed } | { status: "error"; message: string };
@@ -61,6 +77,50 @@ function dateLabel(date: YMD, today: YMD): string {
   });
 }
 
+/** The parts of an almanac date block, in the phone's language. */
+function dateParts(date: YMD, today: YMD) {
+  const d = new Date(date.y, date.m - 1, date.d);
+  const isToday = date.y === today.y && date.m === today.m && date.d === today.d;
+  return {
+    month: d.toLocaleDateString(undefined, { month: "short" }),
+    day: date.d,
+    weekday: isToday ? "Today" : d.toLocaleDateString(undefined, { weekday: "short" }),
+    year: date.y !== today.y ? String(date.y) : null,
+    isToday,
+  };
+}
+
+/** Eight moon phases across the top of the almanac page; tonight's is lit in candle. Decorative. */
+function MoonPhases({ tonight }: { tonight: number | null }) {
+  return (
+    <svg viewBox="0 0 200 24" className="almanac-phases" aria-hidden="true" focusable="false">
+      {Array.from({ length: 8 }, (_, i) => {
+        const cx = 12.5 + i * 25;
+        const lit = litPath(i, cx, 12, 7.5);
+        return (
+          <g key={i} className={i === tonight ? "almanac-tonight" : undefined}>
+            <circle cx={cx} cy={12} r={7.5} fill="none" stroke="currentColor" strokeWidth={1.2} />
+            {lit && <path d={lit} fill="currentColor" opacity={i === tonight ? 0.9 : 0.45} />}
+            {i === tonight && (
+              <circle cx={cx} cy={12} r={10.5} fill="none" stroke="currentColor" strokeWidth={0.8} opacity={0.6} />
+            )}
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+type Platform = "apple" | "google" | "outlook";
+
+/** The calendar this phone most likely uses, for the one filled button. */
+function detectPlatform(): Platform {
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod|Macintosh/.test(ua)) return "apple";
+  if (/Windows/.test(ua)) return "outlook";
+  return "google";
+}
+
 /** The story link inside the app, whatever host the feed's absolute URL names. */
 function appPath(url: string | null): string | null {
   if (!url) return null;
@@ -84,9 +144,26 @@ async function errorMessage(res: Response): Promise<string> {
 
 export function CalendarSubscribeFallback() {
   return (
-    <p className="rounded-xl border border-border bg-surface p-4 text-muted" role="status">
+    <p className="card p-4 text-muted" role="status">
       Loading the calendars…
     </p>
+  );
+}
+
+/** An empty almanac entry, the same size as a real one, while the preview loads. */
+function EntrySlot() {
+  return (
+    <li className="almanac-entry" aria-hidden="true">
+      <span className="almanac-date">
+        <span className="almanac-bar my-1 w-8" />
+        <span className="almanac-bar my-2 w-7" style={{ height: "1.5rem" }} />
+        <span className="almanac-bar my-1 w-8" />
+      </span>
+      <span className="space-y-2 pt-1">
+        <span className="almanac-bar w-11/12" />
+        <span className="almanac-bar w-2/3" />
+      </span>
+    </li>
   );
 }
 
@@ -118,6 +195,7 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
   const origin = useSyncExternalStore(subscribeNothing, getOrigin, () => "");
   const host = useSyncExternalStore(subscribeNothing, getHost, () => "");
   const todayKey = useSyncExternalStore(subscribeNothing, getToday, () => "");
+  const platform = useSyncExternalStore<Platform | null>(subscribeNothing, detectPlatform, () => null);
 
   const sample = options.find((s) => s.qid === qid) ?? samples[0];
   const kinds: EventKind[] = birthdays ? ["death", "birth"] : ["death"];
@@ -194,7 +272,9 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
         {options.map((s) => (
           <label
             key={s.qid}
-            className="tap flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-surface p-3 has-[:checked]:border-accent"
+            className={`tap flex cursor-pointer items-center gap-3 rounded-xl border p-3 ${
+              s.qid === sample.qid ? "border-accent bg-surface-2" : "border-border bg-surface"
+            }`}
           >
             <input
               type="radio"
@@ -223,14 +303,30 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
         <span className="font-bold">Add birthdays too</span>
       </label>
 
-      <section aria-labelledby="preview-heading" className="space-y-3 rounded-xl border border-border bg-surface p-4">
-        <h2 id="preview-heading" className="font-display text-2xl">
+      <section aria-labelledby="preview-heading" className="almanac-page space-y-3">
+        <MoonPhases tonight={today ? moonPhaseIndex(today) : null} />
+        <h2 id="preview-heading" className="text-center font-display text-2xl">
           What you&rsquo;ll get
         </h2>
+        <p className="readout almanac-count" aria-hidden="true">
+          {feed
+            ? `${plural(deaths, "death-day", "death-days")}${birthdays ? ` · ${plural(births, "birthday", "birthdays")}` : ""} a year`
+            : state?.status === "error"
+              ? "No signal"
+              : "Loading"}
+        </p>
         {!state && (
-          <p role="status" className="text-muted">
-            Loading the calendar…
-          </p>
+          <>
+            <p role="status" className="almanac-summary text-muted">
+              Loading the calendar…
+            </p>
+            <h3 className="font-bold">Coming up</h3>
+            <ol className="almanac-entries">
+              {Array.from({ length: PREVIEW_COUNT }, (_, i) => (
+                <EntrySlot key={i} />
+              ))}
+            </ol>
+          </>
         )}
         {state?.status === "error" && (
           <p role="alert" className="text-danger">
@@ -239,7 +335,7 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
         )}
         {feed && (
           <>
-            <p data-testid="calendar-summary" className="text-lg">
+            <p data-testid="calendar-summary" className="almanac-summary text-lg">
               {deaths + births === 0
                 ? `No one buried at ${sample.label} died long enough ago to be included yet.`
                 : `${plural(deaths, "death-day", "death-days")}${
@@ -249,26 +345,53 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
             {next.length > 0 && today && (
               <>
                 <h3 className="font-bold">Coming up</h3>
-                <ol className="space-y-2" data-testid="preview-list">
+                <ol className="almanac-entries" data-testid="preview-list">
                   {next.map(({ event, date }) => {
                     const href = appPath(event.url);
+                    const parts = dateParts(date, today);
                     return (
                       <li
                         key={event.uid}
                         data-testid="preview-event"
                         data-date={ymdKey(date)}
                         data-uid={event.uid}
-                        className="rounded-lg border border-border bg-surface-2 p-3"
+                        className={`almanac-entry ${parts.isToday ? "almanac-today" : ""}`}
                       >
-                        <time dateTime={ymdKey(date)} className="block text-sm font-bold text-accent">
-                          {dateLabel(date, today)}
+                        <time dateTime={ymdKey(date)} className="almanac-date">
+                          <span className="sr-only">{dateLabel(date, today)}</span>
+                          <span aria-hidden="true" className="label">
+                            {parts.month}
+                          </span>
+                          <span aria-hidden="true" className="almanac-day">
+                            {parts.day}
+                          </span>
+                          <span aria-hidden="true" className="label">
+                            {parts.weekday}
+                          </span>
+                          {parts.year && (
+                            <span aria-hidden="true" className="text-sm">
+                              {parts.year}
+                            </span>
+                          )}
                         </time>
-                        <span className="block">{event.summary}</span>
-                        {href && (
-                          <Link href={href} className="text-sm underline">
-                            Read their story
-                          </Link>
-                        )}
+                        <span>
+                          <span className="block">
+                            {event.kind === "birth" ? (
+                              <Sprout className="almanac-kind almanac-birth" />
+                            ) : (
+                              <Moth className="almanac-kind almanac-death" />
+                            )}
+                            {event.summary}
+                          </span>
+                          {href && (
+                            <Link
+                              href={href}
+                              className="tap inline-flex items-center text-sm underline underline-offset-4"
+                            >
+                              Read their story
+                            </Link>
+                          )}
+                        </span>
                       </li>
                     );
                   })}
@@ -286,33 +409,19 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
         </h2>
         {links ? (
           <div className="grid gap-3 sm:grid-cols-2">
-            <a
-              href={links.apple}
-              className="tap flex items-center justify-center rounded-xl bg-accent px-4 py-2 text-center font-bold text-accent-ink"
-            >
-              Add to Apple Calendar
-            </a>
-            <a
-              href={links.google}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="tap flex items-center justify-center rounded-xl bg-accent px-4 py-2 text-center font-bold text-accent-ink"
-            >
-              Add to Google Calendar
-            </a>
-            <a
-              href={links.outlook}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="tap flex items-center justify-center rounded-xl bg-accent px-4 py-2 text-center font-bold text-accent-ink"
-            >
-              Add to Outlook
-            </a>
-            <a
-              href={path}
-              download={`${sample.slug}.ics`}
-              className="tap flex items-center justify-center rounded-xl border border-border bg-surface px-4 py-2 text-center font-bold"
-            >
+            {/* One filled button, for the calendar this phone most likely uses; the others are outlined. */}
+            {order(platform).map((p) => (
+              <a
+                key={p}
+                href={links[p]}
+                {...(p === "apple" ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+                className={`btn ${p === (platform ?? "google") ? "btn-primary btn-lg sm:col-span-2" : "btn-ghost"}`}
+                data-primary={p === (platform ?? "google") ? "true" : undefined}
+              >
+                {SUBSCRIBE_LABEL[p]}
+              </a>
+            ))}
+            <a href={path} download={`${sample.slug}.ics`} className="btn btn-ghost">
               Download .ics
             </a>
           </div>
@@ -335,10 +444,10 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
                 value={links.feed}
                 onFocus={(e) => e.currentTarget.select()}
                 data-testid="feed-url"
-                className="tap mt-1 w-full rounded-lg border border-border bg-bg px-3 font-mono text-sm"
+                className="field mt-1 w-full font-mono text-sm"
               />
             </label>
-            <button type="button" onClick={copy} className="tap rounded-lg border border-border px-4 font-bold">
+            <button type="button" onClick={copy} className="btn btn-ghost">
               Copy address
             </button>
             {copyNote && (

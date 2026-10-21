@@ -1,0 +1,120 @@
+/*
+  Lane 10.4 (skin-b): the Haunted Calendar's preview as a page from an
+  almanac: a row of moon phases across the top (tonight's is lit), a readout of
+  how many death-days the year holds, and each coming date as an almanac entry.
+  Tokens only; nothing animates. Rows have a fixed height so the page doesn't
+  move when the preview arrives (REVIEW-2 N5).
+*/
+
+.almanac-page {
+  position: relative;
+  border-radius: 1.1rem;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  background-image: var(--grain);
+  background-size: 128px 128px;
+  padding: 1.25rem 1rem 1rem;
+}
+/* A ruled almanac border: two hairlines inside the edge. */
+.almanac-page::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: calc(1.1rem - 5px);
+  border: 1px solid color-mix(in srgb, var(--candle) 30%, var(--border));
+  box-shadow:
+    inset 0 0 0 3px var(--surface),
+    inset 0 0 0 4px color-mix(in srgb, var(--border) 80%, transparent);
+  pointer-events: none;
+}
+
+.almanac-phases {
+  display: block;
+  width: 100%;
+  max-width: 22rem;
+  height: auto;
+  margin: 0 auto;
+  color: color-mix(in srgb, var(--text-muted) 70%, var(--border));
+}
+.almanac-tonight {
+  color: var(--candle);
+}
+
+.almanac-count {
+  display: flex;
+  min-height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  color: var(--wisp);
+}
+.almanac-count::before,
+.almanac-count::after {
+  content: "";
+  flex: 1;
+  max-width: 3rem;
+  height: 1px;
+  background: color-mix(in srgb, var(--wisp) 40%, transparent);
+}
+
+.almanac-entries {
+  display: grid;
+  gap: 0.5rem;
+}
+.almanac-entry {
+  display: grid;
+  min-height: 7.3rem;
+  grid-template-columns: 3.75rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background-color: var(--surface-2);
+  padding: 0.75rem 0.75rem 0.25rem;
+}
+
+/* The date block: month and weekday as small labels, the day large in Atkinson. */
+.almanac-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid color-mix(in srgb, var(--candle) 30%, var(--border));
+  padding-right: 0.5rem;
+  color: var(--text-muted);
+}
+.almanac-day {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--candle);
+  font-variant-numeric: tabular-nums;
+}
+.almanac-today .almanac-day {
+  color: var(--wisp);
+}
+
+.almanac-kind {
+  display: inline-block;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-right: 0.35rem;
+  vertical-align: -0.15em;
+}
+.almanac-death {
+  color: var(--text-muted);
+}
+.almanac-birth {
+  color: var(--lichen);
+}
+
+/* Placeholder rows while the preview loads: the same size as the real ones. */
+.almanac-bar {
+  display: block;
+  height: 0.9rem;
+  border-radius: 999px;
+  background-color: var(--surface);
+}
+.almanac-summary {
+  min-height: 3.5rem;
+}

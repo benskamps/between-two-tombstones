@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { BingoGame } from "@/components/games/BingoGame";
 import { HauntGate } from "@/components/haunt/HauntGate";
+import { PageHeader } from "@/components/ui/games/PageHeader";
+import { Candle, Poppy } from "@/components/ui/symbols";
 
 export const metadata: Metadata = {
   title: "Tombstone Bingo",
@@ -11,13 +13,17 @@ export const metadata: Metadata = {
 export default function BingoPage() {
   return (
     <div className="space-y-5">
-      <header className="space-y-2">
-        <h1 className="font-display text-4xl leading-tight">Tombstone Bingo</h1>
-        <p className="text-muted">
-          Find these symbols carved on the stones. Five in a row, a column or a diagonal is a bingo. Look, don&rsquo;t
-          touch: no leaning on or climbing stones.
-        </p>
-      </header>
+      <PageHeader
+        title="Tombstone Bingo"
+        death={<Candle className="h-5 w-5" />}
+        life={<Poppy className="h-5 w-5" />}
+        intro={
+          <>
+            Find these symbols carved on the stones. Five in a row, a column or a diagonal is a bingo. Look, don&rsquo;t
+            touch: no leaning on or climbing stones.
+          </>
+        }
+      />
       {/* The card depends on ?party= and on what this phone saved, so it renders in the browser. A party link always opens. */}
       <Suspense fallback={<p className="min-h-[85svh] text-muted">Shuffling your card&hellip;</p>}>
         <HauntGate tool="/games/bingo" share={["party"]}>
