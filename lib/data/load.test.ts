@@ -43,7 +43,8 @@ describe("loadCemetery", () => {
     expect(r.data.origin).toBe("live");
     expect(r.data.warnings).toEqual([]);
     expect(r.data.cemetery.name).toBe("Oakland Cemetery");
-    expect(r.data.people).toHaveLength(80);
+    // 80 recorded rows minus the 2 whose only label is their QID (F20).
+    expect(r.data.people).toHaveLength(78);
     expect(r.data.people.find((p) => p.name === "Margaret Mitchell")?.wikipedia?.extract).toMatch(/^Margaret Munnerlyn Mitchell/);
     expect(r.data.sources.wikipedia.license).toBe("CC BY-SA 4.0");
     // One cached call per batch of at most 20 titles.
@@ -89,7 +90,8 @@ describe("loadCemetery", () => {
     expect(r.status).toBe("ok");
     if (r.status !== "ok") return;
     expect(r.data.origin).toBe("live");
-    expect(r.data.people).toHaveLength(80);
+    // 80 recorded rows minus the 2 whose only label is their QID (F20).
+    expect(r.data.people).toHaveLength(78);
     expect(r.data.people.every((p) => p.wikipedia === null)).toBe(true);
     expect(r.data.warnings[0]).toMatchObject({ source: "Wikipedia", code: "stories-missing", message: expect.stringMatching(/^Couldn't load \d+ of \d+ stories from Wikipedia/) });
   });
@@ -127,6 +129,40 @@ describe("loadCemetery", () => {
     expect(r.data.people.filter((p) => !p.wikipedia).length).toBeLessThanOrEqual(5);
     expect(r.data.warnings[0].code).toBe("stories-backfilled");
     expect(r.data.warnings[0].message).toMatch(/^Wikipedia didn't answer for every story, so \d+ come from the copy saved on Oct 20, 2026\.$/);
+  });
+
+  it("drops QID-named people and cleans story text from a cache entry written before the parse-time fixes", async () => {
+    const stale = [
+      ...rows,
+      { person: { ...rows[1].person, qid: "Q16162799", name: "Q16162799" }, enwiki: null },
+    ];
+    cached.cachedBurials.mockResolvedValue({ rows: stale, fetchedAt: "2026-10-20T02:15:00.000Z" });
+    cached.cachedCemeteryFacts.mockResolvedValue({ ...facts!, qid: "Q872253" });
+    const gordon = rows.find((r) => r.person.name === "John B. Gordon")!;
+    const title = gordon.enwiki!.split("/wiki/")[1].replaceAll("_", " ");
+    cached.cachedExtracts.mockImplementation(async (titles: string[]) => ({
+      ...(await summariesFor(titles)),
+      ...(titles.includes(title)
+        ? { [title]: { title, extract: "John Brown Gordon ((1832-02-06)February 6, 1832 – (1904-01-09)January 9, 1904) was a general.", url: gordon.enwiki! } }
+        : {}),
+    }));
+    const r = await loadCemetery("Q872253");
+    if (r.status !== "ok") throw new Error("expected ok");
+    expect(r.data.people.some((p) => p.qid === "Q16162799")).toBe(false);
+    expect(r.data.people.find((p) => p.name === "John B. Gordon")?.wikipedia?.extract).toBe(
+      "John Brown Gordon (February 6, 1832 – January 9, 1904) was a general.",
+    );
+  });
+
+  it("the saved Oakland copy comes back with real names and clean stories", async () => {
+    cached.cachedBurials.mockRejectedValue(wikidataDown());
+    const r = await loadCemetery("Q2008469");
+    if (r.status !== "ok") throw new Error("expected ok");
+    expect(r.data.origin).toBe("saved");
+    // The committed snapshot has two QID-only names (Q6986296, Q6066179); neither reaches the tour.
+    expect(r.data.people.filter((p) => /^Q\d+$/.test(p.name))).toEqual([]);
+    expect(r.data.people.find((p) => p.name === "John B. Gordon")?.wikipedia?.extract).toMatch(/^John Brown Gordon \(February 6, 1832 – /);
+    expect(r.data.people.find((p) => p.name === "Charles Collier")?.wikipedia?.extract).toMatch(/^Charles Augustus Collier \(July 19, 1848 – /);
   });
 
   it("reports not-found when Wikidata has no such item", async () => {

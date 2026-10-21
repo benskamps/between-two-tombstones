@@ -9,6 +9,8 @@ import {
   burialsQuery,
   fetchSearch,
   flattenBindings,
+  hasRealName,
+  isQidName,
   mentionsCemetery,
   nearQuery,
   parseBurialRows,
@@ -43,8 +45,11 @@ describe("burials", () => {
   });
 
   it("parses the recorded Oakland Cemetery burials into people", () => {
-    const rows = parseBurialRows(flattenBindings(burialsJson));
-    expect(rows).toHaveLength(80);
+    const raw = flattenBindings(burialsJson);
+    expect(raw).toHaveLength(80);
+    const rows = parseBurialRows(raw);
+    // Two of the 80 recorded rows have only their QID as a label (F20); they're dropped.
+    expect(rows).toHaveLength(78);
     const mitchell = rows.find((r) => r.person.name === "Margaret Mitchell")!;
     expect(mitchell.person).toMatchObject({ qid: "Q173540", findAGraveId: "718", birthPrecision: 11, deathPrecision: 11 });
     expect(mitchell.person.occupations).toContain("novelist");
@@ -54,6 +59,27 @@ describe("burials", () => {
     expect(rows[0].person.sitelinks).toBeGreaterThanOrEqual(rows[rows.length - 1].person.sitelinks);
     // The person-level coordinate stands in when the burial has no P625 qualifier.
     expect(rows.filter((r) => r.person.graveCoord).length).toBeGreaterThanOrEqual(1);
+  });
+});
+
+describe("people with no English label (F20)", () => {
+  it("treats a QID-shaped name as no name", () => {
+    for (const id of ["Q16162799", "Q1", " Q6986296 "]) expect(isQidName(id)).toBe(true);
+    for (const none of [undefined, null, ""]) expect(isQidName(none)).toBe(true);
+    for (const name of ["Margaret Mitchell", "Q", "Quincy Adams", "Q-ship captain", "Q1 Smith", "John Q. Public"]) expect(isQidName(name)).toBe(false);
+    expect(hasRealName({ name: "Q16162799" })).toBe(false);
+    expect(hasRealName({ name: "Bobby Jones" })).toBe(true);
+  });
+
+  it("drops people whose label is their QID from the recorded Oakland rows", () => {
+    const raw = flattenBindings(burialsJson);
+    const qidNamed = raw.filter((r) => /^Q\d+$/.test(r.personLabel ?? "")).map((r) => r.person.split("/").pop());
+    expect(qidNamed.sort()).toEqual(["Q6066179", "Q6986296"]);
+    const rows = parseBurialRows(raw);
+    expect(rows.some((r) => qidNamed.includes(r.person.qid))).toBe(false);
+    expect(rows.every((r) => !/^Q\d+$/.test(r.person.name))).toBe(true);
+    // A row with no label at all is dropped the same way.
+    expect(parseBurialRows([{ person: "http://www.wikidata.org/entity/Q42" }])).toEqual([]);
   });
 });
 

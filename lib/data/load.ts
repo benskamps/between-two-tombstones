@@ -8,8 +8,9 @@ import { asDataSourceError, DataSourceError, type DataSource } from "./errors";
 import { mergeOsm, type OsmCemetery } from "./overpass";
 import { savedSnapshot } from "./samples";
 import type { BurialsResponse, CemeterySearchResult, NearbyCemetery, NearResponse, SourceStatus } from "./types";
+import { cleanExtract } from "@/lib/tour/text";
 import { parsePoint } from "@/lib/types";
-import { burialsQuery, NEAR_RADIUS_KM, type PersonRow } from "./wikidata";
+import { burialsQuery, hasRealName, NEAR_RADIUS_KM, type PersonRow } from "./wikidata";
 import { BATCH_SIZE, titleFromUrl } from "./wikipedia";
 
 /** A sample cemetery falls back to its saved copy if live data takes longer than this. */
@@ -156,6 +157,27 @@ function fromSaved(saved: CemeterySnapshot, err: DataSourceError): BurialsRespon
   };
 }
 
+/**
+ * Every person a tour gets has a real name (not a bare QID) and clean story
+ * text, whichever cache entry or saved copy the data came from: parsing fixes
+ * new data, but cached rows live up to 7 days and the saved copies are fixed.
+ */
+export function tidyPeople<T extends { people: Person[] }>(data: T): T {
+  let changed = false;
+  const people = data.people.flatMap((p) => {
+    if (!hasRealName(p)) {
+      changed = true;
+      return [];
+    }
+    if (!p.wikipedia) return [p];
+    const extract = cleanExtract(p.wikipedia.extract);
+    if (extract === p.wikipedia.extract) return [p];
+    changed = true;
+    return [{ ...p, wikipedia: { ...p.wikipedia, extract } }];
+  });
+  return changed ? { ...data, people } : data;
+}
+
 /** Live burials + stories for a cemetery; for the samples, the saved copy when live fails. */
 export async function loadCemetery(qid: string): Promise<CemeteryLoad> {
   const saved = savedSnapshot(qid);
@@ -169,11 +191,11 @@ export async function loadCemetery(qid: string): Promise<CemeteryLoad> {
     );
     if (!live) return { status: "not-found", qid };
     // A sample whose stories partly failed gets them from its saved copy.
-    if (saved && live.missingStories > 0) return { status: "ok", data: backfillStories(live.data, saved) };
-    return { status: "ok", data: live.data };
+    if (saved && live.missingStories > 0) return { status: "ok", data: tidyPeople(backfillStories(live.data, saved)) };
+    return { status: "ok", data: tidyPeople(live.data) };
   } catch (e) {
     const err = asDataSourceError(e, stage.source);
-    if (saved) return { status: "ok", data: fromSaved(saved, err) };
+    if (saved) return { status: "ok", data: tidyPeople(fromSaved(saved, err)) };
     return { status: "error", error: err };
   }
 }

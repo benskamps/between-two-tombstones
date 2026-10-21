@@ -102,11 +102,25 @@ LIMIT ${limit}`;
 /** A person without the Wikipedia summary yet, plus the article URL to fetch it. */
 export type PersonRow = { person: Omit<Person, "wikipedia">; enwiki: string | null };
 
+/**
+ * True when a "name" is really an ID. With no English label, the label service
+ * answers with the QID ("Q16162799"), which is no name to carve on a card.
+ */
+export function isQidName(name: string | null | undefined): boolean {
+  return !name || /^Q\d+$/.test(name.trim());
+}
+
+/** People with a real name; the rest leave every tour list (F20). */
+export function hasRealName(p: Pick<Person, "name">): boolean {
+  return !isQidName(p.name);
+}
+
+/** One person per row, minus anyone whose only label is their QID. */
 export function parseBurialRows(rows: SparqlRow[]): PersonRow[] {
-  return rows.map((r) => ({
+  return rows.filter((r) => !isQidName(r.personLabel)).map((r) => ({
     person: {
       qid: idOf(r.person),
-      name: r.personLabel ?? idOf(r.person),
+      name: r.personLabel!,
       description: r.personDescription ?? null,
       birth: r.birth ?? null,
       birthPrecision: num(r.birthPrecision),
