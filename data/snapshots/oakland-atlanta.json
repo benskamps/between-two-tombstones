@@ -8,11 +8,11 @@
     "findAGraveCemeteryId": "35955",
     "enwiki": "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Atlanta)"
   },
-  "fetchedAt": "2026-10-20T02:41:03.479Z",
+  "fetchedAt": "2026-10-21T03:05:02.702Z",
   "sources": {
     "wikidata": {
       "license": "CC0 1.0",
-      "query": "SELECT ?person ?personLabel ?personDescription\n  (SAMPLE(?birth_) AS ?birth) (SAMPLE(?birthPrec_) AS ?birthPrecision)\n  (SAMPLE(?death_) AS ?death) (SAMPLE(?deathPrec_) AS ?deathPrecision)\n  (GROUP_CONCAT(DISTINCT ?causeLabel_; separator=\"|\") AS ?causes)\n  (GROUP_CONCAT(DISTINCT ?mannerLabel_; separator=\"|\") AS ?manners)\n  (GROUP_CONCAT(DISTINCT ?occLabel_; separator=\"|\") AS ?occupations)\n  (SAMPLE(?image_) AS ?image) (SAMPLE(?graveImage_) AS ?graveImage)\n  (SAMPLE(?graveCoord_) AS ?graveCoord) (SAMPLE(?personCoord_) AS ?personCoord)\n  (SAMPLE(?fag_) AS ?findAGraveId) (SAMPLE(?sitelinks_) AS ?sitelinks)\n  (SAMPLE(?enwiki_) AS ?enwiki)\nWHERE {\n  ?person p:P119 ?burial . ?burial ps:P119 wd:Q2008469 .\n  OPTIONAL { ?burial pq:P625 ?graveCoord_ }\n  # Best-rank statements only: Margaret Mitchell (Q173540) has a preferred\n  # Nov 8 and a normal-rank Nov 9 birth date, and SAMPLE over all ranks can\n  # pick the wrong one.\n  OPTIONAL { ?person p:P569 ?bst . ?bst a wikibase:BestRank ; psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }\n  OPTIONAL { ?person p:P570 ?dst . ?dst a wikibase:BestRank ; psv:P570 [ wikibase:timeValue ?death_ ; wikibase:timePrecision ?deathPrec_ ] }\n  OPTIONAL { ?person wdt:P509 ?cause . ?cause rdfs:label ?causeLabel_ FILTER(LANG(?causeLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P1196 ?manner . ?manner rdfs:label ?mannerLabel_ FILTER(LANG(?mannerLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P106 ?occ . ?occ rdfs:label ?occLabel_ FILTER(LANG(?occLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P18 ?image_ }\n  OPTIONAL { ?person wdt:P1442 ?graveImage_ }\n  OPTIONAL { ?person wdt:P625 ?personCoord_ }\n  OPTIONAL { ?person wdt:P535 ?fag_ }\n  OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }\n  OPTIONAL { ?enwiki_ schema:about ?person ; schema:isPartOf <https://en.wikipedia.org/> }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". }\n}\nGROUP BY ?person ?personLabel ?personDescription\nORDER BY DESC(?sitelinks)\nLIMIT 80"
+      "query": "SELECT ?person ?personLabel ?personDescription\n  (SAMPLE(?birth_) AS ?birth) (SAMPLE(?birthPrec_) AS ?birthPrecision)\n  (SAMPLE(?death_) AS ?death) (SAMPLE(?deathPrec_) AS ?deathPrecision)\n  (GROUP_CONCAT(DISTINCT ?causeLabel_; separator=\"|\") AS ?causes)\n  (GROUP_CONCAT(DISTINCT ?mannerLabel_; separator=\"|\") AS ?manners)\n  (GROUP_CONCAT(DISTINCT ?occLabel_; separator=\"|\") AS ?occupations)\n  (SAMPLE(?image_) AS ?image) (SAMPLE(?graveImage_) AS ?graveImage)\n  (SAMPLE(?graveCoord_) AS ?graveCoord) (SAMPLE(?personCoord_) AS ?personCoord)\n  (SAMPLE(?fag_) AS ?findAGraveId) (SAMPLE(?sitelinks_) AS ?sitelinks)\n  (SAMPLE(?enwiki_) AS ?enwiki)\nWHERE {\n  ?person p:P119 ?burial . ?burial ps:P119 wd:Q2008469 .\n  OPTIONAL { ?burial pq:P625 ?graveCoord_ }\n  # Best-rank statements only: Margaret Mitchell (Q173540) has a preferred\n  # Nov 8 and a normal-rank Nov 9 birth date, and SAMPLE over all ranks can\n  # pick the wrong one.\n  OPTIONAL { ?person p:P569 ?bst . ?bst a wikibase:BestRank ; psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }\n  OPTIONAL { ?person p:P570 ?dst . ?dst a wikibase:BestRank ; psv:P570 [ wikibase:timeValue ?death_ ; wikibase:timePrecision ?deathPrec_ ] }\n  OPTIONAL { ?person wdt:P509 ?cause . ?cause rdfs:label ?causeLabel_ FILTER(LANG(?causeLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P1196 ?manner . ?manner rdfs:label ?mannerLabel_ FILTER(LANG(?mannerLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P106 ?occ . ?occ rdfs:label ?occLabel_ FILTER(LANG(?occLabel_) = \"en\") }\n  OPTIONAL { ?person wdt:P18 ?image_ }\n  OPTIONAL { ?person wdt:P1442 ?graveImage_ }\n  OPTIONAL { ?person wdt:P625 ?personCoord_ }\n  OPTIONAL { ?person wdt:P535 ?fag_ }\n  OPTIONAL { ?person wikibase:sitelinks ?sitelinks_ }\n  OPTIONAL { ?enwiki_ schema:about ?person ; schema:isPartOf <https://en.wikipedia.org/> }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". }\n}\nGROUP BY ?person ?personLabel ?personDescription\n# Ties on sitelinks are broken by the QID's number (lowest first) so the LIMIT\n# cut is the same on every run. Keep this ORDER BY identical to burialsQuery in\n# lib/data/wikidata.ts.\nORDER BY DESC(?sitelinks) xsd:integer(STRAFTER(STR(?person), \"/entity/Q\"))\nLIMIT 80"
     },
     "wikipedia": {
       "license": "CC BY-SA 4.0",
@@ -36,8 +36,8 @@
       ],
       "occupations": [
         "prose writer",
-        "journalist",
         "novelist",
+        "journalist",
         "writer",
         "screenwriter"
       ],
@@ -80,7 +80,7 @@
       "sitelinks": 32,
       "wikipedia": {
         "title": "Bobby Jones (golfer)",
-        "extract": "Robert Tyre Jones Jr. (March 17, 1902 – December 18, 1971) was an American amateur golfer who was one of the most influential figures in the history of the sport; he was also a lawyer by profession. Jones founded and helped design Augusta National Golf Club, and co-founded the Masters Tournament. The innovations that he introduced at the Masters have been copied by virtually every professional golf tournament in the world.\nJones was the most successful amateur golfer ever to compete at a national and international level. During his peak from 1923 to 1930, he dominated top-level amateur competition, and competed very successfully against the world's best professional golfers. Jones often beat stars such as Walter Hagen and Gene Sarazen, the era's top pros. Jones earned his living mainly as a lawyer, and competed in golf only as an amateur, primarily on a part-time basis, and chose to retire from competition at age 28, though he earned significant money from golf after that, as an instructor and equipment designer.\nExplaining his decision to retire, Jones said, \"It [championship golf] is something like a cage. First you are expected to get into it and then you are expected to stay there. But of course, nobody can stay there.\" Jones is most famous for his unique \"Grand Slam,\" consisting of his victory in all four major golf tournaments of his era (the open and amateur championships in both the U.S. and the U.K.) in a single calendar year (1930). In all Jones played in 31 majors, winning 13 and placing among the top ten finishers 27 times.\nAfter retiring from competitive golf in 1930, Jones founded and helped design the Augusta National Golf Club soon afterwards in 1933. He also co-founded the Masters Tournament, which has been annually staged by the club since 1934 (except for 1943–45, when it was canceled due to World War II). The Masters evolved into one of golf's four major championships. Jones came out of retirement in 1934 to play in the Masters on an exhibition basis through 1948. Jones played his last round of golf at East Lake Golf Club, his home course in Atlanta, on August 18, 1948. A picture commemorating the event now sits in the clubhouse at East Lake. Citing health reasons, he quit golf permanently thereafter. Jones suffered from a rare neurological condition called syringomyelia, which eventually robbed him of the ability to walk. He died of cardiovascular disease in 1971.\nBobby Jones was often confused with the prolific golf course designer Robert Trent Jones, with whom he worked from time to time. \"People always used to get them confused, so when they met, they decided each be called something different,\" Robert Trent Jones Jr. said. To help avoid confusion, the golfer was called \"Bobby,\" and the golf course designer was called \"Trent.\"\n\n",
+        "extract": "Robert Tyre Jones Jr. (March 17, 1902 – December 18, 1971) was an American amateur golfer who was one of the most influential figures in the history of the sport; he was also a lawyer by profession. Jones founded and helped design Augusta National Golf Club, and co-founded the Masters Tournament. The innovations that he introduced at the Masters have been copied by virtually every professional golf tournament in the world.\nJones was the most successful amateur golfer ever to compete at a national and international level. During his peak from 1923 to 1930, he dominated top-level amateur competition, and competed very successfully against the world's best professional golfers. Jones often beat stars such as Walter Hagen and Gene Sarazen, the era's top pros. Jones earned his living mainly as a lawyer, and competed in golf only as an amateur, primarily on a part-time basis, and chose to retire from competition at age 28, though he earned significant money from golf after that, as an instructor and equipment designer.\nExplaining his decision to retire, Jones said, \"It [championship golf] is something like a cage. First you are expected to get into it and then you are expected to stay there. But of course, nobody can stay there.\" Jones is most famous for his unique \"Grand Slam,\" consisting of his victory in all four major golf tournaments of his era (the open and amateur championships in both the U.S. and the U.K.) in a single calendar year (1930). In all Jones played in 31 majors, winning 13 and placing among the top ten finishers 27 times.\nAfter retiring from competitive golf in 1930, Jones founded and helped design the Augusta National Golf Club soon afterwards in 1933. He also co-founded the Masters Tournament, which has been annually staged by the club since 1934 (except for 1943–45, when it was canceled due to World War II). The Masters evolved into one of golf's four major championships. Jones came out of retirement in 1934 to play in the Masters on an exhibition basis through 1948. Jones played his last round of golf at East Lake Golf Club, his home course in Atlanta, on August 18, 1948. A picture commemorating the event now sits in the clubhouse at East Lake. Citing health reasons, he quit golf permanently thereafter. Jones suffered from a rare neurological condition called syringomyelia, which eventually robbed him of the ability to walk. He died of cardiovascular disease in 1971.\nBobby Jones was often confused with the prolific golf course designer Robert Trent Jones, with whom he worked from time to time. \"People always used to get them confused, so when they met, they decided each be called something different,\" Robert Trent Jones Jr. said. To help avoid confusion, the golfer was called \"Bobby,\" and the golf course designer was called \"Trent.\"",
         "url": "https://en.wikipedia.org/wiki/Bobby_Jones_(golfer)",
         "revision": 1368989102
       }
@@ -105,7 +105,7 @@
       "sitelinks": 20,
       "wikipedia": {
         "title": "John B. Gordon",
-        "extract": "John Brown Gordon ((1832-02-06)February 6, 1832 – (1904-01-09)January 9, 1904) was an American politician, Confederate States Army general, attorney, slaveowner and planter. \"One of Robert E. Lee's most trusted generals\" by the end of the Civil War, according to historian Ed Bearss, he strongly opposed Reconstruction. A member of the Democratic Party, he was twice elected by the Georgia state legislature as a United States Senator (as was the practice at the time), serving from 1873 to 1880, and again from 1891 to 1897. He served two terms as the 53rd governor of Georgia from 1886 to 1890.\n\n",
+        "extract": "John Brown Gordon ((1832-02-06)February 6, 1832 – (1904-01-09)January 9, 1904) was an American politician, Confederate States Army general, attorney, slaveowner and planter. \"One of Robert E. Lee's most trusted generals\" by the end of the Civil War, according to historian Ed Bearss, he strongly opposed Reconstruction. A member of the Democratic Party, he was twice elected by the Georgia state legislature as a United States Senator (as was the practice at the time), serving from 1873 to 1880, and again from 1891 to 1897. He served two terms as the 53rd governor of Georgia from 1886 to 1890.",
         "url": "https://en.wikipedia.org/wiki/John_B._Gordon",
         "revision": 1381081728
       }
@@ -132,7 +132,7 @@
       "sitelinks": 15,
       "wikipedia": {
         "title": "Hoke Smith",
-        "extract": "Michael Hoke Smith (September 2, 1855 – November 27, 1931) was an American attorney, politician, and newspaper owner who served as United States secretary of the interior (1893–1896), 58th governor of Georgia (1907–1909, 1911), and a United States senator (1911–1920) from Georgia. He was a leader of the progressive movement in the South and a white supremacist and segregationist who successfully campaigned to further disenfranchise African American voters in 1907.\n\n",
+        "extract": "Michael Hoke Smith (September 2, 1855 – November 27, 1931) was an American attorney, politician, and newspaper owner who served as United States secretary of the interior (1893–1896), 58th governor of Georgia (1907–1909, 1911), and a United States senator (1911–1920) from Georgia. He was a leader of the progressive movement in the South and a white supremacist and segregationist who successfully campaigned to further disenfranchise African American voters in 1907.",
         "url": "https://en.wikipedia.org/wiki/Hoke_Smith",
         "revision": 1366412636
       }
@@ -212,9 +212,37 @@
       "sitelinks": 10,
       "wikipedia": {
         "title": "Joseph Mackey Brown",
-        "extract": "Joseph Mackey Brown (December 28, 1851 – March 3, 1932) was an American politician. He served two non-consecutive terms as  the 59th governor of Georgia, the first from 1909 to 1911 and the second from 1912 to 1913. He has also been posthumously implicated as one of the ringleaders in the lynching of Leo Frank.",
+        "extract": "Joseph Mackey Brown (December 28, 1851 – March 3, 1932) was an American politician. He served two non-consecutive terms as  the 59th governor of Georgia, the first from 1909 to 1911 and the second from 1912 to 1913. He has also been posthumously implicated as one of the ringleaders in the lynching of Leo Frank.\n\n",
         "url": "https://en.wikipedia.org/wiki/Joseph_Mackey_Brown",
         "revision": 1366404708
+      }
+    },
+    {
+      "qid": "Q886071",
+      "name": "John M. Slaton",
+      "description": "American politician (1866-1955)",
+      "birth": "1866-12-25T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1955-01-11T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "jurist",
+        "governor",
+        "politician",
+        "lawyer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Ex-Gov.%20John%20Slaton%20and%20wife%20LCCN2014699353%20%283x4a%29.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "7937575",
+      "sitelinks": 8,
+      "wikipedia": {
+        "title": "John M. Slaton",
+        "extract": "John Marshall Slaton (December 25, 1866 – January 11, 1955) served two non-consecutive terms as the 60th governor of Georgia. His political career ended in 1915 after he commuted the death sentence of Atlanta factory boss Leo Frank, who had been convicted of the murder of a 13-year-old employee, Mary Phagan. Because of Slaton's law firm partnership with Frank's defense counsel, claims were made that Slaton's involvement represented a conflict of interest. Soon after Slaton's action, Frank was lynched. After Slaton's term as governor ended, he and his wife left the state for a decade. Slaton later served as president of the Georgia State Bar Association.",
+        "url": "https://en.wikipedia.org/wiki/John_M._Slaton",
+        "revision": 1372484751
       }
     },
     {
@@ -273,34 +301,6 @@
       }
     },
     {
-      "qid": "Q886071",
-      "name": "John M. Slaton",
-      "description": "American politician (1866-1955)",
-      "birth": "1866-12-25T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1955-01-11T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "jurist",
-        "governor",
-        "politician",
-        "lawyer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Ex-Gov.%20John%20Slaton%20and%20wife%20LCCN2014699353%20%283x4a%29.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "7937575",
-      "sitelinks": 8,
-      "wikipedia": {
-        "title": "John M. Slaton",
-        "extract": "John Marshall Slaton (December 25, 1866 – January 11, 1955) served two non-consecutive terms as the 60th governor of Georgia. His political career ended in 1915 after he commuted the death sentence of Atlanta factory boss Leo Frank, who had been convicted of the murder of a 13-year-old employee, Mary Phagan. Because of Slaton's law firm partnership with Frank's defense counsel, claims were made that Slaton's involvement represented a conflict of interest. Soon after Slaton's action, Frank was lynched. After Slaton's term as governor ended, he and his wife left the state for a decade. Slaton later served as president of the Georgia State Bar Association.",
-        "url": "https://en.wikipedia.org/wiki/John_M._Slaton",
-        "revision": 1372484751
-      }
-    },
-    {
       "qid": "Q1310669",
       "name": "Lucius Jeremiah Gartrell",
       "description": "Confederate Army general (1821-1891)",
@@ -350,7 +350,7 @@
       "sitelinks": 7,
       "wikipedia": {
         "title": "Maynard Jackson",
-        "extract": "Maynard Holbrook Jackson Jr. (March 23, 1938 – June 23, 2003) was an American attorney and politician who served as the 54th mayor of Atlanta, Georgia, from 1974 to 1982, and again as the city's 56th mayor from 1990 to 1994. A member of the Democratic Party, he was the first Black American mayor of Atlanta and of any major city in the South; Jackson's three terms made him the second longest-serving mayor in the city's history, after six-term mayor William B. Hartsfield.\nJackson is notable also for public works projects, primarily the new Maynard H. Jackson International terminal at the Atlanta airport, and for greatly increasing minority business participation in the city. After his death, the William B. Hartsfield Atlanta International Airport was renamed Hartsfield–Jackson Atlanta International Airport to honor his service to the expansion of the airport, the city, and its people.",
+        "extract": "Maynard Holbrook Jackson Jr. (March 23, 1938 – June 23, 2003) was an American attorney and politician who served as the 54th mayor of Atlanta, Georgia, from 1974 to 1982, and again as the city's 56th mayor from 1990 to 1994. A member of the Democratic Party, he was the first Black American mayor of Atlanta and of any major city in the South; Jackson's three terms made him the second longest-serving mayor in the city's history, after six-term mayor William B. Hartsfield.\nJackson is notable also for public works projects, primarily the new Maynard H. Jackson International terminal at the Atlanta airport, and for greatly increasing minority business participation in the city. After his death, the William B. Hartsfield Atlanta International Airport was renamed Hartsfield–Jackson Atlanta International Airport to honor his service to the expansion of the airport, the city, and its people.\n\n",
         "url": "https://en.wikipedia.org/wiki/Maynard_Jackson",
         "revision": 1376555259
       }
@@ -471,8 +471,8 @@
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
-        "bacteriologist",
-        "microbiologist"
+        "microbiologist",
+        "bacteriologist"
       ],
       "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Elizabeth%20King.jpg",
       "graveImage": null,
@@ -593,7 +593,7 @@
       "sitelinks": 5,
       "wikipedia": {
         "title": "Henry W. Grady",
-        "extract": "Henry Woodfin Grady (May 24, 1850 – December 23, 1889) was an American journalist and orator who helped reintegrate the states of the Confederacy into the Union after the American Civil War.\nGrady encouraged the industrialization of the postbellum South, which Grady referred to as \"The New South.\" By creating his metaphor of the \"New South,\" he voluntarily contributed to \"dismantling the advances in rights that Black people had enjoyed during Reconstruction\" (Gates 2019, 3-4). He was praised by his contemporaries and by authors Shavin and Galphin as a civic promoter, political strategist, and captivating speaker, and by Atlanta journalist Frederick Allen as a visionary.\nHowever, in modern times, Grady's arguments for the need for white supremacy in the post–Civil War South have resulted in his legacy being seen as mixed and overtly racist. Grady's name has been removed from several schools including Atlanta's former Grady High School. Grady was the father-in-law of Federal Reserve Chairman Eugene Robert Black and grandfather of banker and World Bank President Eugene R. Black Sr.\n\n",
+        "extract": "Henry Woodfin Grady (May 24, 1850 – December 23, 1889) was an American journalist and orator who helped reintegrate the states of the Confederacy into the Union after the American Civil War.\nGrady encouraged the industrialization of the postbellum South, which Grady referred to as \"The New South.\" By creating his metaphor of the \"New South,\" he voluntarily contributed to \"dismantling the advances in rights that Black people had enjoyed during Reconstruction\" (Gates 2019, 3-4). He was praised by his contemporaries and by authors Shavin and Galphin as a civic promoter, political strategist, and captivating speaker, and by Atlanta journalist Frederick Allen as a visionary.\nHowever, in modern times, Grady's arguments for the need for white supremacy in the post–Civil War South have resulted in his legacy being seen as mixed and overtly racist. Grady's name has been removed from several schools including Atlanta's former Grady High School. Grady was the father-in-law of Federal Reserve Chairman Eugene Robert Black and grandfather of banker and World Bank President Eugene R. Black Sr.",
         "url": "https://en.wikipedia.org/wiki/Henry_W._Grady",
         "revision": 1372517187
       }
@@ -889,8 +889,8 @@
       "occupations": [
         "civil engineer",
         "cartographer",
-        "engineer",
-        "architect"
+        "architect",
+        "engineer"
       ],
       "image": null,
       "graveImage": null,
@@ -950,7 +950,7 @@
       "sitelinks": 3,
       "wikipedia": {
         "title": "Henry Kent McCay",
-        "extract": "Henry Kent McCay (January 8, 1820 – July 30, 1886) was a lawyer, a Confederate States Army and Georgia militia officer, an associate justice of the Georgia Supreme Court, and a United States district judge of the United States District Court for the Northern District of Georgia.",
+        "extract": "Henry Kent McCay (January 8, 1820 – July 30, 1886) was a lawyer, a Confederate States Army and Georgia militia officer, an associate justice of the Georgia Supreme Court, and a United States district judge of the United States District Court for the Northern District of Georgia.\n\n",
         "url": "https://en.wikipedia.org/wiki/Henry_Kent_McCay",
         "revision": 1347581626
       }
@@ -1000,7 +1000,7 @@
       "sitelinks": 3,
       "wikipedia": {
         "title": "Robert Maddox",
-        "extract": "Robert Foster Maddox (April 4, 1870 – 1965) was the 41st Mayor of Atlanta, Georgia.\n\n",
+        "extract": "Robert Foster Maddox (April 4, 1870 – 1965) was the 41st Mayor of Atlanta, Georgia.",
         "url": "https://en.wikipedia.org/wiki/Robert_Maddox",
         "revision": 1378252789
       }
@@ -1108,31 +1108,6 @@
       }
     },
     {
-      "qid": "Q131260124",
-      "name": "Margaret O'Connor Wilson",
-      "description": "American civic leader (1856-1942)",
-      "birth": "1856-01-01T00:00:00Z",
-      "birthPrecision": 9,
-      "death": "1942-01-01T00:00:00Z",
-      "deathPrecision": 9,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "executive"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Margaret%20O%27Conner%20Wilson%20%28ca.%201880%29.png",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "259187246",
-      "sitelinks": 3,
-      "wikipedia": {
-        "title": "Margaret O'Connor Wilson",
-        "extract": "Margaret O'Connor Wilson (née O'Connor; also known as Mrs. A. McD. Wilson; 1856–1942) was an American civic leader and philanthropist. Prominent in civic and patriotic organizations in Atlanta for many years, she was also known for her religious and philanthropic work. Among the many positions that she held, Wilson served as President General of the Confederated Southern Memorial Association (CSMA).",
-        "url": "https://en.wikipedia.org/wiki/Margaret_O%27Connor_Wilson",
-        "revision": 1374520436
-      }
-    },
-    {
       "qid": "Q23806432",
       "name": "Lollie Belle Wylie",
       "description": "American journalist and poet (1858-1923)",
@@ -1181,6 +1156,31 @@
         "extract": "Martha Loftin Wilson (née, Loftin; January 19, 1834 – June 11, 1919) was an American missionary worker and journal editor, as well as a pioneer Atlanta resident and a nurse in the American Civil War. She was regarded as \"the most influential leader in the Woman's Missionary Union in Georgia\". Wilson was the author of Hospital Scenes and Incidents of the War.",
         "url": "https://en.wikipedia.org/wiki/Martha_Loftin_Wilson",
         "revision": 1377851194
+      }
+    },
+    {
+      "qid": "Q131260124",
+      "name": "Margaret O'Connor Wilson",
+      "description": "American civic leader (1856-1942)",
+      "birth": "1856-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1942-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "executive"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Margaret%20O%27Conner%20Wilson%20%28ca.%201880%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "259187246",
+      "sitelinks": 3,
+      "wikipedia": {
+        "title": "Margaret O'Connor Wilson",
+        "extract": "Margaret O'Connor Wilson (née O'Connor; also known as Mrs. A. McD. Wilson; 1856–1942) was an American civic leader and philanthropist. Prominent in civic and patriotic organizations in Atlanta for many years, she was also known for her religious and philanthropic work. Among the many positions that she held, Wilson served as President General of the Confederated Southern Memorial Association (CSMA).",
+        "url": "https://en.wikipedia.org/wiki/Margaret_O%27Connor_Wilson",
+        "revision": 1374520436
       }
     },
     {
@@ -1377,7 +1377,7 @@
       "sitelinks": 2,
       "wikipedia": {
         "title": "Logan Edwin Bleckley",
-        "extract": "Logan Edwin Bleckley (July 3, 1827 – March 6, 1907) was an American lawyer and jurist.\nBorn in 1827 on Screamer Mountain in Rabun County, Georgia, Bleckley became a self-taught lawyer.  At age eleven, he started working in his father's office (Clerk of the Court in Clayton).  He was admitted to the bar in 1846 at age nineteen.  During this period of his life, he authored a state bill that outlawed the imprisonment of women for debt and worked with state legislators to have it passed into law.\nTwo years later, he became a bookkeeper for the State Railroad Office in Atlanta, Georgia. In 1851, he was appointed as a secretary to the governor of Georgia, George W. Towns in Milledgeville (the capital of Georgia at that time), but he left later that year when the new governor, Howell Cobb took office.  Bleckley opened his own practice in Atlanta in 1852 at the age of twenty-four.\nBleckley partnered with Basil H. Overby in 1854 to form the firm of Bleckley and Overby.  The following year, they added John Brown Gordon, but he left in 1856 to pursue other interests. An interesting note is that all three gentlemen married daughters of General Hugh A. Haralson, a former major general in the state militia, a state congressional representative and a U.S. representative for the state of Georgia.  Bleckley married Clara Caroline Haralson, the General's third daughter.  Their son, Haralson Bleckley,  became an architect and designed the University of Georgia Library Building built in 1904.\nIn 1857, Bleckley was elected to the office of Solicitor General in his judicial circuit covering eight counties and served in that capacity for the next four years while still maintaining his practice.\nIn 1861, Bleckley briefly joined the Confederate Army but was discharged for health reasons and returned to his law practice in Atlanta.  He was appointed to office of Supreme Court of Georgia Reporter in 1864.  He resigned that position in 1867 and returned to his private practice.\nIn 1875, he was appointed an Associate Justice of the Supreme Court of Georgia by his former law partner, John Brown Gordon, the governor of Georgia at the time. He resigned in 1880.  When presiding Chief Justice James Jackson died, Bleckley was appointed as the chief justice of the court in 1887 and presided until his resignation in 1894.\nBleckley died in Clarkesville, Georgia, on March 6, 1907, and is buried at Oakland Cemetery in Atlanta. Bleckley County is named in his honor.\nHis son, Logan Bleckley Jr., was later appointed the first Clerk of Court to the Georgia Court of Appeals.\n\n",
+        "extract": "Logan Edwin Bleckley (July 3, 1827 – March 6, 1907) was an American lawyer and jurist.\nBorn in 1827 on Screamer Mountain in Rabun County, Georgia, Bleckley became a self-taught lawyer.  At age eleven, he started working in his father's office (Clerk of the Court in Clayton).  He was admitted to the bar in 1846 at age nineteen.  During this period of his life, he authored a state bill that outlawed the imprisonment of women for debt and worked with state legislators to have it passed into law.\nTwo years later, he became a bookkeeper for the State Railroad Office in Atlanta, Georgia. In 1851, he was appointed as a secretary to the governor of Georgia, George W. Towns in Milledgeville (the capital of Georgia at that time), but he left later that year when the new governor, Howell Cobb took office.  Bleckley opened his own practice in Atlanta in 1852 at the age of twenty-four.\nBleckley partnered with Basil H. Overby in 1854 to form the firm of Bleckley and Overby.  The following year, they added John Brown Gordon, but he left in 1856 to pursue other interests. An interesting note is that all three gentlemen married daughters of General Hugh A. Haralson, a former major general in the state militia, a state congressional representative and a U.S. representative for the state of Georgia.  Bleckley married Clara Caroline Haralson, the General's third daughter.  Their son, Haralson Bleckley,  became an architect and designed the University of Georgia Library Building built in 1904.\nIn 1857, Bleckley was elected to the office of Solicitor General in his judicial circuit covering eight counties and served in that capacity for the next four years while still maintaining his practice.\nIn 1861, Bleckley briefly joined the Confederate Army but was discharged for health reasons and returned to his law practice in Atlanta.  He was appointed to office of Supreme Court of Georgia Reporter in 1864.  He resigned that position in 1867 and returned to his private practice.\nIn 1875, he was appointed an Associate Justice of the Supreme Court of Georgia by his former law partner, John Brown Gordon, the governor of Georgia at the time. He resigned in 1880.  When presiding Chief Justice James Jackson died, Bleckley was appointed as the chief justice of the court in 1887 and presided until his resignation in 1894.\nBleckley died in Clarkesville, Georgia, on March 6, 1907, and is buried at Oakland Cemetery in Atlanta. Bleckley County is named in his honor.\nHis son, Logan Bleckley Jr., was later appointed the first Clerk of Court to the Georgia Court of Appeals.",
         "url": "https://en.wikipedia.org/wiki/Logan_Edwin_Bleckley",
         "revision": 1362390451
       }
@@ -1402,7 +1402,7 @@
       "sitelinks": 2,
       "wikipedia": {
         "title": "Nedom L. Angier",
-        "extract": "Nedom L. Angier (November 10, 1814 – February 3, 1882) was the Mayor of Atlanta from 1877 to 1879. To date, he is the last Republican to hold that office.\n\n",
+        "extract": "Nedom L. Angier (November 10, 1814 – February 3, 1882) was the Mayor of Atlanta from 1877 to 1879. To date, he is the last Republican to hold that office.",
         "url": "https://en.wikipedia.org/wiki/Nedom_L._Angier",
         "revision": 1373175232
       }
@@ -1633,161 +1633,6 @@
       }
     },
     {
-      "qid": "Q98732878",
-      "name": "Isma Dooly",
-      "description": "US newspaper editor and clubwoman",
-      "birth": null,
-      "birthPrecision": null,
-      "death": null,
-      "deathPrecision": null,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "newspaper editor"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/IsmaDooly.png",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "57858679",
-      "sitelinks": 2,
-      "wikipedia": {
-        "title": "Isma Dooly",
-        "extract": "Isma Dooly (1870 – May 11, 1921), also seen as Isma Dooley, was an American newspaper editor and clubwoman, based in Atlanta, Georgia.",
-        "url": "https://en.wikipedia.org/wiki/Isma_Dooly",
-        "revision": 1354929318
-      }
-    },
-    {
-      "qid": "Q100792941",
-      "name": "Christopher C. Wimbish",
-      "description": "American lawyer and politician",
-      "birth": "1895-01-01T00:00:00Z",
-      "birthPrecision": 9,
-      "death": "1962-01-01T00:00:00Z",
-      "deathPrecision": 9,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "military personnel",
-        "politician",
-        "businessperson"
-      ],
-      "image": null,
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "178313365",
-      "sitelinks": 2,
-      "wikipedia": {
-        "title": "Christopher C. Wimbish",
-        "extract": "Christopher Columbus Wimbish, Jr. (February 6, 1895 – December 27, 1962) was an American lawyer and politician. He served in the Illinois State Senate from 1942 through 1955. He was a Democrat.",
-        "url": "https://en.wikipedia.org/wiki/Christopher_C._Wimbish",
-        "revision": 1378367324
-      }
-    },
-    {
-      "qid": "Q107392201",
-      "name": "Myra Miller",
-      "description": "Atlanta-based food entrepreneur and baker (1811-1891)",
-      "birth": "1811-01-01T00:00:00Z",
-      "birthPrecision": 9,
-      "death": "1891-01-01T00:00:00Z",
-      "deathPrecision": 9,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "traiteur",
-        "entrepreneur",
-        "baker"
-      ],
-      "image": null,
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": null,
-      "sitelinks": 2,
-      "wikipedia": {
-        "title": "Myra Miller",
-        "extract": "Myra Miller (c. 1811–1891) was an African-American food entrepreneur and baker in Atlanta during Reconstruction.\nMiller was born in Virginia in about 1811. She was enslaved and sold as a cook to someone in Rome, Georgia. In 1871, after slavery was abolished in the United States, she moved with her husband to Atlanta and started a bakery. Miller's bakery was well known in Atlanta and her wedding fruitcakes were sent across the country. Miller died in 1891 and was buried in the African American section of  Oakland Cemetery.",
-        "url": "https://en.wikipedia.org/wiki/Myra_Miller",
-        "revision": 1336110162
-      }
-    },
-    {
-      "qid": "Q107990165",
-      "name": "Foster Blodgett",
-      "description": "American politician",
-      "birth": null,
-      "birthPrecision": null,
-      "death": null,
-      "deathPrecision": null,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "politician"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Foster%20Blodgett%20Jr.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "42048546",
-      "sitelinks": 2,
-      "wikipedia": {
-        "title": "Foster Blodgett",
-        "extract": "Foster Blodgett Jr. (15 January 1826 – 3 December 1877) was an American politician elected mayor of Augusta, Georgia, from 1859 to 1860, and returned to the mayoralty via military appointment between 1867 and 1868. Blodgett was elected to the United States Senate by the Georgia General Assembly in 1871, but not seated.",
-        "url": "https://en.wikipedia.org/wiki/Foster_Blodgett",
-        "revision": 1356552599
-      }
-    },
-    {
-      "qid": "Q109855709",
-      "name": "Eugenia Jones Bacon",
-      "description": "author (1840–1920)",
-      "birth": "1840-02-02T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1920-03-13T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "art educator",
-        "writer"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Eugenia%20Jones%20Bacon%201895.jpg",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": null,
-      "sitelinks": 2,
-      "wikipedia": {
-        "title": "Eugenia Jones Bacon",
-        "extract": "Eugenia Jones Bacon (1840-1920) was an American writer, known for her novel Lyddy: A Tale of the Old South (1898), a pro-slavery response to Uncle Tom's Cabin (1852) by Harriet Beecher Stowe. Bacon based the novel on memories of her childhood on her father's plantation in Liberty County, Georgia. She also wrote about a rock she collected in Bavaria with an edge reminiscent of the visage of Jesus. She also wrote The Red Moon published in 1910 by the Neale Publishing Company (Eugenie Jones-Bacon).",
-        "url": "https://en.wikipedia.org/wiki/Eugenia_Jones_Bacon",
-        "revision": 1374632015
-      }
-    },
-    {
-      "qid": "Q131301911",
-      "name": "Emily Hendree Stewart Park",
-      "description": "American school president (1848-1910)",
-      "birth": "1848-01-01T00:00:00Z",
-      "birthPrecision": 9,
-      "death": "1910-01-01T00:00:00Z",
-      "deathPrecision": 9,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "academic administrator"
-      ],
-      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Emily%20Hendree%20Park%20%28Confederate%20Veteran%2C%201911%29.png",
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "131567487",
-      "sitelinks": 2,
-      "wikipedia": {
-        "title": "Emily Hendree Stewart Park",
-        "extract": "Emily Hendree Stewart Park (née Hendree; after first marriage, Stewart; after second marriage, Park; 1848-1910) was a school administrator. She served as President of the Washington Seminary in Atlanta, Georgia.\n Also active in civic affairs, Park served as State Regent and Vice President General of the National Society of the Daughters of the American Revolution (DAR), as Vice President of the Georgia Division of the United Daughters of the Confederacy (UDC), and as State Regent of the Confederate Memorial Museum at Richmond, Virginia.",
-        "url": "https://en.wikipedia.org/wiki/Emily_Hendree_Stewart_Park",
-        "revision": 1297020608
-      }
-    },
-    {
       "qid": "Q28921823",
       "name": "Luetta Elmina Braumuller",
       "description": "American artist, publisher",
@@ -1925,8 +1770,8 @@
       "causesOfDeath": [],
       "mannersOfDeath": [],
       "occupations": [
-        "publisher",
-        "journalist"
+        "journalist",
+        "publisher"
       ],
       "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Julia%20Collier%20Harris%20LCCN2014705884.jpg",
       "graveImage": null,
@@ -1939,6 +1784,182 @@
         "url": "https://en.wikipedia.org/wiki/Julia_Collier_Harris",
         "revision": 1356024615
       }
+    },
+    {
+      "qid": "Q98732878",
+      "name": "Isma Dooly",
+      "description": "US newspaper editor and clubwoman",
+      "birth": null,
+      "birthPrecision": null,
+      "death": null,
+      "deathPrecision": null,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "newspaper editor"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/IsmaDooly.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "57858679",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Isma Dooly",
+        "extract": "Isma Dooly (1870 – May 11, 1921), also seen as Isma Dooley, was an American newspaper editor and clubwoman, based in Atlanta, Georgia.",
+        "url": "https://en.wikipedia.org/wiki/Isma_Dooly",
+        "revision": 1354929318
+      }
+    },
+    {
+      "qid": "Q100792941",
+      "name": "Christopher C. Wimbish",
+      "description": "American lawyer and politician",
+      "birth": "1895-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1962-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "businessperson",
+        "politician",
+        "military personnel"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "178313365",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Christopher C. Wimbish",
+        "extract": "Christopher Columbus Wimbish, Jr. (February 6, 1895 – December 27, 1962) was an American lawyer and politician. He served in the Illinois State Senate from 1942 through 1955. He was a Democrat.\n\n",
+        "url": "https://en.wikipedia.org/wiki/Christopher_C._Wimbish",
+        "revision": 1378367324
+      }
+    },
+    {
+      "qid": "Q107392201",
+      "name": "Myra Miller",
+      "description": "Atlanta-based food entrepreneur and baker (1811-1891)",
+      "birth": "1811-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1891-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "entrepreneur",
+        "traiteur",
+        "baker"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Myra Miller",
+        "extract": "Myra Miller (c. 1811–1891) was an African-American food entrepreneur and baker in Atlanta during Reconstruction.\nMiller was born in Virginia in about 1811. She was enslaved and sold as a cook to someone in Rome, Georgia. In 1871, after slavery was abolished in the United States, she moved with her husband to Atlanta and started a bakery. Miller's bakery was well known in Atlanta and her wedding fruitcakes were sent across the country. Miller died in 1891 and was buried in the African American section of  Oakland Cemetery.",
+        "url": "https://en.wikipedia.org/wiki/Myra_Miller",
+        "revision": 1336110162
+      }
+    },
+    {
+      "qid": "Q107990165",
+      "name": "Foster Blodgett",
+      "description": "American politician",
+      "birth": null,
+      "birthPrecision": null,
+      "death": null,
+      "deathPrecision": null,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "politician"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Foster%20Blodgett%20Jr.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "42048546",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Foster Blodgett",
+        "extract": "Foster Blodgett Jr. (15 January 1826 – 3 December 1877) was an American politician elected mayor of Augusta, Georgia, from 1859 to 1860, and returned to the mayoralty via military appointment between 1867 and 1868. Blodgett was elected to the United States Senate by the Georgia General Assembly in 1871, but not seated.",
+        "url": "https://en.wikipedia.org/wiki/Foster_Blodgett",
+        "revision": 1356552599
+      }
+    },
+    {
+      "qid": "Q109855709",
+      "name": "Eugenia Jones Bacon",
+      "description": "author (1840–1920)",
+      "birth": "1840-02-02T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1920-03-13T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "art educator",
+        "writer"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Eugenia%20Jones%20Bacon%201895.jpg",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Eugenia Jones Bacon",
+        "extract": "Eugenia Jones Bacon (1840-1920) was an American writer, known for her novel Lyddy: A Tale of the Old South (1898), a pro-slavery response to Uncle Tom's Cabin (1852) by Harriet Beecher Stowe. Bacon based the novel on memories of her childhood on her father's plantation in Liberty County, Georgia. She also wrote about a rock she collected in Bavaria with an edge reminiscent of the visage of Jesus. She also wrote The Red Moon published in 1910 by the Neale Publishing Company (Eugenie Jones-Bacon).",
+        "url": "https://en.wikipedia.org/wiki/Eugenia_Jones_Bacon",
+        "revision": 1374632015
+      }
+    },
+    {
+      "qid": "Q131301911",
+      "name": "Emily Hendree Stewart Park",
+      "description": "American school president (1848-1910)",
+      "birth": "1848-01-01T00:00:00Z",
+      "birthPrecision": 9,
+      "death": "1910-01-01T00:00:00Z",
+      "deathPrecision": 9,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "academic administrator"
+      ],
+      "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Emily%20Hendree%20Park%20%28Confederate%20Veteran%2C%201911%29.png",
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": "131567487",
+      "sitelinks": 2,
+      "wikipedia": {
+        "title": "Emily Hendree Stewart Park",
+        "extract": "Emily Hendree Stewart Park (née Hendree; after first marriage, Stewart; after second marriage, Park; 1848-1910) was a school administrator. She served as President of the Washington Seminary in Atlanta, Georgia.\n Also active in civic affairs, Park served as State Regent and Vice President General of the National Society of the Daughters of the American Revolution (DAR), as Vice President of the Georgia Division of the United Daughters of the Confederacy (UDC), and as State Regent of the Confederate Memorial Museum at Richmond, Virginia.",
+        "url": "https://en.wikipedia.org/wiki/Emily_Hendree_Stewart_Park",
+        "revision": 1297020608
+      }
+    },
+    {
+      "qid": "Q788884",
+      "name": "Henrik Bak",
+      "description": "Hungarian journalist (1846–1915)",
+      "birth": "1846-09-22T00:00:00Z",
+      "birthPrecision": 11,
+      "death": "1915-05-25T00:00:00Z",
+      "deathPrecision": 11,
+      "causesOfDeath": [],
+      "mannersOfDeath": [],
+      "occupations": [
+        "internist",
+        "physician"
+      ],
+      "image": null,
+      "graveImage": null,
+      "graveCoord": null,
+      "findAGraveId": null,
+      "sitelinks": 1,
+      "wikipedia": null
     },
     {
       "qid": "Q4747236",
@@ -2058,34 +2079,9 @@
       "sitelinks": 1,
       "wikipedia": {
         "title": "Ira O. McDaniel",
-        "extract": "Ira Oliver McDaniel (January 19, 1807 – August 28, 1887) was a cotton merchant, farmer and newspaper man in early Atlanta, Georgia.",
+        "extract": "Ira Oliver McDaniel (January 19, 1807 – August 28, 1887) was a cotton merchant, farmer and newspaper man in early Atlanta, Georgia.\n\n",
         "url": "https://en.wikipedia.org/wiki/Ira_O._McDaniel",
         "revision": 1336518147
-      }
-    },
-    {
-      "qid": "Q6133751",
-      "name": "James Fairlie Cooper",
-      "description": "superintendent of the Dahlonega Mint (1814-1869)",
-      "birth": "1814-09-02T00:00:00Z",
-      "birthPrecision": 11,
-      "death": "1869-10-14T00:00:00Z",
-      "deathPrecision": 11,
-      "causesOfDeath": [],
-      "mannersOfDeath": [],
-      "occupations": [
-        "military officer"
-      ],
-      "image": null,
-      "graveImage": null,
-      "graveCoord": null,
-      "findAGraveId": "110618933",
-      "sitelinks": 1,
-      "wikipedia": {
-        "title": "James Fairlie Cooper",
-        "extract": "James Fairlie Cooper (September 2, 1814 – October 14, 1869) was an American minter and soldier.",
-        "url": "https://en.wikipedia.org/wiki/James_Fairlie_Cooper",
-        "revision": 1380315917
       }
     }
   ]

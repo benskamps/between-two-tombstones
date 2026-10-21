@@ -67,7 +67,7 @@
     },
     "occupations": {
      "type": "literal",
-     "value": "prose writer|novelist|journalist|writer|screenwriter"
+     "value": "prose writer|novelist|journalist|screenwriter|writer"
     },
     "image": {
      "type": "uri",
@@ -488,6 +488,71 @@
    {
     "person": {
      "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q886071"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "John M. Slaton"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician (1866-1955)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1866-12-25T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1955-01-11T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "jurist|governor|politician|lawyer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Ex-Gov.%20John%20Slaton%20and%20wife%20LCCN2014699353%20%283x4a%29.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "7937575"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "8"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/John_M._Slaton"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
      "value": "http://www.wikidata.org/entity/Q1100228"
     },
     "personLabel": {
@@ -618,71 +683,6 @@
     "enwiki": {
      "type": "uri",
      "value": "https://en.wikipedia.org/wiki/William_J._Northen"
-    }
-   },
-   {
-    "person": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q886071"
-    },
-    "personLabel": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "John M. Slaton"
-    },
-    "personDescription": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "American politician (1866-1955)"
-    },
-    "birth": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1866-12-25T00:00:00Z"
-    },
-    "birthPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "11"
-    },
-    "death": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1955-01-11T00:00:00Z"
-    },
-    "deathPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "11"
-    },
-    "causes": {
-     "type": "literal",
-     "value": ""
-    },
-    "manners": {
-     "type": "literal",
-     "value": ""
-    },
-    "occupations": {
-     "type": "literal",
-     "value": "jurist|governor|politician|lawyer"
-    },
-    "image": {
-     "type": "uri",
-     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Ex-Gov.%20John%20Slaton%20and%20wife%20LCCN2014699353%20%283x4a%29.jpg"
-    },
-    "findAGraveId": {
-     "type": "literal",
-     "value": "7937575"
-    },
-    "sitelinks": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "8"
-    },
-    "enwiki": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/John_M._Slaton"
     }
    },
    {
@@ -994,7 +994,7 @@
     },
     "occupations": {
      "type": "literal",
-     "value": "hymnwriter|politician|writer|composer"
+     "value": "hymnwriter|politician|composer|writer"
     },
     "image": {
      "type": "uri",
@@ -1124,7 +1124,7 @@
     },
     "occupations": {
      "type": "literal",
-     "value": "bacteriologist|microbiologist"
+     "value": "microbiologist|bacteriologist"
     },
     "image": {
      "type": "uri",
@@ -2153,7 +2153,7 @@
     },
     "occupations": {
      "type": "literal",
-     "value": "civil engineer|cartographer|architect|engineer"
+     "value": "civil engineer|cartographer|engineer|architect"
     },
     "sitelinks": {
      "datatype": "http://www.w3.org/2001/XMLSchema#integer",
@@ -2668,71 +2668,6 @@
    {
     "person": {
      "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q131260124"
-    },
-    "personLabel": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Margaret O'Connor Wilson"
-    },
-    "personDescription": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "American civic leader (1856-1942)"
-    },
-    "birth": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1856-01-01T00:00:00Z"
-    },
-    "birthPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "9"
-    },
-    "death": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1942-01-01T00:00:00Z"
-    },
-    "deathPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "9"
-    },
-    "causes": {
-     "type": "literal",
-     "value": ""
-    },
-    "manners": {
-     "type": "literal",
-     "value": ""
-    },
-    "occupations": {
-     "type": "literal",
-     "value": "executive"
-    },
-    "image": {
-     "type": "uri",
-     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Margaret%20O%27Conner%20Wilson%20%28ca.%201880%29.png"
-    },
-    "findAGraveId": {
-     "type": "literal",
-     "value": "259187246"
-    },
-    "sitelinks": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "3"
-    },
-    "enwiki": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/Margaret_O%27Connor_Wilson"
-    }
-   },
-   {
-    "person": {
-     "type": "uri",
      "value": "http://www.wikidata.org/entity/Q23806432"
     },
     "personLabel": {
@@ -2854,6 +2789,71 @@
     "enwiki": {
      "type": "uri",
      "value": "https://en.wikipedia.org/wiki/Martha_Loftin_Wilson"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q131260124"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Margaret O'Connor Wilson"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American civic leader (1856-1942)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1856-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1942-01-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "executive"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Margaret%20O%27Conner%20Wilson%20%28ca.%201880%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "259187246"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "3"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Margaret_O%27Connor_Wilson"
     }
    },
    {
@@ -3972,340 +3972,6 @@
    {
     "person": {
      "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q98732878"
-    },
-    "personLabel": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Isma Dooly"
-    },
-    "personDescription": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "US newspaper editor and clubwoman"
-    },
-    "causes": {
-     "type": "literal",
-     "value": ""
-    },
-    "manners": {
-     "type": "literal",
-     "value": ""
-    },
-    "occupations": {
-     "type": "literal",
-     "value": "newspaper editor"
-    },
-    "image": {
-     "type": "uri",
-     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/IsmaDooly.png"
-    },
-    "findAGraveId": {
-     "type": "literal",
-     "value": "57858679"
-    },
-    "sitelinks": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "2"
-    },
-    "enwiki": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/Isma_Dooly"
-    }
-   },
-   {
-    "person": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q100792941"
-    },
-    "personLabel": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Christopher C. Wimbish"
-    },
-    "personDescription": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "American lawyer and politician"
-    },
-    "birth": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1895-01-01T00:00:00Z"
-    },
-    "birthPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "9"
-    },
-    "death": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1962-01-01T00:00:00Z"
-    },
-    "deathPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "9"
-    },
-    "causes": {
-     "type": "literal",
-     "value": ""
-    },
-    "manners": {
-     "type": "literal",
-     "value": ""
-    },
-    "occupations": {
-     "type": "literal",
-     "value": "military personnel|businessperson|politician"
-    },
-    "findAGraveId": {
-     "type": "literal",
-     "value": "178313365"
-    },
-    "sitelinks": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "2"
-    },
-    "enwiki": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/Christopher_C._Wimbish"
-    }
-   },
-   {
-    "person": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q107392201"
-    },
-    "personLabel": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Myra Miller"
-    },
-    "personDescription": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Atlanta-based food entrepreneur and baker (1811-1891)"
-    },
-    "birth": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1811-01-01T00:00:00Z"
-    },
-    "birthPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "9"
-    },
-    "death": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1891-01-01T00:00:00Z"
-    },
-    "deathPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "9"
-    },
-    "causes": {
-     "type": "literal",
-     "value": ""
-    },
-    "manners": {
-     "type": "literal",
-     "value": ""
-    },
-    "occupations": {
-     "type": "literal",
-     "value": "traiteur|baker|entrepreneur"
-    },
-    "sitelinks": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "2"
-    },
-    "enwiki": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/Myra_Miller"
-    }
-   },
-   {
-    "person": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q107990165"
-    },
-    "personLabel": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Foster Blodgett"
-    },
-    "personDescription": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "American politician"
-    },
-    "causes": {
-     "type": "literal",
-     "value": ""
-    },
-    "manners": {
-     "type": "literal",
-     "value": ""
-    },
-    "occupations": {
-     "type": "literal",
-     "value": "politician"
-    },
-    "image": {
-     "type": "uri",
-     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Foster%20Blodgett%20Jr.jpg"
-    },
-    "findAGraveId": {
-     "type": "literal",
-     "value": "42048546"
-    },
-    "sitelinks": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "2"
-    },
-    "enwiki": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/Foster_Blodgett"
-    }
-   },
-   {
-    "person": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q109855709"
-    },
-    "personLabel": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Eugenia Jones Bacon"
-    },
-    "personDescription": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "author (1840–1920)"
-    },
-    "birth": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1840-02-02T00:00:00Z"
-    },
-    "birthPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "11"
-    },
-    "death": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1920-03-13T00:00:00Z"
-    },
-    "deathPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "11"
-    },
-    "causes": {
-     "type": "literal",
-     "value": ""
-    },
-    "manners": {
-     "type": "literal",
-     "value": ""
-    },
-    "occupations": {
-     "type": "literal",
-     "value": "art educator|writer"
-    },
-    "image": {
-     "type": "uri",
-     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Eugenia%20Jones%20Bacon%201895.jpg"
-    },
-    "sitelinks": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "2"
-    },
-    "enwiki": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/Eugenia_Jones_Bacon"
-    }
-   },
-   {
-    "person": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q131301911"
-    },
-    "personLabel": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Emily Hendree Stewart Park"
-    },
-    "personDescription": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "American school president (1848-1910)"
-    },
-    "birth": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1848-01-01T00:00:00Z"
-    },
-    "birthPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "9"
-    },
-    "death": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1910-01-01T00:00:00Z"
-    },
-    "deathPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "9"
-    },
-    "causes": {
-     "type": "literal",
-     "value": ""
-    },
-    "manners": {
-     "type": "literal",
-     "value": ""
-    },
-    "occupations": {
-     "type": "literal",
-     "value": "academic administrator"
-    },
-    "image": {
-     "type": "uri",
-     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Emily%20Hendree%20Park%20%28Confederate%20Veteran%2C%201911%29.png"
-    },
-    "findAGraveId": {
-     "type": "literal",
-     "value": "131567487"
-    },
-    "sitelinks": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "2"
-    },
-    "enwiki": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/Emily_Hendree_Stewart_Park"
-    }
-   },
-   {
-    "person": {
-     "type": "uri",
      "value": "http://www.wikidata.org/entity/Q28921823"
     },
     "personLabel": {
@@ -4696,6 +4362,393 @@
    {
     "person": {
      "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q98732878"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Isma Dooly"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "US newspaper editor and clubwoman"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "newspaper editor"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/IsmaDooly.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "57858679"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Isma_Dooly"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q100792941"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Christopher C. Wimbish"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American lawyer and politician"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1895-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1962-01-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "businessperson|politician|military personnel"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "178313365"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Christopher_C._Wimbish"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q107392201"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Myra Miller"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Atlanta-based food entrepreneur and baker (1811-1891)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1811-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1891-01-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "baker|traiteur|entrepreneur"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Myra_Miller"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q107990165"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Foster Blodgett"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American politician"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Foster%20Blodgett%20Jr.jpg"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "42048546"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Foster_Blodgett"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q109855709"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Eugenia Jones Bacon"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "author (1840–1920)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1840-02-02T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1920-03-13T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "art educator|writer"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Eugenia%20Jones%20Bacon%201895.jpg"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Eugenia_Jones_Bacon"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q131301911"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Emily Hendree Stewart Park"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American school president (1848-1910)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1848-01-01T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1910-01-01T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "9"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "academic administrator"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Emily%20Hendree%20Park%20%28Confederate%20Veteran%2C%201911%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "131567487"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Emily_Hendree_Stewart_Park"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q788884"
+    },
+    "personLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Henrik Bak"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Hungarian journalist (1846–1915)"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1846-09-22T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1915-05-25T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "internist|physician"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
      "value": "http://www.wikidata.org/entity/Q4747236"
     },
     "personLabel": {
@@ -4991,67 +5044,6 @@
     "graveImage": {
      "type": "uri",
      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/IOMcD.jpg"
-    }
-   },
-   {
-    "person": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q6133751"
-    },
-    "personLabel": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "James Fairlie Cooper"
-    },
-    "personDescription": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "superintendent of the Dahlonega Mint (1814-1869)"
-    },
-    "birth": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1814-09-02T00:00:00Z"
-    },
-    "birthPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "11"
-    },
-    "death": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
-     "type": "literal",
-     "value": "1869-10-14T00:00:00Z"
-    },
-    "deathPrecision": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "11"
-    },
-    "causes": {
-     "type": "literal",
-     "value": ""
-    },
-    "manners": {
-     "type": "literal",
-     "value": ""
-    },
-    "occupations": {
-     "type": "literal",
-     "value": "military officer"
-    },
-    "findAGraveId": {
-     "type": "literal",
-     "value": "110618933"
-    },
-    "sitelinks": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
-     "type": "literal",
-     "value": "1"
-    },
-    "enwiki": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/James_Fairlie_Cooper"
     }
    }
   ]

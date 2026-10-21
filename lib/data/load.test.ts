@@ -63,7 +63,7 @@ describe("loadCemetery", () => {
     expect(r.data.warnings[0]).toEqual({
       source: "Wikidata",
       code: "saved-copy",
-      message: "Couldn't reach Wikidata, so this is the copy saved on Oct 20, 2026.",
+      message: "Couldn't reach Wikidata, so this is the copy saved on Oct 21, 2026.",
     });
   });
 
@@ -128,7 +128,7 @@ describe("loadCemetery", () => {
     // Everyone in both the live list and the saved copy has a story.
     expect(r.data.people.filter((p) => !p.wikipedia).length).toBeLessThanOrEqual(5);
     expect(r.data.warnings[0].code).toBe("stories-backfilled");
-    expect(r.data.warnings[0].message).toMatch(/^Wikipedia didn't answer for every story, so \d+ come from the copy saved on Oct 20, 2026\.$/);
+    expect(r.data.warnings[0].message).toMatch(/^Wikipedia didn't answer for every story, so \d+ come from the copy saved on Oct 21, 2026\.$/);
   });
 
   it("repairs or drops QID-named people and cleans story text in a cache entry written before the parse-time fixes", async () => {

@@ -14,6 +14,7 @@ import {
   parseFlag,
   peopleText,
   splitNear,
+  warmTargets,
 } from "./near";
 import type { NearbyCemetery } from "./types";
 import { flattenBindings, parseNearRows } from "./wikidata";
@@ -127,5 +128,27 @@ describe("URL params and text", () => {
     expect(distanceText(1.655)).toBe("1.7 km away");
     expect(peopleText(1)).toBe("1 person listed on Wikidata");
     expect(peopleText(102)).toBe("102 people listed on Wikidata");
+  });
+});
+
+describe("warm-up: tours /near loads before the tap", () => {
+  it("at the Charleston point, preloads the pinned Magnolia (nothing with 5+ is within 1 km)", () => {
+    expect(warmTargets(charleston, bestNearby(charleston))).toEqual(["Q12061438"]);
+  });
+
+  it("at Oakland, preloads Oakland once (it is both the nearest and the pinned card)", () => {
+    expect(warmTargets(oakland, bestNearby(oakland))).toEqual(["Q2008469"]);
+    // Auto-opening: only the cemetery being opened.
+    expect(warmTargets(oakland, null)).toEqual(["Q2008469"]);
+  });
+
+  it("adds at most one extra cemetery: the pinned one when it differs from the nearest", () => {
+    const list = [c("Q1", 0.4, 6), c("Q2", 1.5, 40), c("Q3", 1.8, 90)];
+    expect(bestNearby(list)?.qid).toBe("Q2");
+    expect(warmTargets(list, bestNearby(list))).toEqual(["Q1", "Q2"]);
+    expect(warmTargets(list, null)).toEqual(["Q1"]);
+    // Nearest 5+ beyond 1 km is not warmed for itself; the pinned card still is.
+    expect(warmTargets([c("Q4", 1.2, 6), c("Q5", 1.9, 30)], bestNearby([c("Q4", 1.2, 6), c("Q5", 1.9, 30)]))).toEqual(["Q5"]);
+    expect(warmTargets([c("Q6", 0.2, 3)], null)).toEqual([]);
   });
 });
