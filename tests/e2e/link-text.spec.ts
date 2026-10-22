@@ -81,9 +81,11 @@ test.describe("a link's ?name= is never shown or stored (K2)", () => {
 
   test("a stamp link whose cemetery can't be looked up opens, names nothing and stores nothing", async ({ page }) => {
     await page.route(`**/api/cemeteries/${LAKE_VIEW}/burials`, down);
+    // Listen before navigating: on a fast deployed build the lookup can answer before the page is checked.
+    const lookedUp = page.waitForResponse(`**/api/cemeteries/${LAKE_VIEW}/burials`);
     await page.goto(`/stamp?${bait(LAKE_VIEW)}`);
     await expect(page.locator("#stamp-photo")).toBeAttached();
-    await page.waitForResponse(`**/api/cemeteries/${LAKE_VIEW}/burials`);
+    await lookedUp;
     await expect(badge(page)).toHaveCount(0);
     expect(await storedHaunt(page)).toBeNull();
     await expectNoLinkText(page);
