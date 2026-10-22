@@ -22,7 +22,15 @@ import {
 } from "@anthropic-ai/sdk";
 import * as routeModule from "./route";
 import { POST } from "./route";
-import { NO_KEY_MESSAGE, resetReadStoneState, TOO_BLURRY_MESSAGE } from "@/lib/readstone/handler";
+import {
+  MAX_INPUT_TOKENS,
+  NO_KEY_MESSAGE,
+  readStoneCommittedUsd,
+  resetReadStoneState,
+  TOO_BLURRY_MESSAGE,
+  WORST_CASE_READ_USD,
+} from "@/lib/readstone/handler";
+import { estimateCostUsd } from "@/lib/readstone/limits";
 import { testGif, testJpeg, testPng, testWebpVp8x } from "@/lib/readstone/test-images";
 import { MAX_IMAGE_BYTES, StoneReadingSchema, type ModelReading } from "@/lib/readstone/types";
 
@@ -330,7 +338,9 @@ describe("POST /api/read-stone", () => {
   });
 
   it("daily cap trips: 503 until midnight UTC", async () => {
-    process.env.CLAUDE_DAILY_USD_CAP = "0.04"; // each mocked read costs $0.025
+    // A read starts only if its worst case still fits under the cap. Each mocked read
+    // then costs $0.025, so two fit and the third doesn't.
+    process.env.CLAUDE_DAILY_USD_CAP = String(WORST_CASE_READ_USD + 0.04);
     createMock.mockResolvedValue(apiMessage(IRVING));
     expect((await POST(multipart(pair(700)))).status).toBe(200);
     expect((await POST(multipart(pair(701)))).status).toBe(200);
@@ -349,6 +359,65 @@ describe("POST /api/read-stone", () => {
     expect(createMock).toHaveBeenCalledTimes(2);
     vi.setSystemTime(Date.UTC(2026, 9, 21, 0, 0, 1));
     expect((await POST(multipart(pair(703)))).status).toBe(200);
+  });
+
+  it("parallel reads never push the estimate past the cap (red team P1-4)", async () => {
+    // Worst case for real: every read uses all its input and max_tokens, on both
+    // the declined attempt and the server-side fallback.
+    const worst = { input_tokens: MAX_INPUT_TOKENS, output_tokens: 16_000, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 };
+    const usage = { ...worst, iterations: [{ type: "message", ...worst }, { type: "fallback_message", ...worst }] };
+    expect(estimateCostUsd(worst) * 2).toBeCloseTo(WORST_CASE_READ_USD, 10);
+    expect(WORST_CASE_READ_USD).toBeGreaterThan(0.3);
+    for (const cap of [0.5, 1, 5]) {
+      process.env.CLAUDE_DAILY_USD_CAP = String(cap);
+      resetReadStoneState();
+      createMock.mockReset();
+      let release: () => void = () => {};
+      const gate = new Promise<void>((r) => (release = r));
+      createMock.mockImplementation(async () => {
+        await gate; // every admitted read is in flight at once
+        return { ...apiMessage(IRVING), usage };
+      });
+      // 60 different photos from 60 networks, no cookies: only the cap can stop them.
+      let answered = 0;
+      const pending = Array.from({ length: 60 }, (_, i) =>
+        POST(multipart(pair(2000 + i), { ip: `198.51.100.${i + 1}` })).then((res) => {
+          answered++;
+          return res;
+        }),
+      );
+      await vi.waitFor(() => expect(answered + createMock.mock.calls.length).toBe(60));
+      const started = createMock.mock.calls.length;
+      // As many as fit, and not one more.
+      expect(started * WORST_CASE_READ_USD).toBeLessThanOrEqual(cap);
+      expect((started + 1) * WORST_CASE_READ_USD).toBeGreaterThan(cap);
+      expect(readStoneCommittedUsd()).toBeLessThanOrEqual(cap);
+      release();
+      const responses = await Promise.all(pending);
+      expect(responses.filter((r) => r.status === 200)).toHaveLength(started);
+      expect(responses.filter((r) => r.status === 503)).toHaveLength(60 - started);
+      // Settled at what they were billed (both attempts), still within the cap.
+      expect(readStoneCommittedUsd()).toBeCloseTo(started * WORST_CASE_READ_USD, 10);
+      expect(readStoneCommittedUsd()).toBeLessThanOrEqual(cap);
+    }
+  });
+
+  it("settles a read at what it was billed, counting a server-side fallback's declined attempt", async () => {
+    const declined = { type: "message", input_tokens: 5000, output_tokens: 800, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 };
+    const served = { type: "fallback_message", input_tokens: 5000, output_tokens: 1500, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 };
+    const message = apiMessage(IRVING);
+    createMock.mockResolvedValue({ ...message, usage: { ...message.usage, iterations: [declined, served] } });
+    expect((await POST(multipart(pair(3000)))).status).toBe(200);
+    expect(readStoneCommittedUsd()).toBeCloseTo(estimateCostUsd({ input_tokens: 10_000, output_tokens: 2300 }), 10);
+  });
+
+  it("a read that times out counts at its worst case; one that fails outright costs nothing", async () => {
+    createMock.mockRejectedValueOnce(new AuthenticationError(401, { type: "error" }, "bad key", new Headers()));
+    expect((await POST(multipart(pair(3100)))).status).toBe(503);
+    expect(readStoneCommittedUsd()).toBe(0);
+    createMock.mockRejectedValueOnce(new APIConnectionTimeoutError());
+    expect((await POST(multipart(pair(3101)))).status).toBe(504);
+    expect(readStoneCommittedUsd()).toBeCloseTo(WORST_CASE_READ_USD, 10);
   });
 
   it("a cap of 0 switches reading off", async () => {

@@ -109,14 +109,19 @@ export class LruCache<V> {
  */
 export const SONNET_5_5_USD_PER_MTOK = { input: 2, output: 10, cacheWrite: 2.5, cacheRead: 0.2 } as const;
 
-export type TokenUsage = {
+type TokenCounts = {
   input_tokens: number;
   output_tokens: number;
   cache_creation_input_tokens?: number | null;
   cache_read_input_tokens?: number | null;
 };
 
-export function estimateCostUsd(usage: TokenUsage): number {
+export type TokenUsage = TokenCounts & {
+  /** Per attempt. With server-side fallback, the declined attempt ("message") and the fallback ("fallback_message") each get one. */
+  iterations?: readonly (TokenCounts & { type: string })[] | null;
+};
+
+export function estimateCostUsd(usage: TokenCounts): number {
   const p = SONNET_5_5_USD_PER_MTOK;
   return (
     (usage.input_tokens * p.input +
@@ -126,6 +131,26 @@ export function estimateCostUsd(usage: TokenUsage): number {
     1_000_000
   );
 }
+
+/**
+ * What one response was billed. The top-level usage covers only the attempt
+ * that produced the message; a server-side fallback also bills the attempt that
+ * was declined, so the attempts are added up when they're listed.
+ */
+export function billedCostUsd(usage: TokenUsage): number {
+  const top = estimateCostUsd(usage);
+  const attempts = (usage.iterations ?? []).filter((i) => i.type === "message" || i.type === "fallback_message");
+  if (attempts.length === 0) return top;
+  return Math.max(top, attempts.reduce((sum, a) => sum + estimateCostUsd(a), 0));
+}
+
+/** One read's worst-case estimate, held against the cap until the read settles. */
+export type BudgetHold = {
+  /** The read finished: drop the hold and count what it cost. */
+  settle(usd: number, now: number): void;
+  /** The read cost nothing: drop the hold. */
+  release(): void;
+};
 
 const utcDay = (now: number) => new Date(now).toISOString().slice(0, 10);
 
@@ -152,6 +177,36 @@ export class DailyBudget {
   isOver(capUsd: number, now: number): boolean {
     this.roll(now);
     return this.spent + this.reserved >= capUsd;
+  }
+
+  /** Today's spend plus every hold still open. */
+  committed(now: number): number {
+    this.roll(now);
+    return this.spent + this.reserved;
+  }
+
+  /**
+   * Holds a read's worst-case cost, but only if today's spend, every open hold
+   * and this one together stay within the cap; otherwise null. The check and the
+   * hold happen in one step, so parallel reads can never commit more than the cap.
+   */
+  tryReserve(worstCaseUsd: number, capUsd: number, now: number): BudgetHold | null {
+    this.roll(now);
+    if (this.spent + this.reserved + worstCaseUsd > capUsd) return null;
+    const release = this.reserve(worstCaseUsd);
+    let open = true;
+    return {
+      settle: (usd, at) => {
+        if (!open) return;
+        open = false;
+        release();
+        this.add(usd, at);
+      },
+      release: () => {
+        open = false;
+        release();
+      },
+    };
   }
 
   reserve(estimateUsd: number): () => void {
