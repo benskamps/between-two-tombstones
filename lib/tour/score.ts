@@ -1,7 +1,8 @@
 // "Why this grave": tags a visitor can read, and a score that orders the tour.
 // Fame (sitelinks) carries most of the weight; a Wikipedia story matters next,
 // because a stop without a story is just a name. Unusual deaths get a small
-// boost, except suicide (no boost, no tag), and never for recent deaths.
+// boost, except suicide (no boost, no tag). Recent deaths (lib/respect.ts) get
+// neither the unusual-death nor the died-young boost or tag.
 
 import { needsRespectfulStyle } from "@/lib/respect";
 import type { Person } from "@/lib/types";
@@ -65,7 +66,9 @@ export function scorePerson(p: Person, opts: ScoreOptions = {}): Scored {
   const birth = parseWikiDate(p.birth, p.birthPrecision);
   const death = parseWikiDate(p.death, p.deathPrecision);
   const age = ageAtDeath(birth, death);
-  if (age && age.years < DIED_YOUNG_UNDER) {
+  // A recent (or undated) death gets the plain card, so no "died young" either: the grief may be fresh.
+  const recent = needsRespectfulStyle(p, now);
+  if (age && age.years < DIED_YOUNG_UNDER && !recent) {
     tags.push({ id: "died-young", label: "Died young" });
     score += WEIGHTS["died-young"];
   }
@@ -77,7 +80,7 @@ export function scorePerson(p: Person, opts: ScoreOptions = {}): Scored {
     tags.push({ id: "century-gone", label: "Gone 100+ years" });
     score += WEIGHTS["century-gone"];
   }
-  if (!needsRespectfulStyle(p, now) && hasUnusualDeath(p)) {
+  if (!recent && hasUnusualDeath(p)) {
     tags.push({ id: "unusual-death", label: "Notable death" });
     score += WEIGHTS["unusual-death"];
   }

@@ -61,6 +61,19 @@ describe("why this grave: tags", () => {
     expect(hasUnusualDeath({ mannersOfDeath: ["homicide", "suicide"] })).toBe(false);
   });
 
+  it("recent deaths never get the died-young tag or boost (respect rules)", () => {
+    const base: Person = { ...person(oak, "Q173540"), mannersOfDeath: [], graveImage: null, graveCoord: null };
+    // Died at 24, five years ago: the plain card, and nothing that singles the death out.
+    const recent: Person = { ...base, birth: "1997-03-01T00:00:00Z", birthPrecision: 11, death: "2021-06-01T00:00:00Z", deathPrecision: 11 };
+    expect(tagIds(recent)).not.toContain("died-young");
+    // The same age at death long ago still gets both.
+    const old: Person = { ...recent, birth: "1927-03-01T00:00:00Z", death: "1951-06-01T00:00:00Z" };
+    expect(tagIds(old)).toContain("died-young");
+    expect(scorePerson(old, { now }).score - scorePerson(recent, { now }).score).toBe(WEIGHTS["died-young"]);
+    // Within the 25-year line, at 24 years gone, still no tag.
+    expect(tagIds({ ...recent, birth: "1978-01-01T00:00:00Z", death: "2002-01-01T00:00:00Z" })).not.toContain("died-young");
+  });
+
   it("recent deaths never get the unusual-death tag", () => {
     const helmsley = sh.people.find((p) => p.name === "Leona Helmsley")!;
     expect(tagIds({ ...helmsley, mannersOfDeath: ["homicide"] })).not.toContain("unusual-death");
