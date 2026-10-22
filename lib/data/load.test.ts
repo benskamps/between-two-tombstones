@@ -413,10 +413,11 @@ describe("near", () => {
   it("names an OpenStreetMap outage, then skips OSM during the cooldown", async () => {
     cached.cachedOsm.mockRejectedValue(new DataSourceError("OpenStreetMap", "unreachable", "All 3 Overpass mirrors failed: overpass-api.de (unreachable)."));
     const first = await loadNearOsm(47.6339, -122.3158);
-    expect(first).toEqual({ ok: false, message: expect.stringContaining("All 3 Overpass mirrors failed") });
+    // The page gets a plain sentence; mirror host names and status codes stay in the server log.
+    expect(first).toEqual({ ok: false, message: "Couldn't reach OpenStreetMap. Showing Wikidata results only." });
     const second = await loadNearOsm(47.6339, -122.3158);
     expect(second.ok).toBe(false);
-    expect(second).toMatchObject({ message: expect.stringContaining("(All 3 Overpass mirrors failed: overpass-api.de (unreachable)), so it was skipped") });
+    expect(second).toMatchObject({ message: "Couldn't reach OpenStreetMap a few minutes ago, so it was skipped. Showing Wikidata results only." });
     expect(cached.cachedOsm).toHaveBeenCalledTimes(1);
 
     const combined = combineNear({ lat: 47.634, lon: -122.316 }, [], first);

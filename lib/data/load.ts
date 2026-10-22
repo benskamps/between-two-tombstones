@@ -441,7 +441,6 @@ export async function loadNearWikidata(lat: number, lon: number): Promise<Nearby
 export type OsmLoad = { ok: true; mirror: string; cemeteries: OsmCemetery[] } | { ok: false; message: string };
 
 let osmDownUntil = 0;
-let osmLastFailure = "";
 
 /** OpenStreetMap cemeteries. Never throws: a failure comes back named. */
 export async function loadNearOsm(lat: number, lon: number): Promise<OsmLoad> {
@@ -449,7 +448,7 @@ export async function loadNearOsm(lat: number, lon: number): Promise<OsmLoad> {
   if (now < osmDownUntil) {
     return {
       ok: false,
-      message: `Couldn't reach OpenStreetMap a few minutes ago (${osmLastFailure.replace(/\.$/, "")}), so it was skipped. Showing Wikidata results only.`,
+      message: "Couldn't reach OpenStreetMap a few minutes ago, so it was skipped. Showing Wikidata results only.",
     };
   }
   try {
@@ -458,15 +457,15 @@ export async function loadNearOsm(lat: number, lon: number): Promise<OsmLoad> {
   } catch (e) {
     const err = asDataSourceError(e, "OpenStreetMap");
     osmDownUntil = Date.now() + OSM_COOLDOWN_MS;
-    osmLastFailure = err.detail;
-    return { ok: false, message: `Couldn't reach OpenStreetMap: ${err.detail} Showing Wikidata results only.` };
+    // The detail (mirror host names, status codes) goes to the server log, not to the page.
+    console.warn(`OpenStreetMap failed: ${err.detail}`);
+    return { ok: false, message: "Couldn't reach OpenStreetMap. Showing Wikidata results only." };
   }
 }
 
 /** Test hook: forget an OpenStreetMap outage. */
 export function resetOsmCooldown() {
   osmDownUntil = 0;
-  osmLastFailure = "";
 }
 
 const coordOf = (c: NearbyCemetery) => parsePoint(c.coord);
