@@ -194,7 +194,8 @@ async function startLive(qid: string, stage: { source: DataSource }): Promise<St
       () => new DataSourceError("Wikidata", "timeout", `No list of burials from Wikidata within ${BURIALS_BUDGET_MS / 1000} s.`),
     ),
   );
-  const titles = titlesInTourOrder(rows);
+  // Rank by the burials' own fetch time: reading the clock here broke /near's prerender (its warm-up loads tours).
+  const titles = titlesInTourOrder(rows, new Date(fetchedAt));
   const factsP = call("Wikidata", () => cachedCemeteryFacts(qid)).finally(() => {
     stage.source = "Wikipedia";
   });
