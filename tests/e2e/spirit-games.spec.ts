@@ -314,7 +314,8 @@ test.describe("spirit box", () => {
       }),
     );
     await page.goto("/spirit?cemetery=Q999999&test-caps=short");
-    await expect(page.getByLabel(/The cemetery from your last tour/)).toBeChecked();
+    // The haunt is Oakland, so this cemetery came from the link: named, and said so (review 4, #3).
+    await expect(page.getByRole("radio", { name: /Test Hill Cemetery\s*From your link/ })).toBeChecked();
     await expect(page.getByText("Test Hill Cemetery", { exact: true })).toBeVisible();
     await expect(page.getByText(/1 person buried at Test Hill Cemetery died 75 or more years ago/)).toBeVisible();
     await expect(page.getByText(/2 more recent or undated burials are left out/)).toBeVisible();
@@ -333,12 +334,40 @@ test.describe("spirit box", () => {
       }),
     );
     await page.goto("/spirit?cemetery=Q999999");
-    await expect(page.getByText(/Couldn.t load the burials for this cemetery: Wikidata: Couldn.t reach Wikidata\./)).toBeVisible();
+    // The source once, one full stop, and the spirit box's own next step (review 4, #3).
+    await expect(
+      page.getByText("Couldn't load the burials for this cemetery. Couldn't reach Wikidata. Try again in a minute, or pick a sample cemetery.", { exact: true }),
+    ).toBeVisible();
+    // No name in the link and none loaded: a plain name, never the ID or "your last tour".
+    await expect(page.getByRole("radio", { name: /The cemetery in your link\s*From your link/ })).toBeChecked();
+    const picker = page.locator('section[aria-labelledby="spirit-pick"]');
+    await expect(picker).not.toContainText("Q999999");
+    await expect(picker).not.toContainText("last tour");
     await expect(page.getByRole("button", { name: "Start", exact: true })).toBeDisabled();
     // The samples still work.
     await page.getByLabel(/Sleepy Hollow Cemetery/).check();
     await expect(page.getByText(/people buried at Sleepy Hollow Cemetery died 75 or more years ago/)).toBeVisible();
     await expect(page.getByRole("button", { name: "Start", exact: true })).toBeEnabled();
+  });
+
+  test("a link's cemetery is named from ?name= when its burials can't load (review 4, #3)", async ({ page }) => {
+    await page.route("**/api/cemeteries/Q216344/burials", (route) =>
+      route.fulfill({
+        status: 503,
+        contentType: "application/json",
+        body: JSON.stringify({ error: { source: "Wikidata", message: "Couldn't reach Wikidata. Try again in a minute, or open a saved tour." } }),
+      }),
+    );
+    await page.goto("/spirit?cemetery=Q216344&name=Arlington+National+Cemetery&place=Arlington%2C+Virginia");
+    const picked = page.getByRole("radio", { name: /Arlington National Cemetery\s*From your link · Arlington, Virginia/ });
+    await expect(picked).toBeChecked();
+    await expect(
+      page.getByText("Couldn't load the burials for this cemetery. Couldn't reach Wikidata. Try again in a minute, or pick a sample cemetery.", { exact: true }),
+    ).toBeVisible();
+    const picker = page.locator('section[aria-labelledby="spirit-pick"]');
+    await expect(picker).not.toContainText("Q216344");
+    await expect(picker).not.toContainText("Wikidata: ");
+    await expect(picker).not.toContainText("..");
   });
 });
 

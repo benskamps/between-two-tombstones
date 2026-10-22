@@ -29,7 +29,8 @@ export function SeanceInvite({
   cemeteryQid: string;
   /** The host's bank hash, so joiners can check their names match. */
   bank: string | null;
-  cemeteryName: string;
+  /** Null until its burials load: a séance link carries only the ID, and the ID is no name. */
+  cemeteryName: string | null;
 }) {
   const base = useSyncExternalStore(subscribeNothing, origin, () => "");
   const shareable = useSyncExternalStore(subscribeNothing, canWebShare, () => false);
@@ -50,7 +51,7 @@ export function SeanceInvite({
     try {
       await navigator.share({
         title: "Séance",
-        text: `Join my séance at ${cemeteryName}. Room code ${code}.`,
+        text: cemeteryName ? `Join my séance at ${cemeteryName}. Room code ${code}.` : `Join my séance. Room code ${code}.`,
         url: link,
       });
       shareEvent("share_created", "seance", "share-sheet");
@@ -69,7 +70,13 @@ export function SeanceInvite({
       </div>
       {/* Someone joining by code picks the same cemetery, so say which (F13). */}
       <p className="text-sm">
-        Cemetery: <span className="font-bold">{cemeteryName}</span>. Anyone joining by code picks it first.
+        {cemeteryName ? (
+          <>
+            Cemetery: <span className="font-bold">{cemeteryName}</span>. Anyone joining by code picks it first.
+          </>
+        ) : (
+          "Anyone joining by code picks the same cemetery first."
+        )}
       </p>
       <label className="block">
         <span className="text-sm text-muted">Séance link</span>

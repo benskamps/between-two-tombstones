@@ -10,10 +10,11 @@ import {
   startNoise,
   type NoiseEngine,
 } from "@/lib/spirit/engine";
-import { shouldAutoSetHaunt } from "@/lib/haunt/haunt";
+import { MAX_NAME, MAX_PLACE, cleanText, shouldAutoSetHaunt } from "@/lib/haunt/haunt";
 import { getFreshHaunt, getHaunt, setHaunt } from "@/lib/haunt/store";
 import { useHaunt } from "@/lib/haunt/useHaunt";
 import { QID_RE, loadCemetery, type LoadResult, type SampleCemetery } from "@/lib/spirit/load";
+import { extraCemeteryOption } from "@/lib/spirit/picker";
 import { capsFromParam, createSession, formatDuration, stopMessage, type SpiritSession, type Utterance } from "@/lib/spirit/session";
 import { pickVoice, silenceVoices, speakFragment, speechAvailable } from "@/lib/spirit/voice";
 import { bankHasNames, buildWordBank } from "@/lib/spirit/wordbank";
@@ -179,19 +180,21 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
     rt.current.noise?.setSweepMs(ms);
   }
 
+  const extraResult = extraQid ? results[extraQid] : undefined;
   const options = [
     ...samples.map((s) => ({ qid: s.qid, label: s.name, detail: s.place })),
     ...(extraQid && !extraIsSample
       ? [
           {
             qid: extraQid,
-            // A cemetery from the link (the tour's own links carry it) or, without one, the haunt.
-            label: tourQid ? "The cemetery from your last tour" : "Your haunt",
-            detail: results[extraQid]?.ok
-              ? (results[extraQid] as Extract<LoadResult, { ok: true }>).cemetery.name
-              : extraQid === haunt?.qid
-                ? haunt.name
-                : extraQid,
+            // A cemetery from the link (?name= and ?place= when it has them) or the haunt; never its ID.
+            ...extraCemeteryOption({
+              loaded: extraResult?.ok ? extraResult.cemetery.name : null,
+              link: tourQid
+                ? { name: cleanText(params.get("name"), MAX_NAME), place: cleanText(params.get("place"), MAX_PLACE) }
+                : null,
+              haunt: haunt && haunt.qid === extraQid ? haunt : null,
+            }),
           },
         ]
       : []),
@@ -231,7 +234,9 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
         {/* Room for the names line up front, so the panel below doesn't move when the names arrive. */}
         <div role="status" className="min-h-[5.25rem] text-sm">
           {!result && <p className="text-muted">Loading the names&hellip;</p>}
-          {result && !result.ok && <p className="text-danger">{result.message} Pick a sample cemetery instead.</p>}
+          {result && !result.ok && (
+            <p className="text-danger">{result.message} Try again in a minute, or pick a sample cemetery.</p>
+          )}
           {result?.ok && bank && (
             <>
               {ready ? (

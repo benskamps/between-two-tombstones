@@ -43,10 +43,13 @@ describe("parseBurials", () => {
     expect(parseBurials({ error: { source: "Wikidata", message: "down" } })).toBeNull();
     expect(parseBurials({ cemetery: { name: "x" }, people: "no" })).toBeNull();
   });
-  it("words route errors", () => {
-    expect(routeError({ error: { source: "Wikidata", message: "Couldn't reach Wikidata." } }, 503)).toBe(
-      "Wikidata: Couldn't reach Wikidata.",
-    );
+  it("words route errors, naming the source once (review 4, #3)", () => {
+    expect(routeError({ error: { source: "Wikidata", message: "Couldn't reach Wikidata." } }, 503)).toBe("Couldn't reach Wikidata.");
+    // The route's own message: the tour's next step comes off; the spirit box says its own.
+    expect(
+      routeError({ error: { source: "Wikidata", message: "Couldn't reach Wikidata. Try again in a minute, or open a saved tour." } }, 503),
+    ).toBe("Couldn't reach Wikidata.");
+    expect(routeError({ error: { source: "Wikidata", message: "test outage" } }, 503)).toBe("Wikidata: test outage.");
     expect(routeError(null, 404)).toContain("isn't available yet");
     expect(routeError(null, 500)).toContain("500");
   });
@@ -92,7 +95,7 @@ describe("loadCemetery", () => {
       fetchImpl: fakeFetch(503, { error: { source: "Wikidata", message: "Wikidata is switched off." } }),
       fallback,
     });
-    expect(r.ok && r.note).toContain("Wikidata: Wikidata is switched off.");
+    expect(r.ok && r.note).toBe("Couldn't load fresh names, so this uses the copy saved with the app. Wikidata is switched off.");
   });
   it("names the failure when there's no saved copy", async () => {
     const r = await loadCemetery("Q872253", {
@@ -101,13 +104,19 @@ describe("loadCemetery", () => {
     expect(r.ok).toBe(false);
     expect(!r.ok && r.message).toContain("Wikidata is switched off.");
   });
+  it("says the route's failure once, with one full stop (review 4, #3)", async () => {
+    const r = await loadCemetery("Q216344", {
+      fetchImpl: fakeFetch(503, { error: { source: "Wikidata", message: "Couldn't reach Wikidata. Try again in a minute, or open a saved tour." } }),
+    });
+    expect(!r.ok && r.message).toBe("Couldn't load the burials for this cemetery. Couldn't reach Wikidata.");
+  });
   it("gives up after the timeout", async () => {
     const never = ((_: unknown, init?: RequestInit) =>
       new Promise((_resolve, reject) => {
         init?.signal?.addEventListener("abort", () => reject(new DOMException("aborted", "AbortError")));
       })) as unknown as typeof fetch;
     const r = await loadCemetery("Q872253", { fetchImpl: never, timeoutMs: 50 });
-    expect(!r.ok && r.message).toContain("no answer within");
+    expect(!r.ok && r.message).toMatch(/^Couldn't load the burials for this cemetery\. No answer within \d+ seconds \(you may be offline\)\.$/);
   });
 });
 

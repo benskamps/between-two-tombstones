@@ -8,6 +8,7 @@ import type { EventKind } from "@/lib/calendar/kinds";
 import { feedPath, subscribeLinks } from "@/lib/calendar/params";
 import type { CalendarSample } from "@/lib/calendar/samples";
 import { localToday, readFeed, upcoming, ymdKey, type PreviewFeed } from "@/lib/calendar/upcoming";
+import { errorText } from "@/lib/data/errors";
 import { useHaunt } from "@/lib/haunt/useHaunt";
 import type { YMD } from "@/lib/stonemath";
 import { MoonPhases } from "@/components/ui/Motifs";
@@ -112,8 +113,10 @@ function appPath(url: string | null): string | null {
 
 async function errorMessage(res: Response): Promise<string> {
   try {
-    const json = (await res.json()) as { error?: { message?: unknown } };
-    if (typeof json.error?.message === "string") return json.error.message;
+    const json = (await res.json()) as { error?: { source?: unknown; message?: unknown } };
+    // Said once, without the tour's "open a saved tour" (the buttons are this page's next step).
+    const source = typeof json.error?.source === "string" ? json.error.source : null;
+    if (typeof json.error?.message === "string" && json.error.message.trim()) return errorText(source, json.error.message, { nextStep: false });
   } catch {
     // not JSON
   }
@@ -314,7 +317,7 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
         )}
         {state?.status === "error" && (
           <p role="alert" className="text-danger">
-            Couldn&rsquo;t load the preview: {state.message} The buttons below still work once you&rsquo;re online.
+            Couldn&rsquo;t load the preview. {state.message} The buttons below still work once you&rsquo;re online.
           </p>
         )}
         {feed && (

@@ -390,6 +390,27 @@ test.describe("séance", () => {
     await expect(page.getByRole("button", { name: /Join the séance|Start/ })).toHaveCount(0);
   });
 
+  test("a séance link whose cemetery can't load never shows its ID as a name (review 4, #3)", async ({ page }) => {
+    await page.addInitScript(seenEtiquette);
+    await page.route("**/api/cemeteries/Q216344/burials", (route) =>
+      route.fulfill({
+        status: 503,
+        contentType: "application/json",
+        body: JSON.stringify({ error: { source: "Wikidata", message: "Couldn't reach Wikidata. Try again in a minute, or open a saved tour." } }),
+      }),
+    );
+    await page.goto("/spirit?seance=KXMPRT&cemetery=Q216344");
+    await expect(page.getByRole("heading", { name: "Séance KXMPRT" })).toBeVisible();
+    await expect(
+      page.getByText("Couldn't load the burials for this cemetery. Couldn't reach Wikidata. Ask the host to start the séance with a sample cemetery.", {
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(page.getByText(/^Names from the cemetery in the link\./)).toBeVisible();
+    await expect(page.getByText("Anyone joining by code picks the same cemetery first.")).toBeVisible();
+    await expect(page.locator("main")).not.toContainText("Q216344");
+  });
+
   test("the party page starts a séance with the party's room code", async ({ browser, baseURL }) => {
     const ctx = await phone(browser, baseURL, 0);
     await seedHaunt(ctx);
