@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect, unstable_rethrow } from "next/navigation";
-import { after } from "next/server";
+import { after, connection } from "next/server";
 import { Suspense } from "react";
 import { ServiceWorkerRegistrar } from "@/components/offline/ServiceWorkerRegistrar";
 import { NearMeButton } from "@/components/shell/NearMeButton";
@@ -11,10 +11,10 @@ import { PageHeader } from "@/components/ui/Motifs";
 import { Sprout } from "@/components/ui/symbols";
 import { asDataSourceError } from "@/lib/data/errors";
 import { combineNear, loadCemetery, loadNearOsm, loadNearWikidata, osmWithin } from "@/lib/data/load";
-import { accuracyText, autoOpenTarget, bestNearby, hereHref, isApproximate, parseAccuracy, parseFlag, splitNear, warmTargets } from "@/lib/data/near";
+import { accuracyText, autoOpenTarget, bestNearby, groupNear, hereHref, isApproximate, parseAccuracy, parseFlag, urlCoord, warmTargets } from "@/lib/data/near";
 import type { NearbyCemetery } from "@/lib/data/types";
 import { parseLatLon } from "@/lib/data/validate";
-import { BestNearby, NearLinkList, UnlistedFold } from "./NearList";
+import { BestNearby, NearFold, NearLinkList } from "./NearList";
 
 export const metadata: Metadata = {
   title: "Cemeteries near you",
@@ -64,7 +64,7 @@ async function NearResults({ searchParams }: Pick<PageProps<"/near">, "searchPar
   } catch (e) {
     unstable_rethrow(e);
     const err = asDataSourceError(e, "Wikidata");
-    return <SourceFailure source={err.source} message={err.userMessage} retryHref={`/near?lat=${at.lat}&lon=${at.lon}`} />;
+    return <SourceFailure source={err.source} message={err.userMessage} retryHref={`/near?lat=${urlCoord(at.lat)}&lon=${urlCoord(at.lon)}`} />;
   }
 
   // "I'm here. Haunt me.": with a good fix (±300 m or better) and a cemetery
@@ -82,8 +82,9 @@ async function NearResults({ searchParams }: Pick<PageProps<"/near">, "searchPar
   }
   if (here) redirect(hereHref(here.qid, at.lat, at.lon, here.burials));
 
-  const { listed, unlisted } = splitNear(cemeteries, best);
-  const anyTour = Boolean(best) || listed.length > 0;
+  // Cards only for 5+ people; fewer are folded with the empty ones (review 4, #5).
+  const { cards, few, unlisted } = groupNear(cemeteries, best);
+  const anyTour = Boolean(best) || cards.length > 0;
 
   return (
     <div className="space-y-5">
@@ -101,25 +102,32 @@ async function NearResults({ searchParams }: Pick<PageProps<"/near">, "searchPar
       ) : (
         <>
           {best && <BestNearby cemetery={best} />}
-          {listed.length > 0 && (
+          {cards.length > 0 && (
             <section aria-labelledby="near-listed-title" className="space-y-2">
               <h2 id="near-listed-title" className="font-display text-2xl leading-tight">
                 {best ? "Also nearby" : "Nearby"}
               </h2>
               <p className="text-sm text-muted">Nearest first. The more people listed, the better the tour.</p>
-              <NearLinkList items={listed} label={best ? "Other cemeteries with people listed" : "Cemeteries with people listed"} />
+              <NearLinkList items={cards} label={best ? "Other cemeteries with people listed" : "Cemeteries with people listed"} />
             </section>
           )}
           {!anyTour && (
             <div className="space-y-3" data-testid="near-no-tours">
-              <p>
-                None of the cemeteries within 10 km lists anyone on Wikidata yet, so there&rsquo;s no tour here. Try searching by name for one
-                farther away.
-              </p>
+              {few.length > 0 ? (
+                <p>
+                  None of the cemeteries within 10 km lists 5 or more people on Wikidata, so every tour here is short. Search by name for a bigger
+                  one farther away, or open a short one below.
+                </p>
+              ) : (
+                <p>
+                  None of the cemeteries within 10 km lists anyone on Wikidata yet, so there&rsquo;s no tour here. Try searching by name for one
+                  farther away.
+                </p>
+              )}
               <SearchForm />
             </div>
           )}
-          {unlisted.length > 0 && <UnlistedFold items={unlisted} more={anyTour} />}
+          {few.length + unlisted.length > 0 && <NearFold few={few} unlisted={unlisted} more={anyTour} open={!anyTour && few.length > 0} />}
         </>
       )}
       <Suspense fallback={<p className="text-sm text-muted">Checking OpenStreetMap for cemeteries Wikidata doesn&rsquo;t have…</p>}>
@@ -131,6 +139,9 @@ async function NearResults({ searchParams }: Pick<PageProps<"/near">, "searchPar
 
 /** Optional OpenStreetMap enrichment. Streams in after the list; a failure is named, never hidden. */
 async function OsmExtras({ lat, lon, wikidata }: { lat: number; lon: number; wikidata: NearbyCemetery[] }) {
+  // The OpenStreetMap cooldown reads the clock (Date.now() in loadNearOsm); that belongs to the request,
+  // not a prerender, or Next logs "encountered the unstable value Date.now() while prerendering".
+  await connection();
   const osm = await osmWithin(loadNearOsm(lat, lon));
   const merged = combineNear({ lat, lon }, wikidata, osm);
   if (!osm.ok) {

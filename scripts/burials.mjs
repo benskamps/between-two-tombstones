@@ -31,15 +31,26 @@ WHERE {
   # pick the wrong one.
   OPTIONAL { ?person p:P569 ?bst . ?bst a wikibase:BestRank ; psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }
   OPTIONAL { ?person p:P570 ?dst . ?dst a wikibase:BestRank ; psv:P570 [ wikibase:timeValue ?death_ ; wikibase:timePrecision ?deathPrec_ ] }
-  OPTIONAL { ?person wdt:P509 ?cause . ?cause rdfs:label ?causeLabel_ FILTER(LANG(?causeLabel_) = "en") }
-  OPTIONAL { ?person wdt:P1196 ?manner . ?manner rdfs:label ?mannerLabel_ FILTER(LANG(?mannerLabel_) = "en") }
-  OPTIONAL { ?person wdt:P106 ?occ . ?occ rdfs:label ?occLabel_ FILTER(LANG(?occLabel_) = "en") }
+  # Labels in English, else "mul" (Wikidata's language-neutral labels, where
+  # many names now live only). Same as labelEnMul in lib/data/wikidata.ts.
+  OPTIONAL { ?person wdt:P509 ?cause .
+    OPTIONAL { ?cause rdfs:label ?causeLabel_en FILTER(LANG(?causeLabel_en) = "en") }
+    OPTIONAL { ?cause rdfs:label ?causeLabel_mul FILTER(LANG(?causeLabel_mul) = "mul") }
+    BIND(COALESCE(?causeLabel_en, ?causeLabel_mul) AS ?causeLabel_) }
+  OPTIONAL { ?person wdt:P1196 ?manner .
+    OPTIONAL { ?manner rdfs:label ?mannerLabel_en FILTER(LANG(?mannerLabel_en) = "en") }
+    OPTIONAL { ?manner rdfs:label ?mannerLabel_mul FILTER(LANG(?mannerLabel_mul) = "mul") }
+    BIND(COALESCE(?mannerLabel_en, ?mannerLabel_mul) AS ?mannerLabel_) }
+  OPTIONAL { ?person wdt:P106 ?occ .
+    OPTIONAL { ?occ rdfs:label ?occLabel_en FILTER(LANG(?occLabel_en) = "en") }
+    OPTIONAL { ?occ rdfs:label ?occLabel_mul FILTER(LANG(?occLabel_mul) = "mul") }
+    BIND(COALESCE(?occLabel_en, ?occLabel_mul) AS ?occLabel_) }
   OPTIONAL { ?person wdt:P18 ?image_ }
   OPTIONAL { ?person wdt:P1442 ?graveImage_ }
   OPTIONAL { ?person wdt:P625 ?personCoord_ }
   OPTIONAL { ?person wdt:P535 ?fag_ }
   OPTIONAL { ?enwiki_ schema:about ?person ; schema:isPartOf <https://en.wikipedia.org/> }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en,mul". }
 }
 GROUP BY ?person ?personLabel ?personDescription
 # Ties on sitelinks are broken by the QID's number (lowest first) so the LIMIT

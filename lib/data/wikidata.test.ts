@@ -1,7 +1,13 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { burialsQuery as scriptBurialsQuery } from "../../scripts/burials.mjs";
+import { burialsQuery as deckBurialsQuery, profilesQuery } from "../gravitator/sparql";
+import burialsEnMulJson from "./__fixtures__/sparql-burials-Q2008469.en-mul.excerpt.json";
 import burialsJson from "./__fixtures__/sparql-burials-Q2008469.json";
+import mausoleumFactsJson from "./__fixtures__/sparql-facts-Q1154819.json";
 import factsJson from "./__fixtures__/sparql-facts-Q2008469.json";
+import mulOnlyFactsJson from "./__fixtures__/sparql-facts-Q4946285.json";
 import nearLakeViewJson from "./__fixtures__/sparql-near-lakeview.json";
 import nearManhattanJson from "./__fixtures__/sparql-near-manhattan.json";
 import searchLakeViewJson from "./__fixtures__/sparql-search-lake-view-cemetery.json";
@@ -11,7 +17,9 @@ import { DataSourceError } from "./errors";
 import { setTransportForTests } from "./wikimedia";
 import {
   burialsQuery,
+  cemeteryFactsQuery,
   fetchSearch,
+  labelEnMul,
   flattenBindings,
   mentionsCemetery,
   mergeSearchResults,
@@ -105,6 +113,8 @@ describe("burials", () => {
 });
 
 describe("people with no English label (F20)", () => {
+  // sparql-burials-Q2008469.json was recorded on 10/21 with the English-only query (before K14), so it still
+  // holds the two bare-QID rows this safety net repairs. Re-recording it with today's query names them from "mul".
   it("names the recorded Oakland rows whose label is their QID from their English Wikipedia articles", () => {
     const raw = flattenBindings(burialsJson);
     const qidNamed = raw.filter((r) => /^Q\d+$/.test(r.personLabel ?? "")).map((r) => r.person.split("/").pop());
@@ -146,6 +156,127 @@ describe("cemetery facts", () => {
 
   it("returns null for an item that doesn't exist (no schema:version)", () => {
     expect(parseCemeteryFacts("Q999999999999", [{ c: "http://www.wikidata.org/entity/Q999999999999", cLabel: "Q999999999999" }])).toBeNull();
+  });
+});
+
+describe("only a cemetery opens as one (K1)", () => {
+  const row = (extra: Record<string, string>) => ({ c: "http://www.wikidata.org/entity/Q42", version: "1", ...extra });
+
+  it("the facts query asks Wikidata whether the item is a cemetery, the way search and /near filter", () => {
+    const q = cemeteryFactsQuery("Q42");
+    expect(q).toContain("VALUES ?c { wd:Q42 }");
+    expect(q).toContain("BIND(EXISTS { ?c wdt:P31/wdt:P279* wd:Q39614 } AS ?isCemetery)");
+    expect(q).toMatch(/^SELECT .* \?isCemetery WHERE \{$/m);
+    // The same class as the near and search filters.
+    expect(nearQuery(0, 0)).toContain("?c wdt:P31/wdt:P279* wd:Q39614 .");
+    expect(searchQuery("x")).toContain("?item wdt:P31/wdt:P279* wd:Q39614 .");
+  });
+
+  it("the recorded Oakland answer says it is one", () => {
+    expect(flattenBindings(factsJson)[0].isCemetery).toBe("true");
+    expect(parseCemeteryFacts("Q2008469", flattenBindings(factsJson))?.name).toBe("Oakland Cemetery");
+  });
+
+  it("a mausoleum with a burial is not (recorded: Mausoleum of Mao Zedong)", () => {
+    const rows = flattenBindings(mausoleumFactsJson);
+    // The item exists, has a name, a place and even a Find a Grave cemetery ID; only the class says no.
+    expect(rows[0]).toMatchObject({ version: expect.any(String), cLabel: "Mausoleum of Mao Zedong", fagc: "639601", isCemetery: "false" });
+    expect(parseCemeteryFacts("Q1154819", rows)).toBeNull();
+  });
+
+  it("a person is not (Douglas Adams), and a row without the flag fails closed", () => {
+    expect(parseCemeteryFacts("Q42", [row({ cLabel: "Douglas Adams", isCemetery: "false" })])).toBeNull();
+    expect(parseCemeteryFacts("Q42", [row({ cLabel: "Douglas Adams" })])).toBeNull();
+    expect(parseCemeteryFacts("Q42", [row({ cLabel: "Douglas Adams", isCemetery: "1" })])).toBeNull();
+    expect(parseCemeteryFacts("Q42", [row({ cLabel: "Some Cemetery", isCemetery: "true" })])?.name).toBe("Some Cemetery");
+  });
+});
+
+describe('names stored only in "mul" (K14)', () => {
+  /** Every rdfs:label read has an English and a "mul" filter, and every label service asks for "en,mul". */
+  function expectEnThenMul(query: string, what: string) {
+    const lines = query.split("\n");
+    const en = lines.filter((l) => /rdfs:label \S+ FILTER\(LANG\(\S+\) = "en"\)/.test(l)).length;
+    const mul = lines.filter((l) => /rdfs:label \S+ FILTER\(LANG\(\S+\) = "mul"\)/.test(l)).length;
+    expect(mul, `${what}: one "mul" read per English label read`).toBe(en);
+    for (const m of query.matchAll(/wikibase:language "([^"]*)"/g)) expect(m[1], `${what}: label service`).toBe("en,mul");
+    expect(query, `${what}: no English-only label service`).not.toMatch(/wikibase:language "en"/);
+  }
+
+  it("every query that reads a label falls back to mul", () => {
+    expectEnThenMul(burialsQuery("Q2008469"), "burials");
+    expectEnThenMul(scriptBurialsQuery("Q2008469", 80), "scripts/burials.mjs");
+    expectEnThenMul(cemeteryFactsQuery("Q2008469"), "facts");
+    expectEnThenMul(nearQuery(33.749, -84.372), "near");
+    expectEnThenMul(searchQuery("oakland"), "search");
+    expectEnThenMul(profilesQuery(33.7486, -84.3733, 25), "Gravitator profiles");
+    expectEnThenMul(deckBurialsQuery(["Q2008469"]), "Gravitator burials");
+    // The snapshot script's facts query sits inline at the top of the script (it runs on import).
+    const snapshotScript = readFileSync(join(__dirname, "../../scripts/snapshot.mjs"), "utf8");
+    expectEnThenMul(snapshotScript, "scripts/snapshot.mjs");
+    expect(snapshotScript).toContain("BIND(EXISTS { ?c wdt:P31/wdt:P279* wd:Q39614 } AS ?isCemetery)");
+  });
+
+  it("labelEnMul binds English first, else mul, and leaves the variable unbound with neither", () => {
+    expect(labelEnMul("?occ", "?occLabel_").split("\n").map((l) => l.trim())).toEqual([
+      'OPTIONAL { ?occ rdfs:label ?occLabel_en FILTER(LANG(?occLabel_en) = "en") }',
+      'OPTIONAL { ?occ rdfs:label ?occLabel_mul FILTER(LANG(?occLabel_mul) = "mul") }',
+      "BIND(COALESCE(?occLabel_en, ?occLabel_mul) AS ?occLabel_)",
+    ]);
+    const q = burialsQuery("Q2008469");
+    for (const v of ["cause", "manner", "occ"]) expect(q).toContain(`BIND(COALESCE(?${v}Label_en, ?${v}Label_mul) AS ?${v}Label_)`);
+    expect(q).not.toMatch(/\?occ rdfs:label \?occLabel_ FILTER/);
+    const s = searchQuery("oakland");
+    for (const v of ["label_", "placeLabel_", "stateLabel_", "countryLabel_"]) expect(s).toContain(`AS ?${v})`);
+    const n = nearQuery(33.749, -84.372);
+    for (const v of ["label_", "placeLabel_"]) expect(n).toContain(`AS ?${v})`);
+  });
+
+  it("keeps every output variable, so recorded answers still parse", () => {
+    const vars = (q: string) => q.split("WHERE")[0];
+    expect(vars(cemeteryFactsQuery("Q1"))).toContain("?c ?cLabel ?cDescription ?coord ?fagc ?locLabel ?enwiki ?version ?isCemetery");
+    expect(vars(burialsQuery("Q1"))).toContain("SELECT ?person ?personLabel ?personDescription");
+    for (const v of ["?causes", "?manners", "?occupations"]) expect(vars(burialsQuery("Q1"))).toContain(`AS ${v})`);
+    for (const v of ["?label", "?description", "?places"]) expect(vars(nearQuery(0, 0))).toContain(`AS ${v})`);
+    for (const v of ["?label", "?places", "?state", "?country"]) expect(vars(searchQuery("x"))).toContain(`AS ${v})`);
+  });
+
+  it("names a cemetery whose only label is mul (recorded: Boroondara General Cemetery)", () => {
+    const rows = flattenBindings(mulOnlyFactsJson);
+    expect((mulOnlyFactsJson as { results: { bindings: { cLabel: { "xml:lang": string } }[] } }).results.bindings[0].cLabel["xml:lang"]).toBe("mul");
+    expect(parseCemeteryFacts("Q4946285", rows)).toMatchObject({
+      qid: "Q4946285",
+      name: "Boroondara General Cemetery",
+      description: "cemetery in Melbourne, Australia",
+      locatedIn: "Victoria",
+      findAGraveCemeteryId: "2323471",
+    });
+  });
+
+  it("names the two Oakland people the English-only query left as QIDs, from their mul labels (recorded with en,mul)", () => {
+    const raw = flattenBindings(burialsEnMulJson);
+    expect(raw.map((r) => [r.person.split("/").pop(), r.personLabel])).toEqual([
+      ["Q6986296", "Nedom L. Angier"],
+      ["Q6066179", "Ira O. McDaniel"],
+    ]);
+    // The label alone names them now: no article needed (before K14 these rows were dropped without one).
+    const noArticle = raw.map((r) => Object.fromEntries(Object.entries(r).filter(([k]) => k !== "enwiki")));
+    expect(parseBurialRows(noArticle).map((r) => r.person.name)).toEqual(["Nedom L. Angier", "Ira O. McDaniel"]);
+    expect(parseBurialRows(raw).map((r) => r.person.occupations)).toEqual([["politician"], ["businessperson"]]);
+  });
+
+  it("falls back to the English Wikipedia title, then the QID, for a cemetery with neither label", () => {
+    const facts = (extra: Record<string, string>) =>
+      parseCemeteryFacts("Q123", [{ c: "http://www.wikidata.org/entity/Q123", version: "1", isCemetery: "true", cLabel: "Q123", ...extra }]);
+    expect(facts({ enwiki: "https://en.wikipedia.org/wiki/Oakland_Cemetery_(Atlanta)" })?.name).toBe("Oakland Cemetery");
+    expect(facts({})?.name).toBe("Q123");
+    // The label service puts the QID where a place has no label: leave the place out instead.
+    expect(facts({ locLabel: "Q456" })?.locatedIn).toBeNull();
+    expect(facts({ locLabel: "Victoria" })?.locatedIn).toBe("Victoria");
+    // Near and search: a missing label takes the article title too.
+    const near = parseNearRows([{ c: "http://www.wikidata.org/entity/Q123", enwiki: "https://en.wikipedia.org/wiki/Magnolia_Cemetery_(Charleston,_South_Carolina)" }]);
+    expect(near[0].name).toBe("Magnolia Cemetery");
+    expect(parseSearchRows([{ item: "http://www.wikidata.org/entity/Q123" }])[0].name).toBe("Q123");
   });
 });
 

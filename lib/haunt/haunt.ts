@@ -18,8 +18,18 @@ export type Haunt = {
 
 export type HauntInput = { qid: string; name: string; place?: string | null };
 
-/** A cemetery named in a page's address (?cemetery=Q…&name=…&place=…). */
-export type UrlCemetery = { qid: string; name?: string; place?: string };
+/**
+ * A cemetery named in a page's address: only its ID (?cemetery=Q…). A link's
+ * ?name= and ?place= are whatever its sender typed, so they are never read
+ * (K2): names come from VERIFIED_SAMPLES or from our own data.
+ */
+export type UrlCemetery = { qid: string };
+
+/** The sample cemeteries' names, from their snapshots: known without asking anyone. */
+export const VERIFIED_SAMPLES: readonly HauntInput[] = [
+  { qid: "Q2008469", name: "Oakland Cemetery", place: "Atlanta, Georgia" },
+  { qid: "Q360779", name: "Sleepy Hollow Cemetery", place: "Sleepy Hollow, New York" },
+];
 
 const QID_RE = /^Q[1-9]\d{0,11}$/;
 /** A haunt is fresh for 12 hours (F10): after that, it's "last time", not "now". */
@@ -100,24 +110,21 @@ export function serializeHaunt(h: Haunt): string {
   return JSON.stringify({ qid: h.qid, name: h.name, ...(h.place ? { place: h.place } : {}), at: h.at });
 }
 
-/** The cemetery a page's address names, if its QID is well formed. */
+/** The cemetery a page's address names, if its QID is well formed. Its ?name= and ?place= are ignored (K2). */
 export function cemeteryFromParams(get: (name: string) => string | null): UrlCemetery | null {
   const qid = get("cemetery")?.trim().toUpperCase() ?? "";
-  if (!isQid(qid)) return null;
-  const name = cleanText(get("name"), MAX_NAME);
-  const place = cleanText(get("place"), MAX_PLACE);
-  return { qid, ...(name ? { name } : {}), ...(place ? { place } : {}) };
+  return isQid(qid) ? { qid } : null;
 }
 
 /**
- * The haunt a URL cemetery should become, or null when its name isn't known
- * yet (then the tool sets it once it has loaded the cemetery).
+ * The haunt a URL cemetery should become, named only from what the app already
+ * knows (the samples, or `known`); null otherwise, and the name is looked up
+ * from our own data first (HauntGate, the spirit box, the hub).
  */
 export function hauntInputFromUrl(url: UrlCemetery, known: readonly HauntInput[] = []): HauntInput | null {
-  const k = known.find((c) => c.qid === url.qid);
-  const name = url.name ?? k?.name;
-  if (!name) return null;
-  return { qid: url.qid, name, place: url.place ?? k?.place ?? undefined };
+  const k = known.find((c) => c.qid === url.qid) ?? VERIFIED_SAMPLES.find((c) => c.qid === url.qid);
+  if (!k) return null;
+  return { qid: url.qid, name: k.name, place: k.place ?? undefined };
 }
 
 /** A link someone sent (a séance, a party room…): the page names it in one of these parameters. */

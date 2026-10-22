@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { USER_AGENT } from "@/lib/site";
 import { asDataSourceError, DataSourceError } from "./errors";
-import { DEFAULTS, parseRetryAfter, politeJson, REQUEST_PATH, setTransportForTests } from "./wikimedia";
-import { sparql } from "./wikidata";
+import { DEFAULTS, hostConcurrency, parseRetryAfter, politeJson, REQUEST_PATH, setTransportForTests, WDQS_CONCURRENCY } from "./wikimedia";
+import { BURIALS_FETCH, sparql } from "./wikidata";
 import { fetchExtracts } from "./wikipedia";
 
 /** A fake clock + sleep that records every wait. */
@@ -128,7 +128,7 @@ describe("politeJson", () => {
     await expect(politeJson("https://en.wikipedia.org/w/api.php", { source: "Wikipedia" })).resolves.toEqual({});
   });
 
-  it("sends requests to one host one at a time", async () => {
+  it("sends requests to one host one at a time (every host but WDQS)", async () => {
     let inFlight = 0;
     let maxInFlight = 0;
     const fetchFn = (async () => {
@@ -139,7 +139,7 @@ describe("politeJson", () => {
       return ok({});
     }) as unknown as typeof fetch;
     setTransportForTests({ fetch: fetchFn });
-    await Promise.all([1, 2, 3].map((i) => politeJson(`https://query.wikidata.org/sparql?${i}`, { source: "Wikidata", spacingMs: 0 })));
+    await Promise.all([1, 2, 3].map((i) => politeJson(`https://en.wikipedia.org/w/api.php?${i}`, { source: "Wikipedia", spacingMs: 0 })));
     expect(maxInFlight).toBe(1);
   });
 
@@ -148,6 +148,76 @@ describe("politeJson", () => {
     expect(parseRetryAfter(new Date(10_000).toUTCString(), 0)).toBe(10);
     expect(parseRetryAfter(null, 0)).toBeNull();
     expect(parseRetryAfter("soon", 0)).toBeNull();
+  });
+});
+
+describe("WDQS takes a few queries at once (red team P1-2: head-of-line blocking)", () => {
+  /** A fake WDQS: "SLOW" queries take `slowMs`, the rest 20 ms. Records how many were in flight. */
+  function wdqs(slowMs: number) {
+    const seen = { inFlight: 0, maxInFlight: 0, calls: 0 };
+    const fetchFn = (async (input: RequestInfo | URL) => {
+      seen.calls++;
+      seen.inFlight++;
+      seen.maxInFlight = Math.max(seen.maxInFlight, seen.inFlight);
+      await new Promise((r) => setTimeout(r, decodeURIComponent(String(input)).includes("SLOW") ? slowMs : 20));
+      seen.inFlight--;
+      return ok({ results: { bindings: [] } });
+    }) as unknown as typeof fetch;
+    return { seen, fetchFn };
+  }
+
+  it("allows WDQS_CONCURRENCY (3) queries at once, never more, and keeps other hosts serial", () => {
+    expect(WDQS_CONCURRENCY).toBe(3);
+    expect(hostConcurrency("query.wikidata.org")).toBe(3);
+    expect(hostConcurrency("en.wikipedia.org")).toBe(1);
+    expect(hostConcurrency("overpass-api.de")).toBe(1);
+  });
+
+  it("never has more than 3 WDQS queries in flight", async () => {
+    const { seen, fetchFn } = wdqs(60);
+    setTransportForTests({ fetch: fetchFn });
+    await Promise.all(Array.from({ length: 7 }, (_, i) => sparql(`SELECT * WHERE { # SLOW ${i}\n }`)));
+    expect(seen.calls).toBe(7);
+    expect(seen.maxInFlight).toBe(WDQS_CONCURRENCY);
+  });
+
+  it("two slow queries and a fast one: the fast one doesn't wait for the slow ones", async () => {
+    const { seen, fetchFn } = wdqs(1_500);
+    setTransportForTests({ fetch: fetchFn });
+    const t0 = Date.now();
+    const slow1 = sparql("SELECT * WHERE { # SLOW burials 1\n }", BURIALS_FETCH).then(() => Date.now() - t0);
+    const slow2 = sparql("SELECT * WHERE { # SLOW burials 2\n }", BURIALS_FETCH).then(() => Date.now() - t0);
+    await new Promise((r) => setTimeout(r, 10)); // both slow queries are on the wire first
+    const t1 = Date.now();
+    const fast = await sparql("SELECT * WHERE { # fast search\n }").then(() => Date.now() - t1);
+    expect(fast).toBeLessThan(500); // was ~1,500 ms behind the first slow query (3,057 ms in the red team's run)
+    expect(seen.maxInFlight).toBe(3);
+    expect(await slow1).toBeGreaterThanOrEqual(1_400);
+    expect(await slow2).toBeGreaterThanOrEqual(1_400);
+  });
+
+  it("a 429 on one query is shared: queries in flight and queued fail fast instead of waiting it out", async () => {
+    let calls = 0;
+    const fetchFn = (async (input: RequestInfo | URL) => {
+      calls++;
+      if (decodeURIComponent(String(input)).includes("FIRST")) return status(429, { "retry-after": "50" });
+      // The others were already on the wire; they come back 503 a moment later and want a retry.
+      await new Promise((r) => setTimeout(r, 50));
+      return status(503);
+    }) as unknown as typeof fetch;
+    setTransportForTests({ fetch: fetchFn });
+    const started = Date.now();
+    const results = await Promise.allSettled([
+      sparql("SELECT * WHERE { # FIRST\n }"),
+      sparql("SELECT * WHERE { # second\n }"),
+      sparql("SELECT * WHERE { # third\n }"),
+      sparql("SELECT * WHERE { # fourth, waits for a slot\n }"),
+    ]);
+    expect(results.map((r) => r.status)).toEqual(["rejected", "rejected", "rejected", "rejected"]);
+    for (const r of results) expect((r as PromiseRejectedResult).reason).toMatchObject({ kind: "rate-limited" });
+    // The fourth query never went out, and nobody retried into the 50 s window.
+    expect(calls).toBe(3);
+    expect(Date.now() - started).toBeLessThan(3_000);
   });
 });
 

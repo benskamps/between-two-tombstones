@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { preload } from "react-dom";
 import Link from "next/link";
 import { HauntToolkit } from "@/components/haunt/HauntToolkit";
+import { MakeHauntOffer } from "@/components/haunt/MakeHauntOffer";
 import { useHub } from "@/components/haunt/useHub";
 import { DownloadTourButton } from "@/components/offline/DownloadTourButton";
 import { useOnline, useWakeLock, useWatchPosition } from "@/components/offline/hooks";
@@ -22,6 +23,8 @@ import { CARD_PHOTO_WIDTH, SMALL_PHOTO_WIDTH, commonsThumb } from "@/lib/tour/li
 import { cardPhoto } from "@/lib/tour/photo";
 import { rankPeople } from "@/lib/tour/score";
 import { sharePath } from "@/lib/share/links";
+import { addStories, MORE_STORIES_LOST, MORE_STORIES_WAIT_MS, storiesIncomplete, type MoreStories } from "@/lib/tour/stories";
+import type { TourWarning } from "@/lib/data/types";
 import { SourceFailure } from "./SourceFailure";
 import { StoryCard } from "./StoryCard";
 import { TourHeader, TourLinks } from "./TourHeader";
@@ -35,14 +38,21 @@ type Props = {
   error: { source: DataSource; message: string } | null;
   /** Shown instead of the source failure when there's no data and no saved copy. */
   fallback?: ReactNode;
+  /**
+   * Set when the server sent the first stories before the rest (a cold cache):
+   * who is still waiting for a story, and the promise that brings them.
+   */
+  more?: { pending: string[]; stories: Promise<MoreStories> };
 };
+
+const NONE: ReadonlySet<string> = new Set();
 
 function formatDay(iso: string): string {
   const d = new Date(iso);
   return Number.isNaN(d.getTime()) ? "earlier" : d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-export function TourView({ qid, initial, error, fallback }: Props) {
+export function TourView({ qid, initial, error, fallback, more }: Props) {
   const online = useOnline();
   const [data, setData] = useState<TourData | null>(initial);
   // Set when the tour on screen came from this phone's IndexedDB copy.
@@ -53,6 +63,35 @@ export function TourView({ qid, initial, error, fallback }: Props) {
   const [count, setCount] = useState(PAGE_SIZE);
   const [walking, setWalking] = useState(false);
   const [now] = useState(() => new Date());
+  // Stories still on their way from the server, and what went wrong with them.
+  const [waiting, setWaiting] = useState<ReadonlySet<string>>(() => (more && more.pending.length > 0 ? new Set(more.pending) : NONE));
+  const [lateWarnings, setLateWarnings] = useState<TourWarning[]>([]);
+
+  // The rest of the stories: merged in when they land. Capped: if they never arrive, say so and stop waiting.
+  useEffect(() => {
+    if (!more || more.pending.length === 0) return;
+    let live = true;
+    const cap = setTimeout(() => stop([MORE_STORIES_LOST]), MORE_STORIES_WAIT_MS);
+    function stop(warnings: TourWarning[]) {
+      if (!live) return;
+      live = false;
+      clearTimeout(cap);
+      setLateWarnings(warnings);
+      setWaiting(NONE);
+    }
+    more.stories.then(
+      (r) => {
+        if (!live) return;
+        setData((d) => (d ? addStories(d, r) : d));
+        stop(r.warnings);
+      },
+      () => stop([MORE_STORIES_LOST]),
+    );
+    return () => {
+      live = false;
+      clearTimeout(cap);
+    };
+  }, [more]);
 
   // Offline, or no server data: read the downloaded copy from IndexedDB.
   useEffect(() => {
@@ -82,7 +121,11 @@ export function TourView({ qid, initial, error, fallback }: Props) {
   const wakeLockHeld = useWakeLock(true);
   const { position, first, error: positionError, reset } = useWatchPosition(walking);
 
-  const ranked = useMemo(() => (data ? rankPeople(data.people, { now, cemeteryName: data.cemetery.name }) : []), [data, now]);
+  // A story still on its way ranks as if it were in, so the stops hold still when it lands.
+  const ranked = useMemo(
+    () => (data ? rankPeople(data.people, { now, cemeteryName: data.cemetery.name, storyPending: waiting }) : []),
+    [data, now, waiting],
+  );
   const located = useMemo(() => (data ? locatedGraves(data.people, pins) : new Map()), [data, pins]);
   const routeOk = canRoute(located);
   const tour = useMemo(() => buildStops(ranked, mode, count, located, first), [ranked, mode, count, located, first]);
@@ -100,7 +143,7 @@ export function TourView({ qid, initial, error, fallback }: Props) {
   }
 
   const visibleModes = MODES.filter((m) => m.id !== "route" || routeOk);
-  const storiesIncomplete = data.warnings.some((w) => w.code === "stories-missing");
+  const incomplete = storiesIncomplete(data.warnings) || storiesIncomplete(lateWarnings);
   const located3 = Math.min(located.size, MIN_ROUTE_STOPS);
 
   function startWalk() {
@@ -128,7 +171,8 @@ export function TourView({ qid, initial, error, fallback }: Props) {
           onPinsChange={setPins}
           distanceM={position && at ? distanceM(position, at) : null}
           now={now}
-          storiesIncomplete={storiesIncomplete}
+          storiesIncomplete={incomplete}
+          storyPending={waiting.has(s.person.qid)}
         />
       </li>
     );
@@ -155,16 +199,7 @@ export function TourView({ qid, initial, error, fallback }: Props) {
       </TourHeader>
 
       {/* The header names a different haunt: offer the switch right here, not four screens down (REVIEW-2 N6). */}
-      {hub.other && (
-        <div className="card flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2" data-testid="make-haunt">
-          <p className="min-w-0 flex-1">
-            Your haunt is <span className="font-bold">{hub.other.name}</span>.
-          </p>
-          <button type="button" onClick={hub.makeHaunt} className="btn btn-primary">
-            Make this my haunt
-          </button>
-        </div>
-      )}
+      {hub.other && <MakeHauntOffer name={hub.other.name} onMake={hub.makeHaunt} />}
 
       {hub.continueTo && (
         <Link href={hub.continueTo.href} onClick={forgetNext} className="btn btn-primary w-full" data-testid="continue-to">
@@ -250,7 +285,16 @@ export function TourView({ qid, initial, error, fallback }: Props) {
                 <span className="text-sm font-normal text-muted">uses your location</span>
               </button>
             )}
-            <DownloadTourButton data={data} />
+            {waiting.size > 0 ? (
+              // Saving now would keep a tour with stories missing: wait for them (a few seconds, capped above).
+              <div>
+                <button type="button" disabled className="btn btn-ghost w-full">
+                  Download waits for the last stories
+                </button>
+              </div>
+            ) : (
+              <DownloadTourButton data={data} />
+            )}
             {data.people.length > 0 && (
               <div>
                 <ShareButton
@@ -283,6 +327,16 @@ export function TourView({ qid, initial, error, fallback }: Props) {
           <ol className="space-y-4" start={FIRST + 1} aria-label="More stops">
             {laterStops.map((s, i) => card(s, i + FIRST))}
           </ol>
+        )}
+
+        {/* Problems with the stories that came in after the first ones: said here, below the stops on
+            screen, so nothing above them moves (CLS 0). */}
+        {lateWarnings.length > 0 && (
+          <div role="status" className="space-y-1 rounded-xl border border-border bg-surface-2 px-4 py-2 text-sm" data-testid="late-warnings">
+            {lateWarnings.map((w) => (
+              <p key={w.message}>{w.message}</p>
+            ))}
+          </div>
         )}
 
         {tour.remaining > 0 && (

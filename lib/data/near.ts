@@ -109,12 +109,50 @@ export function splitNear(list: NearbyCemetery[], best: NearbyCemetery | null): 
   return { listed: rest.filter((c) => c.burials > 0), unlisted: rest.filter((c) => c.burials <= 0) };
 }
 
+/** /near gives a cemetery its own card only from this many people listed; fewer opens a tour of one to four stops. */
+export const CARD_MIN_PEOPLE = 5;
+
+/**
+ * The rest of the list in three groups, each nearest first (review 4, #5):
+ * - cards: 5+ people listed, one card each;
+ * - few: 1–4 people, folded with the empty ones but still links (a short tour);
+ * - unlisted: no one listed, folded as plain text.
+ * Built on splitNear; the pin, auto-open and warm-up rules don't read it.
+ */
+export function groupNear(
+  list: NearbyCemetery[],
+  best: NearbyCemetery | null,
+): { cards: NearbyCemetery[]; few: NearbyCemetery[]; unlisted: NearbyCemetery[] } {
+  const { listed, unlisted } = splitNear(list, best);
+  return {
+    cards: listed.filter((c) => c.burials >= CARD_MIN_PEOPLE),
+    few: listed.filter((c) => c.burials < CARD_MIN_PEOPLE),
+    unlisted,
+  };
+}
+
+/** The folded row's summary. `more`: something with a tour is listed above it. */
+export function foldSummary(few: number, unlisted: number, more: boolean): string {
+  const n = few + unlisted;
+  const what = few > 0 ? `fewer than ${CARD_MIN_PEOPLE} people listed` : "no one listed yet";
+  return more ? `${n} more nearby with ${what}` : `${n} ${n === 1 ? "cemetery" : "cemeteries"} nearby with ${what}`;
+}
+
 export function distanceText(km: number): string {
   return km < 1 ? `${Math.round((km * 1000) / 10) * 10} m away` : `${km.toFixed(1)} km away`;
 }
 
 export function peopleText(n: number): string {
   return `${n} ${n === 1 ? "person" : "people"} listed on Wikidata`;
+}
+
+/**
+ * A coordinate as it goes into a URL: three decimals (about 110 m). People share
+ * hub links, so they never carry the phone's exact fix; the near query uses
+ * three decimals too (lib/data/load.ts roundCoord), so nothing is lost.
+ */
+export function urlCoord(x: number): string {
+  return String(Math.round(x * 1000) / 1000);
 }
 
 /** A cemetery picked from the near list. */
@@ -131,5 +169,5 @@ export function nearHref(qid: string, burials?: number): string {
 
 /** Auto-open: the hub knows the visitor is standing here, and where to send "Not here?". */
 export function hereHref(qid: string, lat: number, lon: number, burials?: number): string {
-  return tourHref(qid, { via: "here", lat: String(lat), lon: String(lon) }, burials);
+  return tourHref(qid, { via: "here", lat: urlCoord(lat), lon: urlCoord(lon) }, burials);
 }

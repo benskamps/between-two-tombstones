@@ -14,6 +14,22 @@ export const HUMAN = "Q5";
 
 const QID = /^Q[1-9]\d*$/;
 
+/**
+ * Binds `out` to `item`'s English label, or else its "mul" label (Wikidata's
+ * language-neutral labels, where many names now live only); unbound when it
+ * has neither. The same as labelEnMul in lib/data/wikidata.ts, kept here so
+ * this file stays import-free.
+ */
+export function labelEnMul(item: string, out: string): string {
+  const en = `${out}En`;
+  const mul = `${out}Mul`;
+  return [
+    `OPTIONAL { ${item} rdfs:label ${en} FILTER(LANG(${en}) = "en") }`,
+    `OPTIONAL { ${item} rdfs:label ${mul} FILTER(LANG(${mul}) = "mul") }`,
+    `BIND(COALESCE(${en}, ${mul}) AS ${out})`,
+  ].join("\n    ");
+}
+
 function num(n: number, digits: number): string {
   if (!Number.isFinite(n)) throw new Error("not a number");
   return n.toFixed(digits);
@@ -53,10 +69,9 @@ WHERE {
   ?c wdt:P31/wdt:P279* wd:${CEMETERY} .
 ${flags}
   BIND(EXISTS { ?c wdt:P576 [] } AS ?dissolved)
-  OPTIONAL { ?c rdfs:label ?enLabel FILTER(LANG(?enLabel) = "en") }
-  OPTIONAL { ?c rdfs:label ?mulLabel FILTER(LANG(?mulLabel) = "mul") }
-  BIND(COALESCE(?enLabel, ?mulLabel) AS ?label)
-  OPTIONAL { ?c wdt:P131 ?placeItem . ?placeItem rdfs:label ?placeLabel FILTER(LANG(?placeLabel) = "en") }
+  ${labelEnMul("?c", "?label")}
+  OPTIONAL { ?c wdt:P131 ?placeItem .
+    ${labelEnMul("?placeItem", "?placeLabel")} }
   OPTIONAL { ?c wdt:P18 ?image }
   OPTIONAL {
     ?c p:P571 ?incSt . ?incSt a wikibase:BestRank ;
@@ -66,10 +81,11 @@ ${flags}
     ?c p:P2046 ?areaSt . ?areaSt a wikibase:BestRank ;
       psv:P2046 [ wikibase:quantityAmount ?area ; wikibase:quantityUnit ?areaUnit ] .
   }
-  OPTIONAL { ?c wdt:P1435 ?heritageItem . ?heritageItem rdfs:label ?heritageLabel FILTER(LANG(?heritageLabel) = "en") }
+  OPTIONAL { ?c wdt:P1435 ?heritageItem .
+    ${labelEnMul("?heritageItem", "?heritageLabel")} }
   OPTIONAL {
     ?c wdt:P31 ?type .
-    OPTIONAL { ?type rdfs:label ?typeLabel FILTER(LANG(?typeLabel) = "en") }
+    ${labelEnMul("?type", "?typeLabel")}
     BIND(CONCAT(STRAFTER(STR(?type), "/entity/"), "=", COALESCE(?typeLabel, "")) AS ?typePair)
   }
   OPTIONAL { ?c wdt:P2025 ?fag }

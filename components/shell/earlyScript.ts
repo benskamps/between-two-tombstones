@@ -6,7 +6,8 @@
 //    (no layout shift, no popup).
 // 2. F5: catch a tap on the location button ([data-locate]) that lands before
 //    React is ready. It asks for the location right away and goes to
-//    /near?lat&lon&acc, or leaves its state on window.__bttLocate for the button
+//    /near?lat&lon&acc (three decimals, about 110 m: these links get shared),
+//    or leaves its state on window.__bttLocate for the button
 //    to show once it mounts. Once React owns the button it sets data-ready and
 //    this listener steps aside.
 //
@@ -25,7 +26,7 @@ if(!navigator.geolocation){tell({state:"error",code:0});return}
 tell({state:"pending"});
 navigator.geolocation.getCurrentPosition(function(p){
 var c=p.coords;tell({state:"done"});
-w.location.assign("/near?lat="+c.latitude.toFixed(5)+"&lon="+c.longitude.toFixed(5)+"&acc="+Math.round(c.accuracy));
+w.location.assign("/near?lat="+c.latitude.toFixed(3)+"&lon="+c.longitude.toFixed(3)+"&acc="+Math.round(c.accuracy));
 },function(err){tell({state:"error",code:err&&err.code||0})},{enableHighAccuracy:true,timeout:15000,maximumAge:60000});
 },true);
 })();`;

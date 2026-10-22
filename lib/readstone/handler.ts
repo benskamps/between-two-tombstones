@@ -1,7 +1,8 @@
 // POST /api/read-stone: two photos of one gravestone in, a checked transcription out.
 //
-// Order of work: API key → images (size, magic bytes, pixels) → cache by image
-// hash → rate limits (phone, network) → daily spend cap → Claude → checks.
+// Order of work: sent from our own pages? → API key → images (size, magic bytes,
+// pixels) → cache by image hash → rate limits (phone, network) → daily spend cap
+// (holding the read's worst case) → Claude → checks.
 // Image bytes are never stored, logged or echoed; logs carry a hash prefix and
 // token counts only.
 
@@ -17,6 +18,7 @@ import Anthropic, {
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { clientIp, deviceFromRequest } from "./device";
 import {
+  billedCostUsd,
   DailyBudget,
   DEVICE_RULES,
   estimateCostUsd,
@@ -25,11 +27,14 @@ import {
   LruCache,
   SlidingWindowLimiter,
   whenAgain,
+  type BudgetHold,
 } from "./limits";
+import { isCrossSite } from "./origin";
 import { checkReading } from "./postcheck";
 import { READ_STONE_MODEL, READ_STONE_SYSTEM_PROMPT, READ_STONE_USER_TEXT } from "./prompt";
 import { pairHash, readStoneImages, toBase64, type StoneImage } from "./request";
 import {
+  MAX_LONG_SIDE_PX,
   ModelReadingSchema,
   type ReadStoneError,
   type ReadStoneErrorCode,
@@ -38,16 +43,39 @@ import {
 } from "./types";
 
 export const NO_KEY_MESSAGE = "Reading stones is switched off: the server has no API key.";
+export const CROSS_SITE_MESSAGE =
+  "Stones can only be read from the Between Two Tombstones site. Open the Stamp Kit there and tap Read with Claude.";
 export const TOO_BLURRY_MESSAGE =
   "This photo is too blurry to read. Try again closer, in shade, with the whole face of the stone in frame.";
 
 /** Used when CLAUDE_DAILY_USD_CAP is unset or not a number ≥ 0. */
 export const DEFAULT_DAILY_USD_CAP = 5;
-/** Held against the cap while a read is running, so parallel reads can't all slip under it. */
-const IN_FLIGHT_ESTIMATE_USD = 0.05;
 /** Leaves room under the route's maxDuration (60 s). No SDK retries, so this is the whole wait. */
 export const CLAUDE_TIMEOUT_MS = 50_000;
 const MAX_OUTPUT_TOKENS = 16_000;
+const IMAGE_1_LABEL = "Image 1: the photo, straightened.";
+const IMAGE_2_LABEL = "Image 2: the same photo with the contrast boosted.";
+
+/**
+ * Most input tokens one attempt can use: two images of at most 1600 × 1600 px
+ * (about w × h / 750 tokens each, before any downscaling by the API), every
+ * byte of text we send counted as a token (no token is shorter than a byte),
+ * and 2,000 more for the API's own framing.
+ */
+export const MAX_INPUT_TOKENS =
+  2 * Math.ceil((MAX_LONG_SIDE_PX * MAX_LONG_SIDE_PX) / 750) +
+  new TextEncoder().encode(
+    [READ_STONE_SYSTEM_PROMPT, IMAGE_1_LABEL, IMAGE_2_LABEL, READ_STONE_USER_TEXT, JSON.stringify(betaZodOutputFormat(ModelReadingSchema))].join(""),
+  ).length +
+  2_000;
+/**
+ * The most one read can cost, held against the daily cap while it runs (red
+ * team P1-4: a flat $0.05 let 20 parallel reads commit $3.44 under a $1 cap).
+ * Two attempts: the request, plus the one server-side fallback that
+ * `fallbacks: "default"` can run on a declined read (Claude Sonnet 5, same
+ * prices). Each can use all of max_tokens. About $0.37.
+ */
+export const WORST_CASE_READ_USD = 2 * estimateCostUsd({ input_tokens: MAX_INPUT_TOKENS, output_tokens: MAX_OUTPUT_TOKENS });
 
 type Outcome =
   | { kind: "reading"; reading: StoneReading }
@@ -60,6 +88,11 @@ const budget = new DailyBudget();
 const cache = new LruCache<StoneReading>(200, 24 * HOUR);
 const inFlight = new Map<string, Promise<Outcome>>();
 let warnedAboutCap = false;
+
+/** Test hook: today's estimated spend on this instance plus the reads still running. */
+export function readStoneCommittedUsd(): number {
+  return budget.committed(Date.now());
+}
 
 /** Test hook: forget limits, spend, cache and in-flight reads. */
 export function resetReadStoneState(): void {
@@ -155,9 +188,8 @@ function imageBlock(image: StoneImage): Anthropic.Beta.BetaImageBlockParam {
   return { type: "image", source: { type: "base64", media_type: image.type, data: toBase64(image.bytes) } };
 }
 
-async function readWithClaude(apiKey: string, images: [StoneImage, StoneImage], hash: string): Promise<Outcome> {
+async function readWithClaude(apiKey: string, images: [StoneImage, StoneImage], hash: string, hold: BudgetHold): Promise<Outcome> {
   const client = new Anthropic({ apiKey, maxRetries: 0, timeout: CLAUDE_TIMEOUT_MS });
-  const release = budget.reserve(IN_FLIGHT_ESTIMATE_USD);
   let message: Anthropic.Beta.BetaMessage;
   try {
     message = await client.beta.messages.create({
@@ -171,9 +203,9 @@ async function readWithClaude(apiKey: string, images: [StoneImage, StoneImage], 
         {
           role: "user",
           content: [
-            { type: "text", text: "Image 1: the photo, straightened." },
+            { type: "text", text: IMAGE_1_LABEL },
             imageBlock(images[0]),
-            { type: "text", text: "Image 2: the same photo with the contrast boosted." },
+            { type: "text", text: IMAGE_2_LABEL },
             imageBlock(images[1]),
             { type: "text", text: READ_STONE_USER_TEXT },
           ],
@@ -182,15 +214,17 @@ async function readWithClaude(apiKey: string, images: [StoneImage, StoneImage], 
       output_config: { effort: "medium", format: betaZodOutputFormat(ModelReadingSchema) },
     });
   } catch (err) {
-    release();
+    // A timed-out read most likely ran on Anthropic's side and is billed, but we
+    // never see its usage: count the worst case. Other failures cost nothing.
+    if (err instanceof APIConnectionTimeoutError) hold.settle(WORST_CASE_READ_USD, Date.now());
+    else hold.release();
     const outcome = outcomeForSdkError(err);
     log({ image: hash.slice(0, 12), error: outcome.kind === "error" ? outcome.code : null });
     return outcome;
   }
-  release();
 
-  const usd = estimateCostUsd(message.usage);
-  budget.add(usd, Date.now());
+  const usd = billedCostUsd(message.usage);
+  hold.settle(usd, Date.now());
   log({
     image: hash.slice(0, 12),
     cached: false,
@@ -228,6 +262,8 @@ async function readWithClaude(apiKey: string, images: [StoneImage, StoneImage], 
 }
 
 export async function handleReadStone(request: Request): Promise<Response> {
+  // Before anything else, a device cookie included: another site's page gets nothing.
+  if (isCrossSite(request)) return errorResponse(403, "Limits", "cross_site", CROSS_SITE_MESSAGE);
   const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
   if (!apiKey) return errorResponse(503, "Claude", "no_key", NO_KEY_MESSAGE);
 
@@ -271,7 +307,9 @@ export async function handleReadStone(request: Request): Promise<Response> {
     );
   }
 
-  if (budget.isOver(dailyCapUsd(), now)) {
+  // Hold this read's worst case against the cap before it starts; settled to the real cost when it ends.
+  const hold = budget.tryReserve(WORST_CASE_READ_USD, dailyCapUsd(), now);
+  if (!hold) {
     const retryAfterMs = DailyBudget.msUntilReset(now);
     return errorResponse(
       503,
@@ -285,7 +323,7 @@ export async function handleReadStone(request: Request): Promise<Response> {
   deviceLimiter.record(device.id, now);
   ipLimiter.record(ip, now);
 
-  const reading = readWithClaude(apiKey, input.images, hash);
+  const reading = readWithClaude(apiKey, input.images, hash, hold);
   inFlight.set(hash, reading);
   let outcome: Outcome;
   try {

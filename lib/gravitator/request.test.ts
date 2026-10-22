@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { DeckSourceError } from "./deck";
+import { buildDeck, DeckSourceError, NOTE_WIKIPEDIA } from "./deck";
+import burials from "./fixtures/atlanta-burials.json";
+import profiles from "./fixtures/atlanta-profiles.json";
+import type { ExtractsJson, SparqlJson } from "./parse";
 import { handleDeckRequest, parseDeckParams } from "./request";
 import type { Deck } from "./types";
 
@@ -40,6 +43,18 @@ describe("handleDeckRequest", () => {
 
   it("keeps a deck with notes in browser caches for a minute only", async () => {
     const res = await handleDeckRequest(URL_OK, async () => deck([{ source: "Wikipedia", message: "x" }]), round);
+    expect(res.headers.get("cache-control")).toBe("public, max-age=60");
+  });
+
+  it("a Wikipedia 200 with an error body leaves a note, so the deck is cached for a minute, not days", async () => {
+    // Red team P2-2: this body used to parse as "no bios" with no note.
+    const ratelimited = async () => ({ error: { code: "ratelimited", info: "You've exceeded your rate limit." } }) as ExtractsJson;
+    const getDeck = (lat: number, lon: number, radiusKm: number) =>
+      buildDeck({ lat, lon }, radiusKm, { sparql: async (_q, method) => (method === "GET" ? profiles : burials) as SparqlJson, extracts: ratelimited });
+    const res = await handleDeckRequest(URL_OK, getDeck, round);
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as Deck;
+    expect(body.notes).toEqual([{ source: "Wikipedia", message: NOTE_WIKIPEDIA }]);
     expect(res.headers.get("cache-control")).toBe("public, max-age=60");
   });
 

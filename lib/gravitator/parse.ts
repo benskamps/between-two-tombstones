@@ -231,6 +231,8 @@ export function compareProfiles(
 // Wikipedia intros
 
 export type ExtractsJson = {
+  /** MediaWiki answers HTTP 200 with this when it refuses (ratelimited, maxlag, readonly). */
+  error?: { code?: string; info?: string };
   query?: {
     normalized?: { from: string; to: string }[];
     redirects?: { from: string; to: string }[];
@@ -253,9 +255,23 @@ export function wikipediaUrl(title: string): string {
   return `https://en.wikipedia.org/wiki/${encodeURIComponent(title.replace(/ /g, "_"))}`;
 }
 
-/** Batched extracts → requested title → { intro, url }, following normalization and redirects. */
+/** Wikipedia answered 200 but with an error, or with no query at all: a failure, not "no bios". */
+export class ExtractsError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ExtractsError";
+  }
+}
+
+/**
+ * Batched extracts → requested title → { intro, url }, following normalization
+ * and redirects. Throws ExtractsError on an error body, so the deck gets its
+ * Wikipedia note and is cached for minutes, not days (lib/gravitator/cached.ts).
+ */
 export function parseExtracts(json: ExtractsJson, requested: string[]): Map<string, { intro: string; url: string }> {
-  const q = json.query ?? {};
+  if (json?.error) throw new ExtractsError(`Wikipedia answered with an error: ${json.error.code ?? "unknown"}`);
+  if (!json?.query) throw new ExtractsError("Wikipedia answered without a query result.");
+  const q = json.query;
   const follow = new Map<string, string>();
   for (const n of q.normalized ?? []) follow.set(n.from, n.to);
   for (const r of q.redirects ?? []) follow.set(r.from, r.to);

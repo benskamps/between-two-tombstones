@@ -16,7 +16,9 @@ const cached = vi.hoisted(() => ({
 }));
 vi.mock("./cached", () => cached);
 
-const { combineNear, loadCemetery, loadNearOsm, loadSearch, normalizeQuery, resetOsmCooldown, tidyPeople } = await import("./load");
+const { combineNear, loadCemetery, loadNearOsm, loadSearch, loadTour, normalizeQuery, resetOsmCooldown, tidyPeople, titlesInTourOrder, MORE_STORIES_BUDGET_MS } =
+  await import("./load");
+const { rankPeople } = await import("@/lib/tour/score");
 
 const rows = parseBurialRows(flattenBindings(burialsJson));
 const facts = parseCemeteryFacts("Q2008469", flattenBindings(factsJson));
@@ -234,14 +236,188 @@ describe("loadCemetery", () => {
   });
 });
 
+describe("loadTour: the first stories before the rest (review pass 4, item 1)", () => {
+  const live = () => {
+    cached.cachedBurials.mockResolvedValue({ rows, fetchedAt: "2026-10-20T02:15:00.000Z" });
+    cached.cachedCemeteryFacts.mockResolvedValue({ ...facts!, qid: "Q872253" });
+  };
+  /** Batch 1 answers at once; the others wait for release(). */
+  const holdLaterBatches = () => {
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    let call = 0;
+    cached.cachedExtracts.mockImplementation(async (titles: string[]) => {
+      if (++call > 1) await gate;
+      return summariesFor(titles);
+    });
+    return () => release();
+  };
+
+  it("asks Wikipedia for the stories in tour order, so the first batch holds the first stops", async () => {
+    live();
+    cached.cachedExtracts.mockImplementation(summariesFor);
+    const r = await loadCemetery("Q872253");
+    if (r.status !== "ok") throw new Error("expected ok");
+    const firstBatch = new Set(cached.cachedExtracts.mock.calls[0][0] as string[]);
+    expect(firstBatch.size).toBe(20);
+    const stops = rankPeople(r.data.people, { cemeteryName: r.data.cemetery.name }).slice(0, 12);
+    for (const s of stops) expect(firstBatch, s.person.name).toContain(s.person.wikipedia!.title);
+    // Every title is asked for once.
+    const all = cached.cachedExtracts.mock.calls.flatMap(([t]) => t as string[]);
+    expect(new Set(all).size).toBe(all.length);
+    expect(all).toEqual(titlesInTourOrder(rows));
+  });
+
+  it("cold: comes back with the first 20 stories and who is still waiting, then the rest arrive", async () => {
+    live();
+    const release = holdLaterBatches();
+    const tour = await loadTour("Q872253");
+    if (tour.status !== "partial") throw new Error(`expected partial, got ${tour.status}`);
+    expect(tour.data.people).toHaveLength(80);
+    expect(tour.data.warnings).toEqual([]);
+    const withStory = tour.data.people.filter((p) => p.wikipedia);
+    expect(withStory.length).toBeGreaterThan(0);
+    expect(withStory.length).toBeLessThanOrEqual(20);
+    // Nobody is both: the waiting list is exactly the people whose batch is still out.
+    expect(tour.pending.length).toBeGreaterThan(40);
+    for (const q of tour.pending) expect(tour.data.people.find((p) => p.qid === q)?.wikipedia).toBeNull();
+
+    release();
+    const more = await tour.more;
+    expect(Object.keys(more.stories).sort()).toEqual([...tour.pending].sort());
+    expect(more.warnings).toEqual([]);
+    // The API's whole load is the same tour, all at once.
+    const full = await loadCemetery("Q872253");
+    if (full.status !== "ok") throw new Error("expected ok");
+    expect(full.data.people.filter((p) => p.wikipedia)).toHaveLength(withStory.length + tour.pending.length);
+  });
+
+  it("warm: everything is in at once, so it's one ordinary load", async () => {
+    live();
+    cached.cachedExtracts.mockImplementation(summariesFor);
+    const tour = await loadTour("Q872253");
+    expect(tour.status).toBe("ok");
+  });
+
+  it("a first batch that fails waits for the rest, as before, and names what's missing", async () => {
+    live();
+    let call = 0;
+    cached.cachedExtracts.mockImplementation(async (titles: string[]) => {
+      if (++call === 1) throw rateLimited();
+      return summariesFor(titles);
+    });
+    const tour = await loadTour("Q872253");
+    if (tour.status !== "ok") throw new Error(`expected ok, got ${tour.status}`);
+    expect(tour.data.warnings[0]).toMatchObject({ code: "stories-missing", message: expect.stringMatching(/^Couldn't load 20 of \d+ stories/) });
+  });
+
+  it("stories that never come are named after MORE_STORIES_BUDGET_MS, and the page keeps the ones it has", async () => {
+    vi.useFakeTimers();
+    try {
+      live();
+      let call = 0;
+      cached.cachedExtracts.mockImplementation(async (titles: string[]) => {
+        if (++call === 4) return new Promise(() => {}); // the last batch never answers
+        return summariesFor(titles);
+      });
+      // Its own QID: this load's full budget never runs out once the fake clock is gone, so it stays in flight.
+      const tourP = loadTour("Q5189371");
+      await vi.advanceTimersByTimeAsync(1_000);
+      const tour = await tourP;
+      if (tour.status !== "partial") throw new Error(`expected partial, got ${tour.status}`);
+      let done = false;
+      void tour.more.then(() => (done = true));
+      // The first stories went out about FIRST_STORIES_GRACE_MS (150 ms) in; the rest get 20 s from then.
+      await vi.advanceTimersByTimeAsync(MORE_STORIES_BUDGET_MS - 1_000);
+      expect(done).toBe(false);
+      await vi.advanceTimersByTimeAsync(200);
+      const more = await tour.more;
+      expect(more.warnings[0]).toMatchObject({ code: "stories-missing", message: expect.stringMatching(/^Couldn't load \d+ of \d+ stories from Wikipedia/) });
+      expect(Object.keys(more.stories).length).toBeGreaterThan(30); // batches 2 and 3
+      expect(Object.keys(more.stories).length).toBeLessThan(tour.pending.length);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("a sample whose later stories fail gets them from its saved copy, and says so", async () => {
+    cached.cachedBurials.mockResolvedValue({ rows, fetchedAt: "2026-10-20T02:15:00.000Z" });
+    cached.cachedCemeteryFacts.mockResolvedValue(facts);
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    let call = 0;
+    cached.cachedExtracts.mockImplementation(async (titles: string[]) => {
+      if (++call === 1) return summariesFor(titles);
+      await gate;
+      throw rateLimited();
+    });
+    const tour = await loadTour("Q2008469");
+    if (tour.status !== "partial") throw new Error(`expected partial, got ${tour.status}`);
+    expect(tour.data.origin).toBe("live");
+    release();
+    const more = await tour.more;
+    expect(Object.keys(more.stories).length).toBeGreaterThan(tour.pending.length - 5);
+    expect(more.warnings[0]).toMatchObject({ code: "stories-backfilled" });
+  });
+});
+
+describe("the slow path (N1)", () => {
+  it("the browser's retry after the 25 s budget joins the burials query still running, instead of starting another", async () => {
+    vi.useFakeTimers();
+    try {
+      let answer!: () => void;
+      const late = new Promise<void>((r) => (answer = r));
+      cached.cachedBurials.mockImplementation(async () => {
+        await late;
+        return { rows, fetchedAt: "2026-10-20T02:15:00.000Z" };
+      });
+      cached.cachedCemeteryFacts.mockResolvedValue({ ...facts!, qid: "Q1950358" });
+      cached.cachedExtracts.mockImplementation(summariesFor);
+      const page = loadCemetery("Q1950358");
+      await vi.advanceTimersByTimeAsync(25_000);
+      expect(await page).toMatchObject({ status: "error", error: { kind: "timeout" } });
+      const retry = loadCemetery("Q1950358");
+      await vi.advanceTimersByTimeAsync(2_000);
+      answer(); // Wikidata answers 27 s in
+      await vi.advanceTimersByTimeAsync(0);
+      expect((await retry).status).toBe("ok");
+      expect(cached.cachedBurials).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("SIMULATE_SLOW_BURIALS can hold a cemetery first (Q:ms, at most 30 s), so e2e can read the loading screen", async () => {
+    vi.stubEnv("SIMULATE_SLOW_BURIALS", "Q216344, Q1950358:6000, Q239043:999999");
+    vi.useFakeTimers();
+    try {
+      const held = loadCemetery("Q1950358");
+      let settled = false;
+      void held.then(() => (settled = true));
+      await vi.advanceTimersByTimeAsync(5_999);
+      expect(settled).toBe(false);
+      await vi.advanceTimersByTimeAsync(1);
+      expect(await held).toMatchObject({ status: "error", error: { source: "Wikidata", kind: "timeout" } });
+      const capped = loadCemetery("Q239043");
+      await vi.advanceTimersByTimeAsync(30_000);
+      expect(await capped).toMatchObject({ status: "error", error: { kind: "timeout" } });
+      expect(cached.cachedBurials).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+      vi.unstubAllEnvs();
+    }
+  });
+});
+
 describe("near", () => {
   it("names an OpenStreetMap outage, then skips OSM during the cooldown", async () => {
     cached.cachedOsm.mockRejectedValue(new DataSourceError("OpenStreetMap", "unreachable", "All 3 Overpass mirrors failed: overpass-api.de (unreachable)."));
     const first = await loadNearOsm(47.6339, -122.3158);
-    expect(first).toEqual({ ok: false, message: expect.stringContaining("All 3 Overpass mirrors failed") });
+    // The page gets a plain sentence; mirror host names and status codes stay in the server log.
+    expect(first).toEqual({ ok: false, message: "Couldn't reach OpenStreetMap. Showing Wikidata results only." });
     const second = await loadNearOsm(47.6339, -122.3158);
     expect(second.ok).toBe(false);
-    expect(second).toMatchObject({ message: expect.stringContaining("(All 3 Overpass mirrors failed: overpass-api.de (unreachable)), so it was skipped") });
+    expect(second).toMatchObject({ message: "Couldn't reach OpenStreetMap a few minutes ago, so it was skipped. Showing Wikidata results only." });
     expect(cached.cachedOsm).toHaveBeenCalledTimes(1);
 
     const combined = combineNear({ lat: 47.634, lon: -122.316 }, [], first);

@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useSyncExternalStore } from "react";
-import { cemeteryFromParams, type Haunt, type UrlCemetery } from "./haunt";
+import { cemeteryFromParams, type Haunt } from "./haunt";
 import { getFreshHaunt, getHaunt, subscribeHaunt } from "./store";
 
 /**
@@ -20,17 +20,21 @@ export function useLastHaunt(): Haunt | null | undefined {
   return useSyncExternalStore<Haunt | null | undefined>(subscribeHaunt, getHaunt, () => undefined);
 }
 
+export type ActiveCemetery = { qid: string; name?: string; place?: string; fromUrl: boolean };
+
 /**
  * The cemetery a tool should use: the one in the address (?cemetery=…) first,
- * else the haunt. Call inside <Suspense> (it reads the search params).
+ * else the haunt. Call inside <Suspense> (it reads the search params). A
+ * cemetery from the address has a name only when it is also the haunt: the
+ * link's own ?name= is never used (K2).
  */
-export function useActiveCemetery(): (UrlCemetery & { fromUrl: boolean }) | null | undefined {
+export function useActiveCemetery(): ActiveCemetery | null | undefined {
   const params = useSearchParams();
   const haunt = useHaunt();
   const url = cemeteryFromParams((k) => params.get(k));
   if (url) {
     const same = haunt && haunt.qid === url.qid ? haunt : null;
-    return { qid: url.qid, name: url.name ?? same?.name, place: url.place ?? same?.place, fromUrl: true };
+    return { qid: url.qid, name: same?.name, place: same?.place, fromUrl: true };
   }
   if (haunt === undefined) return undefined;
   return haunt ? { qid: haunt.qid, name: haunt.name, place: haunt.place, fromUrl: false } : null;

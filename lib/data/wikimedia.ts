@@ -1,8 +1,9 @@
 // Polite HTTP client for Wikimedia (and Overpass). Wikimedia rate-limits shared
 // IPs hard (PLAN.md, Hour 0), so every request:
 // - carries the User-Agent from lib/site.ts (decision 13),
-// - goes out one at a time per host (a polling lock, so a cached function never
-//   awaits a promise created by another request),
+// - waits for a free slot at its host (a polling lock, so a cached function never
+//   awaits a promise created by another request): one request at a time per
+//   host, except query.wikidata.org, which takes WDQS_CONCURRENCY at once,
 // - times out after 15 s,
 // - retries 429/5xx and network failures at most 3 times, honoring Retry-After,
 //   and gives up instead of waiting longer than 20 s for any single retry
@@ -41,6 +42,27 @@ export const DEFAULTS = {
 } as const;
 
 /**
+ * Parallel queries allowed to the Wikidata Query Service from one instance.
+ * WDQS allows 5 at once per client IP; everything else stays serial.
+ *
+ * Why 3: one slow burials query (up to 27 s) used to hold the only slot, so a
+ * 20 ms search waited behind it (red team P1-2). /near warms up to 2 tours in
+ * after(), which is two slow burials queries at once; a third slot keeps search,
+ * near and facts moving past them. The Gravitator's own client
+ * (lib/gravitator/wikimedia.ts) sends one WDQS query at a time, so an instance
+ * stays at 4 or fewer, under the limit of 5. WDQS also limits query time per
+ * minute and answers 429 with Retry-After past it; that window is shared by
+ * every request to the host (blockedUntil below).
+ */
+export const WDQS_CONCURRENCY = 3;
+const CONCURRENCY: Record<string, number> = { "query.wikidata.org": WDQS_CONCURRENCY };
+
+/** How many requests may be in flight to `host` at once. */
+export function hostConcurrency(host: string): number {
+  return CONCURRENCY[host] ?? 1;
+}
+
+/**
  * Every request a page makes (lib/data). Gate 2 gives a stranger 20 s to see
  * five stories, so a page never sits out a rate limit: at most about 2 s of
  * retry waits in all, then the call fails fast and the page shows what it has
@@ -68,13 +90,14 @@ export function setTransportForTests(t: Partial<Transport> | null) {
   hosts.clear();
 }
 
-type HostState = { busy: boolean; lastAt: number; blockedUntil: number };
+/** `active`: requests holding a slot. `blockedUntil`: a 429's Retry-After, shared by every request to the host. */
+type HostState = { active: number; lastAt: number; blockedUntil: number };
 const hosts = new Map<string, HostState>();
 
 function hostState(host: string): HostState {
   let s = hosts.get(host);
   if (!s) {
-    s = { busy: false, lastAt: 0, blockedUntil: 0 };
+    s = { active: 0, lastAt: 0, blockedUntil: 0 };
     hosts.set(host, s);
   }
   return s;
@@ -134,16 +157,33 @@ export async function politeJson<T>(url: string, opts: PoliteOptions): Promise<T
   const start = transport.now();
   const deadline = start + (opts.deadlineMs ?? DEFAULTS.deadlineMs);
   const state = hostState(host);
+  const slots = hostConcurrency(host);
 
-  // Wait for our turn at this host. Bounded by the deadline.
+  /** A Retry-After another call received that's longer than this call may wait: fail now. */
+  const tooLongBlocked = (now: number): DataSourceError | null => {
+    const blockedFor = state.blockedUntil - now;
+    if (blockedFor <= 0) return null;
+    if (blockedFor > maxWaitMs || waited + blockedFor > maxTotalWaitMs || now + blockedFor >= deadline) {
+      return new DataSourceError(source, "rate-limited", `${host} asked us to wait ${Math.ceil(blockedFor / 1000)} s.`, {
+        status: 429,
+        retryAfterSeconds: Math.ceil(blockedFor / 1000),
+      });
+    }
+    return null;
+  };
+
+  // Wait for a free slot at this host. Bounded by the deadline, and given up at
+  // once if the host has asked us to wait longer than this call can.
   const maxPolls = Math.ceil((deadline - start) / DEFAULTS.lockPollMs) + 1;
-  for (let polls = 0; state.busy; polls++) {
+  for (let polls = 0; state.active >= slots; polls++) {
+    const blocked = tooLongBlocked(transport.now());
+    if (blocked) throw blocked;
     if (polls >= maxPolls || transport.now() >= deadline) {
       throw new DataSourceError(source, "timeout", `Waited too long for a turn at ${host}.`);
     }
     await transport.sleep(DEFAULTS.lockPollMs);
   }
-  state.busy = true;
+  state.active++;
 
   try {
     for (let attempt = 0; ; attempt++) {
@@ -151,12 +191,8 @@ export async function politeJson<T>(url: string, opts: PoliteOptions): Promise<T
       const now = transport.now();
       const blockedFor = state.blockedUntil - now;
       if (blockedFor > 0) {
-        if (blockedFor > maxWaitMs || waited + blockedFor > maxTotalWaitMs || now + blockedFor >= deadline) {
-          throw new DataSourceError(source, "rate-limited", `${host} asked us to wait ${Math.ceil(blockedFor / 1000)} s.`, {
-            status: 429,
-            retryAfterSeconds: Math.ceil(blockedFor / 1000),
-          });
-        }
+        const blocked = tooLongBlocked(now);
+        if (blocked) throw blocked;
         waited += blockedFor;
         await transport.sleep(blockedFor);
       }
@@ -226,6 +262,6 @@ export async function politeJson<T>(url: string, opts: PoliteOptions): Promise<T
       await transport.sleep(waitMs);
     }
   } finally {
-    state.busy = false;
+    state.active--;
   }
 }

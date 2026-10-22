@@ -2,27 +2,59 @@
 // scripts/wd.mjs: our User-Agent (PLAN.md decision 13), requests serial per
 // host with 1 s spacing, timeouts, and capped retries on 429/5xx that honor
 // Retry-After. Everything runs under one deadline so a deck never outlives the
-// route's maxDuration.
+// route's maxDuration: a request whose turn comes too late fails without being
+// sent, and each host's queue holds at most MAX_QUEUED_PER_HOST requests.
 
 import { USER_AGENT } from "@/lib/site";
 import type { DeckFetcher } from "./deck";
 import type { ExtractsJson, SparqlJson } from "./parse";
 
 const SPACING_MS = 1000;
+/** A request needs at least this long before the deadline to be worth sending. */
+const MIN_REMAINING_MS = 1500;
+/**
+ * Requests waiting for or holding a turn at one host. With 1 s spacing and
+ * queries that take seconds, the 11th in line couldn't start before a deck's
+ * deadline anyway, so it fails at once instead of joining.
+ */
+export const MAX_QUEUED_PER_HOST = 10;
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 const queues = new Map<string, Promise<unknown>>();
 const lastStart = new Map<string, number>();
+const queued = new Map<string, number>();
 
-/** Runs `fn` after every earlier request to the same host, at least 1 s after the last one started. */
-function serial<T>(host: string, fn: () => Promise<T>): Promise<T> {
+/** The request never went out: its host's queue was full, or its turn came too close to the deadline. */
+export class QueueError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "QueueError";
+  }
+}
+
+/**
+ * Runs `fn` after every earlier request to the same host, at least 1 s after the
+ * last one started, with the time left before `deadline` at that moment. Throws
+ * QueueError without running `fn` when the queue is full or the turn comes too late.
+ */
+function serial<T>(host: string, deadline: number, fn: (remainingMs: number) => Promise<T>): Promise<T> {
+  const depth = queued.get(host) ?? 0;
+  if (depth >= MAX_QUEUED_PER_HOST) {
+    return Promise.reject(new QueueError(`${MAX_QUEUED_PER_HOST} requests are already waiting for ${host}`));
+  }
+  queued.set(host, depth + 1);
   const prev = queues.get(host) ?? Promise.resolve();
-  const run = prev.then(async () => {
-    const wait = (lastStart.get(host) ?? 0) + SPACING_MS - Date.now();
-    if (wait > 0) await sleep(wait);
-    lastStart.set(host, Date.now());
-    return fn();
-  });
+  const run = prev
+    .then(async () => {
+      const wait = (lastStart.get(host) ?? 0) + SPACING_MS - Date.now();
+      if (wait > 0) await sleep(wait);
+      // Checked when the turn comes, not when the request joined the queue.
+      const remaining = deadline - Date.now();
+      if (remaining < MIN_REMAINING_MS) throw new QueueError(`out of time while waiting for ${host}`);
+      lastStart.set(host, Date.now());
+      return fn(remaining);
+    })
+    .finally(() => queued.set(host, (queued.get(host) ?? 1) - 1));
   queues.set(
     host,
     run.catch(() => undefined),
@@ -54,11 +86,10 @@ export type PoliteOptions = {
 export async function politeFetch(url: string, init: RequestInit, opts: PoliteOptions): Promise<Response> {
   const host = new URL(url).host;
   for (let attempt = 0; ; attempt++) {
-    const remaining = opts.deadline - Date.now();
-    if (remaining < 1500) throw new Error(`out of time before asking ${host}`);
+    if (opts.deadline - Date.now() < MIN_REMAINING_MS) throw new QueueError(`out of time before asking ${host}`);
     let res: Response;
     try {
-      res = await serial(host, () =>
+      res = await serial(host, opts.deadline, (remaining) =>
         fetch(url, {
           ...init,
           headers: { "User-Agent": USER_AGENT, ...(init.headers as Record<string, string> | undefined) },
@@ -66,6 +97,8 @@ export async function politeFetch(url: string, init: RequestInit, opts: PoliteOp
         }),
       );
     } catch (err) {
+      // Never sent: retrying would only queue again behind the same requests.
+      if (err instanceof QueueError) throw err;
       if (attempt >= opts.retries) throw err;
       await sleep(1000 * 2 ** attempt);
       continue;
@@ -74,7 +107,7 @@ export async function politeFetch(url: string, init: RequestInit, opts: PoliteOp
     if ((res.status === 429 || res.status >= 500) && attempt < opts.retries) {
       const ra = Number(res.headers.get("retry-after"));
       const wait = Number.isFinite(ra) && ra > 0 ? ra * 1000 : 1000 * 2 ** attempt;
-      if (wait <= opts.maxRetryWaitMs && Date.now() + wait + 1500 < opts.deadline) {
+      if (wait <= opts.maxRetryWaitMs && Date.now() + wait + MIN_REMAINING_MS < opts.deadline) {
         await res.body?.cancel();
         await sleep(wait);
         continue;

@@ -314,7 +314,8 @@ test.describe("spirit box", () => {
       }),
     );
     await page.goto("/spirit?cemetery=Q999999&test-caps=short");
-    await expect(page.getByLabel(/The cemetery from your last tour/)).toBeChecked();
+    // The haunt is Oakland, so this cemetery came from the link: named, and said so (review 4, #3).
+    await expect(page.getByRole("radio", { name: /Test Hill Cemetery\s*From your link/ })).toBeChecked();
     await expect(page.getByText("Test Hill Cemetery", { exact: true })).toBeVisible();
     await expect(page.getByText(/1 person buried at Test Hill Cemetery died 75 or more years ago/)).toBeVisible();
     await expect(page.getByText(/2 more recent or undated burials are left out/)).toBeVisible();
@@ -333,12 +334,42 @@ test.describe("spirit box", () => {
       }),
     );
     await page.goto("/spirit?cemetery=Q999999");
-    await expect(page.getByText(/Couldn.t load the burials for this cemetery: Wikidata: Couldn.t reach Wikidata\./)).toBeVisible();
+    // The source once, one full stop, and the spirit box's own next step (review 4, #3).
+    await expect(
+      page.getByText("Couldn't load the burials for this cemetery. Couldn't reach Wikidata. Try again in a minute, or pick a sample cemetery.", { exact: true }),
+    ).toBeVisible();
+    // No name in the link and none loaded: a plain name, never the ID or "your last tour".
+    await expect(page.getByRole("radio", { name: /The cemetery in your link\s*From your link/ })).toBeChecked();
+    const picker = page.locator('section[aria-labelledby="spirit-pick"]');
+    await expect(picker).not.toContainText("Q999999");
+    await expect(picker).not.toContainText("last tour");
     await expect(page.getByRole("button", { name: "Start", exact: true })).toBeDisabled();
     // The samples still work.
     await page.getByLabel(/Sleepy Hollow Cemetery/).check();
     await expect(page.getByText(/people buried at Sleepy Hollow Cemetery died 75 or more years ago/)).toBeVisible();
     await expect(page.getByRole("button", { name: "Start", exact: true })).toBeEnabled();
+  });
+
+  test("a link's cemetery whose burials can't load: plainly named, never by ?name= or its ID (review 4, #3; K2)", async ({ page }) => {
+    await page.route("**/api/cemeteries/Q216344/burials", (route) =>
+      route.fulfill({
+        status: 503,
+        contentType: "application/json",
+        body: JSON.stringify({ error: { source: "Wikidata", message: "Couldn't reach Wikidata. Try again in a minute, or open a saved tour." } }),
+      }),
+    );
+    await page.goto("/spirit?cemetery=Q216344&name=Arlington+National+Cemetery&place=Arlington%2C+Virginia");
+    // ?name= and ?place= are a stranger's text: not shown, even when they look right.
+    const picked = page.getByRole("radio", { name: /The cemetery in your link\s*From your link/ });
+    await expect(picked).toBeChecked();
+    await expect(
+      page.getByText("Couldn't load the burials for this cemetery. Couldn't reach Wikidata. Try again in a minute, or pick a sample cemetery.", { exact: true }),
+    ).toBeVisible();
+    const picker = page.locator('section[aria-labelledby="spirit-pick"]');
+    await expect(picker).not.toContainText("Q216344");
+    await expect(picker).not.toContainText("Arlington");
+    await expect(picker).not.toContainText("Wikidata: ");
+    await expect(picker).not.toContainText("..");
   });
 });
 
@@ -381,6 +412,38 @@ test.describe("tombstone bingo", () => {
     await pa.getByRole("button", { name: "New card" }).click();
     await expect.poll(() => cardSymbols(pa)).not.toEqual(first);
     await Promise.all([a.close(), b.close()]);
+  });
+
+  test("“Start a party” under a solo card is a 48 px target", async ({ page, context }) => {
+    await context.addInitScript(seenEtiquette);
+    await seedHaunt(context);
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("/games/bingo");
+    await cardSymbols(page);
+    expect((await page.getByRole("link", { name: "Start a party" }).boundingBox())!.height).toBeGreaterThanOrEqual(48);
+  });
+
+  test("on a 360 px phone every label stays on its stone", async ({ page }) => {
+    await page.addInitScript(seenEtiquette);
+    await page.setViewportSize({ width: 360, height: 800 });
+    // These rooms' cards hold the three-line labels ("Hand pointing down", "Square & compass"…) that spilled out.
+    for (const room of ["KXMPRT", "ABCDEF", "GHJKMN", "PQRSTU", "VWXYZA", "BCDEFG"]) {
+      await page.goto(`/games/bingo?party=${room}`);
+      await cardSymbols(page);
+      await page.evaluate(() => document.fonts.ready);
+      const spills = await page.getByTestId("bingo-card").getByRole("button").evaluateAll((els) =>
+        els.flatMap((el) => {
+          const t = el.getBoundingClientRect();
+          const l = el.querySelector(".bingo-label")!.getBoundingClientRect();
+          return l.bottom > t.bottom - 1 || l.left < t.left || l.right > t.right ? [`${el.textContent} ${Math.round(l.bottom - t.bottom)}px`] : [];
+        }),
+      );
+      expect(spills, room).toEqual([]);
+      // Still a 3:4 stone or taller, and no wider than its column.
+      const sizes = await page.getByTestId("bingo-card").getByRole("button").evaluateAll((els) => els.map((el) => el.getBoundingClientRect()));
+      for (const r of sizes) expect(r.height / r.width).toBeGreaterThanOrEqual(4 / 3 - 0.02);
+      expect(Math.max(...sizes.map((r) => r.width)) - Math.min(...sizes.map((r) => r.width))).toBeLessThan(1);
+    }
   });
 
   test("tapping marks a square, shows its meaning, detects a bingo, and survives a reload", async ({ page }) => {

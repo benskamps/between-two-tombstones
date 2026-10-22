@@ -14,6 +14,7 @@ import { shouldAutoSetHaunt } from "@/lib/haunt/haunt";
 import { getFreshHaunt, getHaunt, setHaunt } from "@/lib/haunt/store";
 import { useHaunt } from "@/lib/haunt/useHaunt";
 import { QID_RE, loadCemetery, type LoadResult, type SampleCemetery } from "@/lib/spirit/load";
+import { extraCemeteryOption, usableName } from "@/lib/spirit/picker";
 import { capsFromParam, createSession, formatDuration, stopMessage, type SpiritSession, type Utterance } from "@/lib/spirit/session";
 import { pickVoice, silenceVoices, speakFragment, speechAvailable } from "@/lib/spirit/voice";
 import { bankHasNames, buildWordBank } from "@/lib/spirit/wordbank";
@@ -70,14 +71,16 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
     return () => ctrl.abort();
   }, [choice, samples]);
 
-  // A cemetery from the link becomes the haunt once its burials load (then its name is known),
-  // unless it already is (the gate may have set it with its place from ?name=&place=), and
+  // A cemetery from the link becomes the haunt once its burials load, under the name they came
+  // back with (never the link's ?name=, K2), or takes that name if it is the haunt under another;
   // never over a fresh haunt elsewhere (F11: a link is used, not adopted).
   const tourResult = tourQid ? results[tourQid] : undefined;
-  const tourName = tourResult?.ok ? tourResult.cemetery.name : null;
+  const tourName = usableName(tourResult?.ok ? tourResult.cemetery.name : null);
   useEffect(() => {
-    if (tourQid && tourName && getHaunt()?.qid !== tourQid && shouldAutoSetHaunt(tourQid, getFreshHaunt(), null)) {
-      setHaunt({ qid: tourQid, name: tourName });
+    const stored = getHaunt();
+    const same = stored?.qid === tourQid;
+    if (tourQid && tourName && !(same && stored.name === tourName) && shouldAutoSetHaunt(tourQid, getFreshHaunt(), null)) {
+      setHaunt({ qid: tourQid, name: tourName, place: same ? stored.place : undefined });
     }
   }, [tourQid, tourName]);
 
@@ -179,19 +182,19 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
     rt.current.noise?.setSweepMs(ms);
   }
 
+  const extraResult = extraQid ? results[extraQid] : undefined;
   const options = [
     ...samples.map((s) => ({ qid: s.qid, label: s.name, detail: s.place })),
     ...(extraQid && !extraIsSample
       ? [
           {
             qid: extraQid,
-            // A cemetery from the link (the tour's own links carry it) or, without one, the haunt.
-            label: tourQid ? "The cemetery from your last tour" : "Your haunt",
-            detail: results[extraQid]?.ok
-              ? (results[extraQid] as Extract<LoadResult, { ok: true }>).cemetery.name
-              : extraQid === haunt?.qid
-                ? haunt.name
-                : extraQid,
+            // A cemetery from the link or the haunt, named from our data: never its ID or the link's ?name=.
+            ...extraCemeteryOption({
+              loaded: extraResult?.ok ? extraResult.cemetery.name : null,
+              haunt: haunt && haunt.qid === extraQid ? haunt : null,
+              fromLink: tourQid !== null,
+            }),
           },
         ]
       : []),
@@ -231,7 +234,9 @@ export function SpiritBox({ samples }: { samples: SampleCemetery[] }) {
         {/* Room for the names line up front, so the panel below doesn't move when the names arrive. */}
         <div role="status" className="min-h-[5.25rem] text-sm">
           {!result && <p className="text-muted">Loading the names&hellip;</p>}
-          {result && !result.ok && <p className="text-danger">{result.message} Pick a sample cemetery instead.</p>}
+          {result && !result.ok && (
+            <p className="text-danger">{result.message} Try again in a minute, or pick a sample cemetery.</p>
+          )}
           {result?.ok && bank && (
             <>
               {ready ? (

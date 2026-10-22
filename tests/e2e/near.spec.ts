@@ -35,24 +35,31 @@ test.describe("/near", () => {
     await expect(best.getByRole("link")).toContainText("Magnolia Cemetery");
     await expect(best.getByRole("link")).toHaveAttribute("href", /^\/cemetery\/Q12061438\?via=near&n=\d+$/);
 
-    // Every linked cemetery has someone listed, and every link says it came from the near list.
+    // A card only for 5+ people (review 4, #5), and every link says it came from the near list.
     const links = page.getByTestId("cemetery-list").getByRole("link");
     expect(await links.count()).toBeGreaterThan(0);
-    for (const href of await links.evaluateAll((els) => els.map((e) => e.getAttribute("href")))) expect(href).toMatch(/^\/cemetery\/Q\d+\?via=near&n=[1-9]\d*$/);
+    for (const href of await links.evaluateAll((els) => els.map((e) => e.getAttribute("href")))) expect(href).toMatch(/^\/cemetery\/Q\d+\?via=near&n=([5-9]|[1-9]\d+)$/);
     await expect(page.getByTestId("cemetery-list")).not.toContainText("No burials listed");
+    await expect(page.getByTestId("cemetery-list")).not.toContainText("Bethany Cemetery");
 
-    // The rest are folded, closed, and plain text: no link to an empty tour.
+    // The rest are folded and closed. One to four people: a link that says the count;
+    // no one: plain text, never a link to an empty tour.
     const fold = page.getByTestId("near-unlisted");
     await expect(fold).not.toHaveAttribute("open", "");
-    await expect(fold.locator("summary")).toHaveText(/^\d+ more nearby with no one listed yet$/);
-    await expect(fold.getByRole("link")).toHaveCount(0);
+    await expect(fold.locator("summary")).toHaveText(/^\d+ more nearby with fewer than 5 people listed$/);
     await fold.locator("summary").click();
+    const short = fold.getByTestId("near-few").getByRole("link");
+    for (const href of await short.evaluateAll((els) => els.map((e) => e.getAttribute("href")))) expect(href).toMatch(/^\/cemetery\/Q\d+\?via=near&n=[1-4]$/);
+    await expect(short.filter({ hasText: "Bethany Cemetery" })).toContainText("1 person listed on Wikidata");
+    for (const box of await short.evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height))) expect(box).toBeGreaterThanOrEqual(48);
     await expect(fold.getByText("Wilson-Shepheard Family Cemetery")).toBeVisible();
+    await expect(fold.getByRole("link", { name: /Wilson-Shepheard/ })).toHaveCount(0);
   });
 
   test("I'm here with a good fix: opens the tour straight away", async ({ page }) => {
     await page.goto(`/near?${OAKLAND_POINT}&acc=20`);
-    await page.waitForURL(/\/cemetery\/Q2008469\?via=here&lat=33\.7489&lon=-84\.3718&n=\d+$/, { timeout: 25_000 });
+    // Three decimals in the hub's URL (P0-1): people share hub links, so they never carry the exact fix.
+    await page.waitForURL(/\/cemetery\/Q2008469\?via=here&lat=33\.749&lon=-84\.372&n=\d+$/, { timeout: 25_000 });
     await expect(page.getByRole("heading", { level: 1, name: "Oakland Cemetery" })).toBeVisible({ timeout: 25_000 });
     await expect(page.getByTestId("story-card")).toHaveCount(12, { timeout: 25_000 });
   });

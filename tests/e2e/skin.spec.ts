@@ -207,6 +207,30 @@ test.describe("layout and sunlight", () => {
     expect((await offer.boundingBox())!.y).toBeLessThan((await first.boundingBox())!.y);
   });
 
+  test("on a narrow phone the “Make this my haunt” pill sits under the sentence, not beside it (review 4, #4)", async ({ page, context }) => {
+    await seedHaunt(context, OAKLAND_HAUNT);
+    for (const width of [360, 393, 412]) {
+      await page.setViewportSize({ width, height: 839 });
+      await page.goto("/cemetery/Q360779");
+      const offer = page.getByTestId("make-haunt");
+      await expect(offer).toBeVisible({ timeout: 25_000 });
+      await settle(page);
+      const text = offer.locator("p");
+      await expect(text).toHaveText("Your haunt is Oakland Cemetery.");
+      const [t, b] = [(await text.boundingBox())!, (await offer.getByRole("button", { name: "Make this my haunt" }).boundingBox())!];
+      const lineHeight = await text.evaluate((el) => parseFloat(getComputedStyle(el).lineHeight));
+      expect(t.height, `${width}px: one line`).toBeLessThan(lineHeight * 1.5);
+      expect(b.y, `${width}px: the pill is under the sentence`).toBeGreaterThanOrEqual(t.y + t.height);
+      expect(b.height).toBeGreaterThanOrEqual(48);
+    }
+    // With room for both, they share a line again.
+    await page.setViewportSize({ width: 700, height: 839 });
+    await settle(page);
+    const offer = page.getByTestId("make-haunt");
+    const [t, b] = [(await offer.locator("p").boundingBox())!, (await offer.getByRole("button").boundingBox())!];
+    expect(b.y).toBeLessThan(t.y + t.height);
+  });
+
   test("/near's location button reads like home's", async ({ page }) => {
     await page.goto("/near");
     await expect(page.getByRole("button", { name: /^I.m here\. Haunt me\.$/ })).toBeVisible();

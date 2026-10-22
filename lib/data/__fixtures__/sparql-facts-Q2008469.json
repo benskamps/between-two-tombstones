@@ -8,7 +8,8 @@
    "fagc",
    "locLabel",
    "enwiki",
-   "version"
+   "version",
+   "isCemetery"
   ]
  },
  "results": {
@@ -22,6 +23,11 @@
      "datatype": "http://www.w3.org/2001/XMLSchema#integer",
      "type": "literal",
      "value": "2479230138"
+    },
+    "isCemetery": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+     "type": "literal",
+     "value": "true"
     },
     "coord": {
      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",

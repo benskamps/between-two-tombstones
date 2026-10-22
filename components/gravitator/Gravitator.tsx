@@ -224,7 +224,21 @@ function EndOfDeck({
   );
 }
 
-function DeckLoader({ lat, lon, radiusKm, near }: { lat: number; lon: number; radiusKm: number; near: string | null }) {
+function DeckLoader({
+  lat,
+  lon,
+  radiusKm,
+  near,
+  nearFromLink,
+}: {
+  lat: number;
+  lon: number;
+  radiusKm: number;
+  /** One of our sample places' labels, or null. */
+  near: string | null;
+  /** The link had a ?near= we didn't write: its words aren't shown. */
+  nearFromLink: boolean;
+}) {
   const router = useRouter();
   const [attempt, setAttempt] = useState(0);
   const [result, setResult] = useState<
@@ -251,7 +265,7 @@ function DeckLoader({ lat, lon, radiusKm, near }: { lat: number; lon: number; ra
     return () => ac.abort();
   }, [lat, lon, radiusKm, attempt]);
 
-  const where = near ? `Near ${near}` : "Near you";
+  const where = near ? `Near ${near}` : nearFromLink ? "Near the place in your link" : "Near you";
   const loading = !result || result.attempt !== attempt;
 
   return (
@@ -310,13 +324,25 @@ function DeckLoader({ lat, lon, radiusKm, near }: { lat: number; lon: number; ra
   );
 }
 
+/**
+ * ?near= names one of our sample places at its own point; anything else a
+ * link says is a stranger's text (K2, P1-1), so it isn't shown.
+ */
+function nearLabel(raw: string | null, lat: number | null, lon: number | null): string | null {
+  if (raw === null) return null;
+  const sample = SAMPLE_PLACES.find((p) => p.label === raw);
+  const here = sample && lat !== null && lon !== null && Math.abs(sample.lat - lat) < 0.01 && Math.abs(sample.lon - lon) < 0.01;
+  return here ? sample.label : null;
+}
+
 /** Reads the place from the URL (?lat&lon&near&r): no place → the start screen. */
 export function Gravitator() {
   const params = useSearchParams();
   const lat = coord(params.get("lat"), 90);
   const lon = coord(params.get("lon"), 180);
   const radiusKm = params.get("r") === "50" ? 50 : 25;
-  const near = params.get("near")?.slice(0, 60) || null;
+  const rawNear = params.get("near");
+  const near = nearLabel(rawNear, lat, lon);
   if (lat === null || lon === null) return <StartScreen />;
-  return <DeckLoader key={`${lat},${lon},${radiusKm}`} lat={lat} lon={lon} radiusKm={radiusKm} near={near} />;
+  return <DeckLoader key={`${lat},${lon},${radiusKm}`} lat={lat} lon={lon} radiusKm={radiusKm} near={near} nearFromLink={rawNear !== null && near === null} />;
 }

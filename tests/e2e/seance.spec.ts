@@ -368,7 +368,9 @@ test.describe("séance", () => {
     await seedHaunt(page);
     await page.goto("/spirit");
     await page.getByLabel(/Sleepy Hollow Cemetery/).check();
-    await expect(page.getByText(/people buried at Sleepy Hollow Cemetery died 75 or more years ago/)).toBeVisible();
+    // The names line waits on the live burials route for up to 5 s, then the spirit box uses the saved copy
+    // (lib/spirit/load.ts), so allow that cap plus the usual 5 s (as haunt.spec does for Oakland).
+    await expect(page.getByText(/people buried at Sleepy Hollow Cemetery died 75 or more years ago/)).toBeVisible({ timeout: 10_000 });
     await page.getByLabel("Séance room code").fill("abc");
     await page.getByRole("button", { name: "Join", exact: true }).click();
     await expect(page.getByText(/Room codes are six letters \(no I, L or O\)/)).toBeVisible();
@@ -388,6 +390,27 @@ test.describe("séance", () => {
     // (Next's route announcer is also role=alert, so pick ours by its text.)
     await expect(page.getByRole("alert").filter({ hasText: "This séance link has a broken room code" })).toBeVisible();
     await expect(page.getByRole("button", { name: /Join the séance|Start/ })).toHaveCount(0);
+  });
+
+  test("a séance link whose cemetery can't load never shows its ID as a name (review 4, #3)", async ({ page }) => {
+    await page.addInitScript(seenEtiquette);
+    await page.route("**/api/cemeteries/Q216344/burials", (route) =>
+      route.fulfill({
+        status: 503,
+        contentType: "application/json",
+        body: JSON.stringify({ error: { source: "Wikidata", message: "Couldn't reach Wikidata. Try again in a minute, or open a saved tour." } }),
+      }),
+    );
+    await page.goto("/spirit?seance=KXMPRT&cemetery=Q216344");
+    await expect(page.getByRole("heading", { name: "Séance KXMPRT" })).toBeVisible();
+    await expect(
+      page.getByText("Couldn't load the burials for this cemetery. Couldn't reach Wikidata. Ask the host to start the séance with a sample cemetery.", {
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(page.getByText(/^Names from the cemetery in the link\./)).toBeVisible();
+    await expect(page.getByText("Anyone joining by code picks the same cemetery first.")).toBeVisible();
+    await expect(page.locator("main")).not.toContainText("Q216344");
   });
 
   test("the party page starts a séance with the party's room code", async ({ browser, baseURL }) => {
