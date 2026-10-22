@@ -8,6 +8,8 @@ import { asDataSourceError, DataSourceError, type DataSource } from "./errors";
 import { mergeOsm, type OsmCemetery } from "./overpass";
 import { savedSnapshot } from "./samples";
 import type { BurialsResponse, CemeterySearchResult, NearbyCemetery, NearResponse, SourceStatus } from "./types";
+import { rankPeople } from "@/lib/tour/score";
+import type { MoreStories } from "@/lib/tour/stories";
 import { cleanExtract, personName } from "@/lib/tour/text";
 import { parsePoint } from "@/lib/types";
 import { burialsQuery, NEAR_RADIUS_KM, searchWithFallback, type PersonRow } from "./wikidata";
@@ -24,6 +26,16 @@ export const LIVE_BUDGET_MS = 35_000;
  * outside the cache, and a late answer still fills the cache.
  */
 export const BURIALS_BUDGET_MS = 25_000;
+/**
+ * The tour page shows the first stories once the first batch of 20 is in; the
+ * rest follow. If they all land within this long of the first batch (a warm
+ * cache), the page sends them in one go instead.
+ */
+export const FIRST_STORIES_GRACE_MS = 150;
+/** After the first stories are on screen, the rest get this long; then the page names what's missing. */
+export const MORE_STORIES_BUDGET_MS = 20_000;
+/** Longest hold SIMULATE_SLOW_BURIALS can ask for. */
+export const MAX_SIMULATED_HOLD_MS = 30_000;
 /** The near API waits this long for OpenStreetMap after Wikidata answers. */
 export const OSM_EXTRA_WAIT_MS = 4_000;
 /** After every Overpass mirror fails, skip OpenStreetMap for this long. */
@@ -40,11 +52,22 @@ async function call<T>(source: DataSource, fn: () => Promise<T>): Promise<T> {
 /**
  * Test hook, like DISABLE_WIKIDATA: SIMULATE_SLOW_BURIALS=Q216344,Q239043 makes
  * those cemeteries' burials time out at once, so e2e can walk the slow path.
+ * `Q1950358:6000` holds that one for 6 s first (at most 30 s), so e2e can read
+ * the loading screen. Returns the hold in ms, or null when the QID isn't listed.
  */
-function simulatedSlowBurials(qid: string): boolean {
+function simulatedSlowBurials(qid: string): number | null {
   const list = process.env.SIMULATE_SLOW_BURIALS;
-  return Boolean(list) && list!.split(",").map((s) => s.trim()).includes(qid);
+  if (!list) return null;
+  for (const entry of list.split(",")) {
+    const [id, hold] = entry.trim().split(":");
+    if (id !== qid) continue;
+    const ms = Number(hold ?? 0);
+    return Number.isFinite(ms) && ms > 0 ? Math.min(ms, MAX_SIMULATED_HOLD_MS) : 0;
+  }
+  return null;
 }
+
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 function withBudget<T>(work: Promise<T>, ms: number, onTimeout: () => DataSourceError): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -83,33 +106,95 @@ export function assembleSnapshot(
   };
 }
 
+/**
+ * English Wikipedia titles in the order the tour will show their people
+ * (rankPeople, counting every article as a story to come), so the first
+ * batch of 20 holds the first stops and the page can show them before the
+ * rest arrive. Without a ranking signal, Wikidata's order (most sitelinks) holds.
+ */
+export function titlesInTourOrder(rows: PersonRow[], now: Date = new Date()): string[] {
+  const titleOf = new Map<string, string>();
+  for (const r of rows) {
+    const t = r.enwiki ? titleFromUrl(r.enwiki) : null;
+    if (t && !titleOf.has(r.person.qid)) titleOf.set(r.person.qid, t);
+  }
+  const people: Person[] = rows.map((r) => ({ ...r.person, wikipedia: null }));
+  const ranked = rankPeople(people, { now, storyPending: new Set(titleOf.keys()) });
+  return [...new Set(ranked.flatMap((s) => titleOf.get(s.person.qid) ?? []))];
+}
+
 export type CemeteryLoad =
   | { status: "ok"; data: BurialsResponse }
   | { status: "not-found"; qid: string }
   | { status: "error"; error: DataSourceError };
 
+/**
+ * What the tour page renders: a whole load, or (on a cold cache) the people
+ * with the first batch of stories, who is still waiting for one, and a
+ * promise for the rest. `more` never rejects.
+ */
+export type TourLoad = CemeteryLoad | { status: "partial"; data: BurialsResponse; pending: string[]; more: Promise<MoreStories> };
+
+type Batch = PromiseSettledResult<Record<string, WikipediaSummary>>;
+
+/** Burials and facts are in; the Wikipedia batches are running. */
+type Started = {
+  cemetery: CemeterySnapshot["cemetery"];
+  rows: PersonRow[];
+  fetchedAt: string;
+  titles: string[];
+  batches: string[][];
+  /** One per batch, already running, in tour order. Each settles; none rejects. */
+  results: Promise<Batch>[];
+};
+
 type LiveResult = { data: BurialsResponse; missingStories: number; wikipediaError: DataSourceError | null };
 
-async function loadLive(qid: string, stage: { source: DataSource }): Promise<LiveResult | null> {
+/**
+ * Burials queries still running, by QID. When the page gives up at
+ * BURIALS_BUDGET_MS, the query carries on for up to 3 s more and then fills the
+ * cache; the browser's one retry (SlowCemetery) joins it here instead of
+ * starting a second query from scratch.
+ */
+const burialsInFlight = new Map<string, ReturnType<typeof cachedBurials>>();
+
+function burialsOnce(qid: string): ReturnType<typeof cachedBurials> {
+  const running = burialsInFlight.get(qid);
+  if (running) return running;
+  const query = cachedBurials(qid);
+  if (burialsInFlight.size < MAX_IN_FLIGHT) {
+    burialsInFlight.set(qid, query);
+    const forget = () => {
+      if (burialsInFlight.get(qid) === query) burialsInFlight.delete(qid);
+    };
+    query.then(forget, forget);
+  }
+  return query;
+}
+
+function settle<T>(p: Promise<T>): Promise<PromiseSettledResult<T>> {
+  return p.then(
+    (value) => ({ status: "fulfilled", value }),
+    (reason: unknown) => ({ status: "rejected", reason }),
+  );
+}
+
+/** Burials, then facts alongside every Wikipedia batch. Null when the item doesn't exist. */
+async function startLive(qid: string, stage: { source: DataSource }): Promise<Started | null> {
   stage.source = "Wikidata";
-  if (simulatedSlowBurials(qid)) {
+  const hold = simulatedSlowBurials(qid);
+  if (hold !== null) {
+    if (hold > 0) await sleep(hold);
     throw new DataSourceError("Wikidata", "timeout", `Burials for ${qid} timed out (SIMULATE_SLOW_BURIALS).`);
   }
   const { rows, fetchedAt } = await call("Wikidata", () =>
     withBudget(
-      cachedBurials(qid),
+      burialsOnce(qid),
       BURIALS_BUDGET_MS,
       () => new DataSourceError("Wikidata", "timeout", `No list of burials from Wikidata within ${BURIALS_BUDGET_MS / 1000} s.`),
     ),
   );
-  const titles = [
-    ...new Set(
-      rows.flatMap((r) => {
-        const t = r.enwiki ? titleFromUrl(r.enwiki) : null;
-        return t ? [t] : [];
-      }),
-    ),
-  ];
+  const titles = titlesInTourOrder(rows);
   const factsP = call("Wikidata", () => cachedCemeteryFacts(qid)).finally(() => {
     stage.source = "Wikipedia";
   });
@@ -117,18 +202,22 @@ async function loadLive(qid: string, stage: { source: DataSource }): Promise<Liv
   // stories the first batches already brought back (and cached).
   const batches: string[][] = [];
   for (let i = 0; i < titles.length; i += BATCH_SIZE) batches.push(titles.slice(i, i + BATCH_SIZE));
-  const [facts, ...extracts] = await Promise.allSettled([factsP, ...batches.map((b) => call("Wikipedia", () => cachedExtracts(b)))]);
-  if (facts.status === "rejected") throw facts.reason;
-  const cemetery = facts.value as CemeterySnapshot["cemetery"] | null;
+  const results = batches.map((b) => settle(call("Wikipedia", () => cachedExtracts(b))));
+  const cemetery = await factsP;
   if (!cemetery) return null;
+  return { cemetery, rows, fetchedAt, titles, batches, results };
+}
 
+/** The snapshot from the batches that have answered; `undefined` is a batch still on its way (not counted as missing). */
+function assembleLive(s: Started, results: (Batch | undefined)[]): LiveResult {
   const summaries: Record<string, WikipediaSummary> = {};
   let missingStories = 0;
   let wikipediaError: DataSourceError | null = null;
-  extracts.forEach((r, i) => {
+  results.forEach((r, i) => {
+    if (!r) return;
     if (r.status === "fulfilled") Object.assign(summaries, r.value);
     else {
-      missingStories += batches[i].length;
+      missingStories += s.batches[i].length;
       wikipediaError ??= asDataSourceError(r.reason, "Wikipedia");
     }
   });
@@ -137,14 +226,30 @@ async function loadLive(qid: string, stage: { source: DataSource }): Promise<Liv
     warnings.push({
       source: "Wikipedia",
       code: "stories-missing",
-      message: `Couldn't load ${missingStories} of ${titles.length} stories from Wikipedia. Names and dates are all here; try again in a minute for the rest.`,
+      message: `Couldn't load ${missingStories} of ${s.titles.length} stories from Wikipedia. Names and dates are all here; try again in a minute for the rest.`,
     });
   }
   return {
-    data: { ...assembleSnapshot(cemetery, rows, summaries, fetchedAt), origin: "live", warnings },
+    data: { ...assembleSnapshot(s.cemetery, s.rows, summaries, s.fetchedAt), origin: "live", warnings },
     missingStories,
     wikipediaError,
   };
+}
+
+/** Every batch's result, or a timeout for the ones still out after `ms`. */
+async function batchesWithin(results: Promise<Batch>[], ms: number): Promise<Batch[]> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const late = new Promise<Batch>((resolve) => {
+    timer = setTimeout(
+      () => resolve({ status: "rejected", reason: new DataSourceError("Wikipedia", "timeout", `No answer from Wikipedia within ${ms / 1000} s.`) }),
+      ms,
+    );
+  });
+  try {
+    return await Promise.all(results.map((r) => Promise.race([r, late])));
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 /** Fill stories Wikipedia didn't send from the saved copy (same person QID). */
@@ -207,6 +312,14 @@ export function tidyPeople<T extends { people: Person[] }>(data: T): T {
   return changed ? { ...data, people } : data;
 }
 
+/** One cemetery's load, shared by everyone who asks while it runs. */
+type Staged = {
+  /** Everything (the API, the /near warm-up, share pages, the calendar). */
+  full: Promise<CemeteryLoad>;
+  /** The tour page's view: the first stories early when the cache is cold. Made on first use. */
+  tour: () => Promise<TourLoad>;
+};
+
 /**
  * Loads still in flight, by QID. 'use cache' only shares an entry once it's
  * stored, so a tour request that lands while /near's warm-up (or another
@@ -214,40 +327,106 @@ export function tidyPeople<T extends { people: Person[] }>(data: T): T {
  * again. It joins the running load instead. Settled loads leave the map, so
  * the next request goes through the cache (and retries a failure) as before.
  */
-const inFlight = new Map<string, Promise<CemeteryLoad>>();
-/** Cap on remembered in-flight loads; past it, loads simply run on their own. */
+const inFlight = new Map<string, Staged>();
+/** Cap on remembered in-flight loads (and burials queries); past it, loads simply run on their own. */
 export const MAX_IN_FLIGHT = 50;
 
-/** Live burials + stories for a cemetery; for the samples, the saved copy when live fails. */
-export function loadCemetery(qid: string): Promise<CemeteryLoad> {
+function staged(qid: string): Staged {
   const running = inFlight.get(qid);
   if (running) return running;
-  const load = loadCemeteryOnce(qid).finally(() => {
-    if (inFlight.get(qid) === load) inFlight.delete(qid);
-  });
-  if (inFlight.size < MAX_IN_FLIGHT) inFlight.set(qid, load);
+  const load = stageCemetery(qid);
+  if (inFlight.size < MAX_IN_FLIGHT) {
+    inFlight.set(qid, load);
+    void load.full.finally(() => {
+      if (inFlight.get(qid) === load) inFlight.delete(qid);
+    });
+  }
   return load;
 }
 
-async function loadCemeteryOnce(qid: string): Promise<CemeteryLoad> {
+/** Live burials + stories for a cemetery; for the samples, the saved copy when live fails. */
+export function loadCemetery(qid: string): Promise<CemeteryLoad> {
+  return staged(qid).full;
+}
+
+/**
+ * The tour page's load. Warm, it's the same as loadCemetery. Cold, it comes
+ * back as soon as the first 20 stories (the first stops, in tour order) are
+ * in, with a promise for the rest: on a big cemetery that is seconds sooner.
+ */
+export function loadTour(qid: string): Promise<TourLoad> {
+  return staged(qid).tour();
+}
+
+function stageCemetery(qid: string): Staged {
   const saved = savedSnapshot(qid);
   const stage: { source: DataSource } = { source: "Wikidata" };
   const budgetMs = saved ? SAMPLE_BUDGET_MS : LIVE_BUDGET_MS;
-  try {
-    const live = await withBudget(
-      loadLive(qid, stage),
-      budgetMs,
-      () => new DataSourceError(stage.source, "timeout", `No complete answer within ${budgetMs / 1000} s.`),
-    );
-    if (!live) return { status: "not-found", qid };
-    // A sample whose stories partly failed gets them from its saved copy.
-    if (saved && live.missingStories > 0) return { status: "ok", data: tidyPeople(backfillStories(live.data, saved)) };
-    return { status: "ok", data: tidyPeople(live.data) };
-  } catch (e) {
+  const overBudget = () => new DataSourceError(stage.source, "timeout", `No complete answer within ${budgetMs / 1000} s.`);
+  const started = startLive(qid, stage);
+
+  const failed = (e: unknown): CemeteryLoad => {
     const err = asDataSourceError(e, stage.source);
     if (saved) return { status: "ok", data: tidyPeople(fromSaved(saved, err)) };
     return { status: "error", error: err };
-  }
+  };
+  const complete = (s: Started, results: Batch[]): BurialsResponse => {
+    const live = assembleLive(s, results);
+    // A sample whose stories partly failed gets them from its saved copy.
+    return tidyPeople(saved && live.missingStories > 0 ? backfillStories(live.data, saved) : live.data);
+  };
+
+  const full: Promise<CemeteryLoad> = withBudget(
+    started.then(async (s) => (s ? complete(s, await Promise.all(s.results)) : null)),
+    budgetMs,
+    overBudget,
+  ).then((data): CemeteryLoad => (data ? { status: "ok", data } : { status: "not-found", qid }), failed);
+
+  let tour: Promise<TourLoad> | undefined;
+  const early = async (): Promise<TourLoad> => {
+    const first = await withBudget(
+      started.then(async (s) => (s && s.results.length > 1 ? { s, batch: await s.results[0] } : null)),
+      budgetMs,
+      overBudget,
+    ).catch(() => null);
+    // Not found, failed, or one batch at most: nothing to show early. A first batch that failed (a 429)
+    // waits for the rest, as before, rather than open on 20 stops without stories.
+    if (!first || first.batch.status === "rejected") return full;
+    // Everything else landed too (a warm cache): one render.
+    const done = await Promise.race([full, sleep(FIRST_STORIES_GRACE_MS).then(() => null)]);
+    if (done) return done;
+
+    const { s, batch } = first;
+    const data = tidyPeople(assembleLive(s, [batch]).data);
+    const later = new Set(s.batches.slice(1).flat());
+    const waiting = new Set(
+      s.rows.flatMap((r) => {
+        const t = r.enwiki ? titleFromUrl(r.enwiki) : null;
+        return t && later.has(t) ? [r.person.qid] : [];
+      }),
+    );
+    const pending = data.people.filter((p) => !p.wikipedia && waiting.has(p.qid)).map((p) => p.qid);
+    const more = batchesWithin(s.results, MORE_STORIES_BUDGET_MS).then(
+      (results): MoreStories => {
+        const all = complete(s, results);
+        const stories: MoreStories["stories"] = {};
+        for (const p of all.people) if (p.wikipedia && waiting.has(p.qid)) stories[p.qid] = p.wikipedia;
+        return { stories, warnings: all.warnings };
+      },
+      (): MoreStories => ({
+        stories: {},
+        warnings: [
+          {
+            source: "Wikipedia",
+            code: "stories-missing",
+            message: `Couldn't load ${pending.length} of ${s.titles.length} stories from Wikipedia. Names and dates are all here; try again in a minute for the rest.`,
+          },
+        ],
+      }),
+    );
+    return { status: "partial", data, pending, more };
+  };
+  return { full, tour: () => (tour ??= early()) };
 }
 
 // ---------------------------------------------------------------- near

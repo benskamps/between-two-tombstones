@@ -2,8 +2,8 @@
 //   pnpm build && NODE_USE_ENV_PROXY=1 pnpm start -p 3102
 //   BASE_URL=http://localhost:3102 pnpm test:e2e tests/e2e/tour.spec.ts
 // The outage tests start their own `next start` with DISABLE_WIKIDATA=1 and
-// SIMULATE_SLOW_BURIALS=Q216344 on port 3199 (needs a local build), or use
-// OUTAGE_BASE_URL if set: a server started with both flags.
+// SIMULATE_SLOW_BURIALS=Q216344,Q1950358:6000 on port 3199 (needs a local
+// build), or use OUTAGE_BASE_URL if set: a server started with both flags.
 import { spawn, type ChildProcess } from "node:child_process";
 import { existsSync } from "node:fs";
 import { expect, test, type Locator, type Page } from "@playwright/test";
@@ -11,6 +11,9 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 const OAKLAND = "/cemetery/Q2008469";
 /** Arlington National Cemetery: the outage server makes its burials time out (SIMULATE_SLOW_BURIALS). */
 const SLOW_QID = "Q216344";
+/** Mount Auburn: the outage server holds it 6 s before timing out, so the loading screen can be read. */
+const HELD_QID = "Q1950358";
+const HOLD_MS = 6_000;
 
 test.beforeEach(async ({ context }) => {
   // Skip the first-run etiquette dialog (a modal that would cover the page).
@@ -68,6 +71,19 @@ test.describe("Oakland Cemetery tour", () => {
     await expect(page.getByRole("button", { name: "Walk through time" })).toHaveAttribute("aria-pressed", "true");
     const time = await cards.evaluateAll((els) => els.map((e) => e.getAttribute("data-qid")).sort());
     expect(time).toEqual(hits);
+  });
+});
+
+test.describe("links that can't lead to a tour", () => {
+  // An item Wikidata doesn't have (Q99999999999) takes the same path once Wikidata answers; checked by
+  // hand on a local build, since this suite shouldn't depend on a live query for it.
+  test("a malformed ID is the app's not-found page, marked noindex", async ({ page }) => {
+    for (const path of ["/cemetery/abc", "/cemetery/Q2008469x", "/cemetery/Q0"]) {
+      await page.goto(path);
+      await expect(page.getByRole("heading", { level: 1, name: "Page not found" }), path).toBeVisible();
+      await expect(page.locator('meta[name="robots"][content*="noindex"]').first(), path).toBeAttached();
+      await expect(page.getByTestId("story-card"), path).toHaveCount(0);
+    }
   });
 });
 
@@ -150,7 +166,7 @@ test.describe("Wikidata outage (DISABLE_WIKIDATA=1)", () => {
     test.skip(!existsSync(".next/BUILD_ID"), "Needs a local `pnpm build`, or OUTAGE_BASE_URL pointing at a server started with DISABLE_WIKIDATA=1.");
     const port = 3199;
     server = spawn(process.execPath, ["node_modules/next/dist/bin/next", "start", "-p", String(port)], {
-      env: { ...process.env, DISABLE_WIKIDATA: "1", SIMULATE_SLOW_BURIALS: SLOW_QID },
+      env: { ...process.env, DISABLE_WIKIDATA: "1", SIMULATE_SLOW_BURIALS: `${SLOW_QID},${HELD_QID}:${HOLD_MS}` },
       stdio: "ignore",
     });
     base = `http://localhost:${port}`;
@@ -218,6 +234,34 @@ test.describe("Wikidata outage (DISABLE_WIKIDATA=1)", () => {
       await expect(failure.getByRole("link", { name: "Try again" })).toHaveAttribute("href", `/cemetery/${SLOW_QID}`);
       expect(retries).toBe(1);
     });
+  });
+
+  test("a slow first load says a big cemetery can take half a minute, and nothing moves (review pass 4)", async ({ page }) => {
+    // Don't wait for the page to finish: the server holds it on purpose.
+    await page.goto(`${base}/cemetery/${HELD_QID}?via=near&n=1415`, { waitUntil: "commit" });
+    const loading = page.getByTestId("tour-loading");
+    await expect(loading).toContainText("Most cemeteries take a few seconds the first time.");
+    await expect(loading).not.toContainText("This takes a few seconds");
+    // The size comes from the link; the line shows 3 s in (8 s without a size), in space held from the start.
+    const note = page.getByTestId("loading-note");
+    await expect(note).toHaveText("This cemetery is big (1,415 people listed), so the first load can take half a minute.");
+    await expect(note).toHaveCSS("opacity", "0");
+    const before = await note.boundingBox();
+    await expect(note).toHaveCSS("opacity", "1", { timeout: HOLD_MS - 1_000 });
+    expect(await note.boundingBox()).toEqual(before);
+    const shift = await page.evaluate(
+      () =>
+        new Promise<number>((resolve) => {
+          let total = 0;
+          new PerformanceObserver((list) => {
+            for (const e of list.getEntries() as (PerformanceEntry & { value: number; hadRecentInput: boolean })[]) if (!e.hadRecentInput) total += e.value;
+          }).observe({ type: "layout-shift", buffered: true });
+          setTimeout(() => resolve(total), 200);
+        }),
+    );
+    expect(shift).toBe(0);
+    // Then the server gives up and the browser asks once more, saying why.
+    await expect(page.getByTestId("slow-cemetery-message")).toHaveText("Still loading. This cemetery is big (1,415 people listed).", { timeout: HOLD_MS + 5_000 });
   });
 
   test("the API answers 503 with the source named", async ({ request }) => {
