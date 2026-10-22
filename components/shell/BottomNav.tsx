@@ -35,7 +35,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Main"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)]"
+      className="nav-dock fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)]"
     >
       {items === null ? (
         <div className="h-16" aria-hidden="true" />
@@ -48,8 +48,16 @@ export function BottomNav() {
                 <Link
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`tap flex h-16 flex-col items-center justify-center gap-1 ${active ? "text-mauve" : "text-muted"}`}
+                  className={`tap relative flex h-16 flex-col items-center justify-center gap-1 transition-colors ${
+                    active ? "text-mauve" : "text-muted hover:text-text"
+                  }`}
                 >
+                  {active && (
+                    <span
+                      aria-hidden="true"
+                      className="nav-pill-active pointer-events-none absolute top-1.5 h-1 w-7 rounded-full"
+                    />
+                  )}
                   <ToolIcon tool={item.tool} className="h-5 w-5" />
                   <span
                     className={`whitespace-nowrap font-label text-[13px] uppercase tracking-[0.05em] ${

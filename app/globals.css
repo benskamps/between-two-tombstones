@@ -239,6 +239,13 @@ body {
   text-decoration: none;
   cursor: pointer;
   user-select: none;
+  transition:
+    transform 0.14s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+.btn:active:not(:disabled, [aria-disabled="true"]) {
+  transform: scale(0.985);
 }
 .btn:disabled,
 .btn[aria-disabled="true"] {
@@ -248,11 +255,17 @@ body {
 .btn-primary {
   background: var(--mauve);
   color: var(--mauve-ink);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mauve-ink) 25%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--text) 35%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--mauve-ink) 25%, transparent),
+    0 6px 18px -6px color-mix(in srgb, var(--mauve) 45%, transparent);
 }
 .btn-candle {
   background: var(--candle);
   color: var(--mauve-ink);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--text) 40%, transparent),
+    0 6px 18px -6px color-mix(in srgb, var(--candle) 45%, transparent);
 }
 .btn-ghost {
   background-color: var(--surface);
@@ -297,13 +310,46 @@ body {
 
 /* ---------- Cards: rounded stone with a thin inner rule ---------- */
 
+.site-header {
+  background-color: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 6px 20px -12px color-mix(in srgb, var(--bg) 90%, transparent);
+}
+.nav-dock {
+  background-color: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(16px);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--mauve) 18%, transparent),
+    0 -8px 24px -10px color-mix(in srgb, var(--bg) 92%, transparent);
+}
+.nav-pill-active {
+  background: var(--mauve);
+  box-shadow: 0 0 10px 1px color-mix(in srgb, var(--mauve) 65%, transparent);
+}
+
 .card {
   position: relative;
   border-radius: 1.1rem;
   border: 1px solid var(--border);
   background-color: var(--surface);
-  background-image: var(--grain);
-  background-size: 128px 128px;
+  background-image:
+    radial-gradient(ellipse 90% 60% at 50% 0%, color-mix(in srgb, var(--mauve) 6%, transparent), transparent 70%),
+    var(--grain);
+  background-size: 100% 100%, 128px 128px;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--text) 9%, transparent),
+    0 10px 26px -14px color-mix(in srgb, var(--bg) 90%, transparent);
+}
+a.card,
+a.tool-chip {
+  transition:
+    transform 0.14s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+a.card:active,
+a.tool-chip:active {
+  transform: scale(0.988);
 }
 .card::before {
   content: "";
@@ -381,13 +427,15 @@ article:has(.story-more[open]) .story-lead {
   border: 1px solid var(--border);
   border-radius: 50% 50% 1.1rem 1.1rem / 4.75rem 4.75rem 1.1rem 1.1rem;
   background-color: var(--surface);
-  background-image: var(--grain);
-  background-size: 128px 128px;
+  background-image:
+    radial-gradient(ellipse 85% 55% at 50% 0%, color-mix(in srgb, var(--mauve) 11%, transparent), transparent 72%),
+    var(--grain);
+  background-size: 100% 100%, 128px 128px;
   padding: 1.75rem 1.25rem 1.25rem;
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--text) 14%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--text) 16%, transparent),
     inset 0 -10px 20px -12px color-mix(in srgb, var(--bg) 90%, transparent),
-    0 8px 24px -12px color-mix(in srgb, var(--bg) 85%, transparent);
+    0 12px 28px -12px color-mix(in srgb, var(--bg) 88%, transparent);
 }
 /* Optional deco double rule just inside the stone's edge. */
 .arch-rule::before {

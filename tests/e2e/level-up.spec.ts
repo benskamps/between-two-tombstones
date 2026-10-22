@@ -81,4 +81,18 @@ test.describe("Spooky & Experience Level-Up (L2.9, L4.5, L5.3)", () => {
     await expect(page.getByTestId("badge-civil-war")).toHaveAttribute("data-earned", "true");
     await expect(page.getByTestId("passport-cemeteries")).toContainText("Sleepy Hollow Cemetery");
   });
+
+  test("Home page (/) hooks visitors from the couch with an interactive headstone switcher and 6-tool field kit", async ({ page }) => {
+    await page.goto("/");
+    const showcase = page.getByTestId("home-showcase");
+    await expect(showcase).toBeVisible();
+    await expect(showcase.getByRole("heading", { name: "Read a stone right now" })).toBeVisible();
+    await expect(showcase.getByRole("heading", { level: 3, name: "Washington Irving" })).toBeVisible();
+
+    await showcase.getByRole("tab", { name: "Margaret Mitchell" }).click();
+    await expect(showcase.getByRole("heading", { level: 3, name: "Margaret Mitchell" })).toBeVisible();
+    await expect(showcase).toContainText("Gone with the Wind");
+
+    await expect(showcase.getByRole("heading", { name: "Six reasons to walk the stones" })).toBeVisible();
+  });
 });
