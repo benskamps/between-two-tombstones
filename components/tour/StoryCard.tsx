@@ -3,8 +3,8 @@
 import type { ReactNode } from "react";
 import type { Pin } from "@/components/offline/store";
 import { ShareButton } from "@/components/share/ShareButton";
+import { BingoGlyph } from "@/components/games/BingoGlyph";
 import { SymbolPair } from "@/components/ui/Motifs";
-import { Candle, Fern, HourglassSprout, Lily, Moth, Poppy, RingedMoon } from "@/components/ui/symbols";
 import { needsRespectfulStyle } from "@/lib/respect";
 import { ageAtDeath, formatAge, formatWikiDate, parseWikiDate, type WikiDate } from "@/lib/tour/dates";
 import { findAGraveUrl } from "@/lib/tour/links";
@@ -28,13 +28,26 @@ export function shortDate(d: WikiDate | null): string | null {
   return formatWikiDate(d);
 }
 
-/** The death sign and the life sign at the apex of a carved card, picked by why the grave is on the tour. */
-function apexPair(tagIds: string[]): { death: ReactNode; life: ReactNode } {
-  const g = "h-6 w-6";
-  if (tagIds.includes("century-gone")) return { death: <HourglassSprout className={g} />, life: <Fern className={g} /> };
-  if (tagIds.includes("died-young")) return { death: <Candle className={g} />, life: <Poppy className={g} /> };
-  if (tagIds.includes("long-life")) return { death: <Moth className={g} />, life: <Lily className={g} /> };
-  return { death: <RingedMoon className={g} />, life: <Lily className={g} /> };
+/**
+ * The carved symbols at the apex of a carved card: a death sign and a life
+ * sign, real epitaph art picked by why the grave is on the tour (the bingo
+ * set's drawings, with their traditional meanings in lib/games/symbols.ts).
+ * Never a tool's sign (components/ui/tools.tsx): those stand for tools.
+ */
+export function apexSymbols(tagIds: readonly string[]): { death: string; life: string } {
+  // A life cut short; gone before full bloom.
+  if (tagIds.includes("died-young")) return { death: "broken-column", life: "rosebud" };
+  // The harvest of old age; strength, endurance and a long life.
+  if (tagIds.includes("long-life")) return { death: "wheat-sheaf", life: "oak-leaves" };
+  // The soul's departure; undying memory.
+  if (tagIds.includes("century-gone")) return { death: "draped-urn", life: "ivy" };
+  // Mourning; honor and distinction.
+  return { death: "weeping-willow", life: "laurel-wreath" };
+}
+
+function apexPair(tagIds: readonly string[]): { death: ReactNode; life: ReactNode } {
+  const { death, life } = apexSymbols(tagIds);
+  return { death: <BingoGlyph id={death} className="h-6 w-6" />, life: <BingoGlyph id={life} className="h-6 w-6" /> };
 }
 
 /** A lead longer than this may run past the four lines the card shows, so it gets a "Read more". */
