@@ -11,13 +11,17 @@ const LIMIT = 80;
 const split = (v) => (v ? v.split("|").filter(Boolean) : []);
 const id = (uri) => uri?.split("/").pop();
 
+// The same facts and class check as cemeteryFactsQuery in lib/data/wikidata.ts:
+// labels in English, else "mul"; only a cemetery (any subclass of Q39614).
 const [cem] = await sparql(`
-SELECT ?c ?cLabel ?cDescription ?coord ?fagc ?locLabel ?enwiki WHERE {
+SELECT ?c ?cLabel ?cDescription ?coord ?fagc ?locLabel ?enwiki ?isCemetery WHERE {
   VALUES ?c { wd:${qid} }
+  BIND(EXISTS { ?c wdt:P31/wdt:P279* wd:Q39614 } AS ?isCemetery)
   OPTIONAL { ?c wdt:P625 ?coord } OPTIONAL { ?c wdt:P2025 ?fagc } OPTIONAL { ?c wdt:P131 ?loc }
   OPTIONAL { ?enwiki schema:about ?c ; schema:isPartOf <https://en.wikipedia.org/> }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en,mul". }
 } LIMIT 1`);
+if (cem?.isCemetery !== "true") throw new Error(`${qid} isn't a cemetery on Wikidata (not P31/P279* Q39614); no snapshot written.`);
 
 const rows = await burials(qid, LIMIT);
 console.error(`${rows.length} burials from Wikidata`);

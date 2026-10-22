@@ -29,6 +29,24 @@ describe("profilesQuery", () => {
   it("refuses non-numbers", () => {
     expect(() => profilesQuery(Number.NaN, 0, 25)).toThrow();
   });
+
+  it('reads every label in English, else "mul" (K14), keeping the output variables', () => {
+    for (const [item, out] of [
+      ["?c", "?label"],
+      ["?placeItem", "?placeLabel"],
+      ["?heritageItem", "?heritageLabel"],
+      ["?type", "?typeLabel"],
+    ]) {
+      expect(q).toContain(`OPTIONAL { ${item} rdfs:label ${out}En FILTER(LANG(${out}En) = "en") }`);
+      expect(q).toContain(`OPTIONAL { ${item} rdfs:label ${out}Mul FILTER(LANG(${out}Mul) = "mul") }`);
+      expect(q).toContain(`BIND(COALESCE(${out}En, ${out}Mul) AS ${out})`);
+    }
+    for (const v of ["?name", "?places", "?heritage", "?types"]) expect(q.split("WHERE")[0]).toContain(`AS ${v})`);
+  });
+
+  it("asks only for cemeteries (the Q39614 tree the tour's facts check uses), so every card's /cemetery link opens", () => {
+    expect(q.match(/wdt:P31\/wdt:P279\* wd:Q39614 \./g)).toHaveLength(1);
+  });
 });
 
 describe("burialsQuery", () => {
@@ -37,6 +55,7 @@ describe("burialsQuery", () => {
     expect(q).toContain("VALUES ?c { wd:Q2008469 wd:Q360779 }");
     expect(q).toContain("?p wdt:P119 ?c ; wdt:P31 wd:Q5 ; wikibase:sitelinks ?sitelinks");
     expect(q).not.toContain("bogus");
+    expect(q).toContain('wikibase:language "en,mul"');
   });
 
   it("refuses an empty list", () => {

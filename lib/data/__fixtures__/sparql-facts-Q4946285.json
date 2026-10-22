@@ -1,0 +1,63 @@
+{
+ "head": {
+  "vars": [
+   "c",
+   "cLabel",
+   "cDescription",
+   "coord",
+   "fagc",
+   "locLabel",
+   "enwiki",
+   "version",
+   "isCemetery"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4946285"
+    },
+    "version": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2558928881"
+    },
+    "isCemetery": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+     "type": "literal",
+     "value": "true"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(145.044 -37.8034)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "2323471"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Boroondara_General_Cemetery"
+    },
+    "cLabel": {
+     "xml:lang": "mul",
+     "type": "literal",
+     "value": "Boroondara General Cemetery"
+    },
+    "cDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "cemetery in Melbourne, Australia"
+    },
+    "locLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Victoria"
+    }
+   }
+  ]
+ }
+}

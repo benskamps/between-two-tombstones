@@ -63,7 +63,11 @@ export type TourCard = {
 export type RoomCard = {
   kind: "seance" | "party";
   room: string;
-  /** Null when Wikidata couldn't name it, or lists no one buried there (so it may not be a cemetery at all). */
+  /**
+   * Null when Wikidata couldn't name it, lists no one buried there, or says it
+   * isn't a cemetery (K1: the tour's loader answers not-found for a mausoleum
+   * or a person, so a forged link never names one).
+   */
   cemetery: CemeteryLabel | null;
 };
 
@@ -154,7 +158,7 @@ export function tourCard(cemetery: Cemetery, people: Person[], now: Date): TourC
   return { kind: "tour", cemetery: cemeteryLabel(cemetery), people: people.length, top };
 }
 
-/** A séance or party card: the room code and, when Wikidata lists burials there, the cemetery. */
+/** A séance or party card: the room code and, when it is a cemetery with burials listed, the cemetery. */
 export function roomCard(kind: "seance" | "party", room: string, cemetery: Cemetery | null, people: Person[]): RoomCard {
   return { kind, room, cemetery: cemetery && people.length > 0 ? cemeteryLabel(cemetery) : null };
 }

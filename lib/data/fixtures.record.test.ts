@@ -37,8 +37,15 @@ describe.skipIf(!record)("record live fixtures", () => {
   afterAll(() => setTransportForTests(null));
 
   it("records missing Wikidata + Wikipedia responses", async () => {
+    // Recorded 10/21 with the English-only query (before K14): it keeps the two bare-QID rows the F20 tests
+    // repair. Re-recorded today, those rows come back named from "mul" (see the .en-mul.excerpt fixture,
+    // two rows cut from a live answer on 10/22) and the F20 tests' input changes.
     await rawSparql("sparql-burials-Q2008469", burialsQuery("Q2008469"));
     await rawSparql("sparql-facts-Q2008469", cemeteryFactsQuery("Q2008469"));
+    // K1: a mausoleum with one burial, not a cemetery (Mausoleum of Mao Zedong).
+    await rawSparql("sparql-facts-Q1154819", cemeteryFactsQuery("Q1154819"));
+    // K14: a cemetery whose only label is "mul" (Boroondara General Cemetery, Melbourne).
+    await rawSparql("sparql-facts-Q4946285", cemeteryFactsQuery("Q4946285"));
     await rawSparql("sparql-near-lakeview", nearQuery(47.6339, -122.3158));
     await rawSparql("sparql-search-lake-view-cemetery", searchQuery("lake view cemetery"));
     await rawSparql("sparql-search-oakland", searchQuery("oakland"));

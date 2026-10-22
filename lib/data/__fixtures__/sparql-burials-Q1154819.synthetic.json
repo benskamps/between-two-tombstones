@@ -1,0 +1,20 @@
+{
+ "note": "SYNTHETIC test fixture in WDQS JSON shape (burialsQuery's variables), written by hand: the one person with P119 = Mausoleum of Mao Zedong (Q1154819), not a cemetery. Pairs with the recorded sparql-facts-Q1154819.json (isCemetery false) to test that a mausoleum never opens or shares as a cemetery (K1, red-team P0-2). Not shown to users.",
+ "head": {
+  "vars": ["person", "personLabel", "personDescription", "birth", "birthPrecision", "death", "deathPrecision", "causes", "manners", "occupations", "image", "graveImage", "graveCoord", "personCoord", "findAGraveId", "sitelinks", "enwiki"]
+ },
+ "results": {
+  "bindings": [
+   {
+    "person": { "type": "uri", "value": "http://www.wikidata.org/entity/Q5816" },
+    "personLabel": { "xml:lang": "en", "type": "literal", "value": "Mao Zedong" },
+    "death": { "datatype": "http://www.w3.org/2001/XMLSchema#dateTime", "type": "literal", "value": "1976-09-09T00:00:00Z" },
+    "deathPrecision": { "datatype": "http://www.w3.org/2001/XMLSchema#integer", "type": "literal", "value": "11" },
+    "causes": { "type": "literal", "value": "" },
+    "manners": { "type": "literal", "value": "" },
+    "occupations": { "type": "literal", "value": "politician" },
+    "enwiki": { "type": "uri", "value": "https://en.wikipedia.org/wiki/Mao_Zedong" }
+   }
+  ]
+ }
+}

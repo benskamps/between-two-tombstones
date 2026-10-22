@@ -1,0 +1,153 @@
+{
+ "head": {
+  "vars": [
+   "person",
+   "personLabel",
+   "personDescription",
+   "birth",
+   "birthPrecision",
+   "death",
+   "deathPrecision",
+   "causes",
+   "manners",
+   "occupations",
+   "image",
+   "graveImage",
+   "graveCoord",
+   "personCoord",
+   "findAGraveId",
+   "sitelinks",
+   "enwiki"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6986296"
+    },
+    "personLabel": {
+     "xml:lang": "mul",
+     "type": "literal",
+     "value": "Nedom L. Angier"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American mayor"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1814-11-10T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1882-02-03T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "politician"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Nedom%20L.%20Angier%20%281814%E2%80%931882%29.png"
+    },
+    "findAGraveId": {
+     "type": "literal",
+     "value": "45045211"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Nedom_L._Angier"
+    }
+   },
+   {
+    "person": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6066179"
+    },
+    "personLabel": {
+     "xml:lang": "mul",
+     "type": "literal",
+     "value": "Ira O. McDaniel"
+    },
+    "personDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "American businessman"
+    },
+    "birth": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1807-01-19T00:00:00Z"
+    },
+    "birthPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "death": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "1887-08-28T00:00:00Z"
+    },
+    "deathPrecision": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "11"
+    },
+    "causes": {
+     "type": "literal",
+     "value": ""
+    },
+    "manners": {
+     "type": "literal",
+     "value": ""
+    },
+    "occupations": {
+     "type": "literal",
+     "value": "businessperson"
+    },
+    "sitelinks": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "1"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Ira_O._McDaniel"
+    },
+    "graveImage": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/IOMcD.jpg"
+    }
+   }
+  ]
+ }
+}
