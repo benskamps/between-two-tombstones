@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Atkinson_Hyperlegible, IM_Fell_English, Michroma } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import { ServiceWorkerRegistrar } from "@/components/offline/ServiceWorkerRegistrar";
+import { SiteAnalytics } from "@/components/shell/Analytics";
 import { BottomNav } from "@/components/shell/BottomNav";
 import { EARLY_SCRIPT } from "@/components/shell/earlyScript";
 import { SiteFooter } from "@/components/shell/SiteFooter";
@@ -52,7 +52,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <SiteFooter />
         <BottomNav />
-        <Analytics />
+        {/* Never the query string or hash: they can carry the visitor's position. */}
+        <SiteAnalytics />
       </body>
     </html>
   );
