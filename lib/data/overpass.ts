@@ -26,6 +26,8 @@ export type OsmCemetery = {
 };
 
 type OverpassJson = {
+  /** Set when the query failed on the server, e.g. 'runtime error: Query timed out in "query" at line 2 after 21 seconds.' */
+  remark?: string;
   elements?: {
     type: string;
     id: number;
@@ -42,6 +44,15 @@ export const overpassQuery = (lat: number, lon: number, radiusM: number) =>
 out tags center ${MAX_ELEMENTS};`;
 
 export function parseOverpass(json: OverpassJson): OsmCemetery[] {
+  // Overpass answers HTTP 200 with partial or empty elements plus a remark when
+  // the query timed out or ran out of memory. That's a failure, not "no
+  // cemeteries": throwing keeps it out of the cache (lib/data/cached.ts stores
+  // only what returns) and lets the next mirror try.
+  const remark = typeof json?.remark === "string" ? json.remark : "";
+  if (/runtime error|timed out|out of memory/i.test(remark)) {
+    const kind = /timed out|timeout/i.test(remark) ? "timeout" : "bad-response";
+    throw new DataSourceError("OpenStreetMap", kind, `Overpass answered with an error: ${remark.slice(0, 160)}`);
+  }
   if (!Array.isArray(json?.elements)) {
     throw new DataSourceError("OpenStreetMap", "bad-response", "Overpass answered without elements.");
   }

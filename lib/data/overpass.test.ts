@@ -62,6 +62,47 @@ describe("Overpass", () => {
     for (const m of OVERPASS_MIRRORS) expect(err.detail).toContain(new URL(m).host);
   });
 
+  it("treats a 200 with a timeout remark as a failure, not an empty list (never cached)", () => {
+    const timedOut = { elements: [], remark: 'runtime error: Query timed out in "query" at line 2 after 21 seconds.' };
+    const err = (() => {
+      try {
+        parseOverpass(timedOut);
+      } catch (e) {
+        return e;
+      }
+    })();
+    expect(err).toBeInstanceOf(DataSourceError);
+    expect(err).toMatchObject({ source: "OpenStreetMap", kind: "timeout" });
+    // Partial results with the remark are not data either.
+    expect(() => parseOverpass({ ...osmJson, remark: timedOut.remark })).toThrow(DataSourceError);
+    expect(() => parseOverpass({ elements: [], remark: "runtime error: Query run out of memory using about 2048 MB of RAM." })).toThrow(
+      expect.objectContaining({ kind: "bad-response" }),
+    );
+    // No remark: an empty list really is empty.
+    expect(parseOverpass({ elements: [] })).toEqual([]);
+  });
+
+  it("moves on to the next mirror when one times out with a 200, and fails when all do", async () => {
+    const remark = { elements: [], remark: 'runtime error: Query timed out in "query" at line 2 after 4 seconds.' };
+    const responses = [remark, osmJson];
+    setTransportForTests({
+      fetch: vi.fn(async () => new Response(JSON.stringify(responses.shift()), { status: 200 })) as unknown as typeof fetch,
+      sleep: async () => {},
+    });
+    const r = await fetchOsmCemeteries(center.lat, center.lon, 10);
+    expect(r.mirror).toBe("overpass.kumi.systems");
+    expect(r.cemeteries.length).toBe(5);
+
+    setTransportForTests({
+      fetch: vi.fn(async () => new Response(JSON.stringify(remark), { status: 200 })) as unknown as typeof fetch,
+      sleep: async () => {},
+    });
+    const err = await fetchOsmCemeteries(center.lat, center.lon, 10).catch((e) => e);
+    expect(err).toBeInstanceOf(DataSourceError);
+    expect(err.source).toBe("OpenStreetMap");
+    for (const m of OVERPASS_MIRRORS) expect(err.detail).toContain(`${new URL(m).host} (timeout)`);
+  });
+
   it("merges by QID, then by name nearby; keeps named OSM-only cemeteries separately", () => {
     const wikidata = parseNearRows(flattenBindings(nearLakeViewJson));
     const merged = mergeOsm(wikidata, parseOverpass(osmJson), center, (c) => parsePoint(c.coord));
