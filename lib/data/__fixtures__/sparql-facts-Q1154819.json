@@ -1,0 +1,63 @@
+{
+ "head": {
+  "vars": [
+   "c",
+   "cLabel",
+   "cDescription",
+   "coord",
+   "fagc",
+   "locLabel",
+   "enwiki",
+   "version",
+   "isCemetery"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "c": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1154819"
+    },
+    "version": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+     "type": "literal",
+     "value": "2545677669"
+    },
+    "isCemetery": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+     "type": "literal",
+     "value": "false"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(116.391580555 39.901025)"
+    },
+    "fagc": {
+     "type": "literal",
+     "value": "639601"
+    },
+    "enwiki": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Chairman_Mao_Memorial_Hall"
+    },
+    "cLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Mausoleum of Mao Zedong"
+    },
+    "cDescription": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "final resting place of Mao Zedong, former Chairman of the Chinese Communist Party, in Beijing, China"
+    },
+    "locLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Donghuamen Subdistrict"
+    }
+   }
+  ]
+ }
+}

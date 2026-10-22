@@ -3,7 +3,7 @@
 // scripts/snapshot.mjs and scripts/hour0-probe.mjs (verified live on 10/20).
 // Everything here is uncached; lib/data/cached.ts wraps it in 'use cache: remote'.
 
-import { personName } from "@/lib/tour/text";
+import { isQidName, personName } from "@/lib/tour/text";
 import type { Cemetery, Person } from "@/lib/types";
 import { DataSourceError } from "./errors";
 import type { CemeterySearchResult, NearbyCemetery } from "./types";
@@ -46,6 +46,30 @@ export async function sparql(query: string, opts: SparqlOptions = {}): Promise<S
   return flattenBindings(json);
 }
 
+/** The class every cemetery query filters on: cemetery (Q39614) and its subclasses (churchyard, war cemetery…). */
+export const CEMETERY_CLASS = "Q39614";
+
+/** The label service's languages: English, then "mul". */
+export const LABEL_LANGUAGES = "en,mul";
+
+/**
+ * Binds `out` to `item`'s English label, or else its "mul" label; unbound
+ * when it has neither. Wikidata now keeps many labels only in "mul", the
+ * language-neutral code (Douglas Adams, Norra begravningsplatsen, Boroondara
+ * General Cemetery), so an English-only read left those as bare QIDs (K14).
+ * Unlike the label service, it never stands a QID in for a missing label, so
+ * a multi-valued field (occupations) never lists one.
+ */
+export function labelEnMul(item: string, out: string): string {
+  const en = `${out}en`;
+  const mul = `${out}mul`;
+  return [
+    `OPTIONAL { ${item} rdfs:label ${en} FILTER(LANG(${en}) = "en") }`,
+    `OPTIONAL { ${item} rdfs:label ${mul} FILTER(LANG(${mul}) = "mul") }`,
+    `BIND(COALESCE(${en}, ${mul}) AS ${out})`,
+  ].join("\n    ");
+}
+
 /** Escape a user string for a SPARQL double-quoted literal. */
 export function sparqlString(s: string): string {
   return `"${s.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\r?\n|\r/g, " ")}"`;
@@ -67,6 +91,11 @@ export function pickPlace(places: string | undefined): string | null {
   return [...list].sort((a, b) => Number(AREA_WORDS.test(a)) - Number(AREA_WORDS.test(b)) || a.length - b.length || a.localeCompare(b))[0];
 }
 
+/** A cemetery's name: its label, else its English Wikipedia title, else (nothing better) its QID. */
+function placeName(label: string | undefined, enwiki: string | undefined, qid: string): string {
+  return personName(label, enwiki ? titleFromUrl(enwiki) : null) ?? qid;
+}
+
 // ---------------------------------------------------------------- burials
 
 /**
@@ -79,6 +108,7 @@ export function pickPlace(places: string | undefined): string | null {
  * other 1-sitelink people at the end of Oakland's 80. Numbers, not the IRI
  * string, which would favour "Q1…" items such as a newer "Grave of Bobby Jones".
  * scripts/burials.mjs has the same ORDER BY.
+ * Names, causes, manners and occupations read English, then "mul" (K14).
  */
 export const burialsQuery = (qid: string, limit = BURIALS_LIMIT) => `
 SELECT ?person ?personLabel ?personDescription
@@ -107,15 +137,18 @@ WHERE {
   OPTIONAL { ?burial pq:P625 ?graveCoord_ }
   OPTIONAL { ?person p:P569 ?bst . ?bst a wikibase:BestRank ; psv:P569 [ wikibase:timeValue ?birth_ ; wikibase:timePrecision ?birthPrec_ ] }
   OPTIONAL { ?person p:P570 ?dst . ?dst a wikibase:BestRank ; psv:P570 [ wikibase:timeValue ?death_ ; wikibase:timePrecision ?deathPrec_ ] }
-  OPTIONAL { ?person wdt:P509 ?cause . ?cause rdfs:label ?causeLabel_ FILTER(LANG(?causeLabel_) = "en") }
-  OPTIONAL { ?person wdt:P1196 ?manner . ?manner rdfs:label ?mannerLabel_ FILTER(LANG(?mannerLabel_) = "en") }
-  OPTIONAL { ?person wdt:P106 ?occ . ?occ rdfs:label ?occLabel_ FILTER(LANG(?occLabel_) = "en") }
+  OPTIONAL { ?person wdt:P509 ?cause .
+    ${labelEnMul("?cause", "?causeLabel_")} }
+  OPTIONAL { ?person wdt:P1196 ?manner .
+    ${labelEnMul("?manner", "?mannerLabel_")} }
+  OPTIONAL { ?person wdt:P106 ?occ .
+    ${labelEnMul("?occ", "?occLabel_")} }
   OPTIONAL { ?person wdt:P18 ?image_ }
   OPTIONAL { ?person wdt:P1442 ?graveImage_ }
   OPTIONAL { ?person wdt:P625 ?personCoord_ }
   OPTIONAL { ?person wdt:P535 ?fag_ }
   OPTIONAL { ?enwiki_ schema:about ?person ; schema:isPartOf <https://en.wikipedia.org/> }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${LABEL_LANGUAGES}". }
 }
 GROUP BY ?person ?personLabel ?personDescription
 ORDER BY DESC(?sitelinks) xsd:integer(STRAFTER(STR(?person), "/entity/Q"))
@@ -125,9 +158,9 @@ LIMIT ${limit}`;
 export type PersonRow = { person: Omit<Person, "wikipedia">; enwiki: string | null };
 
 /**
- * One person per row. A row whose label is only its QID (no English label)
- * takes its name from the English Wikipedia title; with no article either, it
- * is dropped (F20).
+ * One person per row. A row whose label is only its QID (no English or "mul"
+ * label) takes its name from the English Wikipedia title; with no article
+ * either, it is dropped (F20).
  */
 export function parseBurialRows(rows: SparqlRow[]): PersonRow[] {
   return rows.flatMap((r) => {
@@ -176,24 +209,38 @@ export async function fetchBurials(qid: string): Promise<PersonRow[]> {
 
 // ---------------------------------------------------------------- cemetery facts
 
+/**
+ * The cemetery's own facts, and whether it is a cemetery at all: ?isCemetery
+ * is the class check search and /near filter on (any subclass of Q39614).
+ * Without it any item opened as a cemetery: /cemetery/Q42 was a tour page for
+ * Douglas Adams, and a séance link named "Mausoleum of Mao Zedong" (K1).
+ */
 export const cemeteryFactsQuery = (qid: string) => `
-SELECT ?c ?cLabel ?cDescription ?coord ?fagc ?locLabel ?enwiki ?version WHERE {
+SELECT ?c ?cLabel ?cDescription ?coord ?fagc ?locLabel ?enwiki ?version ?isCemetery WHERE {
   VALUES ?c { wd:${qid} }
   OPTIONAL { ?c schema:version ?version }
+  BIND(EXISTS { ?c wdt:P31/wdt:P279* wd:${CEMETERY_CLASS} } AS ?isCemetery)
   OPTIONAL { ?c wdt:P625 ?coord } OPTIONAL { ?c wdt:P2025 ?fagc } OPTIONAL { ?c wdt:P131 ?loc }
   OPTIONAL { ?enwiki schema:about ?c ; schema:isPartOf <https://en.wikipedia.org/> }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${LABEL_LANGUAGES}". }
 } LIMIT 1`;
 
-/** Returns null when the item doesn't exist on Wikidata. */
+/**
+ * Null when the item doesn't exist on Wikidata, or isn't a cemetery (K1). A
+ * row without the class flag counts as not a cemetery: the check fails closed.
+ * The label service stands the QID in for a missing label, so a bare-QID name
+ * takes the English Wikipedia title (as people do), and a bare-QID place is
+ * left out.
+ */
 export function parseCemeteryFacts(qid: string, rows: SparqlRow[]): Cemetery | null {
   const r = rows[0];
   if (!r || !r.version) return null;
+  if (r.isCemetery !== "true") return null;
   return {
     qid,
-    name: r.cLabel ?? qid,
+    name: placeName(r.cLabel, r.enwiki, qid),
     description: r.cDescription ?? null,
-    locatedIn: r.locLabel ?? null,
+    locatedIn: isQidName(r.locLabel) ? null : r.locLabel!,
     coord: r.coord ?? null,
     findAGraveCemeteryId: r.fagc ?? null,
     enwiki: r.enwiki ?? null,
@@ -221,10 +268,11 @@ WHERE {
     bd:serviceParam wikibase:center "Point(${lon} ${lat})"^^geo:wktLiteral ;
       wikibase:radius "${radiusKm}" ; wikibase:distance ?dist_ .
   }
-  ?c wdt:P31/wdt:P279* wd:Q39614 .
-  OPTIONAL { ?c rdfs:label ?label_ FILTER(LANG(?label_) = "en") }
+  ?c wdt:P31/wdt:P279* wd:${CEMETERY_CLASS} .
+  ${labelEnMul("?c", "?label_")}
   OPTIONAL { ?c schema:description ?desc_ FILTER(LANG(?desc_) = "en") }
-  OPTIONAL { ?c wdt:P131 ?place_ . ?place_ rdfs:label ?placeLabel_ FILTER(LANG(?placeLabel_) = "en") }
+  OPTIONAL { ?c wdt:P131 ?place_ .
+    ${labelEnMul("?place_", "?placeLabel_")} }
   OPTIONAL { ?c wdt:P2025 ?fagc_ }
   OPTIONAL { ?enwiki_ schema:about ?c ; schema:isPartOf <https://en.wikipedia.org/> }
   OPTIONAL { ?buried wdt:P119 ?c }
@@ -242,7 +290,7 @@ export function parseNearRows(rows: SparqlRow[]): NearbyCemetery[] {
     seen.add(qid);
     out.push({
       qid,
-      name: r.label ?? qid,
+      name: placeName(r.label, r.enwiki, qid),
       description: r.description ?? null,
       locatedIn: pickPlace(r.places),
       coord: r.coord ?? null,
@@ -274,13 +322,15 @@ WHERE {
     ?item wikibase:apiOutputItem mwapi:item .
     ?ordinal_ wikibase:apiOrdinal true .
   }
-  ?item wdt:P31/wdt:P279* wd:Q39614 .
-  OPTIONAL { ?item rdfs:label ?label_ FILTER(LANG(?label_) = "en") }
+  ?item wdt:P31/wdt:P279* wd:${CEMETERY_CLASS} .
+  ${labelEnMul("?item", "?label_")}
   OPTIONAL { ?item schema:description ?desc_ FILTER(LANG(?desc_) = "en") }
-  OPTIONAL { ?item wdt:P131 ?place_ . ?place_ rdfs:label ?placeLabel_ FILTER(LANG(?placeLabel_) = "en") }
+  OPTIONAL { ?item wdt:P131 ?place_ .
+    ${labelEnMul("?place_", "?placeLabel_")} }
   OPTIONAL { ?item wdt:P131+ ?state_ . ?state_ wdt:P31/wdt:P279* wd:Q10864048 .
-    ?state_ rdfs:label ?stateLabel_ FILTER(LANG(?stateLabel_) = "en") }
-  OPTIONAL { ?item wdt:P17 ?country_ . ?country_ rdfs:label ?countryLabel_ FILTER(LANG(?countryLabel_) = "en") }
+    ${labelEnMul("?state_", "?stateLabel_")} }
+  OPTIONAL { ?item wdt:P17 ?country_ .
+    ${labelEnMul("?country_", "?countryLabel_")} }
   OPTIONAL { ?item wdt:P625 ?coord_ }
   OPTIONAL { ?item wdt:P2025 ?fagc_ }
   OPTIONAL { ?enwiki_ schema:about ?item ; schema:isPartOf <https://en.wikipedia.org/> }
@@ -301,7 +351,7 @@ export function parseSearchRows(rows: SparqlRow[]): CemeterySearchResult[] {
     const region = [r.state, r.country].find((x) => x && x !== locatedIn) ?? null;
     out.push({
       qid,
-      name: r.label ?? qid,
+      name: placeName(r.label, r.enwiki, qid),
       description: r.description ?? null,
       locatedIn,
       region,
