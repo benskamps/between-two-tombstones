@@ -5,6 +5,7 @@ import { cemeteryQuery, shouldAutoSetHaunt, type Haunt, NEXT_TOOLS } from "@/lib
 import { readNext } from "@/lib/haunt/next";
 import { setHaunt } from "@/lib/haunt/store";
 import { useHaunt } from "@/lib/haunt/useHaunt";
+import { urlCoord } from "@/lib/data/near";
 
 const noSubscribe = () => () => {};
 const DECIMAL = /^-?\d{1,3}(\.\d+)?$/;
@@ -47,8 +48,11 @@ export function useHub(cemetery: { qid: string; name: string; locatedIn: string 
   const isHaunt = cemetery !== null && fresh?.qid === qid;
   const lat = params.get("lat") ?? "";
   const lon = params.get("lon") ?? "";
+  // Three decimals, like every link with a position in it (an older hub link may carry more).
   const notHereHref =
-    via === "here" && DECIMAL.test(lat) && DECIMAL.test(lon) ? `/near?${new URLSearchParams({ lat, lon, list: "1" })}` : null;
+    via === "here" && DECIMAL.test(lat) && DECIMAL.test(lon)
+      ? `/near?${new URLSearchParams({ lat: urlCoord(Number(lat)), lon: urlCoord(Number(lon)), list: "1" })}`
+      : null;
   const continueTo =
     isHaunt && next && cemetery ? { href: `${next}?${cemeteryQuery({ qid, name, place })}`, label: `Continue to ${NEXT_TOOLS[next]}` } : null;
 

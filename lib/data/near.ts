@@ -146,6 +146,15 @@ export function peopleText(n: number): string {
   return `${n} ${n === 1 ? "person" : "people"} listed on Wikidata`;
 }
 
+/**
+ * A coordinate as it goes into a URL: three decimals (about 110 m). People share
+ * hub links, so they never carry the phone's exact fix; the near query uses
+ * three decimals too (lib/data/load.ts roundCoord), so nothing is lost.
+ */
+export function urlCoord(x: number): string {
+  return String(Math.round(x * 1000) / 1000);
+}
+
 /** A cemetery picked from the near list. */
 /** `n` = people listed, so a slow first load can say how big the cemetery is (lib/data/big.ts). */
 function tourHref(qid: string, params: Record<string, string>, burials?: number): string {
@@ -160,5 +169,5 @@ export function nearHref(qid: string, burials?: number): string {
 
 /** Auto-open: the hub knows the visitor is standing here, and where to send "Not here?". */
 export function hereHref(qid: string, lat: number, lon: number, burials?: number): string {
-  return tourHref(qid, { via: "here", lat: String(lat), lon: String(lon) }, burials);
+  return tourHref(qid, { via: "here", lat: urlCoord(lat), lon: urlCoord(lon) }, burials);
 }

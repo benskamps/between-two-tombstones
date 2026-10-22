@@ -11,7 +11,7 @@ import { PageHeader } from "@/components/ui/Motifs";
 import { Sprout } from "@/components/ui/symbols";
 import { asDataSourceError } from "@/lib/data/errors";
 import { combineNear, loadCemetery, loadNearOsm, loadNearWikidata, osmWithin } from "@/lib/data/load";
-import { accuracyText, autoOpenTarget, bestNearby, groupNear, hereHref, isApproximate, parseAccuracy, parseFlag, warmTargets } from "@/lib/data/near";
+import { accuracyText, autoOpenTarget, bestNearby, groupNear, hereHref, isApproximate, parseAccuracy, parseFlag, urlCoord, warmTargets } from "@/lib/data/near";
 import type { NearbyCemetery } from "@/lib/data/types";
 import { parseLatLon } from "@/lib/data/validate";
 import { BestNearby, NearFold, NearLinkList } from "./NearList";
@@ -64,7 +64,7 @@ async function NearResults({ searchParams }: Pick<PageProps<"/near">, "searchPar
   } catch (e) {
     unstable_rethrow(e);
     const err = asDataSourceError(e, "Wikidata");
-    return <SourceFailure source={err.source} message={err.userMessage} retryHref={`/near?lat=${at.lat}&lon=${at.lon}`} />;
+    return <SourceFailure source={err.source} message={err.userMessage} retryHref={`/near?lat=${urlCoord(at.lat)}&lon=${urlCoord(at.lon)}`} />;
   }
 
   // "I'm here. Haunt me.": with a good fix (±300 m or better) and a cemetery

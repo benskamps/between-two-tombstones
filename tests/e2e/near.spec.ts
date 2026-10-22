@@ -58,7 +58,8 @@ test.describe("/near", () => {
 
   test("I'm here with a good fix: opens the tour straight away", async ({ page }) => {
     await page.goto(`/near?${OAKLAND_POINT}&acc=20`);
-    await page.waitForURL(/\/cemetery\/Q2008469\?via=here&lat=33\.7489&lon=-84\.3718&n=\d+$/, { timeout: 25_000 });
+    // Three decimals in the hub's URL (P0-1): people share hub links, so they never carry the exact fix.
+    await page.waitForURL(/\/cemetery\/Q2008469\?via=here&lat=33\.749&lon=-84\.372&n=\d+$/, { timeout: 25_000 });
     await expect(page.getByRole("heading", { level: 1, name: "Oakland Cemetery" })).toBeVisible({ timeout: 25_000 });
     await expect(page.getByTestId("story-card")).toHaveCount(12, { timeout: 25_000 });
   });

@@ -18,8 +18,10 @@ import {
   parseFlag,
   peopleText,
   splitNear,
+  urlCoord,
   warmTargets,
 } from "./near";
+import { roundCoord } from "./load";
 import type { NearbyCemetery } from "./types";
 import { flattenBindings, parseNearRows } from "./wikidata";
 
@@ -201,11 +203,21 @@ describe("URL params and text", () => {
 
   it("builds the contract URLs", () => {
     expect(nearHref("Q2008469")).toBe("/cemetery/Q2008469?via=near");
-    expect(hereHref("Q2008469", 33.7489, -84.3718)).toBe("/cemetery/Q2008469?via=here&lat=33.7489&lon=-84.3718");
+    // Three decimals (P0-1): a hub link people share never carries the exact fix.
+    expect(hereHref("Q2008469", 33.7489, -84.3718)).toBe("/cemetery/Q2008469?via=here&lat=33.749&lon=-84.372");
     // With the people count, so a slow first load can say how big the cemetery is.
     expect(nearHref("Q216344", 4359)).toBe("/cemetery/Q216344?via=near&n=4359");
-    expect(hereHref("Q2008469", 33.7489, -84.3718, 115)).toBe("/cemetery/Q2008469?via=here&lat=33.7489&lon=-84.3718&n=115");
+    expect(hereHref("Q2008469", 33.7489, -84.3718, 115)).toBe("/cemetery/Q2008469?via=here&lat=33.749&lon=-84.372&n=115");
     expect(nearHref("Q1", 0)).toBe("/cemetery/Q1?via=near");
+  });
+
+  it("puts coordinates into URLs at three decimals, the same point the near query already uses (P0-1)", () => {
+    expect(urlCoord(33.748712)).toBe("33.749");
+    expect(urlCoord(-84.371349)).toBe("-84.371");
+    expect(urlCoord(32.8)).toBe("32.8");
+    // The near query rounds to three decimals before asking Wikidata, so a three-decimal URL
+    // gives the same list, the same distances, and so the same pin and auto-open as the exact fix.
+    for (const x of [33.748712, -84.371349, 32.80449, -79.94701, 39.99912, -75.18849]) expect(roundCoord(Number(urlCoord(x)))).toBe(roundCoord(x));
   });
 
   it("formats distance and people like the other lists", () => {
