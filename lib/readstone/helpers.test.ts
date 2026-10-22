@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { clientIp, newDeviceCookie, readDeviceId } from "./device";
 import { detectImageType, imageSize } from "./image";
-import { DailyBudget, DAY, estimateCostUsd, LruCache, MINUTE, SlidingWindowLimiter, whenAgain } from "./limits";
+import { billedCostUsd, DailyBudget, DAY, estimateCostUsd, LruCache, MINUTE, SlidingWindowLimiter, whenAgain } from "./limits";
 import { checkReading, implausibleDate, matchKey, normalizeLegibility } from "./postcheck";
 import { testGif, testJpeg, testPng, testWebpVp8, testWebpVp8l, testWebpVp8x } from "./test-images";
 import type { ModelReading } from "./types";
@@ -114,6 +114,36 @@ describe("limits", () => {
     release();
     release();
     expect(budget.isOver(0.5, Date.UTC(2026, 9, 21, 1))).toBe(false);
+  });
+
+  it("holds a read's worst case only while it fits under the cap, then settles to the real cost", () => {
+    const budget = new DailyBudget();
+    const noon = Date.UTC(2026, 9, 20, 12);
+    const holds = [1, 2, 3, 4].map(() => budget.tryReserve(0.3, 1, noon));
+    expect(holds.map((h) => h !== null)).toEqual([true, true, true, false]); // 3 × 0.3 fits under 1; a 4th doesn't
+    expect(budget.committed(noon)).toBeCloseTo(0.9, 10);
+    holds[0]!.settle(0.02, noon); // cost far less than its worst case
+    holds[0]!.settle(0.02, noon); // settling twice counts once
+    expect(budget.committed(noon)).toBeCloseTo(0.62, 10);
+    holds[1]!.release();
+    holds[1]!.release();
+    expect(budget.committed(noon)).toBeCloseTo(0.32, 10);
+    expect(budget.tryReserve(0.3, 1, noon)).not.toBeNull();
+    expect(budget.tryReserve(0.3, 1, noon)).not.toBeNull();
+    expect(budget.tryReserve(0.3, 1, noon)).toBeNull();
+    expect(budget.committed(noon)).toBeLessThanOrEqual(1);
+  });
+
+  it("bills a server-side fallback's declined attempt too", () => {
+    const top = { input_tokens: 5000, output_tokens: 1500 };
+    expect(billedCostUsd(top)).toBeCloseTo(0.025, 10);
+    const iterations = [
+      { type: "message", input_tokens: 5000, output_tokens: 800 },
+      { type: "fallback_message", input_tokens: 5000, output_tokens: 1500 },
+    ];
+    expect(billedCostUsd({ ...top, iterations })).toBeCloseTo(0.043, 10);
+    // A single attempt listed once is not counted twice.
+    expect(billedCostUsd({ ...top, iterations: [{ type: "message", ...top }] })).toBeCloseTo(0.025, 10);
   });
 
   it("says when to try again in plain words", () => {

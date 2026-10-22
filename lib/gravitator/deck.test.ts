@@ -128,6 +128,17 @@ describe("buildDeck", () => {
     expect(deck.cards.every((c) => c.bio === null)).toBe(true);
   });
 
+  it("adds the Wikipedia note when Wikipedia answers 200 with an error body (so the deck is kept for minutes)", async () => {
+    const { f, calls } = fetcher({
+      extracts: async () => ({ error: { code: "ratelimited", info: "You've exceeded your rate limit." } }) as ExtractsJson,
+    });
+    const deck = await buildDeck(ATLANTA, 25, f, NOW);
+    expect(deck.notes).toEqual([{ source: "Wikipedia", message: NOTE_WIKIPEDIA }]);
+    expect(calls.extracts).toHaveLength(1); // stops asking after the refusal
+    expect(deck.cards.length).toBeGreaterThan(0);
+    expect(deck.cards.every((c) => c.bio === null)).toBe(true);
+  });
+
   it("asks Wikipedia in batches of 20, at most 3 batches", async () => {
     const many = {
       results: {

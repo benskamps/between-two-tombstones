@@ -71,6 +71,7 @@ export type StonePerson = StoneReading["people"][number];
 export type ReadStoneSuccess = { reading: StoneReading; cached: boolean };
 
 export type ReadStoneErrorCode =
+  | "cross_site" // 403: another website's page sent the request
   | "no_key" // 503: ANTHROPIC_API_KEY is not set
   | "bad_key" // 503: Anthropic rejected the key
   | "daily_cap" // 503: CLAUDE_DAILY_USD_CAP reached for today (UTC)

@@ -5,6 +5,7 @@ import {
   checkPublic,
   commonsImage,
   compareProfiles,
+  ExtractsError,
   isPublicCemetery,
   parseBurials,
   parseEstablished,
@@ -248,6 +249,16 @@ describe("Wikipedia intros", () => {
     });
     expect(out.get("Westview Cemetery")!.url).toBe("https://en.wikipedia.org/wiki/Westview_Cemetery_(Atlanta)");
     expect(out.has("Nowhere Cemetery")).toBe(false);
+  });
+
+  it("treats a 200 with an error body, or no query, as a failure rather than no bios", () => {
+    expect(() => parseExtracts({ error: { code: "ratelimited", info: "You've exceeded your rate limit." } }, ["Oakland Cemetery (Atlanta)"])).toThrow(
+      ExtractsError,
+    );
+    expect(() => parseExtracts({ error: { code: "maxlag" } }, ["A"])).toThrow(/maxlag/);
+    expect(() => parseExtracts({}, ["A"])).toThrow(ExtractsError);
+    // Pages that are simply missing are still an ordinary answer.
+    expect(parseExtracts({ query: { pages: [{ title: "A", missing: true }] } }, ["A"]).size).toBe(0);
   });
 
   it("caps long intros at a sentence end", () => {
