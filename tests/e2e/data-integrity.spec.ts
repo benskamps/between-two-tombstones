@@ -57,9 +57,13 @@ test.describe("only a cemetery opens as one (K1)", () => {
 
   test("/cemetery/Q42 is no tour and no haunt: it says it can't look this up and offers the way on", async ({ page }) => {
     await page.goto(`/cemetery/${PERSON}`);
-    const alert = page.getByRole("alert");
-    // Today's copy is "No such place on Wikidata"; the app's not-found page or a "not a cemetery" title would do too.
-    await expect(alert.getByRole("heading", { level: 1 })).toHaveText(/No such place|not a cemetery|isn.t a cemetery|Page not found/i, { timeout: 30_000 });
+    // The tour page calls notFound() for an item that isn't a cemetery, so this is the app's not-found page
+    // (app/not-found.tsx: an h1 in the page header, not an alert).
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Page not found/i, { timeout: 30_000 });
+    // Next adds its own robots tag when notFound() streams in, so there can be two; every one says noindex.
+    const robots = await page.locator('meta[name="robots"]').evaluateAll((els) => els.map((el) => el.getAttribute("content")));
+    expect(robots.length).toBeGreaterThan(0);
+    for (const content of robots) expect(content).toMatch(/noindex/);
     await expect(page.getByRole("link", { name: "Find a cemetery" }).first()).toBeVisible();
     await expect(page.getByText("No tour here yet")).toHaveCount(0);
     await expect(page.getByTestId("story-card")).toHaveCount(0);
