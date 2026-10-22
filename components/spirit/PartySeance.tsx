@@ -20,12 +20,12 @@ export function PartySeance({ samples, partyCode }: { samples: SampleCemetery[];
   const [choice, setChoice] = useState(active?.qid ?? samples[0].qid);
   const [results, setResults] = useState<Record<string, LoadResult>>({});
   const extraResult = extra ? results[extra.qid] : undefined;
-  // Its name and where it came from (your haunt, or the link), never its ID (review 4, #3).
+  // Its name and where it came from (your haunt, or the link): never its ID (review 4, #3) or the link's ?name= (K2).
   const extraRow = extra
     ? extraCemeteryOption({
         loaded: extraResult?.ok ? extraResult.cemetery.name : null,
-        link: extra.fromUrl ? { name: extra.name, place: extra.place } : null,
         haunt: haunt && haunt.qid === extra.qid ? haunt : null,
+        fromLink: extra.fromUrl,
       })
     : null;
   const options = [

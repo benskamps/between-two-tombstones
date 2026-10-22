@@ -350,7 +350,7 @@ test.describe("spirit box", () => {
     await expect(page.getByRole("button", { name: "Start", exact: true })).toBeEnabled();
   });
 
-  test("a link's cemetery is named from ?name= when its burials can't load (review 4, #3)", async ({ page }) => {
+  test("a link's cemetery whose burials can't load: plainly named, never by ?name= or its ID (review 4, #3; K2)", async ({ page }) => {
     await page.route("**/api/cemeteries/Q216344/burials", (route) =>
       route.fulfill({
         status: 503,
@@ -359,13 +359,15 @@ test.describe("spirit box", () => {
       }),
     );
     await page.goto("/spirit?cemetery=Q216344&name=Arlington+National+Cemetery&place=Arlington%2C+Virginia");
-    const picked = page.getByRole("radio", { name: /Arlington National Cemetery\s*From your link · Arlington, Virginia/ });
+    // ?name= and ?place= are a stranger's text: not shown, even when they look right.
+    const picked = page.getByRole("radio", { name: /The cemetery in your link\s*From your link/ });
     await expect(picked).toBeChecked();
     await expect(
       page.getByText("Couldn't load the burials for this cemetery. Couldn't reach Wikidata. Try again in a minute, or pick a sample cemetery.", { exact: true }),
     ).toBeVisible();
     const picker = page.locator('section[aria-labelledby="spirit-pick"]');
     await expect(picker).not.toContainText("Q216344");
+    await expect(picker).not.toContainText("Arlington");
     await expect(picker).not.toContainText("Wikidata: ");
     await expect(picker).not.toContainText("..");
   });

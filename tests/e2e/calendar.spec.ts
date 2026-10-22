@@ -429,6 +429,10 @@ test.describe("Haunted Calendar page", () => {
     await page.route("**/api/calendar/Q872253*", (route) =>
       route.fulfill({ status: 200, contentType: "text/calendar; charset=utf-8", body: "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nEND:VCALENDAR\r\n" }),
     );
+    // The name comes from our burials route, never the link's ?name= (K2).
+    await page.route("**/api/cemeteries/Q872253/burials", (route) =>
+      route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ cemetery: { qid: "Q872253", name: "Lake View Cemetery", locatedIn: "Seattle" }, people: [] }) }),
+    );
     await open(page, "/calendar?cemetery=Q872253&name=Lake%20View%20Cemetery&place=Seattle");
     await expect(page.getByRole("radio", { name: /Lake View Cemetery/ })).toBeChecked();
     await expect(page.getByRole("radio", { name: /Oakland Cemetery/ })).not.toBeChecked();
