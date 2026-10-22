@@ -87,6 +87,17 @@ describe("why this grave: ranking", () => {
     expect(ranked[ranked.length - 1].person.name).toBe("No Story");
   });
 
+  it("a story still on its way ranks as if it were in, so the stops don't reorder when it lands", () => {
+    const withStories = rankPeople(oak.people, { now, cemeteryName: oak.cemetery.name });
+    // Take the stories of stops 5, 9 and 13 away, as if their Wikipedia batch hadn't answered yet.
+    const waiting = new Set([4, 8, 12].map((i) => withStories[i].person.qid));
+    const partial = oak.people.map((p) => (waiting.has(p.qid) ? { ...p, wikipedia: null } : p));
+    const order = (r: ReturnType<typeof rankPeople>) => r.map((s) => s.person.qid);
+    expect(order(rankPeople(partial, { now, cemeteryName: oak.cemetery.name, storyPending: waiting }))).toEqual(order(withStories));
+    // Without the hint they would drop behind everyone who has a story.
+    expect(order(rankPeople(partial, { now, cemeteryName: oak.cemetery.name })).slice(0, 13)).not.toEqual(order(withStories).slice(0, 13));
+  });
+
   it("fame is worth 10 points per doubling of sitelinks", () => {
     const base: Person = { ...sh.people[0], sitelinks: 0, wikipedia: null, graveImage: null, graveCoord: null, mannersOfDeath: [], birth: null, death: null };
     expect(scorePerson({ ...base, sitelinks: 1 }, { now }).score).toBe(WEIGHTS.famePerDoubling);

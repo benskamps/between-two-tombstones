@@ -86,9 +86,12 @@ export function StoryCard({
   distanceM,
   now,
   storiesIncomplete = false,
+  storyPending = false,
 }: {
   /** True when Wikipedia didn't answer for every story, so a missing one may exist. */
   storiesIncomplete?: boolean;
+  /** True while this person's story is still on its way (the first stories came early). */
+  storyPending?: boolean;
   scored: Scored;
   stop: number;
   /** Stops in the whole tour, for "STOP 01 / 80" on carved cards. */
@@ -222,10 +225,12 @@ export function StoryCard({
         </div>
       ) : (
         <>
-          <p className="text-muted" data-testid="story-text">
-            {storiesIncomplete
-              ? `No Wikipedia story loaded for ${p.name} this time. Wikipedia didn't answer every request; try again in a minute.`
-              : `There's no English Wikipedia article about ${p.name} yet.`}
+          <p className="text-muted" data-testid="story-text" data-pending={storyPending ? "" : undefined}>
+            {storyPending
+              ? `Loading ${p.name}’s story from Wikipedia…`
+              : storiesIncomplete
+                ? `No Wikipedia story loaded for ${p.name} this time. Wikipedia didn't answer every request; try again in a minute.`
+                : `There's no English Wikipedia article about ${p.name} yet.`}
           </p>
           {photo && <GravePhoto src={photo.src} name={p.name} kind={photo.kind} priority={stop === 1} />}
         </>

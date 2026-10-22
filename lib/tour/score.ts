@@ -44,6 +44,12 @@ export type ScoreOptions = {
   now?: Date;
   /** The cemetery being toured, so a grave photo of some other cemetery doesn't count. */
   cemeteryName?: string | null;
+  /**
+   * People whose Wikipedia story is still on its way (the tour page shows the
+   * first stories before the rest arrive). They rank as if the story were in,
+   * so the stops don't reorder when it lands.
+   */
+  storyPending?: ReadonlySet<string>;
 };
 
 export function scorePerson(p: Person, opts: ScoreOptions = {}): Scored {
@@ -51,7 +57,7 @@ export function scorePerson(p: Person, opts: ScoreOptions = {}): Scored {
   const tags: Tag[] = [];
   let score = WEIGHTS.famePerDoubling * Math.log2(1 + Math.max(0, p.sitelinks));
 
-  const hasStory = Boolean(p.wikipedia?.extract?.trim());
+  const hasStory = Boolean(p.wikipedia?.extract?.trim()) || Boolean(opts.storyPending?.has(p.qid));
   if (hasStory) score += WEIGHTS.story;
 
   if (p.sitelinks >= FAMOUS_SITELINKS) tags.push({ id: "famous", label: "Famous" });

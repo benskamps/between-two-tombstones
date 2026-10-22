@@ -7,8 +7,10 @@ import { TourView } from "@/components/tour/TourView";
 import { PageHeader } from "@/components/ui/Motifs";
 import { Sprout } from "@/components/ui/symbols";
 import { isSlowFailure, parsePeopleParam } from "@/lib/data/big";
-import { loadCemetery } from "@/lib/data/load";
+import { loadTour } from "@/lib/data/load";
 import { parseQid } from "@/lib/data/validate";
+import { LOADING_INTRO } from "@/lib/tour/loading";
+import { LoadingNote } from "./LoadingNote";
 import { SlowCemetery } from "./SlowCemetery";
 
 // The shared layout's BottomNav reads usePathname() outside <Suspense>, which a
@@ -31,18 +33,34 @@ export default function CemeteryPage({ params, searchParams }: PageProps<"/cemet
       <link rel="preconnect" href="https://commons.wikimedia.org" />
       <link rel="preconnect" href="https://thumb.wikimedia.org" />
       <ServiceWorkerRegistrar />
-      <Suspense fallback={<TourLoading />}>
-        <Tour params={params} searchParams={searchParams} />
+      <Suspense fallback={<TourLoading people={null} />}>
+        <SizedTour params={params} searchParams={searchParams} />
       </Suspense>
     </>
   );
 }
 
-function TourLoading() {
+/**
+ * The static shell can't read the link, so it shows the loading screen without
+ * a size; a moment later this swaps in the same screen with the size from `n`
+ * (how many people the near list said are listed here) while the tour loads.
+ */
+async function SizedTour({ params, searchParams }: Pick<PageProps<"/cemetery/[qid]">, "params" | "searchParams">) {
+  const people = parsePeopleParam((await searchParams).n);
   return (
-    <div role="status" className="space-y-3">
+    <Suspense fallback={<TourLoading people={people} />}>
+      <Tour params={params} searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+function TourLoading({ people }: { people: number | null }) {
+  return (
+    <div role="status" className="space-y-3" data-testid="tour-loading">
       <p className="font-display text-4xl leading-tight">Gathering the stories…</p>
-      <p className="text-muted">Asking Wikidata who&rsquo;s buried here and Wikipedia how they lived. This takes a few seconds the first time.</p>
+      <p className="text-muted">{LOADING_INTRO}</p>
+      {/* A big cemetery nobody has opened yet can take half a minute: say so once the wait is long. */}
+      <LoadingNote people={people} />
     </div>
   );
 }
@@ -63,7 +81,8 @@ async function Tour({ params, searchParams }: Pick<PageProps<"/cemetery/[qid]">,
   // Always render at request time: the data is cached separately, and a
   // failed load must never be stored as the page.
   await connection();
-  const result = await loadCemetery(parsed.qid);
+  // Cold, this comes back once the first 20 stories are in; the rest stream in behind (`more`).
+  const result = await loadTour(parsed.qid);
 
   if (result.status === "not-found") {
     return (
@@ -94,6 +113,9 @@ async function Tour({ params, searchParams }: Pick<PageProps<"/cemetery/[qid]">,
         fallback={slow ? <SlowCemetery qid={parsed.qid} people={people} /> : undefined}
       />
     );
+  }
+  if (result.status === "partial") {
+    return <TourView key="live" qid={parsed.qid} initial={result.data} error={null} more={{ pending: result.pending, stories: result.more }} />;
   }
   return <TourView key="live" qid={parsed.qid} initial={result.data} error={null} />;
 }
