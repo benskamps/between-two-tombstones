@@ -74,6 +74,19 @@ test.describe("Oakland Cemetery tour", () => {
   });
 });
 
+test.describe("links that can't lead to a tour", () => {
+  // An item Wikidata doesn't have (Q99999999999) takes the same path once Wikidata answers; checked by
+  // hand on a local build, since this suite shouldn't depend on a live query for it.
+  test("a malformed ID is the app's not-found page, marked noindex", async ({ page }) => {
+    for (const path of ["/cemetery/abc", "/cemetery/Q2008469x", "/cemetery/Q0"]) {
+      await page.goto(path);
+      await expect(page.getByRole("heading", { level: 1, name: "Page not found" }), path).toBeVisible();
+      await expect(page.locator('meta[name="robots"][content*="noindex"]').first(), path).toBeAttached();
+      await expect(page.getByTestId("story-card"), path).toHaveCount(0);
+    }
+  });
+});
+
 test.describe("offline", () => {
   test("a downloaded tour still renders every card after an offline reload", async ({ page, context }) => {
     await page.goto(OAKLAND);

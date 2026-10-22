@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { ServiceWorkerRegistrar } from "@/components/offline/ServiceWorkerRegistrar";
 import { TourView } from "@/components/tour/TourView";
-import { PageHeader } from "@/components/ui/Motifs";
-import { Sprout } from "@/components/ui/symbols";
 import { isSlowFailure, parsePeopleParam } from "@/lib/data/big";
 import { loadTour } from "@/lib/data/load";
 import { parseQid } from "@/lib/data/validate";
@@ -68,37 +66,17 @@ function TourLoading({ people }: { people: number | null }) {
 async function Tour({ params, searchParams }: Pick<PageProps<"/cemetery/[qid]">, "params" | "searchParams">) {
   const { qid: raw } = await params;
   const parsed = parseQid(raw);
-  if (!parsed.ok) {
-    return (
-      <div role="alert" className="space-y-5">
-        <PageHeader title="That isn’t a cemetery we can look up" intro={parsed.message} tool="search" life={<Sprout className="h-5 w-5" />} />
-        <Link href="/" className="btn btn-primary">
-          Find a cemetery
-        </Link>
-      </div>
-    );
-  }
+  // A link that can't lead to a tour (a malformed ID, an item Wikidata doesn't have, or one that
+  // isn't a cemetery once the facts query says so) is the app's not-found page. The static shell has
+  // already gone out, so the status stays 200 and Next adds robots noindex (decision 24 for /s/ links).
+  if (!parsed.ok) notFound();
   // Always render at request time: the data is cached separately, and a
   // failed load must never be stored as the page.
   await connection();
   // Cold, this comes back once the first 20 stories are in; the rest stream in behind (`more`).
   const result = await loadTour(parsed.qid);
 
-  if (result.status === "not-found") {
-    return (
-      <div role="alert" className="space-y-5">
-        <PageHeader
-          title="No such place on Wikidata"
-          intro={`Wikidata has no item ${result.qid}. Check the link, or find the cemetery by name.`}
-          tool="search"
-          life={<Sprout className="h-5 w-5" />}
-        />
-        <Link href="/" className="btn btn-primary">
-          Find a cemetery
-        </Link>
-      </div>
-    );
-  }
+  if (result.status === "not-found") notFound();
   // Keys: a refresh after the slow-cemetery retry swaps the failed view for a fresh live one.
   if (result.status === "error") {
     // A Wikidata timeout (a big cemetery, N1) retries once from the browser before failing; an outage doesn't (Gate 8).
