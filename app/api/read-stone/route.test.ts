@@ -23,6 +23,7 @@ import {
 import * as routeModule from "./route";
 import { POST } from "./route";
 import {
+  CROSS_SITE_MESSAGE,
   MAX_INPUT_TOKENS,
   NO_KEY_MESSAGE,
   readStoneCommittedUsd,
@@ -31,6 +32,7 @@ import {
   WORST_CASE_READ_USD,
 } from "@/lib/readstone/handler";
 import { estimateCostUsd } from "@/lib/readstone/limits";
+import { SITE } from "@/lib/site";
 import { testGif, testJpeg, testPng, testWebpVp8x } from "@/lib/readstone/test-images";
 import { MAX_IMAGE_BYTES, StoneReadingSchema, type ModelReading } from "@/lib/readstone/types";
 
@@ -77,7 +79,7 @@ function pair(seed: number): Images {
 
 function multipart(
   images: Partial<Images> & Record<string, Uint8Array<ArrayBuffer> | undefined>,
-  opts: { cookie?: string; ip?: string; types?: Record<string, string> } = {},
+  opts: { cookie?: string; ip?: string; types?: Record<string, string>; headers?: Record<string, string> } = {},
 ): Request {
   const form = new FormData();
   for (const [field, bytes] of Object.entries(images)) {
@@ -87,6 +89,7 @@ function multipart(
   }
   const headers: Record<string, string> = { "x-forwarded-for": opts.ip ?? "203.0.113.10" };
   if (opts.cookie) headers.cookie = opts.cookie;
+  Object.assign(headers, opts.headers);
   return new Request("http://localhost:3103/api/read-stone", { method: "POST", body: form, headers });
 }
 
@@ -174,6 +177,45 @@ describe("POST /api/read-stone", () => {
     expect(res.status).toBe(200);
     const blocks = createMock.mock.calls[0][0].messages[0].content.filter((b: { type: string }) => b.type === "image");
     expect(blocks.map((b: { source: { media_type: string } }) => b.source.media_type)).toEqual(["image/webp", "image/jpeg"]);
+  });
+
+  it("another site's page gets 403 with a plain message: no read, no cookie (red team P2-4)", async () => {
+    createMock.mockResolvedValue(apiMessage(IRVING));
+    const refused: Record<string, string>[] = [
+      { "sec-fetch-site": "cross-site", origin: "https://evil.example" },
+      { "sec-fetch-site": "cross-site" }, // a browser that omits Origin
+      { origin: "https://evil.example" }, // a browser without Sec-Fetch-*
+      { origin: "null" }, // a sandboxed frame
+      { "sec-fetch-site": "same-site", origin: "https://other.localhost:3103" },
+    ];
+    for (const headers of refused) {
+      const res = await POST(multipart(pair(4000), { headers }));
+      expect(res.status, JSON.stringify(headers)).toBe(403);
+      expect(res.headers.get("set-cookie")).toBeNull();
+      expect(res.headers.get("cache-control")).toBe("no-store");
+      expect(await res.json()).toEqual({ error: { source: "Limits", code: "cross_site", message: CROSS_SITE_MESSAGE } });
+    }
+    expect(CROSS_SITE_MESSAGE).toBe(
+      "Stones can only be read from the Between Two Tombstones site. Open the Stamp Kit there and tap Read with Claude.",
+    );
+    expect(createMock).not.toHaveBeenCalled();
+  });
+
+  it("our own pages, the canonical site, and clients without those headers still read", async () => {
+    createMock.mockResolvedValue(apiMessage(IRVING));
+    const allowed: Record<string, string>[] = [
+      { "sec-fetch-site": "same-origin", origin: "http://localhost:3103" },
+      { origin: "http://localhost:3103" },
+      { "sec-fetch-site": "same-origin", origin: new URL(SITE.url).origin }, // behind a proxy that rewrites the host
+      { "sec-fetch-site": "none" }, // typed into the address bar (a GET in practice)
+      {}, // curl, tests
+    ];
+    let seed = 4100;
+    for (const headers of allowed) {
+      const res = await POST(multipart(pair(seed++), { headers }));
+      expect(res.status, JSON.stringify(headers)).toBe(200);
+    }
+    expect(createMock).toHaveBeenCalledTimes(allowed.length);
   });
 
   it("missing key → 503 with the plain message, and no SDK call", async () => {

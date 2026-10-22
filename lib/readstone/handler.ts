@@ -1,7 +1,8 @@
 // POST /api/read-stone: two photos of one gravestone in, a checked transcription out.
 //
-// Order of work: API key → images (size, magic bytes, pixels) → cache by image
-// hash → rate limits (phone, network) → daily spend cap → Claude → checks.
+// Order of work: sent from our own pages? → API key → images (size, magic bytes,
+// pixels) → cache by image hash → rate limits (phone, network) → daily spend cap
+// (holding the read's worst case) → Claude → checks.
 // Image bytes are never stored, logged or echoed; logs carry a hash prefix and
 // token counts only.
 
@@ -28,6 +29,7 @@ import {
   whenAgain,
   type BudgetHold,
 } from "./limits";
+import { isCrossSite } from "./origin";
 import { checkReading } from "./postcheck";
 import { READ_STONE_MODEL, READ_STONE_SYSTEM_PROMPT, READ_STONE_USER_TEXT } from "./prompt";
 import { pairHash, readStoneImages, toBase64, type StoneImage } from "./request";
@@ -41,6 +43,8 @@ import {
 } from "./types";
 
 export const NO_KEY_MESSAGE = "Reading stones is switched off: the server has no API key.";
+export const CROSS_SITE_MESSAGE =
+  "Stones can only be read from the Between Two Tombstones site. Open the Stamp Kit there and tap Read with Claude.";
 export const TOO_BLURRY_MESSAGE =
   "This photo is too blurry to read. Try again closer, in shade, with the whole face of the stone in frame.";
 
@@ -258,6 +262,8 @@ async function readWithClaude(apiKey: string, images: [StoneImage, StoneImage], 
 }
 
 export async function handleReadStone(request: Request): Promise<Response> {
+  // Before anything else, a device cookie included: another site's page gets nothing.
+  if (isCrossSite(request)) return errorResponse(403, "Limits", "cross_site", CROSS_SITE_MESSAGE);
   const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
   if (!apiKey) return errorResponse(503, "Claude", "no_key", NO_KEY_MESSAGE);
 

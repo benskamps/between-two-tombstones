@@ -99,3 +99,28 @@ test.describe("analytics never carries the visitor's position (P0-1)", () => {
     expect(event).toMatchObject({ en: "share_created", ed: { kind: "stop", via: "copy" } });
   });
 });
+
+test.describe("read-stone refuses other sites' pages (P2-4)", () => {
+  // No request here can reach Claude: the refused ones stop first, and the allowed
+  // one carries no images, so it fails validation (or no_key) before any read.
+  test("a cross-site POST gets 403 and no cookie; same-origin and header-less requests get through", async ({ request, baseURL }) => {
+    const origin = new URL(baseURL!).origin;
+    const form = { note: "not a photo" };
+    const refused: Record<string, string>[] = [{ "sec-fetch-site": "cross-site", origin: "https://evil.example" }, { origin: "https://evil.example" }];
+    for (const headers of refused) {
+      const res = await request.post("/api/read-stone", { headers, multipart: form });
+      expect(res.status(), JSON.stringify(headers)).toBe(403);
+      expect(res.headers()["set-cookie"]).toBeUndefined();
+      const body = await res.json();
+      expect(body.error.code).toBe("cross_site");
+      expect(body.error.message).toMatch(/^Stones can only be read from the Between Two Tombstones site\./);
+    }
+    const allowed: Record<string, string>[] = [{ "sec-fetch-site": "same-origin", origin }, {}];
+    for (const headers of allowed) {
+      const res = await request.post("/api/read-stone", { headers, multipart: form });
+      expect(res.status(), JSON.stringify(headers)).not.toBe(403);
+      expect([400, 415, 503]).toContain(res.status()); // bad request, or no_key on a server without one
+      expect((await res.json()).error.code).not.toBe("cross_site");
+    }
+  });
+});
