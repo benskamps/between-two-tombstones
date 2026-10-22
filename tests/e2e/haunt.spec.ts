@@ -138,7 +138,7 @@ test.describe("home", () => {
       await page.route("**/near?**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<p>near</p>" }));
       await page.goto("/", { waitUntil: "networkidle" });
       await page.getByRole("button", { name: HAUNT_ME }).click();
-      await expect(page).toHaveURL(/\/near\?lat=33\.7487\d*&lon=-84\.3713\d*&acc=35$/);
+      await expect(page).toHaveURL(/\/near\?lat=33\.749&lon=-84\.371&acc=35$/);
     });
 
     test("a tap before React hydrates still goes to the nearby list (F5)", async ({ page, context }) => {
@@ -155,7 +155,7 @@ test.describe("home", () => {
       await expect(button).toBeVisible();
       await expect(button).not.toHaveAttribute("data-ready", "");
       await button.click();
-      await expect(page).toHaveURL(/\/near\?lat=33\.7487\d*&lon=-84\.3713\d*&acc=12$/, { timeout: 5000 });
+      await expect(page).toHaveURL(/\/near\?lat=33\.749&lon=-84\.371&acc=12$/, { timeout: 5000 });
     });
   });
 
@@ -311,7 +311,7 @@ test.describe("the hub", () => {
     await expect(page.getByRole("link", { name: "Not here? See the others" })).toHaveCount(0);
 
     await openOakland(page, "?via=here&lat=33.7487&lon=-84.3713");
-    await expect(page.getByRole("link", { name: "Not here? See the others" })).toHaveAttribute("href", "/near?lat=33.7487&lon=-84.3713&list=1");
+    await expect(page.getByRole("link", { name: "Not here? See the others" })).toHaveAttribute("href", "/near?lat=33.749&lon=-84.371&list=1");
   });
 
   test("a tool that asked for a haunt first is offered again once you have one (F12)", async ({ page }) => {
@@ -440,6 +440,9 @@ test.describe("tool pages without a haunt", () => {
   }
 
   test("a cemetery in the link opens the tool and becomes the haunt", async ({ page }) => {
+    await page.route("**/api/cemeteries/Q872253/burials", (route) =>
+      route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ cemetery: { qid: "Q872253", name: "Lake View Cemetery", locatedIn: "Seattle" }, people: [] }) }),
+    );
     await page.goto("/stamp?cemetery=Q872253&name=Lake%20View%20Cemetery&place=Seattle");
     await expect(page.getByTestId("pick-haunt")).toHaveCount(0);
     await expect(page.locator("#stamp-photo")).toBeAttached();
@@ -546,6 +549,9 @@ test.describe("links someone sent open straight in, with no haunt", () => {
   test("a calendar link, which also becomes the haunt", async ({ page }) => {
     await page.route("**/api/calendar/Q872253*", (route) =>
       route.fulfill({ status: 200, contentType: "text/calendar; charset=utf-8", body: "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nEND:VCALENDAR\r\n" }),
+    );
+    await page.route("**/api/cemeteries/Q872253/burials", (route) =>
+      route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ cemetery: { qid: "Q872253", name: "Lake View Cemetery", locatedIn: "Seattle" }, people: [] }) }),
     );
     await page.goto("/calendar?cemetery=Q872253&name=Lake%20View%20Cemetery&place=Seattle");
     await expect(page.getByRole("radio", { name: /Lake View Cemetery/ })).toBeChecked();
