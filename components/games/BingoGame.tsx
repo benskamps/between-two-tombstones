@@ -84,7 +84,7 @@ export function BingoGame() {
       {rawParty && !party && (
         <p role="alert" className="text-danger">
           &ldquo;{rawParty}&rdquo; isn&rsquo;t a room code (six letters, no I, L or O). This is your own card instead.{" "}
-          <Link href="/games/party" className="underline">
+          <Link href="/games/party" className="tap inline-flex items-center font-bold text-mauve underline underline-offset-4">
             Join a party
           </Link>
         </p>
@@ -102,10 +102,10 @@ export function BingoGame() {
       ) : (
         <p className="text-muted">
           Your own card. Want everyone on the same card?{" "}
-          <Link href="/games/party" className="underline">
+          {/* A 48 px target, like the app's other links. */}
+          <Link href="/games/party" className="tap inline-flex items-center font-bold text-mauve underline underline-offset-4">
             Start a party
           </Link>
-          .
         </p>
       )}
 

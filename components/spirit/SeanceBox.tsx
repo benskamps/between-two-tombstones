@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import { syncClock, type ClockSync } from "@/lib/spirit/clock";
 import { SWEEP_DEFAULT_MS, speechSeconds, startNoise, type NoiseEngine } from "@/lib/spirit/engine";
 import { loadCemetery, type LoadResult, type SampleCemetery } from "@/lib/spirit/load";
+import { usableName } from "@/lib/spirit/picker";
 import {
   STEP_MS,
   bankHash,
@@ -74,7 +75,8 @@ export function SeanceBox({
   const mismatch = linkBank !== null && ownHash !== null && linkBank !== ownHash;
   const running = phase !== "idle";
   const sample = samples.find((s) => s.qid === cemetery);
-  const cemeteryName = result?.ok ? result.cemetery.name : (sample?.name ?? cemetery);
+  // Séance links carry only the cemetery's ID: name it once its burials load, never by the ID.
+  const cemeteryName = usableName(result?.ok ? result.cemetery.name : sample?.name);
   const inviteHash = linkBank ?? ownHash;
 
   // The names: live route first, the saved copy for the samples (same as the spirit box).
@@ -211,7 +213,7 @@ export function SeanceBox({
           Séance {room}
         </h2>
         <p>
-          Names from {cemeteryName}. Every phone on this link speaks the same words at the same second. Each person
+          Names from {cemeteryName ?? "the cemetery in the link"}. Every phone on this link speaks the same words at the same second. Each person
           taps Join on their own phone; nothing plays until they do.
         </p>
         <div role="status" className="space-y-1 text-sm">
@@ -249,7 +251,7 @@ export function SeanceBox({
         {linkBank === null && ready && (
           <p className="text-sm text-muted">
             You joined by room code, so this phone can’t check its names against the host’s. Make sure everyone
-            picked {cemeteryName}.
+            picked {cemeteryName ?? "the same cemetery"}.
           </p>
         )}
       </section>

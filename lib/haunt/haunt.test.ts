@@ -73,12 +73,9 @@ describe("parseHaunt / serializeHaunt", () => {
 });
 
 describe("cemeteryFromParams", () => {
-  it("reads ?cemetery=&name=&place=", () => {
-    expect(cemeteryFromParams(params("cemetery=Q872253&name=Lake%20View%20Cemetery&place=Seattle"))).toEqual({
-      qid: "Q872253",
-      name: "Lake View Cemetery",
-      place: "Seattle",
-    });
+  it("reads ?cemetery= and never the link's ?name= or ?place= (K2: a stranger typed those)", () => {
+    expect(cemeteryFromParams(params("cemetery=Q872253&name=Lake%20View%20Cemetery&place=Seattle"))).toEqual({ qid: "Q872253" });
+    expect(cemeteryFromParams(params("cemetery=Q872253&name=Free%20prize%20at%20example.com&place=%3Cscript%3E"))).toEqual({ qid: "Q872253" });
     expect(cemeteryFromParams(params("cemetery=q360779"))).toEqual({ qid: "Q360779" });
   });
 
@@ -90,13 +87,16 @@ describe("cemeteryFromParams", () => {
 });
 
 describe("hauntInputFromUrl", () => {
-  const known = [{ qid: "Q2008469", name: "Oakland Cemetery", place: "Atlanta, Georgia" }];
-  it("names the cemetery from the link, else from what the page knows", () => {
-    expect(hauntInputFromUrl({ qid: "Q872253", name: "Lake View Cemetery" }, known)).toEqual({ qid: "Q872253", name: "Lake View Cemetery", place: undefined });
-    expect(hauntInputFromUrl({ qid: "Q2008469" }, known)).toEqual({ qid: "Q2008469", name: "Oakland Cemetery", place: "Atlanta, Georgia" });
+  const known = [{ qid: "Q872253", name: "Lake View Cemetery", place: "Seattle" }];
+  it("names the cemetery only from what the app knows: the page's list, then the samples (K2)", () => {
+    expect(hauntInputFromUrl({ qid: "Q872253" }, known)).toEqual({ qid: "Q872253", name: "Lake View Cemetery", place: "Seattle" });
+    expect(hauntInputFromUrl({ qid: "Q2008469" })).toEqual({ qid: "Q2008469", name: "Oakland Cemetery", place: "Atlanta, Georgia" });
+    expect(hauntInputFromUrl({ qid: "Q360779" })).toEqual({ qid: "Q360779", name: "Sleepy Hollow Cemetery", place: "Sleepy Hollow, New York" });
   });
-  it("waits when the name isn't known yet", () => {
+  it("waits when the name isn't known yet: a name in the link doesn't count", () => {
     expect(hauntInputFromUrl({ qid: "Q999999" }, known)).toBeNull();
+    const fromLink = cemeteryFromParams(params("cemetery=Q999999&name=Free%20prize%20at%20example.com"))!;
+    expect(hauntInputFromUrl(fromLink, known)).toBeNull();
   });
 });
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArchFrame, SymbolPair } from "@/components/ui/Motifs";
 import { Lily, RingedMoon } from "@/components/ui/symbols";
-import { distanceText, nearHref, peopleText } from "@/lib/data/near";
+import { distanceText, foldSummary, nearHref, peopleText } from "@/lib/data/near";
 import type { NearbyCemetery } from "@/lib/data/types";
 
 function placeLine(c: NearbyCemetery): string {
@@ -45,27 +45,60 @@ export function NearLinkList({ items, label }: { items: NearbyCemetery[]; label:
 }
 
 /**
- * Cemeteries Wikidata lists nobody at, folded away as plain text: a link would
- * open an empty tour. `more` says whether anything with people is listed above.
+ * Everything with fewer than 5 people listed, folded under one row (F2; review 4, #5).
+ * One to four people: still a link, with the count said plainly, since it opens a
+ * short tour. No one: plain text, since a link would open an empty tour. `more`
+ * says whether anything with a tour is listed above; `open` starts it unfolded,
+ * for when nothing nearby has 5 or more.
  */
-export function UnlistedFold({ items, more }: { items: NearbyCemetery[]; more: boolean }) {
-  const n = items.length;
-  const noun = n === 1 ? "cemetery" : "cemeteries";
+export function NearFold({
+  few,
+  unlisted,
+  more,
+  open = false,
+}: {
+  few: NearbyCemetery[];
+  unlisted: NearbyCemetery[];
+  more: boolean;
+  open?: boolean;
+}) {
   return (
-    <details className="group" data-testid="near-unlisted">
+    <details className="group" data-testid="near-unlisted" open={open}>
       <summary className="tap flex cursor-pointer items-center rounded-xl border border-border px-4 font-bold">
-        {more ? `${n} more nearby with no one listed yet` : `${n} ${noun} nearby with no one listed yet`}
+        {foldSummary(few.length, unlisted.length, more)}
       </summary>
-      <div className="space-y-2 px-4 pb-4 pt-2">
-        <p className="text-sm text-muted">Wikidata doesn&rsquo;t list anyone buried at these yet, so there&rsquo;s no tour for them.</p>
-        <ul className="grid gap-2" aria-label="Cemeteries with no one listed yet">
-          {items.map((c) => (
-            <li key={c.qid} data-qid={c.qid}>
-              <span className="font-bold">{c.name}</span>
-              <span className="block text-sm text-muted">{placeLine(c)}</span>
-            </li>
-          ))}
-        </ul>
+      <div className="space-y-4 px-4 pb-4 pt-2">
+        {few.length > 0 && (
+          <div className="space-y-2">
+            <h3 className="font-bold">Short tours</h3>
+            <p className="text-sm text-muted">Wikidata lists only one to four people at each of these.</p>
+            <ul className="grid gap-2" aria-label="Cemeteries with one to four people listed" data-testid="near-few">
+              {few.map((c) => (
+                <li key={c.qid}>
+                  <Link href={nearHref(c.qid, c.burials)} className="tap block rounded-xl border border-border px-3 py-2" data-qid={c.qid}>
+                    <span className="block font-display text-lg leading-tight">{c.name}</span>
+                    <span className="block text-sm text-muted">{placeLine(c)}</span>
+                    <span className="block text-sm">{peopleText(c.burials)}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {unlisted.length > 0 && (
+          <div className="space-y-2">
+            {few.length > 0 && <h3 className="font-bold">No one listed yet</h3>}
+            <p className="text-sm text-muted">Wikidata doesn&rsquo;t list anyone buried at these yet, so there&rsquo;s no tour for them.</p>
+            <ul className="grid gap-2" aria-label="Cemeteries with no one listed yet">
+              {unlisted.map((c) => (
+                <li key={c.qid} data-qid={c.qid}>
+                  <span className="font-bold">{c.name}</span>
+                  <span className="block text-sm text-muted">{placeLine(c)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </details>
   );

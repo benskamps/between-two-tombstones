@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { preload } from "react-dom";
 import Link from "next/link";
 import { HauntToolkit } from "@/components/haunt/HauntToolkit";
+import { MakeHauntOffer } from "@/components/haunt/MakeHauntOffer";
 import { useHub } from "@/components/haunt/useHub";
 import { DownloadTourButton } from "@/components/offline/DownloadTourButton";
 import { useOnline, useWakeLock, useWatchPosition } from "@/components/offline/hooks";
@@ -198,16 +199,7 @@ export function TourView({ qid, initial, error, fallback, more }: Props) {
       </TourHeader>
 
       {/* The header names a different haunt: offer the switch right here, not four screens down (REVIEW-2 N6). */}
-      {hub.other && (
-        <div className="card flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2" data-testid="make-haunt">
-          <p className="min-w-0 flex-1">
-            Your haunt is <span className="font-bold">{hub.other.name}</span>.
-          </p>
-          <button type="button" onClick={hub.makeHaunt} className="btn btn-primary">
-            Make this my haunt
-          </button>
-        </div>
-      )}
+      {hub.other && <MakeHauntOffer name={hub.other.name} onMake={hub.makeHaunt} />}
 
       {hub.continueTo && (
         <Link href={hub.continueTo.href} onClick={forgetNext} className="btn btn-primary w-full" data-testid="continue-to">

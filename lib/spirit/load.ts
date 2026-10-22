@@ -2,6 +2,7 @@
 // (GET /api/cemeteries/[qid]/burials, a CemeterySnapshot) and falls back to the
 // saved copy bundled with the app for the sample cemeteries.
 
+import { errorText, sentence } from "../data/errors";
 import { personName } from "../tour/text";
 import type { SpiritPerson } from "./wordbank";
 
@@ -65,15 +66,18 @@ export function parseBurials(json: unknown): { name: string; fetchedAt: string |
   return { name, fetchedAt: str(j.fetchedAt), people };
 }
 
-/** The route's `{ error: { source, message } }`, as one sentence. */
+/**
+ * What went wrong, as a sentence. The route's `{ error: { source, message } }`
+ * already names its source, so it is said once ("Couldn't reach Wikidata.",
+ * not "Wikidata: Couldn't reach Wikidata."), without the tour's "open a saved
+ * tour": the spirit box says its own next step.
+ */
 export function routeError(json: unknown, status: number): string {
   const e = (json as { error?: { source?: unknown; message?: unknown } } | null)?.error;
-  const source = str(e?.source);
-  const message = str(e?.message);
-  if (source && message) return `${source}: ${message}`;
-  if (message) return message;
-  if (status === 404) return "the burials service isn't available yet";
-  return `the server answered ${status}`;
+  const message = str(e?.message)?.trim();
+  if (message) return errorText(str(e?.source), message, { nextStep: false });
+  if (status === 404) return "The burials service isn't available yet.";
+  return `The server answered ${status}.`;
 }
 
 export async function loadCemetery(
@@ -106,11 +110,11 @@ export async function loadCemetery(
         note: null,
       };
     }
-    problem = res.ok ? "the burials list came back in a shape we don't understand" : routeError(json, res.status);
+    problem = res.ok ? "The burials list came back in a shape we don't understand." : routeError(json, res.status);
   } catch {
     problem = opts.signal?.aborted
-      ? "cancelled"
-      : `no answer within ${Math.round(timeoutMs / 1000)} seconds (you may be offline)`;
+      ? "Cancelled."
+      : `No answer within ${Math.round(timeoutMs / 1000)} seconds (you may be offline).`;
   } finally {
     clearTimeout(timer);
     opts.signal?.removeEventListener("abort", onAbort);
@@ -121,8 +125,9 @@ export async function loadCemetery(
     return {
       ok: true,
       cemetery: { qid, name: f.name, people: f.people, source: "saved", fetchedAt: f.fetchedAt },
-      note: `Couldn't load fresh names (${problem}), so this uses the copy saved with the app.`,
+      note: `Couldn't load fresh names, so this uses the copy saved with the app. ${sentence(problem)}`,
     };
   }
-  return { ok: false, message: `Couldn't load the burials for this cemetery: ${problem}.` };
+  // One sentence each: what failed, then why. The screen adds what to do next.
+  return { ok: false, message: `Couldn't load the burials for this cemetery. ${sentence(problem)}` };
 }

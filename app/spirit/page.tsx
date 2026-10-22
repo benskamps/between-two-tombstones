@@ -34,7 +34,8 @@ export default function SpiritPage() {
           </div>
         }
       >
-        <HauntGate tool="/spirit" share={["seance", "join"]} known={KNOWN}>
+        {/* selfVerifies: the spirit box loads the cemetery's names and makes it the haunt under Wikidata's name. */}
+        <HauntGate tool="/spirit" share={["seance", "join"]} known={KNOWN} selfVerifies>
           <SpiritModes samples={SAMPLE_CEMETERIES} />
         </HauntGate>
       </Suspense>

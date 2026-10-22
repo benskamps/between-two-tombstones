@@ -30,10 +30,14 @@ function fromEarly(e: Early): Status {
   return { kind: "error", message: e.code ? (ERRORS[e.code] ?? ERRORS[2]) : NO_GEO };
 }
 
-/** Where the nearby list lives, with how sure the phone is (F17: the data lane's contract). */
+/**
+ * Where the nearby list lives, with how sure the phone is (F17: the data lane's
+ * contract). Three decimals (about 110 m), never the exact fix: people share
+ * these links, and /near looks cemeteries up at three decimals anyway.
+ */
 export function nearHref(pos: GeolocationPosition): string {
   const { latitude, longitude, accuracy } = pos.coords;
-  return `/near?lat=${latitude.toFixed(5)}&lon=${longitude.toFixed(5)}&acc=${Math.round(accuracy)}`;
+  return `/near?lat=${latitude.toFixed(3)}&lon=${longitude.toFixed(3)}&acc=${Math.round(accuracy)}`;
 }
 
 /**

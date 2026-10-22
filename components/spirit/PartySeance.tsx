@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useActiveCemetery } from "@/lib/haunt/useHaunt";
+import { useActiveCemetery, useHaunt } from "@/lib/haunt/useHaunt";
 import { loadCemetery, type LoadResult, type SampleCemetery } from "@/lib/spirit/load";
+import { extraCemeteryOption } from "@/lib/spirit/picker";
 import { bankHasNames, buildWordBank } from "@/lib/spirit/wordbank";
 import { SEANCE_PITCH, SeanceStart } from "./SeanceStart";
 
@@ -14,13 +15,23 @@ import { SEANCE_PITCH, SeanceStart } from "./SeanceStart";
 export function PartySeance({ samples, partyCode }: { samples: SampleCemetery[]; partyCode: string | null }) {
   // The haunt (or the cemetery in the link) comes first; the samples stay as choices.
   const active = useActiveCemetery();
+  const haunt = useHaunt();
   const extra = active && !samples.some((s) => s.qid === active.qid) ? active : null;
-  const options = [
-    ...(extra ? [{ qid: extra.qid, name: extra.name ?? extra.qid, place: extra.place ?? "Your haunt" }] : []),
-    ...samples.map((s) => ({ qid: s.qid, name: s.name, place: s.place })),
-  ];
   const [choice, setChoice] = useState(active?.qid ?? samples[0].qid);
   const [results, setResults] = useState<Record<string, LoadResult>>({});
+  const extraResult = extra ? results[extra.qid] : undefined;
+  // Its name and where it came from (your haunt, or the link): never its ID (review 4, #3) or the link's ?name= (K2).
+  const extraRow = extra
+    ? extraCemeteryOption({
+        loaded: extraResult?.ok ? extraResult.cemetery.name : null,
+        haunt: haunt && haunt.qid === extra.qid ? haunt : null,
+        fromLink: extra.fromUrl,
+      })
+    : null;
+  const options = [
+    ...(extra && extraRow ? [{ qid: extra.qid, name: extraRow.label, place: extraRow.detail }] : []),
+    ...samples.map((s) => ({ qid: s.qid, name: s.name, place: s.place })),
+  ];
   const result = results[choice];
   const bank = useMemo(() => (result?.ok ? buildWordBank(result.cemetery.people) : null), [result]);
   const ready = bank !== null && bankHasNames(bank);
@@ -65,7 +76,7 @@ export function PartySeance({ samples, partyCode }: { samples: SampleCemetery[];
       </fieldset>
       <div role="status" className="text-sm">
         {!result && <p className="text-muted">Loading the names&hellip;</p>}
-        {result && !result.ok && <p className="text-danger">{result.message}</p>}
+        {result && !result.ok && <p className="text-danger">{result.message} Try again in a minute, or pick a sample cemetery.</p>}
         {result?.ok && !ready && (
           <p className="text-danger">Nobody in this list died 75 or more years ago, so there are no names to use.</p>
         )}

@@ -7,7 +7,10 @@ import {
   accuracyText,
   autoOpenTarget,
   bestNearby,
+  CARD_MIN_PEOPLE,
   distanceText,
+  foldSummary,
+  groupNear,
   hereHref,
   isApproximate,
   nearHref,
@@ -15,8 +18,10 @@ import {
   parseFlag,
   peopleText,
   splitNear,
+  urlCoord,
   warmTargets,
 } from "./near";
+import { roundCoord } from "./load";
 import type { NearbyCemetery } from "./types";
 import { flattenBindings, parseNearRows } from "./wikidata";
 
@@ -72,6 +77,62 @@ describe("best stories nearby (F2)", () => {
     expect(unlisted.length).toBeGreaterThan(20);
     for (const part of [listed, unlisted]) for (let i = 1; i < part.length; i++) expect(part[i].distanceKm).toBeGreaterThanOrEqual(part[i - 1].distanceKm);
     expect(splitNear([c("Q1", 1, 0)], null)).toEqual({ listed: [], unlisted: [c("Q1", 1, 0)] });
+  });
+});
+
+describe("folding cemeteries with fewer than 5 people listed (review 4, #5)", () => {
+  it("at the Charleston point, only Second Presbyterian (7) keeps a card; Bethany and Friendly Union (1 each) fold", () => {
+    const best = bestNearby(charleston);
+    const { cards, few, unlisted } = groupNear(charleston, best);
+    expect(cards.map((x) => `${x.name} ${x.burials}`)).toEqual(["Second Presbyterian Church Cemetery 7"]);
+    expect(few.map((x) => x.name)).toEqual(expect.arrayContaining(["Bethany Cemetery", "Friendly Union Society Cemetery", "Coming Street Cemetery"]));
+    expect(few).toHaveLength(12);
+    expect(unlisted).toHaveLength(26);
+    expect(foldSummary(few.length, unlisted.length, true)).toBe("38 more nearby with fewer than 5 people listed");
+  });
+
+  it("splits by count: 5+ cards, 1–4 short tours, 0 plain; nothing lost, the pin left out, nearest first", () => {
+    for (const list of [charleston, oakland, laurelHill]) {
+      const best = bestNearby(list);
+      const { cards, few, unlisted } = groupNear(list, best);
+      expect(cards.every((x) => x.burials >= CARD_MIN_PEOPLE)).toBe(true);
+      expect(few.every((x) => x.burials >= 1 && x.burials < CARD_MIN_PEOPLE)).toBe(true);
+      expect(unlisted.every((x) => x.burials === 0)).toBe(true);
+      expect([...cards, ...few, ...unlisted].some((x) => x.qid === best?.qid)).toBe(false);
+      expect(cards.length + few.length + unlisted.length + (best ? 1 : 0)).toBe(list.length);
+      for (const part of [cards, few, unlisted]) for (let i = 1; i < part.length; i++) expect(part[i].distanceKm).toBeGreaterThanOrEqual(part[i - 1].distanceKm);
+    }
+    expect(groupNear([c("Q1", 0.2, 4), c("Q2", 0.5, 5), c("Q3", 0.1, 0)], null)).toEqual({
+      cards: [c("Q2", 0.5, 5)],
+      few: [c("Q1", 0.2, 4)],
+      unlisted: [c("Q3", 0.1, 0)],
+    });
+  });
+
+  it("leaves the pin and auto-open alone: a 1–4 cemetery never becomes either", () => {
+    // The same rules as before the fold; the fold only reads what they leave.
+    const list = [c("Q1", 0.05, 4), c("Q2", 0.25, 5), c("Q3", 1.9, 3)];
+    expect(bestNearby(list)?.qid).toBe("Q2");
+    expect(autoOpenTarget(list, 10)?.qid).toBe("Q2");
+    expect(groupNear(list, bestNearby(list))).toEqual({ cards: [], few: [c("Q1", 0.05, 4), c("Q3", 1.9, 3)], unlisted: [] });
+    // At Oakland the pin, the auto-open and the warm-up are what they were.
+    expect(bestNearby(oakland)?.qid).toBe("Q2008469");
+    expect(autoOpenTarget(oakland, 20)?.qid).toBe("Q2008469");
+    expect(groupNear(oakland, bestNearby(oakland)).cards.map((x) => x.name)).toEqual([
+      "South-View Cemetery",
+      "Westview Cemetery",
+      "Greenwood Cemetery",
+      "Decatur Cemetery",
+      "Lincoln Cemetery",
+      "Crest Lawn Cemetery",
+    ]);
+  });
+
+  it("words the folded row by what's in it", () => {
+    expect(foldSummary(0, 26, true)).toBe("26 more nearby with no one listed yet");
+    expect(foldSummary(0, 1, false)).toBe("1 cemetery nearby with no one listed yet");
+    expect(foldSummary(3, 2, false)).toBe("5 cemeteries nearby with fewer than 5 people listed");
+    expect(foldSummary(1, 0, true)).toBe("1 more nearby with fewer than 5 people listed");
   });
 });
 
@@ -142,11 +203,21 @@ describe("URL params and text", () => {
 
   it("builds the contract URLs", () => {
     expect(nearHref("Q2008469")).toBe("/cemetery/Q2008469?via=near");
-    expect(hereHref("Q2008469", 33.7489, -84.3718)).toBe("/cemetery/Q2008469?via=here&lat=33.7489&lon=-84.3718");
+    // Three decimals (P0-1): a hub link people share never carries the exact fix.
+    expect(hereHref("Q2008469", 33.7489, -84.3718)).toBe("/cemetery/Q2008469?via=here&lat=33.749&lon=-84.372");
     // With the people count, so a slow first load can say how big the cemetery is.
     expect(nearHref("Q216344", 4359)).toBe("/cemetery/Q216344?via=near&n=4359");
-    expect(hereHref("Q2008469", 33.7489, -84.3718, 115)).toBe("/cemetery/Q2008469?via=here&lat=33.7489&lon=-84.3718&n=115");
+    expect(hereHref("Q2008469", 33.7489, -84.3718, 115)).toBe("/cemetery/Q2008469?via=here&lat=33.749&lon=-84.372&n=115");
     expect(nearHref("Q1", 0)).toBe("/cemetery/Q1?via=near");
+  });
+
+  it("puts coordinates into URLs at three decimals, the same point the near query already uses (P0-1)", () => {
+    expect(urlCoord(33.748712)).toBe("33.749");
+    expect(urlCoord(-84.371349)).toBe("-84.371");
+    expect(urlCoord(32.8)).toBe("32.8");
+    // The near query rounds to three decimals before asking Wikidata, so a three-decimal URL
+    // gives the same list, the same distances, and so the same pin and auto-open as the exact fix.
+    for (const x of [33.748712, -84.371349, 32.80449, -79.94701, 39.99912, -75.18849]) expect(roundCoord(Number(urlCoord(x)))).toBe(roundCoord(x));
   });
 
   it("formats distance and people like the other lists", () => {

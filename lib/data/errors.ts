@@ -3,6 +3,8 @@
 
 export type DataSource = "Wikidata" | "Wikipedia" | "OpenStreetMap";
 
+const SOURCES: readonly string[] = ["Wikidata", "Wikipedia", "OpenStreetMap"] satisfies DataSource[];
+
 export type FailureKind = "unreachable" | "timeout" | "rate-limited" | "bad-response";
 
 export type ErrorBody = { error: { source: DataSource; message: string } };
@@ -52,17 +54,47 @@ export class DataSourceError extends Error {
   }
 }
 
-export function userMessageFor(source: DataSource, kind: FailureKind): string {
+/** What to do next, after every source failure on the tour pages. */
+export const TRY_AGAIN = "Try again in a minute, or open a saved tour.";
+
+/** What happened, in one sentence that already names the source. */
+export function failureFor(source: DataSource, kind: FailureKind): string {
   switch (kind) {
     case "rate-limited":
-      return `${source} asked us to slow down. Try again in a minute, or open a saved tour.`;
+      return `${source} asked us to slow down.`;
     case "bad-response":
-      return `${source} sent back something we couldn't read. Try again in a minute, or open a saved tour.`;
+      return `${source} sent back something we couldn't read.`;
     case "timeout":
-      return `${source} took too long to answer. Try again in a minute, or open a saved tour.`;
+      return `${source} took too long to answer.`;
     default:
-      return `Couldn't reach ${source}. Try again in a minute, or open a saved tour.`;
+      return `Couldn't reach ${source}.`;
   }
+}
+
+export function userMessageFor(source: DataSource, kind: FailureKind): string {
+  return `${failureFor(source, kind)} ${TRY_AGAIN}`;
+}
+
+/** Trimmed and ending in exactly one full stop (or the "?" or "!" it has): never "…Wikidata..". */
+export function sentence(text: string): string {
+  const t = text.trim().replace(/\s*\.+$/, "");
+  if (!t) return "";
+  return /[!?…]$/.test(t) ? t : `${t}.`;
+}
+
+/**
+ * The `message` of an error body (`{ error: { source, message } }`), naming the
+ * source once. Every message we send already names it ("Couldn't reach
+ * Wikidata. …"), so an outside source goes in front only when the message
+ * doesn't: never "Wikidata: Couldn't reach Wikidata.". With `nextStep: false` the tour
+ * pages' "Try again in a minute, or open a saved tour." comes off, for a screen
+ * that says its own next step.
+ */
+export function errorText(source: string | null, message: string, opts: { nextStep?: boolean } = {}): string {
+  let m = message.trim();
+  if (opts.nextStep === false && m.endsWith(TRY_AGAIN)) m = m.slice(0, -TRY_AGAIN.length).trim();
+  if (source && SOURCES.includes(source) && !m.includes(source)) m = `${source}: ${m}`;
+  return sentence(m);
 }
 
 /** Recover a DataSourceError from anything thrown, falling back to "unreachable" for `fallback`. */

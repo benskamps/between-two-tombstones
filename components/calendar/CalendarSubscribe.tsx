@@ -8,7 +8,9 @@ import type { EventKind } from "@/lib/calendar/kinds";
 import { feedPath, subscribeLinks } from "@/lib/calendar/params";
 import type { CalendarSample } from "@/lib/calendar/samples";
 import { localToday, readFeed, upcoming, ymdKey, type PreviewFeed } from "@/lib/calendar/upcoming";
+import { errorText } from "@/lib/data/errors";
 import { useHaunt } from "@/lib/haunt/useHaunt";
+import { useVerifiedCemetery } from "@/lib/haunt/useVerified";
 import type { YMD } from "@/lib/stonemath";
 import { MoonPhases } from "@/components/ui/Motifs";
 import { Moth, Sprout } from "@/components/ui/symbols";
@@ -28,9 +30,23 @@ function order(platform: Platform | null): Platform[] {
 }
 const QID_RE = /^Q[1-9]\d{0,9}$/;
 
-/** A cemetery passed in from its tour page (`?cemetery=&name=&place=`), not one of the samples. */
+/**
+ * A cemetery that isn't one of the samples: the haunt, or one from a link
+ * (`?cemetery=`). Named only from our data (the haunt, or the burials route);
+ * never the link's ?name= (K2) and never the ID. Until then, plainly.
+ */
 function fromTourPage(qid: string, name: string | null, place: string | null): CalendarSample {
-  const cemetery = { qid, name: name?.trim().slice(0, 120) || qid, locatedIn: place?.trim().slice(0, 80) || null };
+  if (!name) {
+    return {
+      qid,
+      name: "The cemetery in your link",
+      place: "From your link",
+      label: "the cemetery in your link",
+      calendarName: "Haunted Calendar",
+      slug: "haunted-calendar",
+    };
+  }
+  const cemetery = { qid, name: name.trim().slice(0, 120), locatedIn: place?.trim().slice(0, 80) || null };
   return {
     qid,
     name: cemetery.name,
@@ -112,8 +128,10 @@ function appPath(url: string | null): string | null {
 
 async function errorMessage(res: Response): Promise<string> {
   try {
-    const json = (await res.json()) as { error?: { message?: unknown } };
-    if (typeof json.error?.message === "string") return json.error.message;
+    const json = (await res.json()) as { error?: { source?: unknown; message?: unknown } };
+    // Said once, without the tour's "open a saved tour" (the buttons are this page's next step).
+    const source = typeof json.error?.source === "string" ? json.error.source : null;
+    if (typeof json.error?.message === "string" && json.error.message.trim()) return errorText(source, json.error.message, { nextStep: false });
   } catch {
     // not JSON
   }
@@ -152,8 +170,11 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
   const fromLink = params.get("cemetery");
   const linkValid = fromLink !== null && QID_RE.test(fromLink);
   const preselect = linkValid ? fromLink : (haunt?.qid ?? fromLink);
-  const extraName = linkValid ? params.get("name") : (haunt?.name ?? null);
-  const extraPlace = linkValid ? params.get("place") : (haunt?.place ?? null);
+  // Its name from the haunt when it is the haunt, else from our burials route; never from the link.
+  const linkHaunt = linkValid && haunt?.qid === fromLink ? haunt : null;
+  const verified = useVerifiedCemetery(linkValid && !linkHaunt && !samples.some((s) => s.qid === fromLink) ? fromLink : null);
+  const extraName = linkValid ? (linkHaunt?.name ?? verified?.name ?? null) : (haunt?.name ?? null);
+  const extraPlace = linkValid ? (linkHaunt?.place ?? verified?.place ?? null) : (haunt?.place ?? null);
   const extra = useMemo(
     () =>
       preselect && QID_RE.test(preselect) && !samples.some((s) => s.qid === preselect)
@@ -216,12 +237,8 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
     setQid(next);
     setCopyNote(null);
     try {
-      const q = new URLSearchParams({ cemetery: next });
-      if (extra && next === extra.qid) {
-        q.set("name", extra.name);
-        if (extra.place) q.set("place", extra.place);
-      }
-      window.history.replaceState(null, "", `?${q}`);
+      // Only the ID: a name in the address would never be read back (K2).
+      window.history.replaceState(null, "", `?${new URLSearchParams({ cemetery: next })}`);
     } catch {
       // Only the address bar misses out.
     }
@@ -314,7 +331,7 @@ export function CalendarSubscribe({ samples, productionHost }: { samples: Calend
         )}
         {state?.status === "error" && (
           <p role="alert" className="text-danger">
-            Couldn&rsquo;t load the preview: {state.message} The buttons below still work once you&rsquo;re online.
+            Couldn&rsquo;t load the preview. {state.message} The buttons below still work once you&rsquo;re online.
           </p>
         )}
         {feed && (
