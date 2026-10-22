@@ -8,6 +8,8 @@ Hackyard Yard #5 wants: public repo, a writeup of 500 characters or less, a mode
 
 Model declaration: Ben's wording. (Built with Claude Code; the app calls Claude for reading headstones.)
 
+A newer draft (484 characters, mentions share links) is in `README.md` under "Writeup", marked for Ben to approve.
+
 ## Before the shoot
 
 - [ ] Production is live (Ben's deploy click) and the stranger pass is done.
@@ -41,7 +43,7 @@ Model declaration: Ben's wording. (Built with Claude Code; the app calls Claude 
 - Offline Oakland and Sleepy Hollow data ship with the app.
 - Screenshot for the Hackyard card: the Oakland tour card or the three stamps side by side.
 
-## Still to build before the video works end to end
+## Still open before the video works end to end (updated 10/22)
 
-- Gate 6 needs share links with preview cards (Lane 5.2). Partial work is saved on `lane5-share-links`; restarting it waits on Ben's go.
+- Share links with preview cards (L5.2) are live on prod since PR #4 (decision 24). The iMessage and Slack paste (gate 6) is Ben's.
 - Real-phone checks: stamps under 5 s (gate 4), two phones in a party (gate 7), a downloaded tour opened offline (gate 3). Gate 5 (three stones read without invented dates) passed on prod 10/20.
