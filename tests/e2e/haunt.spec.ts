@@ -145,17 +145,32 @@ test.describe("home", () => {
       await context.grantPermissions(["geolocation"]);
       await context.setGeolocation({ latitude: 33.7487, longitude: -84.3713, accuracy: 12 });
       await page.route("**/near?**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<p>near</p>" }));
-      // Hold every script chunk back (not the CSS), so the button is painted long before React owns it.
-      await page.route((url) => url.pathname.startsWith("/_next/static/chunks/") && url.pathname.endsWith(".js"), async (route) => {
-        await new Promise((r) => setTimeout(r, 6000));
-        await route.continue().catch(() => {});
-      });
-      await page.goto("/", { waitUntil: "commit" });
-      const button = page.getByRole("button", { name: HAUNT_ME });
-      await expect(button).toBeVisible();
-      await expect(button).not.toHaveAttribute("data-ready", "");
-      await button.click();
-      await expect(page).toHaveURL(/\/near\?lat=33\.7487\d*&lon=-84\.3713\d*&acc=12$/, { timeout: 5000 });
+      // Hold every script chunk back (not the CSS) until the tap has gone through, so React never owns the
+      // button here. A deployed build serves them from /_next/static/immutable/chunks/ (Vercel's immutable
+      // assets), a local one from /_next/static/chunks/; matching only the second let React hydrate on prod.
+      // The hold is capped so a stuck run still ends.
+      let release = () => {};
+      const released = new Promise<void>((r) => (release = r));
+      let held = 0;
+      await page.route(
+        (url) => /^\/_next\/static\/(immutable\/)?chunks\/.+\.js$/.test(url.pathname),
+        async (route) => {
+          held += 1;
+          await Promise.race([released, new Promise((r) => setTimeout(r, 20_000))]);
+          await route.continue().catch(() => {});
+        },
+      );
+      try {
+        await page.goto("/", { waitUntil: "commit" });
+        const button = page.getByRole("button", { name: HAUNT_ME });
+        await expect(button).toBeVisible();
+        await expect.poll(() => held, { message: "the page's script chunks are held back" }).toBeGreaterThan(0);
+        await expect(button).not.toHaveAttribute("data-ready", "");
+        await button.click();
+        await expect(page).toHaveURL(/\/near\?lat=33\.7487\d*&lon=-84\.3713\d*&acc=12$/, { timeout: 5000 });
+      } finally {
+        release();
+      }
     });
   });
 
@@ -240,9 +255,13 @@ test.describe("the hub", () => {
     await expect(nav(page).getByRole("link", { name: "Haunt" })).toHaveAttribute("aria-current", "page");
     await expect(nav(page).getByRole("link", { name: "Haunt" })).toHaveAttribute("href", OAKLAND);
 
-    // A tool from the toolkit opens on the haunt.
+    // A tool from the toolkit opens on the haunt. The names line waits on the live burials route: the
+    // spirit box gives it up to 5 s once /spirit has rendered, then uses the saved copy (lib/spirit/load.ts).
+    // So the line can come at nav + 5 s + render (5.9 s measured with the route held 6 s or 12 s), past
+    // the default 5 s from the click, whenever the server's live load is cold or queued behind other
+    // Wikimedia calls. Allow that cap plus the usual 5 s for the page itself.
     await kit(page).getByRole("link", { name: "Spirit", exact: true }).click();
-    await expect(page.getByText(/people buried at Oakland Cemetery died 75 or more years ago/)).toBeVisible();
+    await expect(page.getByText(/people buried at Oakland Cemetery died 75 or more years ago/)).toBeVisible({ timeout: 10_000 });
     await expect(nav(page).getByRole("link", { name: "Spirit" })).toHaveAttribute("aria-current", "page");
 
     // "Change haunt" goes back to the doors; home offers the way back too, above them.
