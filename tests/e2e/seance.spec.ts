@@ -368,7 +368,9 @@ test.describe("séance", () => {
     await seedHaunt(page);
     await page.goto("/spirit");
     await page.getByLabel(/Sleepy Hollow Cemetery/).check();
-    await expect(page.getByText(/people buried at Sleepy Hollow Cemetery died 75 or more years ago/)).toBeVisible();
+    // The names line waits on the live burials route for up to 5 s, then the spirit box uses the saved copy
+    // (lib/spirit/load.ts), so allow that cap plus the usual 5 s (as haunt.spec does for Oakland).
+    await expect(page.getByText(/people buried at Sleepy Hollow Cemetery died 75 or more years ago/)).toBeVisible({ timeout: 10_000 });
     await page.getByLabel("Séance room code").fill("abc");
     await page.getByRole("button", { name: "Join", exact: true }).click();
     await expect(page.getByText(/Room codes are six letters \(no I, L or O\)/)).toBeVisible();
