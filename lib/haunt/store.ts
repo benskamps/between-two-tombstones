@@ -8,6 +8,7 @@
 // the rest of this page view and its client-side navigations.
 
 import { HAUNT_EVENT, HAUNT_KEY, isFresh, makeHaunt, parseHaunt, serializeHaunt, type Haunt, type HauntInput } from "./haunt";
+import { recordVisitedCemetery, resetPassportForTests } from "@/lib/passport/store";
 
 let memory: string | null = null;
 /** True once a write to localStorage failed: from then on, memory is the truth. */
@@ -62,6 +63,7 @@ export function setHaunt(input: HauntInput, now: Date = new Date()): Haunt | nul
       storageBroken = true;
     }
   }
+  recordVisitedCemetery(input, now);
   notify();
   return h;
 }
@@ -97,4 +99,5 @@ export function resetHauntStoreForTests(): void {
   storageBroken = false;
   lastRaw = undefined;
   lastValue = null;
+  resetPassportForTests();
 }

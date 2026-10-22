@@ -22,6 +22,7 @@ function tools(cemetery: Pick<Cemetery, "qid" | "name" | "locatedIn">): Tool[] {
     { href: `/games/party?${q}`, title: "Party", tool: "party" },
     { href: `/games/evp?${q}`, title: "EVP", tool: "evp", needs: "mic" },
     { href: `/calendar?${q}`, title: "Calendar", tool: "calendar", needs: "calendar" },
+    { href: "/p", title: "Passport", tool: "passport" },
   ];
 }
 
@@ -63,7 +64,7 @@ export function HauntToolkit({
         )}
       </div>
       {/* Four to a row on a phone (nothing hidden off-screen), one row from 640px. */}
-      <ul className="grid grid-cols-4 gap-1.5 sm:grid-cols-7">
+      <ul className="grid grid-cols-4 gap-1.5 sm:grid-cols-8">
         {list.map((t) => (
           <li key={t.title}>
             <ToolTile variant="chip" tool={t.tool} href={t.href} title={t.title} />

@@ -82,6 +82,9 @@ export const NEXT_TOOLS: Record<string, string> = {
   "/games/bingo": "Tombstone Bingo",
   "/games/party": "the Graveyard Party",
   "/games/evp": "the EVP Recorder",
+  "/games/stonemath": "Stone Math",
+  "/games/whoami": "Who Am I?",
+  "/p": "your Graveyard Passport",
   "/calendar": "the Haunted Calendar",
 };
 

@@ -201,3 +201,39 @@ export function Star(props: SymbolProps) {
     </Svg>
   );
 }
+
+/** Dividers over an inscribed tablet: the Stone Math calculator. */
+export function Chisel(props: SymbolProps) {
+  return (
+    <Svg {...props}>
+      <path d="M5 12.5v7.5h14v-7.5" />
+      <path d="M8 16h8M9.5 18.5h5" />
+      <circle cx="12" cy="4.5" r="1.6" />
+      <path d="M11 6 6.5 14M13 6l4.5 8" />
+      <path d="M8.5 10.5h7" />
+    </Svg>
+  );
+}
+
+/** An arched headstone with a carved question cipher: Who Am I? */
+export function EpitaphRiddle(props: SymbolProps) {
+  return (
+    <Svg {...props}>
+      <path d="M5.5 20.5V10a6.5 6.5 0 0 1 13 0v10.5M3.5 20.5h17" />
+      <path d="M10.2 9.2a2 2 0 1 1 2.9 1.8c-.7.4-1.1.9-1.1 1.7v.5" />
+      <circle cx="12" cy="16.2" r=".8" fill="currentColor" stroke="none" />
+    </Svg>
+  );
+}
+
+/** A pocket field ledger with an arched crest: the Graveyard Passport. */
+export function PassportSeal(props: SymbolProps) {
+  return (
+    <Svg {...props}>
+      <rect x="5" y="3" width="14" height="18" rx="2" />
+      <path d="M8 3v18" />
+      <path d="M11 11.5V9.8a2.5 2.5 0 0 1 5 0v1.7Z" />
+      <path d="M10.5 14.5h6M11.5 17h4" />
+    </Svg>
+  );
+}

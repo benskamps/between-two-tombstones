@@ -8,7 +8,7 @@ import { SymbolPair } from "@/components/ui/Motifs";
 import { needsRespectfulStyle } from "@/lib/respect";
 import { ageAtDeath, formatAge, formatWikiDate, parseWikiDate, type WikiDate } from "@/lib/tour/dates";
 import { findAGraveUrl } from "@/lib/tour/links";
-import { diedDuring } from "@/lib/tour/periods";
+import { diedDuring, theirWorld } from "@/lib/tour/periods";
 import { cardPhoto } from "@/lib/tour/photo";
 import type { Scored } from "@/lib/tour/score";
 import { cleanExtract } from "@/lib/tour/text";
@@ -111,6 +111,8 @@ export function StoryCard({
   const life = plain ? lifeLine(formatWikiDate(birth), formatWikiDate(death)) : lifeLine(shortDate(birth), shortDate(death));
   const age = formatAge(ageAtDeath(birth, death));
   const during = diedDuring(p.death, p.deathPrecision);
+  const world = theirWorld(p.birth, p.birthPrecision, p.death, p.deathPrecision);
+  const centuryGone = !plain && scored.tags.some((t) => t.id === "century-gone");
   const occupations = occupationsLine(p.occupations);
   const fag = findAGraveUrl(p);
   const photo = cardPhoto(p, cemeteryName);
@@ -125,6 +127,7 @@ export function StoryCard({
       data-testid="story-card"
       data-qid={p.qid}
       data-style={plain ? "plain" : "carved"}
+      data-century={centuryGone ? "true" : undefined}
       className={
         plain
           ? "card card-plain space-y-3 p-4"
@@ -187,11 +190,14 @@ export function StoryCard({
         </ul>
       )}
 
-      {during.length > 0 && (
+      {(during.length > 0 || world.length > 0) && (
         <ul className="space-y-0.5 text-sm text-muted">
           {during.map((line) => (
             <li key={line}>{line}</li>
           ))}
+          {world.length > 0 && (
+            <li data-testid="their-world">Their world: {world.join(" · ")}</li>
+          )}
         </ul>
       )}
 
