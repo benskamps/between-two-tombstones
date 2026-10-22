@@ -412,6 +412,15 @@ test.describe("tombstone bingo", () => {
     await Promise.all([a.close(), b.close()]);
   });
 
+  test("“Start a party” under a solo card is a 48 px target", async ({ page, context }) => {
+    await context.addInitScript(seenEtiquette);
+    await seedHaunt(context);
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("/games/bingo");
+    await cardSymbols(page);
+    expect((await page.getByRole("link", { name: "Start a party" }).boundingBox())!.height).toBeGreaterThanOrEqual(48);
+  });
+
   test("tapping marks a square, shows its meaning, detects a bingo, and survives a reload", async ({ page }) => {
     await page.addInitScript(seenEtiquette);
     await page.goto("/games/bingo?party=KXMPRT");
