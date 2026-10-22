@@ -954,8 +954,16 @@ nav[aria-label="Main"] ul {
   position: relative;
   display: flex;
   min-width: 0;
-  min-height: 48px;
+  /*
+    At least 3:4, and taller when a three-line label needs it (below ~400 px,
+    "Hand pointing down" spilled out of its stone). Stretched both ways, so a row
+    shares one height and the ratio never widens a stone past its column. Tiles are
+    at least 51 px wide on a 320 px screen, so the 48 px tap target holds.
+  */
+  min-height: auto;
   aspect-ratio: 3 / 4;
+  align-self: stretch;
+  justify-self: stretch;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
