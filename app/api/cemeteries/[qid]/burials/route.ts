@@ -16,7 +16,7 @@ export async function GET(_req: NextRequest, ctx: RouteContext<"/api/cemeteries/
   const result = await loadCemetery(parsed.qid);
   if (result.status === "not-found") {
     return Response.json(
-      { error: { source: "Wikidata", message: `Wikidata has no item ${parsed.qid}.` } },
+      { error: { source: "Wikidata", message: `${parsed.qid} isn't a cemetery on Wikidata. Check the link, or find the cemetery by name.` } },
       { status: 404, headers: { "Cache-Control": "public, max-age=300" } },
     );
   }
