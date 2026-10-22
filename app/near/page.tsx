@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect, unstable_rethrow } from "next/navigation";
-import { after } from "next/server";
+import { after, connection } from "next/server";
 import { Suspense } from "react";
 import { ServiceWorkerRegistrar } from "@/components/offline/ServiceWorkerRegistrar";
 import { NearMeButton } from "@/components/shell/NearMeButton";
@@ -139,6 +139,9 @@ async function NearResults({ searchParams }: Pick<PageProps<"/near">, "searchPar
 
 /** Optional OpenStreetMap enrichment. Streams in after the list; a failure is named, never hidden. */
 async function OsmExtras({ lat, lon, wikidata }: { lat: number; lon: number; wikidata: NearbyCemetery[] }) {
+  // The OpenStreetMap cooldown reads the clock (Date.now() in loadNearOsm); that belongs to the request,
+  // not a prerender, or Next logs "encountered the unstable value Date.now() while prerendering".
+  await connection();
   const osm = await osmWithin(loadNearOsm(lat, lon));
   const merged = combineNear({ lat, lon }, wikidata, osm);
   if (!osm.ok) {
