@@ -4,6 +4,7 @@ import { Doors } from "@/components/haunt/Doors";
 import { FamousCemeteries } from "@/components/haunt/Famous";
 import { HauntReturn } from "@/components/haunt/HauntReturn";
 import { HomeShowcase } from "@/components/home/HomeShowcase";
+import { deckHref, SAMPLE_PLACES } from "@/lib/gravitator/places";
 
 export default function Home() {
   return (
@@ -12,15 +13,22 @@ export default function Home() {
         <Image src="/images/cemetery-dusk.webp" alt="" fill priority sizes="100vw" className="cemetery-hero-image" />
         <div className="hero-shade" />
         <div className="hero-content">
-          <p className="editorial-kicker">Macy’s graveyard companion</p>
-          <h1 id="home-title">Between Two<br /><em>Tombstones</em><span className="hero-period">.</span></h1>
-          <p className="hero-invitation">A little wander. A life you never knew.</p>
-          <p className="hero-description">Meet the people behind the names. Follow their stories through a cemetery, wherever you are.</p>
+          <p className="editorial-kicker">Meet the dead next door</p>
+          <h1 id="home-title">Swipe right on a graveyard<span className="hero-period">.</span></h1>
+          <p className="hero-description">Find the old cemeteries near you, meet the people buried there, then go haunt them. It’s Halloween. They’ve been waiting.</p>
           <div className="hero-actions">
-            <Link href="/cemetery/Q360779" className="editorial-button">Step into Sleepy Hollow <span aria-hidden="true">↗</span></Link>
-            <a href="#find" className="editorial-text-link">Find my own graveyard <span aria-hidden="true">↓</span></a>
+            <Link href="/gravitator" className="editorial-button">Start swiping <span aria-hidden="true">↗</span></Link>
+            <Link href="/cemetery/Q360779" className="editorial-text-link">Step into Sleepy Hollow <span aria-hidden="true">↗</span></Link>
           </div>
-          <p className="hero-footnote">No account. No need to be there. Just curiosity.</p>
+          <p className="hero-cities">
+            <span>Not near one? Swipe</span>
+            {SAMPLE_PLACES.filter((p) => !p.label.startsWith("Sleepy")).map((p) => (
+              <Link key={p.label} href={deckHref(p.lat, p.lon, { near: p.label })} className="tap">
+                {p.label.split(",")[0]}
+              </Link>
+            ))}
+          </p>
+          <p className="hero-footnote">No account. Your location is asked for only when you tap.</p>
         </div>
         <div className="hero-bottom"><span>For the living. About the lives before us.</span><a href="#discover" className="tap">Wander a little <span aria-hidden="true">↓</span></a></div>
       </section>

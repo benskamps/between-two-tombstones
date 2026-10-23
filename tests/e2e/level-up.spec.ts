@@ -82,7 +82,7 @@ test.describe("Spooky & Experience Level-Up (L2.9, L4.5, L5.3)", () => {
     await expect(page.getByTestId("passport-cemeteries")).toContainText("Sleepy Hollow Cemetery");
   });
 
-  test("Home page (/) hooks visitors from the couch with an interactive headstone switcher and 6-tool field kit", async ({ page }) => {
+  test("Home page (/) hooks visitors from the couch with an interactive headstone switcher, and names the kit without opening it", async ({ page }) => {
     await page.goto("/");
     const showcase = page.getByTestId("home-showcase");
     await expect(showcase).toBeVisible();
@@ -93,6 +93,8 @@ test.describe("Spooky & Experience Level-Up (L2.9, L4.5, L5.3)", () => {
     await expect(showcase.getByRole("heading", { level: 3, name: "Margaret Mitchell" })).toBeVisible();
     await expect(showcase).toContainText("Gone with the Wind");
 
-    await expect(showcase.getByRole("heading", { name: "Six reasons to walk the stones" })).toBeVisible();
+    await expect(showcase.getByRole("heading", { name: "Then go haunt it" })).toBeVisible();
+    // The tools are named, not linked: they open once a graveyard is picked.
+    await expect(showcase.getByRole("link", { name: /Open tool/ })).toHaveCount(0);
   });
 });

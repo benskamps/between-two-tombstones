@@ -5,14 +5,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { fetchDeck, OFFLINE_MESSAGE, type DeckResult } from "@/lib/gravitator/client";
 import { getSaved, getSavedServer, subscribeSaved } from "@/lib/gravitator/saved";
+import { deckHref, SAMPLE_PLACES } from "@/lib/gravitator/places";
 import type { Deck } from "@/lib/gravitator/types";
 import { PlaceholderArt } from "./PlaceholderArt";
 import { SwipeDeck } from "./SwipeDeck";
-
-export const SAMPLE_PLACES = [
-  { label: "Atlanta", button: "Try it around Atlanta", lat: 33.7486, lon: -84.3733 },
-  { label: "Sleepy Hollow, NY", button: "Try it around Sleepy Hollow, NY", lat: 41.0956, lon: -73.8607 },
-] as const;
 
 const GEO_ERRORS: Record<number, string> = {
   1: "Location is turned off for this site. Allow it in your browser settings, or try one of the places below.",
@@ -44,13 +40,6 @@ function coord(v: string | null, max: number): number | null {
   if (v === null || v.trim() === "") return null;
   const n = Number(v);
   return Number.isFinite(n) && Math.abs(n) <= max ? n : null;
-}
-
-function deckHref(lat: number, lon: number, opts: { near?: string; r?: number } = {}): string {
-  const q = new URLSearchParams({ lat: lat.toFixed(4), lon: lon.toFixed(4) });
-  if (opts.near) q.set("near", opts.near);
-  if (opts.r && opts.r !== 25) q.set("r", String(opts.r));
-  return `/gravitator?${q}`;
 }
 
 function SavedLink() {

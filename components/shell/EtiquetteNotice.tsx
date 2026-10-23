@@ -3,8 +3,8 @@
 const KEY = "btt-etiquette-seen";
 
 /**
- * The first-run rules (decision 5), as a quiet card at the top of the first
- * cemetery hub instead of a popup (Ben, F6). Rendered on the server; the
+ * The first-run rules (decision 5), as a quiet card on the first cemetery
+ * hub, after the first stories and before the walk, instead of a popup (Ben, F6). Rendered on the server; the
  * layout's early script marks <html data-etq="seen"> once they've been read,
  * and CSS hides the card before paint. "Got it" remembers it.
  */

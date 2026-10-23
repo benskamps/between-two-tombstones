@@ -207,20 +207,24 @@ export function TourView({ qid, initial, error, fallback, more }: Props) {
         </Link>
       )}
 
-      <EtiquetteNotice />
-
       {deviceCopyAt && (
         <p role="status" className="rounded-xl border border-border bg-surface-2 px-4 py-2">
           {online ? "Couldn't load this tour live, so this" : "You're offline. This"} is the copy saved on this phone on {formatDay(deviceCopyAt)}.
         </p>
       )}
-      {!deviceCopyAt && data.warnings.length > 0 && (
-        <div role="status" className="space-y-1 rounded-xl border border-border bg-surface-2 px-4 py-2 text-sm">
-          {data.warnings.map((w) => (
-            <p key={w.message}>{w.message}</p>
-          ))}
-        </div>
-      )}
+      {/* A saved copy reads the same as live: one quiet line, not a box above the first story. Missing stories keep the box. */}
+      {!deviceCopyAt && data.warnings.length > 0 &&
+        (data.warnings.every((w) => w.code === "saved-copy") ? (
+          <p role="status" className="text-sm text-muted">
+            {data.warnings.map((w) => w.message).join(" ")}
+          </p>
+        ) : (
+          <div role="status" className="space-y-1 rounded-xl border border-border bg-surface-2 px-4 py-2 text-sm">
+            {data.warnings.map((w) => (
+              <p key={w.message}>{w.message}</p>
+            ))}
+          </div>
+        ))}
 
       <section aria-labelledby="stops-title" className="space-y-4">
         <h2 id="stops-title" className="sr-only">
@@ -265,6 +269,9 @@ export function TourView({ qid, initial, error, fallback, more }: Props) {
             {firstStops.map((s, i) => card(s, i))}
           </ol>
         )}
+
+        {/* The rules sit where the walk starts, after the first stories, not above them. */}
+        <EtiquetteNotice />
 
         {/* Then everything else: walk and save in one row, the tools, the rest of the stops. */}
         <section aria-label="Walking and saving" className="space-y-2">

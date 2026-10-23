@@ -418,7 +418,7 @@ test.describe("the hub", () => {
 });
 
 test.describe("first-run rules (F6)", () => {
-  test("show once as a card at the top of the first hub, never as a popup", async ({ page }) => {
+  test("show once as a card on the first hub, after the first stories, never as a popup", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("dialog")).toHaveCount(0);
     await openOakland(page);

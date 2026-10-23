@@ -76,51 +76,39 @@ const FEATURED_GRAVES: FeaturedGrave[] = [
 const FIELD_INSTRUMENTS = [
   {
     href: "/stamp",
-    badge: "Make a keepsake",
     title: "Stamp Kit & Stone Reader",
     body: "Turn a headstone photo into a keepsake, or get help reading a worn inscription.",
     icon: Fern,
-    accent: "text-candle",
   },
   {
     href: "/spirit",
-    badge: "Listen together",
     title: "Spirit Box & Multi-Phone Séance",
     body: "Hear names from the cemetery through radio static. Invite friends to listen together.",
     icon: Planchette,
-    accent: "text-wisp",
   },
   {
     href: "/games/bingo",
-    badge: "Look for the details",
     title: "Tombstone Bingo & Party",
     body: "Find the willows, wings, and hourglasses carved into the stones. Play alone or with friends.",
     icon: HourglassSprout,
-    accent: "text-lichen",
   },
   {
     href: "/games/whoami",
-    badge: "Follow the clues",
     title: "Who Am I?",
     body: "Three clues. One life. Can you put a name to the story?",
     icon: EpitaphRiddle,
-    accent: "text-mauve",
   },
   {
     href: "/games/stonemath",
-    badge: "Read between the dates",
     title: "Stone Math Decoder",
     body: "Unravel the years, months, and days on an old stone to find a birth date.",
     icon: Chisel,
-    accent: "text-candle",
   },
   {
     href: "/p",
-    badge: "Pocket Almanac",
     title: "Graveyard Passport",
     body: "Keep the places, graves, and discoveries from your walks, privately on your phone.",
     icon: PassportSeal,
-    accent: "text-lichen",
   },
 ] as const;
 
@@ -206,45 +194,38 @@ export function HomeShowcase() {
         </article>
       </section>
 
-      {/* Why go to a graveyard? The 6 field instruments */}
+      {/* What waits at the gate. Named here, opened there: no games before you've picked a graveyard. */}
       <section aria-labelledby="instruments-heading" className="space-y-3">
         <div className="space-y-1 px-1">
-          <p className="label text-wisp">Pocket Field Kit</p>
+          <p className="label text-lichen">Waiting at the gate</p>
           <h2 id="instruments-heading" className="font-display text-2xl leading-tight">
-            Six reasons to walk the stones
+            Then go haunt it
           </h2>
           <p className="text-sm text-muted">
-            Every cemetery becomes an outdoor museum, a darkroom, and a late-night instrument panel.
+            Once you&rsquo;ve picked a graveyard, the field kit opens for that place.
           </p>
         </div>
 
-        <ul className="grid gap-3 sm:grid-cols-2">
+        <ul className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
           {FIELD_INSTRUMENTS.map((item) => {
             const Icon = item.icon;
             return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="card tap group flex h-full flex-col justify-between gap-3 p-4 transition-transform active:scale-[0.985]"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="tool-medallion tool-medallion-sm">
-                        <Icon className="h-5 w-5" />
-                      </span>
-                      <span className={`label text-[11px] ${item.accent}`}>{item.badge}</span>
-                    </div>
-                    <h3 className="font-display text-xl leading-snug group-hover:text-mauve">{item.title}</h3>
-                    <p className="text-sm leading-relaxed text-muted">{item.body}</p>
-                  </div>
-                  <span className="inline-flex items-center gap-1 text-sm font-bold text-mauve">
-                    Open tool <span aria-hidden="true">→</span>
-                  </span>
-                </Link>
+              <li key={item.href} className="flex items-start gap-3">
+                <span className="tool-medallion tool-medallion-sm shrink-0">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <span className="space-y-0.5">
+                  <span className="block font-display text-lg leading-snug">{item.title}</span>
+                  <span className="block text-sm leading-relaxed text-muted">{item.body}</span>
+                </span>
               </li>
             );
           })}
         </ul>
+
+        <a href="#find" className="tap inline-flex items-center gap-2 font-bold text-mauve underline underline-offset-4">
+          At a graveyard now? Pick it <span aria-hidden="true">↑</span>
+        </a>
 
         <div className="card flex items-center gap-3 border-lichen/40 bg-lit-lichen p-3.5 text-sm">
           <Sprout className="h-5 w-5 shrink-0 text-lichen" />

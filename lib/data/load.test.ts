@@ -69,6 +69,15 @@ describe("loadCemetery", () => {
     });
   });
 
+  it("says Wikidata was slow, not unreachable, when the saved copy stands in for a timeout", async () => {
+    cached.cachedBurials.mockRejectedValue(new DataSourceError("Wikidata", "timeout", "No list of burials from Wikidata within 25 s."));
+    const r = await loadCemetery("Q2008469");
+    expect(r.status).toBe("ok");
+    if (r.status !== "ok") return;
+    expect(r.data.origin).toBe("saved");
+    expect(r.data.warnings[0].message).toBe("Wikidata was slow to answer, so this is the copy saved on Oct 21, 2026.");
+  });
+
   it("recovers the source from an error that crossed the cache boundary as a plain Error", async () => {
     cached.cachedBurials.mockRejectedValue(new Error(new DataSourceError("Wikidata", "rate-limited", "busy", { status: 429 }).message));
     const r = await loadCemetery("Q872253");
