@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { HAUNT_KEY } from "./haunt";
+import { GHOST_PASS, HAUNT_KEY } from "./haunt";
 import { clearHaunt, getHaunt, resetHauntStoreForTests, setHaunt, subscribeHaunt } from "./store";
 
 class MemoryStorage {
@@ -50,6 +50,19 @@ describe("haunt store", () => {
     clearHaunt();
     expect(storage.getItem(HAUNT_KEY)).toBeNull();
     expect(getHaunt()).toBeNull();
+  });
+
+  it("keeps a Ghost pass when the same cemetery is opened again, and ends it for any other", () => {
+    const storage = new MemoryStorage();
+    vi.stubGlobal("window", fakeWindow(storage));
+    expect(setHaunt(GHOST_PASS, NOW)).toMatchObject({ qid: "Q360779", ghost: true });
+    expect(JSON.parse(storage.getItem(HAUNT_KEY)!)).toMatchObject({ ghost: true });
+    // The hub sets the haunt from its own data, with no ghost flag: still a Ghost pass.
+    expect(setHaunt({ qid: "Q360779", name: "Sleepy Hollow Cemetery" }, NOW)).toMatchObject({ ghost: true });
+    expect(getHaunt()).toMatchObject({ ghost: true });
+    const real = setHaunt(OAKLAND, NOW);
+    expect(real).toEqual({ ...OAKLAND, at: NOW.toISOString() });
+    expect(JSON.parse(storage.getItem(HAUNT_KEY)!)).not.toHaveProperty("ghost");
   });
 
   it("returns the same object until the stored value changes (what useSyncExternalStore needs)", () => {

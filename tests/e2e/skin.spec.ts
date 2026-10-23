@@ -175,19 +175,17 @@ test.describe("layout and sunlight", () => {
     if (await word.isVisible()) expect((await word.boundingBox())!.height).toBeLessThan(30);
   });
 
-  test("the first invitation and own-graveyard path fit above the mobile dock", async ({ page }) => {
+  test("the first invitation and the couch path fit above the mobile dock", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link").first()).toBeVisible();
     await settle(page);
     const navTop = (await page.getByRole("navigation", { name: "Main" }).boundingBox())!.y;
-    for (const name of ["Step into Sleepy Hollow", "Find my own graveyard"]) {
+    for (const name of ["Start swiping", "Step into Sleepy Hollow", "Atlanta"]) {
       const box = (await page.getByRole("link", { name, exact: true }).boundingBox())!;
       expect(box.y).toBeGreaterThan(0);
       expect(box.y + box.height).toBeLessThanOrEqual(navTop);
       expect(box.height).toBeGreaterThanOrEqual(48);
     }
-    await page.getByRole("link", { name: "Find my own graveyard", exact: true }).click();
-    await expect(page.getByLabel("Or type the cemetery’s name")).toBeInViewport();
   });
 
   test("nav labels are at least 13 px", async ({ page }) => {

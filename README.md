@@ -23,7 +23,8 @@ Everything below is in this repo; the first commit is from Oct 20, 01:56 UTC (`g
 - **Séance**: every phone that opens the same link speaks the same words at the same second (a shared seed and the server's clock; no server state).
 - **Games** (`/games`): Tombstone Bingo with the meanings of carved symbols; a graveyard party, where everyone with the link gets the same card; an EVP recorder that plays your recording back reversed and slowed.
 - **Haunted Calendar** (`/calendar`): subscribe to a cemetery and your calendar gets the yearly death-days (optionally birthdays) of people buried there who died 25 or more years ago.
-- **Gravitator** (`/gravitator`): a swipe deck of public cemeteries near you, for planning a visit.
+- **Gravitator** (`/gravitator`): a swipe deck of public cemeteries near you, for planning a visit, or around Atlanta, Savannah, New Orleans and Sleepy Hollow without sharing a location.
+- **Field kit and Ghost pass** (`/kit`): the tools for the graveyard you picked, locked until you pick one. The Ghost pass is for anyone with no graveyard nearby: it opens the kit at Sleepy Hollow, says "Ghost pass" wherever the haunt shows, and offers a sample headstone in the Stamp Kit.
 - **Share links** (`/s/…`): links that carry only Wikidata IDs and a room code, with link-preview and story-size images. Every page re-checks Wikidata before naming anyone.
 
 Respect rules (`lib/respect.ts`): the spirit box and the séance use only people who died 75 or more years ago. Anyone who died within 25 years, or whose death date is unknown, gets a plain card with no spooky effects and stays out of calendars.
@@ -48,6 +49,7 @@ Respect rules (`lib/respect.ts`): the spirit box and the séance use only people
 | [OpenStreetMap](https://www.openstreetmap.org) via Overpass | Optional: cemeteries near you that Wikidata lacks, merged into `/near` when Overpass answers within 4 s (`lib/data/overpass.ts`). From Vercel it usually doesn't, and `/near` says so | ODbL, © OpenStreetMap contributors | Site footer, linked to openstreetmap.org/copyright |
 | Fonts: IM Fell English, Atkinson Hyperlegible, Michroma | Page text (through `next/font`) and the share images (`assets/fonts/`) | SIL Open Font License 1.1 | License texts in `assets/fonts/OFL-*.txt`; sources in `assets/fonts/LICENSES.md` |
 | Test photos | Three headstone photos from Commons, used only as test inputs | CC BY 2.0, public domain, CC BY-SA 3.0 | Authors and licenses in `tests/fixtures/stones/LICENSES.md` |
+| Sample headstone | Washington Irving's grave (`public/samples/washington-irving-grave.jpg`, a copy of the test fixture), loaded by the Stamp Kit's "Use a sample" button | CC BY 2.0, Chris Kirkman | Credited under the photo picker whenever the sample is in use, linked to the Commons file page (`components/stamp/StampKit.tsx`) |
 | [Find a Grave](https://www.findagrave.com) | Outbound links only: a memorial or cemetery page from the ID Wikidata stores, else a name search (`lib/tour/links.ts`) | — | Nothing is fetched or scraped |
 
 ## How to run it

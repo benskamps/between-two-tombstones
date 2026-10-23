@@ -14,9 +14,11 @@ export type Haunt = {
   place?: string;
   /** ISO time it was last set. */
   at: string;
+  /** Picked with the Ghost pass: you're here in spirit, not at the gate. */
+  ghost?: true;
 };
 
-export type HauntInput = { qid: string; name: string; place?: string | null };
+export type HauntInput = { qid: string; name: string; place?: string | null; ghost?: boolean };
 
 /**
  * A cemetery named in a page's address: only its ID (?cemetery=Q…). A link's
@@ -30,6 +32,12 @@ export const VERIFIED_SAMPLES: readonly HauntInput[] = [
   { qid: "Q2008469", name: "Oakland Cemetery", place: "Atlanta, Georgia" },
   { qid: "Q360779", name: "Sleepy Hollow Cemetery", place: "Sleepy Hollow, New York" },
 ];
+
+/**
+ * The Ghost pass: for anyone with no graveyard nearby (judges at home, mostly).
+ * Sleepy Hollow, because the Stamp Kit's sample headstone is Washington Irving's.
+ */
+export const GHOST_PASS: HauntInput = { qid: "Q360779", name: "Sleepy Hollow Cemetery", place: "Sleepy Hollow, New York", ghost: true };
 
 const QID_RE = /^Q[1-9]\d{0,11}$/;
 /** A haunt is fresh for 12 hours (F10): after that, it's "last time", not "now". */
@@ -53,7 +61,7 @@ export function makeHaunt(input: HauntInput, now: Date = new Date()): Haunt | nu
   const name = cleanText(input.name, MAX_NAME);
   if (!isQid(qid) || !name) return null;
   const place = cleanText(input.place, MAX_PLACE);
-  return { qid, name, ...(place ? { place } : {}), at: now.toISOString() };
+  return { qid, name, ...(place ? { place } : {}), at: now.toISOString(), ...(input.ghost ? { ghost: true as const } : {}) };
 }
 
 /** Set within the last 12 hours (and not in the future by more than a minute of clock skew). */
@@ -105,12 +113,12 @@ export function parseHaunt(raw: string | null | undefined): Haunt | null {
   const o = v as Record<string, unknown>;
   const at = typeof o.at === "string" && !Number.isNaN(Date.parse(o.at)) ? o.at : null;
   if (!at || typeof o.qid !== "string" || typeof o.name !== "string") return null;
-  const h = makeHaunt({ qid: o.qid, name: o.name, place: typeof o.place === "string" ? o.place : undefined });
+  const h = makeHaunt({ qid: o.qid, name: o.name, place: typeof o.place === "string" ? o.place : undefined, ghost: o.ghost === true });
   return h ? { ...h, at } : null;
 }
 
 export function serializeHaunt(h: Haunt): string {
-  return JSON.stringify({ qid: h.qid, name: h.name, ...(h.place ? { place: h.place } : {}), at: h.at });
+  return JSON.stringify({ qid: h.qid, name: h.name, ...(h.place ? { place: h.place } : {}), at: h.at, ...(h.ghost ? { ghost: true } : {}) });
 }
 
 /** The cemetery a page's address names, if its QID is well formed. Its ?name= and ?place= are ignored (K2). */

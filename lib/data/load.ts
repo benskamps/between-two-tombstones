@@ -277,6 +277,8 @@ export function backfillStories(live: BurialsResponse, saved: CemeterySnapshot):
 }
 
 function fromSaved(saved: CemeterySnapshot, err: DataSourceError): BurialsResponse {
+  // A slow answer (often the first visit after a deploy, on a cold cache) isn't an outage: say so plainly.
+  const why = err.kind === "timeout" ? `${err.source} was slow to answer` : `Couldn't reach ${err.source}`;
   return {
     ...saved,
     origin: "saved",
@@ -284,7 +286,7 @@ function fromSaved(saved: CemeterySnapshot, err: DataSourceError): BurialsRespon
       {
         source: err.source,
         code: "saved-copy",
-        message: `Couldn't reach ${err.source}, so this is the copy saved on ${formatSavedDate(saved.fetchedAt)}.`,
+        message: `${why}, so this is the copy saved on ${formatSavedDate(saved.fetchedAt)}.`,
       },
     ],
   };

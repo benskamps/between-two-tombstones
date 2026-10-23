@@ -50,9 +50,14 @@ export function getFreshHaunt(): Haunt | null {
   return h && isFresh(h) ? h : null;
 }
 
-/** Makes this cemetery the haunt. Returns what was kept, or null for bad input. */
+/**
+ * Makes this cemetery the haunt. Returns what was kept, or null for bad input.
+ * Opening the same cemetery again (its hub, a tool) keeps a Ghost pass; any other cemetery ends it.
+ */
 export function setHaunt(input: HauntInput, now: Date = new Date()): Haunt | null {
-  const h = makeHaunt(input, now);
+  const prev = getHaunt();
+  const ghost = input.ghost ?? (prev?.ghost === true && typeof input.qid === "string" && prev.qid === input.qid.trim().toUpperCase());
+  const h = makeHaunt({ ...input, ghost }, now);
   if (!h) return null;
   const raw = serializeHaunt(h);
   memory = raw;

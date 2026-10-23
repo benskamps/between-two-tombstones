@@ -63,6 +63,10 @@ describe("parseHaunt / serializeHaunt", () => {
     expect(parseHaunt(serializeHaunt(h))).toEqual(h);
     const noPlace = { qid: "Q1", name: "X", at: NOW.toISOString() };
     expect(parseHaunt(serializeHaunt(noPlace))).toEqual(noPlace);
+    const ghost: Haunt = { ...h, ghost: true };
+    expect(parseHaunt(serializeHaunt(ghost))).toEqual(ghost);
+    // Only a literal true is a Ghost pass.
+    expect(parseHaunt(JSON.stringify({ ...h, ghost: "yes" }))).toEqual(h);
   });
 
   it("treats anything malformed as no haunt", () => {

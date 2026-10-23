@@ -87,10 +87,11 @@ test.describe("home", () => {
     await expect(page.getByRole("link", { name: /Oakland Cemetery/ })).toHaveAttribute("href", OAKLAND);
     await expect(page.getByRole("link", { name: /Sleepy Hollow Cemetery/ })).toHaveAttribute("href", "/cemetery/Q360779");
 
-    // No haunt: no badge, and the nav is the ways in.
+    // No haunt: no badge, one nav for the whole night, and the kit wears a lock.
     await expect(badge(page)).toHaveCount(0);
-    await expect(nav(page).getByRole("link")).toHaveText(["Explore", "Gravitator", "Saved"]);
-    await expect(nav(page).getByRole("link", { name: "Saved" })).toHaveAttribute("href", "/gravitator/saved");
+    await expect(nav(page).getByRole("link")).toHaveText(["Swipe", "Matches", "Kit", "Passport"]);
+    await expect(nav(page).getByRole("link", { name: "Matches" })).toHaveAttribute("href", "/gravitator/saved");
+    await expect(nav(page).getByTestId("kit-lock")).toHaveCount(1);
     for (const link of await nav(page).getByRole("link").all()) {
       const box = await link.boundingBox();
       expect(box!.height).toBeGreaterThanOrEqual(48);
@@ -199,7 +200,8 @@ test.describe("home", () => {
     const [backBox, doorsBox] = [await back.boundingBox(), await pf.getByTestId("doors").boundingBox()];
     expect(backBox!.y).toBeLessThan(doorsBox!.y);
     await expect(badge(pf)).toHaveText(/Haunting:\s*Sleepy Hollow Cemetery/);
-    await expect(nav(pf).getByRole("link")).toHaveText(["Haunt", "Stamp", "Spirit", "Games"]);
+    await expect(nav(pf).getByRole("link")).toHaveText(["Swipe", "Matches", "Kit", "Passport"]);
+    await expect(nav(pf).getByTestId("kit-lock")).toHaveCount(0);
     await fresh.close();
 
     const stale = await browser.newContext({ baseURL });
@@ -213,7 +215,7 @@ test.describe("home", () => {
     expect((await last.boundingBox())!.y).toBeGreaterThan((await ps.getByTestId("doors").boundingBox())!.y);
     await expect(ps.getByTestId("haunt-return")).toHaveCount(0);
     await expect(badge(ps)).toHaveCount(0);
-    await expect(nav(ps).getByRole("link")).toHaveText(["Explore", "Gravitator", "Saved"]);
+    await expect(nav(ps).getByTestId("kit-lock")).toHaveCount(1);
     // A stale haunt doesn't open the tools either.
     await ps.goto("/stamp");
     await expect(ps.getByTestId("pick-haunt")).toBeVisible();
@@ -251,9 +253,9 @@ test.describe("the hub", () => {
     await expect(page.getByRole("link", { name: "Start a séance here" })).toHaveCount(0);
     await expect(page.getByRole("link", { name: "Haunt my calendar" })).toHaveCount(0);
 
-    await expect(nav(page).getByRole("link")).toHaveText(["Haunt", "Stamp", "Spirit", "Games"]);
-    await expect(nav(page).getByRole("link", { name: "Haunt" })).toHaveAttribute("aria-current", "page");
-    await expect(nav(page).getByRole("link", { name: "Haunt" })).toHaveAttribute("href", OAKLAND);
+    await expect(nav(page).getByRole("link")).toHaveText(["Swipe", "Matches", "Kit", "Passport"]);
+    await expect(nav(page).getByRole("link", { name: "Kit" })).toHaveAttribute("aria-current", "page");
+    await expect(nav(page).getByRole("link", { name: "Kit" })).toHaveAttribute("href", "/kit");
 
     // A tool from the toolkit opens on the haunt. The names line waits on the live burials route: the
     // spirit box gives it up to 5 s once /spirit has rendered, then uses the saved copy (lib/spirit/load.ts).
@@ -262,7 +264,7 @@ test.describe("the hub", () => {
     // Wikimedia calls. Allow that cap plus the usual 5 s for the page itself.
     await kit(page).getByRole("link", { name: "Spirit", exact: true }).click();
     await expect(page.getByText(/people buried at Oakland Cemetery died 75 or more years ago/)).toBeVisible({ timeout: 10_000 });
-    await expect(nav(page).getByRole("link", { name: "Spirit" })).toHaveAttribute("aria-current", "page");
+    await expect(nav(page).getByRole("link", { name: "Kit" })).toHaveAttribute("aria-current", "page");
 
     // "Change haunt" goes back to the doors; home offers the way back too, above them.
     await openOakland(page);
@@ -418,7 +420,7 @@ test.describe("the hub", () => {
 });
 
 test.describe("first-run rules (F6)", () => {
-  test("show once as a card at the top of the first hub, never as a popup", async ({ page }) => {
+  test("show once as a card on the first hub, after the first stories, never as a popup", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("dialog")).toHaveCount(0);
     await openOakland(page);
@@ -583,5 +585,46 @@ test.describe("links someone sent open straight in, with no haunt", () => {
       await page.goto(path);
       await expect(page.getByTestId("pick-haunt"), path).toHaveCount(0);
     }
+  });
+});
+
+test.describe("the Kit tab and the Ghost pass (decision 29)", () => {
+  test.beforeEach(async ({ context }) => {
+    await context.addInitScript(seenEtiquette);
+  });
+
+  test("the kit is locked without a haunt; the Ghost pass opens it at Sleepy Hollow and says so", async ({ page }) => {
+    await page.goto("/kit");
+    await expect(page.getByTestId("kit-locked")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Stamp Kit" })).toHaveCount(0);
+
+    await page.getByRole("button", { name: "Take the Ghost pass" }).click();
+    await expect(page.getByTestId("ghost-pass")).toContainText("Ghost pass: you’re at Sleepy Hollow Cemetery in spirit.");
+    await expect(page.getByTestId("haunt-badge")).toHaveText(/Ghost pass:\s*Sleepy Hollow Cemetery/);
+    expect(await storedHaunt(page)).toMatchObject({ qid: "Q360779", ghost: true });
+    await expect(nav(page).getByRole("link", { name: "Kit" })).toHaveAttribute("aria-current", "page");
+    await expect(nav(page).getByTestId("kit-lock")).toHaveCount(0);
+    await expect(page.getByRole("link", { name: /^Stamp Kit/ })).toHaveAttribute("href", /^\/stamp\?cemetery=Q360779/);
+
+    // Opening the haunt's own hub keeps the pass; ending it locks the kit again.
+    await page.goto("/cemetery/Q360779");
+    await expect(page.getByRole("heading", { level: 1, name: "Sleepy Hollow Cemetery" })).toBeVisible({ timeout: 25_000 });
+    await expect(page.getByTestId("haunt-badge")).toHaveText(/Ghost pass:/);
+    await page.goto("/kit");
+    await page.getByRole("button", { name: "End the Ghost pass" }).click();
+    await expect(page.getByTestId("kit-locked")).toBeVisible();
+    await expect(page.getByTestId("haunt-badge")).toHaveCount(0);
+  });
+
+  test("a tool that asks for a haunt offers the Ghost pass and opens on it, sample headstone included", async ({ page }) => {
+    await page.goto("/stamp");
+    await expect(page.getByTestId("pick-haunt")).toBeVisible();
+    await page.getByRole("button", { name: "Take the Ghost pass" }).click();
+    await expect(page).toHaveURL(/\/stamp$/);
+    await expect(page.getByTestId("pick-haunt")).toHaveCount(0);
+    await page.getByRole("button", { name: "No headstone handy? Use a sample" }).click();
+    await expect(page.getByTestId("sample-credit")).toContainText("CC BY 2.0");
+    await expect(page.getByTestId("stamp-status")).toContainText(/Photo ready|Stamps ready/);
+    await expect(page.locator("#stamp-name")).toHaveValue("Washington Irving");
   });
 });

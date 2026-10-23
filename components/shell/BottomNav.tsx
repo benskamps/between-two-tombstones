@@ -3,75 +3,84 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ToolIcon, type ToolId } from "@/components/ui/tools";
-import { hubHref, type Haunt } from "@/lib/haunt/haunt";
 import { useHaunt } from "@/lib/haunt/useHaunt";
 
 type Item = { href: string; label: string; tool: ToolId; match: (p: string) => boolean };
 
-/** Without a haunt: the ways in, and the graves you saved in the Gravitator. */
-const DOORS: Item[] = [
-  { href: "/", label: "Explore", tool: "search", match: (p) => p === "/" || p.startsWith("/search") || p.startsWith("/near") },
-  { href: "/gravitator", label: "Gravitator", tool: "gravitator", match: (p) => p.startsWith("/gravitator") && !p.startsWith("/gravitator/saved") },
-  { href: "/gravitator/saved", label: "Saved", tool: "saved", match: (p) => p.startsWith("/gravitator/saved") },
-];
+/** Where the kit's tools live: the Kit tab stays lit on all of them, and on the haunt's hub. */
+const KIT_PATHS = ["/kit", "/cemetery", "/stamp", "/spirit", "/games", "/calendar"];
 
-/** With a haunt: its hub and its tools. The hub has the way back to the doors ("Change haunt"). */
-function hauntItems(h: Haunt): Item[] {
-  return [
-    { href: hubHref(h), label: "Haunt", tool: "haunt", match: (p) => p.startsWith("/cemetery") },
-    { href: "/stamp", label: "Stamp", tool: "stamp", match: (p) => p.startsWith("/stamp") },
-    { href: "/spirit", label: "Spirit", tool: "spirit", match: (p) => p.startsWith("/spirit") },
-    { href: "/games", label: "Games", tool: "games", match: (p) => p.startsWith("/games") },
-  ];
-}
+/**
+ * One nav for the whole night (decision 29): find a graveyard, the ones you
+ * matched, the kit for the one you picked, and what you kept.
+ */
+const NAV: Item[] = [
+  { href: "/gravitator", label: "Swipe", tool: "gravitator", match: (p) => p.startsWith("/gravitator") && !p.startsWith("/gravitator/saved") },
+  { href: "/gravitator/saved", label: "Matches", tool: "saved", match: (p) => p.startsWith("/gravitator/saved") },
+  { href: "/kit", label: "Kit", tool: "haunt", match: (p) => KIT_PATHS.some((k) => p === k || p.startsWith(`${k}/`)) },
+  { href: "/p", label: "Passport", tool: "passport", match: (p) => p === "/p" },
+];
 
 export function BottomNav() {
   const pathname = usePathname() ?? "/";
-  // The server can't know the haunt (it lives on the phone). Until it's read,
-  // the bar keeps its height with no tabs, so it doesn't flip from the doors'
-  // tabs to the haunt's on every load (F25).
-  const haunt = useHaunt();
-  const items = haunt === undefined ? null : haunt ? hauntItems(haunt) : DOORS;
+  // The haunt lives on the phone: the Kit tab wears a lock once the phone says there's none.
+  const locked = useHaunt() === null;
   return (
     <nav
       aria-label="Main"
       className="nav-dock fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)]"
     >
-      {items === null ? (
-        <div className="h-16" aria-hidden="true" />
-      ) : (
-        <ul className={`mx-auto grid max-w-2xl ${items.length === 4 ? "grid-cols-4" : "grid-cols-3"}`}>
-          {items.map((item) => {
-            const active = item.match(pathname);
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={active ? "page" : undefined}
-                  className={`tap relative flex h-16 flex-col items-center justify-center gap-1 transition-colors ${
-                    active ? "text-mauve" : "text-muted hover:text-text"
+      <ul className="mx-auto grid max-w-2xl grid-cols-4">
+        {NAV.map((item) => {
+          const active = item.match(pathname);
+          const lock = locked && item.href === "/kit";
+          return (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                title={lock ? "Opens once you pick a graveyard" : undefined}
+                className={`tap relative flex h-16 flex-col items-center justify-center gap-1 transition-colors ${
+                  active ? "text-mauve" : "text-muted hover:text-text"
+                }`}
+              >
+                {active && (
+                  <span
+                    aria-hidden="true"
+                    className="nav-pill-active pointer-events-none absolute top-1.5 h-1 w-7 rounded-full"
+                  />
+                )}
+                <span className="relative">
+                  <ToolIcon tool={item.tool} className="h-5 w-5" />
+                  {lock && (
+                    <svg
+                      aria-hidden="true"
+                      data-testid="kit-lock"
+                      viewBox="0 0 24 24"
+                      className="absolute -right-2.5 -bottom-1 h-3 w-3"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                    >
+                      <rect x="5" y="11" width="14" height="9" rx="2" />
+                      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+                    </svg>
+                  )}
+                </span>
+                {/* Title case: four labels in Michroma capitals don't fit a 390 px phone ("PASSPORT" clipped). */}
+                <span
+                  className={`whitespace-nowrap font-label text-[13px] tracking-[0.02em] ${
+                    active ? "underline decoration-2 underline-offset-4" : ""
                   }`}
                 >
-                  {active && (
-                    <span
-                      aria-hidden="true"
-                      className="nav-pill-active pointer-events-none absolute top-1.5 h-1 w-7 rounded-full"
-                    />
-                  )}
-                  <ToolIcon tool={item.tool} className="h-5 w-5" />
-                  <span
-                    className={`whitespace-nowrap font-label text-[13px] uppercase tracking-[0.05em] ${
-                      active ? "underline decoration-2 underline-offset-4" : ""
-                    }`}
-                  >
-                    {item.label}
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+                  {item.label}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
     </nav>
   );
 }

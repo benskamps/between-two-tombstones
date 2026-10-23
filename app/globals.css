@@ -1453,7 +1453,7 @@ body:has(.home-editorial) .site-header .wordmark { font-size: 19px; }
 .hero-shade { position: absolute; inset: 0; z-index: -2; background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 88%, transparent), color-mix(in srgb, var(--bg) 38%, transparent) 58%, transparent), linear-gradient(0deg, var(--bg), transparent 25%, transparent 80%, color-mix(in srgb, var(--bg) 60%, transparent)); }
 .hero-content { width: 100%; max-width: 850px; animation: cemetery-arrive .8s ease-out both; }
 .editorial-kicker { color: var(--candle); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; }
-.hero-content h1 { font-family: var(--font-carved), Georgia, serif; font-size: clamp(66px, 8.4vw, 126px); font-weight: 400; line-height: .94; letter-spacing: -.045em; margin: 30px 0 28px; }
+.hero-content h1 { font-family: var(--font-carved), Georgia, serif; font-size: clamp(60px, 7.2vw, 108px); font-weight: 400; line-height: .94; letter-spacing: -.045em; margin: 30px 0 28px; }
 .hero-content h1 em { font-style: normal; }
 .hero-period { color: var(--candle); }
 .hero-invitation { font-family: var(--font-carved), Georgia, serif; font-size: clamp(23px, 2.5vw, 34px); margin-bottom: 10px; }
@@ -1464,6 +1464,10 @@ body:has(.home-editorial) .site-header .wordmark { font-size: 19px; }
 .editorial-text-link { display: inline-flex; min-height: 48px; align-items: center; gap: 18px; border-bottom: 1px solid var(--ash); font-size: 15px; }
 .editorial-text-link:hover { color: var(--candle); }
 .hero-footnote { color: var(--text-muted); font-size: 12px; margin-top: 18px; }
+/* City decks for anyone who isn't near a graveyard: the same links as the Gravitator's start screen. */
+.hero-cities { display: flex; flex-wrap: wrap; align-items: center; gap: 0 18px; margin-top: 14px; font-size: 15px; color: var(--text-muted); }
+.hero-cities a { display: inline-flex; align-items: center; color: var(--mauve); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+.hero-cities a:hover { color: var(--text); }
 .hero-bottom { display: flex; align-items: center; justify-content: space-between; position: absolute; bottom: 12px; left: clamp(24px, 7vw, 112px); right: clamp(24px, 7vw, 112px); font-size: 12px; color: var(--text-muted); }
 .hero-bottom a { display: inline-flex; align-items: center; gap: 20px; }
 .editorial-body { max-width: var(--home-width); margin: auto; padding: 0 32px 60px; }
@@ -1509,7 +1513,7 @@ body:has(.home-editorial) .site-header .wordmark { font-size: 19px; }
   .cemetery-hero { min-height: calc(100svh - 64px); padding: 104px 24px 75px; }
   .cemetery-hero-image { object-position: 62% center; }
   .hero-shade { background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 82%, transparent), color-mix(in srgb, var(--bg) 35%, transparent)), linear-gradient(0deg, var(--bg), transparent 50%); }
-  .hero-content h1 { font-size: clamp(53px, 12vw, 72px); margin: 24px 0; }
+  .hero-content h1 { font-size: clamp(44px, 12vw, 64px); margin: 20px 0; }
   .hero-description { max-width: 310px; font-size: 16px; }
   .hero-actions { gap: 10px; margin-top: 22px; flex-direction: column; align-items: flex-start; }
   .hero-invitation { font-size: 25px; }
