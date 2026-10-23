@@ -10,7 +10,7 @@ type Item = { href: string; label: string; tool: ToolId; match: (p: string) => b
 
 /** Without a haunt: the ways in, and the graves you saved in the Gravitator. */
 const DOORS: Item[] = [
-  { href: "/", label: "Search", tool: "search", match: (p) => p === "/" || p.startsWith("/search") || p.startsWith("/near") },
+  { href: "/", label: "Explore", tool: "search", match: (p) => p === "/" || p.startsWith("/search") || p.startsWith("/near") },
   { href: "/gravitator", label: "Gravitator", tool: "gravitator", match: (p) => p.startsWith("/gravitator") && !p.startsWith("/gravitator/saved") },
   { href: "/gravitator/saved", label: "Saved", tool: "saved", match: (p) => p.startsWith("/gravitator/saved") },
 ];

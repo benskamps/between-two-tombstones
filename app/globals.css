@@ -1440,3 +1440,95 @@ nav[aria-label="Main"] ul {
     animation: none;
   }
 }
+
+/* The entrance: a photographic field guide, with the tools one level deeper. */
+body:has(.home-editorial) { background-image: none; }
+main:has(.home-editorial) { max-width: none; padding: 0; }
+body:has(.home-editorial) .site-header { position: absolute; inset: 0 0 auto; background: transparent; border: 0; box-shadow: none; background-image: none; }
+body:has(.home-editorial) .site-header > div { max-width: 1440px; padding: 18px clamp(24px, 5vw, 80px); }
+body:has(.home-editorial) .site-header .wordmark { font-size: 19px; }
+.home-editorial { --home-width: 1120px; }
+.cemetery-hero { position: relative; isolation: isolate; min-height: min(900px, calc(100svh - 64px)); display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding: 110px clamp(24px, 7vw, 112px) 80px; background: var(--bg); }
+.cemetery-hero-image { object-fit: cover; object-position: center 55%; z-index: -3; animation: cemetery-arrive 1.5s ease-out both, cemetery-drift 22s ease-out 1.5s both; }
+.hero-shade { position: absolute; inset: 0; z-index: -2; background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 88%, transparent), color-mix(in srgb, var(--bg) 38%, transparent) 58%, transparent), linear-gradient(0deg, var(--bg), transparent 25%, transparent 80%, color-mix(in srgb, var(--bg) 60%, transparent)); }
+.hero-content { width: 100%; max-width: 850px; animation: cemetery-arrive .8s ease-out both; }
+.editorial-kicker { color: var(--candle); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; }
+.hero-content h1 { font-family: var(--font-carved), Georgia, serif; font-size: clamp(66px, 8.4vw, 126px); font-weight: 400; line-height: .94; letter-spacing: -.045em; margin: 30px 0 28px; }
+.hero-content h1 em { font-style: normal; }
+.hero-period { color: var(--candle); }
+.hero-invitation { font-family: var(--font-carved), Georgia, serif; font-size: clamp(23px, 2.5vw, 34px); margin-bottom: 10px; }
+.hero-description { max-width: 390px; font-size: 17px; color: var(--text-muted); line-height: 1.65; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; margin-top: 30px; }
+.editorial-button { display: inline-flex; min-height: 54px; align-items: center; justify-content: space-between; gap: 32px; padding: 13px 22px; background: var(--candle); color: var(--bg); font-weight: 700; border: 1px solid var(--candle); transition: background .2s, transform .2s; }
+.editorial-button:hover { background: var(--text); transform: translateY(-2px); }
+.editorial-text-link { display: inline-flex; min-height: 48px; align-items: center; gap: 18px; border-bottom: 1px solid var(--ash); font-size: 15px; }
+.editorial-text-link:hover { color: var(--candle); }
+.hero-footnote { color: var(--text-muted); font-size: 12px; margin-top: 18px; }
+.hero-bottom { display: flex; align-items: center; justify-content: space-between; position: absolute; bottom: 12px; left: clamp(24px, 7vw, 112px); right: clamp(24px, 7vw, 112px); font-size: 12px; color: var(--text-muted); }
+.hero-bottom a { display: inline-flex; align-items: center; gap: 20px; }
+.editorial-body { max-width: var(--home-width); margin: auto; padding: 0 32px 60px; }
+.home-return:has(section, p) { padding-top: 32px; }
+.home-destinations, .home-finder, .home-stories { padding-top: 64px; scroll-margin-top: 30px; }
+.section-intro { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 20px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+.section-intro > p:last-child { color: var(--text-muted); font-size: 14px; }
+.home-destinations section > div { text-align: left; }
+.home-destinations section > div > p { display: none; }
+.home-destinations h2 { font-size: 36px; }
+.home-editorial .card, .home-editorial .arch { background: transparent; background-image: none; box-shadow: none; border-radius: 0; border: 0; }
+.home-editorial .card::before, .home-editorial .card::after, .home-editorial .arch::before, .home-editorial .arch::after { display: none; }
+.home-destinations ul { margin-top: 25px; gap: 32px; }
+.home-destinations li { border-bottom: 1px solid var(--ash); }
+.home-destinations li a { padding: 24px 0; transition: padding .2s; }
+.home-destinations li a:hover { padding-left: 12px; }
+.home-destinations li .font-display { font-size: 32px; }
+.home-finder [data-testid="doors"] { grid-template-columns: 1.2fr 1fr; gap: 60px; }
+.home-finder .arch { text-align: left; padding: 0 !important; }
+.home-finder .arch > .symbol-pair { display: none; }
+.home-finder .arch > div:first-child { display: none; }
+.home-finder h2 { font-size: 32px; margin-bottom: 18px; }
+.home-editorial .btn, .home-editorial .field { border-radius: 3px; box-shadow: none; }
+.home-finder .btn-candle { background: transparent; color: var(--candle); border: 1px solid var(--candle); }
+.home-stories [data-testid="home-showcase"] { display: grid; gap: 60px; }
+.home-stories [data-testid="home-showcase"] > section:first-child { max-width: 760px; margin: 0 auto; width: 100%; }
+.home-stories article.arch { border-left: 1px solid var(--candle); padding: 20px 32px !important; }
+.home-stories article header { text-align: left; }
+.home-stories article header > div, .home-stories article > ul { display: none; }
+.home-stories article h3 { font-size: 42px; }
+.home-stories article > p { background: transparent; border: 0; padding-left: 0; }
+.home-stories [aria-labelledby="instruments-heading"] > ul { gap: 0 40px; }
+.home-stories [aria-labelledby="instruments-heading"] > ul > li { border-top: 1px solid var(--border); }
+.home-stories [aria-labelledby="instruments-heading"] > ul a { padding: 24px 0; }
+.home-stories .readout-strip { display: none; }
+.home-stories .tool-medallion { background: transparent; border: 0; box-shadow: none; }
+.home-stories h2 { font-size: 32px; }
+.artwork-credit { font-size: 12px; color: var(--text-muted); margin-top: 60px; }
+@keyframes cemetery-arrive { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes cemetery-drift { from { transform: scale(1.04); } to { transform: scale(1); } }
+@media (min-width: 900px) { body:has(.home-editorial) .nav-dock { left: auto; right: 24px; bottom: 20px; width: 380px; border: 1px solid var(--border); background: var(--bg); } }
+@media (max-width: 600px) {
+  .cemetery-hero { min-height: calc(100svh - 64px); padding: 104px 24px 75px; }
+  .cemetery-hero-image { object-position: 62% center; }
+  .hero-shade { background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 82%, transparent), color-mix(in srgb, var(--bg) 35%, transparent)), linear-gradient(0deg, var(--bg), transparent 50%); }
+  .hero-content h1 { font-size: clamp(53px, 12vw, 72px); margin: 24px 0; }
+  .hero-description { max-width: 310px; font-size: 16px; }
+  .hero-actions { gap: 10px; margin-top: 22px; flex-direction: column; align-items: flex-start; }
+  .hero-invitation { font-size: 25px; }
+  .hero-bottom > span { display: none; }
+  .hero-bottom { justify-content: flex-end; }
+  .editorial-body { padding: 0 24px 40px; }
+  .section-intro { flex-direction: column; gap: 10px; }
+  .home-finder [data-testid="doors"] { grid-template-columns: 1fr; gap: 36px; }
+  .home-destinations, .home-finder, .home-stories { padding-top: 42px; }
+  .home-stories article.arch { padding: 10px 16px !important; }
+}
+@media (prefers-reduced-motion: reduce) { .cemetery-hero-image, .hero-content { animation: none; } .editorial-button, .home-destinations li a { transition: none; } }
+@media (min-width: 900px) {
+  body:has(.home-editorial) .nav-dock { position: absolute; top: 20px; bottom: auto; right: 4vw; width: 360px; border: 0; background: transparent; box-shadow: none; }
+  body:has(.home-editorial) .nav-dock a { height: 48px; }
+  body:has(.home-editorial) .nav-dock svg, body:has(.home-editorial) .nav-pill-active { display: none; }
+  body:has(.home-editorial) .nav-dock a span { font-family: var(--font-body), sans-serif; font-size: 14px; text-transform: none; letter-spacing: .02em; }
+}
+
+.home-editorial .label { font-family: var(--font-body), sans-serif; letter-spacing: .12em; font-size: 12px; }
+.home-finder .arch > span[aria-hidden], .home-stories article header > span[aria-hidden] { display: none; }
+body:has(.home-editorial) .site-header [data-testid="haunt-badge"] { position: absolute; top: 70px; left: clamp(24px, 7vw, 112px); max-width: 70vw; }

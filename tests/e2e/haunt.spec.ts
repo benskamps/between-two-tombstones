@@ -89,7 +89,7 @@ test.describe("home", () => {
 
     // No haunt: no badge, and the nav is the ways in.
     await expect(badge(page)).toHaveCount(0);
-    await expect(nav(page).getByRole("link")).toHaveText(["Search", "Gravitator", "Saved"]);
+    await expect(nav(page).getByRole("link")).toHaveText(["Explore", "Gravitator", "Saved"]);
     await expect(nav(page).getByRole("link", { name: "Saved" })).toHaveAttribute("href", "/gravitator/saved");
     for (const link of await nav(page).getByRole("link").all()) {
       const box = await link.boundingBox();
@@ -213,7 +213,7 @@ test.describe("home", () => {
     expect((await last.boundingBox())!.y).toBeGreaterThan((await ps.getByTestId("doors").boundingBox())!.y);
     await expect(ps.getByTestId("haunt-return")).toHaveCount(0);
     await expect(badge(ps)).toHaveCount(0);
-    await expect(nav(ps).getByRole("link")).toHaveText(["Search", "Gravitator", "Saved"]);
+    await expect(nav(ps).getByRole("link")).toHaveText(["Explore", "Gravitator", "Saved"]);
     // A stale haunt doesn't open the tools either.
     await ps.goto("/stamp");
     await expect(ps.getByTestId("pick-haunt")).toBeVisible();

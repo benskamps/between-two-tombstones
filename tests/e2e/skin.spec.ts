@@ -175,19 +175,25 @@ test.describe("layout and sunlight", () => {
     if (await word.isVisible()) expect((await word.boundingBox())!.height).toBeLessThan(30);
   });
 
-  test("both doors' buttons sit above the fold on a Pixel 7", async ({ page }) => {
+  test("the first invitation and own-graveyard path fit above the mobile dock", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link").first()).toBeVisible();
     await settle(page);
     const navTop = (await page.getByRole("navigation", { name: "Main" }).boundingBox())!.y;
-    const gravitator = (await page.getByRole("link", { name: "Open the Gravitator" }).boundingBox())!;
-    expect(gravitator.y + gravitator.height).toBeLessThanOrEqual(navTop);
-    const hauntMe = (await page.getByRole("button", { name: /^I.m here\. Haunt me\.$/ }).boundingBox())!;
-    expect(hauntMe.y + hauntMe.height).toBeLessThanOrEqual(navTop);
+    for (const name of ["Step into Sleepy Hollow", "Find my own graveyard"]) {
+      const box = (await page.getByRole("link", { name, exact: true }).boundingBox())!;
+      expect(box.y).toBeGreaterThan(0);
+      expect(box.y + box.height).toBeLessThanOrEqual(navTop);
+      expect(box.height).toBeGreaterThanOrEqual(48);
+    }
+    await page.getByRole("link", { name: "Find my own graveyard", exact: true }).click();
+    await expect(page.getByLabel("Or type the cemetery’s name")).toBeInViewport();
   });
 
   test("nav labels are at least 13 px", async ({ page }) => {
     await page.goto("/");
+    // The dock waits for local storage before rendering its links.
+    await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link").first()).toBeVisible();
     const sizes = await page
       .getByRole("navigation", { name: "Main" })
       .locator("a span")

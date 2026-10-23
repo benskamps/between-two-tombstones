@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { BingoGlyph } from "@/components/games/BingoGlyph";
-import { ReadoutStrip } from "@/components/ui/Instrument";
 import { SymbolPair } from "@/components/ui/Motifs";
 import { Candle, Chisel, EpitaphRiddle, Fern, HourglassSprout, PassportSeal, Planchette, Sprout } from "@/components/ui/symbols";
 
@@ -77,41 +76,41 @@ const FEATURED_GRAVES: FeaturedGrave[] = [
 const FIELD_INSTRUMENTS = [
   {
     href: "/stamp",
-    badge: "Darkroom & AI Vision",
+    badge: "Make a keepsake",
     title: "Stamp Kit & Stone Reader",
-    body: "Frame any weathered stone to press a wax rubbing, an ink stamp, and a postage stamp valued at their age at death — or let Claude decipher worn 1800s carvings.",
+    body: "Turn a headstone photo into a keepsake, or get help reading a worn inscription.",
     icon: Fern,
     accent: "text-candle",
   },
   {
     href: "/spirit",
-    badge: "Web Audio & Sync",
+    badge: "Listen together",
     title: "Spirit Box & Multi-Phone Séance",
-    body: "Sweeps radio noise and speaks only burials gone 75+ years. Start a Séance and every phone in the circle speaks the same name at the exact same millisecond.",
+    body: "Hear names from the cemetery through radio static. Invite friends to listen together.",
     icon: Planchette,
     accent: "text-wisp",
   },
   {
     href: "/games/bingo",
-    badge: "44 Victorian Symbols",
+    badge: "Look for the details",
     title: "Tombstone Bingo & Party",
-    body: "Spot weeping willows, broken columns, and winged hourglasses while you walk. Share one code so everyone plays on the same card.",
+    body: "Find the willows, wings, and hourglasses carved into the stones. Play alone or with friends.",
     icon: HourglassSprout,
     accent: "text-lichen",
   },
   {
     href: "/games/whoami",
-    badge: "3-Clue Riddles",
+    badge: "Follow the clues",
     title: "Who Am I?",
-    body: "Read three progressive clues drawn live from the graves of your haunt — their dates, their calling, and a redacted line from their life.",
+    body: "Three clues. One life. Can you put a name to the story?",
     icon: EpitaphRiddle,
     accent: "text-mauve",
   },
   {
     href: "/games/stonemath",
-    badge: "1800s Inscriptions",
+    badge: "Read between the dates",
     title: "Stone Math Decoder",
-    body: "Work a birth date back from “Aged 34 y'rs 2 m's 11 d's” or “in the 76th year”, borrowing months the way 19th-century stonecutters did.",
+    body: "Unravel the years, months, and days on an old stone to find a birth date.",
     icon: Chisel,
     accent: "text-candle",
   },
@@ -119,7 +118,7 @@ const FIELD_INSTRUMENTS = [
     href: "/p",
     badge: "Pocket Almanac",
     title: "Graveyard Passport",
-    body: "Keep a private ledger on your phone of haunts visited, graves pinned, stamps pressed, and Victorian mourning badges earned.",
+    body: "Keep the places, graves, and discoveries from your walks, privately on your phone.",
     icon: PassportSeal,
     accent: "text-lichen",
   },
@@ -218,15 +217,6 @@ export function HomeShowcase() {
             Every cemetery becomes an outdoor museum, a darkroom, and a late-night instrument panel.
           </p>
         </div>
-
-        <ReadoutStrip
-          live
-          status="Field Kit Ready"
-          values={[
-            { label: "Sources", value: "Wikidata · Wikipedia" },
-            { label: "Respect", value: "25y / 75y rules" },
-          ]}
-        />
 
         <ul className="grid gap-3 sm:grid-cols-2">
           {FIELD_INSTRUMENTS.map((item) => {
