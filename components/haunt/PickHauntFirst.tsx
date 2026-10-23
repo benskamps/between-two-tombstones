@@ -6,6 +6,7 @@ import { RingedMoon } from "@/components/ui/symbols";
 import { NEXT_TOOLS } from "@/lib/haunt/haunt";
 import { rememberNext } from "@/lib/haunt/next";
 import { Doors } from "./Doors";
+import { GhostPassButton } from "./GhostPass";
 import { FamousCemeteries } from "./Famous";
 
 export type ToolPath = keyof typeof NEXT_TOOLS;
@@ -49,6 +50,12 @@ export function PickHauntFirst({ tool }: { tool: ToolPath }) {
             {JOIN[tool].label}
           </Link>
         )}
+      </div>
+      <div className="card space-y-2 px-5 py-4 text-center">
+        <p>
+          No graveyard nearby? The Ghost pass puts you at Sleepy Hollow in spirit, and {NEXT_TOOLS[tool]} opens there.
+        </p>
+        <GhostPassButton to={tool} />
       </div>
       <Doors idPrefix="gate" level={3} />
       <FamousCemeteries id="gate-famous" />

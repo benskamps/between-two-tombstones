@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { BingoGlyph } from "@/components/games/BingoGlyph";
+import { GhostPassButton } from "@/components/haunt/GhostPass";
 import { SymbolPair } from "@/components/ui/Motifs";
 import { Candle, Chisel, EpitaphRiddle, Fern, HourglassSprout, PassportSeal, Planchette, Sprout } from "@/components/ui/symbols";
 
@@ -223,6 +224,14 @@ export function HomeShowcase() {
           })}
         </ul>
 
+        <div className="card space-y-2 px-4 py-4">
+          <p className="font-bold">No graveyard nearby?</p>
+          <p className="text-sm text-muted">
+            The Ghost pass puts you at Sleepy Hollow&rsquo;s gate in spirit, with a sample headstone in the Stamp Kit. Every
+            tool works, and it says &ldquo;Ghost pass&rdquo; wherever your haunt shows.
+          </p>
+          <GhostPassButton />
+        </div>
         <a href="#find" className="tap inline-flex items-center gap-2 font-bold text-mauve underline underline-offset-4">
           At a graveyard now? Pick it <span aria-hidden="true">↑</span>
         </a>

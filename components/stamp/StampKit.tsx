@@ -74,12 +74,27 @@ function useStampLink(): string | null {
   return sharePath({ kind: "tour", cemetery: cemetery.qid });
 }
 
+/**
+ * The sample headstone (public/samples/, a copy of tests/fixtures/stones/WashingtonIrvingGrave.jpg;
+ * license in tests/fixtures/stones/LICENSES.md). Name and dates as Wikidata has them (the Sleepy Hollow
+ * snapshot), the same as the fields' placeholders.
+ */
+const SAMPLE_STONE = {
+  src: "/samples/washington-irving-grave.jpg",
+  page: "https://commons.wikimedia.org/wiki/File:WashingtonIrvingGrave.jpg",
+  name: "Washington Irving",
+  born: "April 3, 1783",
+  died: "November 28, 1859",
+};
+
 export function StampKit() {
   const clientRef = useRef<StampClient | null>(null);
   const urlsRef = useRef<PreviewUrls | null>(null);
   const blobsRef = useRef<Blobs | null>(null);
   const [photo, setPhoto] = useState<Photo | null>(null);
   const [opening, setOpening] = useState(false);
+  /** The photo is the sample headstone: its credit shows under the picker. */
+  const [sample, setSample] = useState(false);
   const [corners, setCorners] = useState<Quad | null>(null);
   const [settings, setSettings] = useState<StampSettings>(DEFAULT_SETTINGS);
   const [name, setName] = useState("");
@@ -177,12 +192,36 @@ export function StampKit() {
   }, [photo, corners, cornersOk, settings, text, applyRender]);
 
   async function onFile(e: ChangeEvent<HTMLInputElement>) {
-    const input = e.currentTarget;
-    const file = input.files?.[0];
-    if (!file) return;
+    const file = e.currentTarget.files?.[0];
+    if (file) await openPhoto(file);
+  }
+
+  /** For anyone without a stone in front of them (the Ghost pass, a judge at home): Washington Irving's, labelled as a sample. */
+  async function openSample() {
+    setOpening(true);
+    setError(null);
+    try {
+      const res = await fetch(SAMPLE_STONE.src);
+      if (!res.ok) throw new Error(`sample ${res.status}`);
+      if (!(await openPhoto(await res.blob()))) return;
+      setSample(true);
+      // The stone's own carving, so the postage value (the age at death) reads right away.
+      setName((v) => v || SAMPLE_STONE.name);
+      setBorn((v) => v || SAMPLE_STONE.born);
+      setDied((v) => v || SAMPLE_STONE.died);
+    } catch {
+      setOpening(false);
+      setError("Couldn't load the sample headstone. Check your connection, or use a photo of your own.");
+    }
+  }
+
+  /** Opens a photo for framing. True once it's ready; false after saying what went wrong. */
+  async function openPhoto(file: Blob): Promise<boolean> {
+    setSample(false);
     if (!stampKitSupported()) {
+      setOpening(false);
       setError("This browser can't make stamps: it lacks off-screen drawing. Try a current Chrome, Firefox or Safari.");
-      return;
+      return false;
     }
     setOpening(true);
     setError(null);
@@ -212,6 +251,7 @@ export function StampKit() {
       setLast(null);
       blobsRef.current = null;
       setStatus("Photo ready. Drag the corners onto the stone's face; the stamps update as you go.");
+      return true;
     } catch (err) {
       setStatus("");
       setError(
@@ -219,6 +259,7 @@ export function StampKit() {
           ? err.message
           : "Couldn't open that photo. Try another one, or a JPEG or PNG.",
       );
+      return false;
     } finally {
       setOpening(false);
     }
@@ -343,6 +384,20 @@ export function StampKit() {
             className="sr-only"
           />
         </label>
+        {!photo && (
+          <button type="button" onClick={openSample} disabled={opening} className="btn btn-ghost w-full">
+            No headstone handy? Use a sample
+          </button>
+        )}
+        {sample && (
+          <p className="text-sm text-muted" data-testid="sample-credit">
+            Sample: Washington Irving&rsquo;s headstone, Sleepy Hollow. Photo by Chris Kirkman,{" "}
+            <a href={SAMPLE_STONE.page} className="underline underline-offset-4">
+              CC BY 2.0, via Wikimedia Commons
+            </a>
+            .
+          </p>
+        )}
       </section>
 
       {!photo && (
