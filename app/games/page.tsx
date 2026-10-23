@@ -31,6 +31,24 @@ const GAMES: { href: string; title: string; body: string; tool: ToolId }[] = [
     body: "Every phone on one link speaks the same spirit words at the same second.",
     tool: "seance",
   },
+  {
+    href: "/games/whoami",
+    title: "Who Am I?",
+    body: "Three clues from a stone at your haunt: dates, calling, and a line from their life.",
+    tool: "whoami",
+  },
+  {
+    href: "/games/stonemath",
+    title: "Stone Math",
+    body: "Work a birth date back from “Aged 34 y'rs 2 m's 11 d's”, the way the stonecutter subtracted it.",
+    tool: "stonemath",
+  },
+  {
+    href: "/p",
+    title: "Graveyard Passport",
+    body: "Your pocket ledger of cemeteries visited, graves pinned, stamps pressed and badges earned.",
+    tool: "passport",
+  },
 ];
 
 export default function GamesPage() {

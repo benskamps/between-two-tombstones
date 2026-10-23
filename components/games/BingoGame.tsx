@@ -17,6 +17,7 @@ import {
 } from "@/lib/games/bingo";
 import { SOLO_SEED_KEY, marksKey, parseMarks, readItem, subscribeStorage, writeItem } from "@/lib/games/storage";
 import { FREE_SQUARE, symbolById } from "@/lib/games/symbols";
+import { recordBingoWin } from "@/lib/passport/store";
 import { BingoGlyph } from "./BingoGlyph";
 import { PartyShare } from "./PartyShare";
 
@@ -56,9 +57,12 @@ export function BingoGame() {
   function tap(i: number) {
     setSelected(i);
     if (!seed || i === CENTER) return;
+    const prevLines = completedLines(marked).length;
     const next = new Set(marked);
     if (next.has(i)) next.delete(i);
     else next.add(i);
+    const nextLines = completedLines(next).length;
+    if (nextLines > prevLines) recordBingoWin();
     writeItem(marksKey(seed), JSON.stringify([...next].sort((a, b) => a - b)));
   }
 

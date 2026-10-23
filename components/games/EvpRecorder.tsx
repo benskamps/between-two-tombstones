@@ -16,6 +16,9 @@ type Runtime = {
   stream: MediaStream | null;
   recorder: MediaRecorder | null;
   source: AudioBufferSourceNode | null;
+  micNode: MediaStreamAudioSourceNode | null;
+  analyser: AnalyserNode | null;
+  rafId: number | null;
   reversed: AudioBuffer | null;
   timers: Set<ReturnType<typeof setTimeout>>;
   ticker: ReturnType<typeof setInterval> | null;
@@ -60,16 +63,78 @@ export function EvpRecorder() {
   const [remaining, setRemaining] = useState(seconds);
   const [duration, setDuration] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [liveTrace, setLiveTrace] = useState<string | null>(null);
   const rt = useRef<Runtime>({
     ctx: null,
     stream: null,
     recorder: null,
     source: null,
+    micNode: null,
+    analyser: null,
+    rafId: null,
     reversed: null,
     timers: new Set(),
     ticker: null,
     disposed: false,
   });
+
+  function stopScope() {
+    const r = rt.current;
+    if (r.rafId !== null) {
+      cancelAnimationFrame(r.rafId);
+      r.rafId = null;
+    }
+    try {
+      r.micNode?.disconnect();
+    } catch {
+      // ignore
+    }
+    r.micNode = null;
+    try {
+      r.analyser?.disconnect();
+    } catch {
+      // ignore
+    }
+    r.analyser = null;
+    setLiveTrace(null);
+  }
+
+  function startScope(connectNode: (analyser: AnalyserNode) => void) {
+    const r = rt.current;
+    stopScope();
+    if (!r.ctx || typeof r.ctx.createAnalyser !== "function") return;
+    if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    try {
+      const analyser = r.ctx.createAnalyser();
+      analyser.fftSize = 128;
+      analyser.smoothingTimeConstant = 0.65;
+      connectNode(analyser);
+      r.analyser = analyser;
+      const buf = new Uint8Array(analyser.frequencyBinCount);
+      let lastPaint = 0;
+      const tick = (now: number) => {
+        if (r.disposed || r.analyser !== analyser) return;
+        if (now - lastPaint >= 45) {
+          lastPaint = now;
+          analyser.getByteTimeDomainData(buf);
+          let peak = 0;
+          for (let i = 0; i < buf.length; i++) {
+            const dev = Math.abs(buf[i] - 128);
+            if (dev > peak) peak = dev;
+          }
+          if (peak > 2) {
+            setLiveTrace(waveFromSamples(buf));
+          } else {
+            setLiveTrace(null);
+          }
+        }
+        r.rafId = requestAnimationFrame(tick);
+      };
+      r.rafId = requestAnimationFrame(tick);
+    } catch {
+      // Fallback to CSS sweep wave if AnalyserNode isn't supported.
+    }
+  }
 
   function clearTimers() {
     const r = rt.current;
@@ -81,6 +146,7 @@ export function EvpRecorder() {
 
   function releaseMic() {
     const r = rt.current;
+    stopScope();
     r.stream?.getTracks().forEach((t) => t.stop());
     r.stream = null;
   }
@@ -94,6 +160,7 @@ export function EvpRecorder() {
 
   function stopPlayback() {
     const r = rt.current;
+    stopScope();
     const src = r.source;
     r.source = null;
     if (src) {
@@ -135,6 +202,10 @@ export function EvpRecorder() {
       r.timers.clear();
       if (r.ticker !== null) clearInterval(r.ticker);
       r.ticker = null;
+      if (r.rafId !== null) {
+        cancelAnimationFrame(r.rafId);
+        r.rafId = null;
+      }
       if (r.recorder && r.recorder.state !== "inactive") r.recorder.stop();
       r.stream?.getTracks().forEach((t) => t.stop());
       r.stream = null;
@@ -215,6 +286,12 @@ export function EvpRecorder() {
     };
     r.recorder = recorder;
     recorder.start();
+    startScope((analyser) => {
+      if (!r.ctx) return;
+      const micNode = r.ctx.createMediaStreamSource(stream);
+      micNode.connect(analyser);
+      r.micNode = micNode;
+    });
     const startedAt = Date.now();
     setRemaining(seconds);
     setPhase("recording");
@@ -237,9 +314,13 @@ export function EvpRecorder() {
     src.buffer = r.reversed;
     src.playbackRate.value = EVP_PLAYBACK_RATE;
     src.connect(r.ctx.destination);
+    startScope((analyser) => {
+      src.connect(analyser);
+    });
     src.onended = () => {
       if (r.source !== src) return;
       r.source = null;
+      stopScope();
       src.disconnect();
       setPhase("ready");
     };
@@ -280,7 +361,7 @@ export function EvpRecorder() {
 
   return (
     <div className="space-y-5">
-      <EvpPanel phase={phase} readout={readout.filter(Boolean)}>
+      <EvpPanel phase={phase} readout={readout.filter(Boolean)} liveTrace={liveTrace}>
         {(phase === "ready" || phase === "playing") && duration !== null && (
           <p role="status">
             Recorded {duration.toFixed(1)} seconds. Played backwards at {Math.round(EVP_PLAYBACK_RATE * 100)}% speed it
@@ -371,20 +452,36 @@ function wave(seed: number, amp: number): string {
 const LIVE_WAVE = wave(7, 40);
 const FLAT_WAVE = wave(3, 2.5);
 
+/** Converts byte time-domain samples (0..255, 128=zero) into a dual-period 400×100 SVG path. */
+function waveFromSamples(samples: Uint8Array): string {
+  const n = samples.length;
+  const ys = Array.from({ length: n }, (_, i) => {
+    const norm = (samples[i] - 128) / 128;
+    const clamped = Math.max(-0.92, Math.min(0.92, norm * 2.2));
+    return 50 + clamped * 44;
+  });
+  const pts: string[] = [];
+  for (let k = 0; k < 2; k++) ys.forEach((y, i) => pts.push(`${(k * 200 + (i / n) * 200).toFixed(1)} ${y.toFixed(1)}`));
+  pts.push(`400 ${ys[0].toFixed(1)}`);
+  return `M${pts.join("L")}`;
+}
+
 /** The recorder as an instrument: a readout strip, an oscilloscope, the controls, and the privacy line at its foot. */
 function EvpPanel({
   phase,
   readout,
+  liveTrace,
   note,
   children,
 }: {
   phase: Phase;
   readout: string[];
+  liveTrace?: string | null;
   note?: string;
   children?: ReactNode;
 }) {
   const live = phase === "recording" || phase === "playing";
-  const trace = phase === "idle" || phase === "processing" ? FLAT_WAVE : LIVE_WAVE;
+  const trace = live && liveTrace ? liveTrace : phase === "idle" || phase === "processing" ? FLAT_WAVE : LIVE_WAVE;
   return (
     <div className="instrument bezel space-y-4 p-4" data-testid="evp-panel">
       {/* The status first, then at most two values: one line, like every instrument. */}

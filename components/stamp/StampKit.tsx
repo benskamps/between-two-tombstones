@@ -6,6 +6,7 @@ import { useActiveCemetery } from "@/lib/haunt/useHaunt";
 import { shareEvent } from "@/lib/share/analytics";
 import { isShareQid, sharePath } from "@/lib/share/links";
 import { ageFromDates, datesLine } from "@/lib/stamp/age";
+import { recordStampMade } from "@/lib/passport/store";
 import { defaultQuad, isUsableQuad } from "@/lib/stamp/homography";
 import {
   DEFAULT_SETTINGS,
@@ -127,6 +128,7 @@ export function StampKit() {
     const prev = urlsRef.current;
     urlsRef.current = next;
     blobsRef.current = { rubbing: r.rubbing, ink: r.ink, postage: r.postage };
+    if (!prev && r.stats.maskPixels > 0) recordStampMade();
     setUrls(next);
     const timings = Object.fromEntries(Object.entries(r.timings).map(([k, v]) => [k, Math.round(v)]));
     setLast({

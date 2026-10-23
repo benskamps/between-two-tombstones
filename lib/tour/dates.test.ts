@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ageAtDeath, formatAge, formatWikiDate, parseWikiDate } from "./dates";
-import { diedDuring } from "./periods";
+import { diedDuring, theirWorld } from "./periods";
 
 describe("dates", () => {
   it("formats only the precision Wikidata has", () => {
@@ -46,5 +46,30 @@ describe("died during", () => {
 
   it("only ever says 'Died during', never a cause", () => {
     for (const line of diedDuring("1918-10-01T00:00:00Z", 11)) expect(line).toMatch(/^Died during /);
+  });
+});
+
+describe("their world", () => {
+  it("lists milestones the person lived through from start to finish", () => {
+    // Washington Irving: April 3, 1783 – November 28, 1859.
+    expect(theirWorld("1783-04-03T00:00:00Z", 11, "1859-11-28T00:00:00Z", 11)).toEqual([
+      "the first telegraph message (1844)",
+    ]);
+    // Margaret Mitchell: Nov 8, 1900 – Aug 16, 1949 (caps at 3 across her arc).
+    expect(theirWorld("1900-11-08T00:00:00Z", 11, "1949-08-16T00:00:00Z", 11)).toEqual([
+      "first powered flight at Kitty Hawk (1903)",
+      "U.S. women’s suffrage (1920)",
+      "World War II (1939–1945)",
+    ]);
+  });
+
+  it("never claims an event when year-only precision leaves birth or death order ambiguous", () => {
+    // Year-only 1844 birth: could have been born after May 24, 1844.
+    expect(theirWorld("1844-01-01T00:00:00Z", 9, "1850-01-01T00:00:00Z", 9)).toEqual([]);
+    // Day-precise birth before May 24, 1844: definitely alive for the telegraph.
+    expect(theirWorld("1844-05-01T00:00:00Z", 11, "1850-01-01T00:00:00Z", 9)).toEqual([
+      "the first telegraph message (1844)",
+    ]);
+    expect(theirWorld(null, null, "1949-08-16T00:00:00Z", 11)).toEqual([]);
   });
 });

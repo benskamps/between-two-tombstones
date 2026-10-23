@@ -4,7 +4,7 @@ import { RingedMoon } from "@/components/ui/symbols";
 
 export function SiteHeader() {
   return (
-    <header className="border-b border-border bg-surface">
+    <header className="site-header sticky top-0 z-30 border-b border-border bg-surface">
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:p-3">
         Skip to content
       </a>

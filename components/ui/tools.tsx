@@ -2,13 +2,16 @@ import Link from "next/link";
 import type { ComponentType, ReactNode } from "react";
 import {
   Candle,
+  Chisel,
   Comet,
+  EpitaphRiddle,
   Fern,
   Gate,
   HourglassSprout,
   Key,
   Lily,
   Moth,
+  PassportSeal,
   Planchette,
   Poppy,
   RingedMoon,
@@ -36,6 +39,9 @@ export type ToolId =
   | "bingo"
   | "party"
   | "evp"
+  | "stonemath"
+  | "whoami"
+  | "passport"
   | "calendar";
 
 export const TOOL_ICON: Record<ToolId, ComponentType<SymbolProps>> = {
@@ -50,6 +56,9 @@ export const TOOL_ICON: Record<ToolId, ComponentType<SymbolProps>> = {
   bingo: HourglassSprout,
   party: Key,
   evp: Waveform,
+  stonemath: Chisel,
+  whoami: EpitaphRiddle,
+  passport: PassportSeal,
   calendar: Poppy,
 };
 
